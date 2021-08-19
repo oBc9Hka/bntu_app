@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "7735442397",
+    "project_id": "bntu-app",
+    "storage_bucket": "bntu-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7735442397:android:c4091551b9c461f5b49434",
+        "android_client_info": {
+          "package_name": "com.bntu.bntu_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7735442397-k5fmds8e01aikbdgog2a31443o0vq37m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCCCumtX9EpyEhlpm1uRZsQfyiFIATj4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7735442397-k5fmds8e01aikbdgog2a31443o0vq37m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
