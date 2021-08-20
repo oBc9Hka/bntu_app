@@ -84,6 +84,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
 
   @override
   Widget build(BuildContext context) {
+
+    const Color main_color = Color.fromARGB(255, 0, 138, 94); // green color
     return Scaffold(
       appBar: AppBar(
         title: Text('Карта корпусов'),
@@ -154,19 +156,30 @@ class _BuildingsMapState extends State<BuildingsMap> {
                     setInitialPos();
                   },
                   child: Text('БНТУ'),
+                  style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(main_color),
+                  minimumSize: MaterialStateProperty.all(Size(220, 50)),
+                  elevation: MaterialStateProperty.all(10),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: main_color),
+                    ),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    addPlacemark(_fitrPoint);
-                  },
-                  child: Text('Placemark'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    removePlacemark();
-                  },
-                  child: Text('Remove Placemark'),
-                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     addPlacemark(_fitrPoint);
+                //   },
+                //   child: Text('Placemark'),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     removePlacemark();
+                //   },
+                //   child: Text('Remove Placemark'),
+                // ),
               ],
             ),
           )

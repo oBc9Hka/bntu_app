@@ -15,13 +15,12 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   void initFirebase() async {
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp().whenComplete(() => setState((){}));
+    await Firebase.initializeApp().whenComplete(() => setState(() {}));
   }
 
   @override
   void initState() {
     super.initState();
-
     initFirebase();
   }
 
@@ -29,12 +28,11 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     double c_width = MediaQuery.of(context).size.width * 0.8;
     double height = MediaQuery.of(context).size.height;
-    Color main_color = Color.fromRGBO(0, 94, 62, 0.8);
+    const Color main_color = Color.fromARGB(255, 0, 138, 94);
     Color sec_color = Color.fromRGBO(0, 79, 0, 0.3);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Список факультетов', style: TextStyle(color: Colors.black)),
-          backgroundColor: Colors.white,
+          title: Text('Список факультетов'),
           elevation: 3,
         ),
 //         floatingActionButton: FloatingActionButton(
@@ -163,99 +161,97 @@ class _MainPageState extends State<MainPage> {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             children: [
-          // Column(
-          //   children: [
-          //     Container(
-          //       width: double.infinity,
-          //       height: height / 2,
-          //       alignment: Alignment.center,
-          //       decoration: BoxDecoration(
-          //         image: DecorationImage(
-          //           image: NetworkImage('https://firebasestorage.googleapis.com/v0/b/bntu-app.appspot.com/o/headerimage.jpg?alt=media&token=af529fc5-ecc3-4772-98be-01400f1cede3'),
-          //           fit: BoxFit.cover,
-          //         ),
-          //       ),
-          //       child: Column(
-          //         children: [
-          //           // Padding(padding: EdgeInsets.only(left: 40)),
-          //           Text(
-          //             "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
-          //             style: TextStyle(
-          //               fontSize: 40,
-          //               color: Colors.white.withOpacity(0.8),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //     // Padding(padding: EdgeInsets.only(bottom: 30)),
-          //   ],
-          // ),
-          StreamBuilder(
-            stream:
-                FirebaseFirestore.instance.collection('faculties').snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
-            {
-              if (!snapshot.hasData)
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(color: main_color,),
-                  ),
-                );
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('faculties')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData)
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: CircularProgressIndicator(
+                          color: main_color,
+                        ),
+                      ),
+                    );
 
-              return ListView.builder(
-                  // scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    QueryDocumentSnapshot<Object?> item =
-                        snapshot.data!.docs[index];
-                    if (index != snapshot.data!.docs.length)
-                      Padding(padding: EdgeInsets.only(top: 10),);
-                      return Padding(padding: EdgeInsets.all(5),
-                      child: Container(
-                        width: c_width * 0.3,
-                        child:ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            elevation: 10,
-                            onSurface: main_color,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                side: BorderSide(color: main_color)
-
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                  return ListView.builder(
+                      // scrollDirection: Axis.vertical,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        QueryDocumentSnapshot<Object?> item =
+                            snapshot.data!.docs[index];
+                        if (index != snapshot.data!.docs.length)
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                          );
+                        return Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                          child: Container(
+                            width: c_width * 0.3,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                foregroundColor:
+                                    MaterialStateProperty.all(main_color),
+                                minimumSize:
+                                    MaterialStateProperty.all(Size(200, 50)),
+                                elevation: MaterialStateProperty.all(10),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: main_color),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
                                     builder: (context) => FacultyPage(
                                       faculty: item,
-                                    ))); },
-                          child: ListTile(
-                            key: Key(snapshot.data!.docs[index].id),
-                            leading:
-                            Text(snapshot.data!.docs[index].get('shortName'),
-                              style: TextStyle(
-                                color: main_color,
-                              ),),
-                            trailing: Icon(Icons.arrow_forward_ios,
-                              color: main_color,),
-                            title: Text(snapshot.data!.docs[index].get('name'),
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),),
-
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                key: Key(snapshot.data!.docs[index].id),
+                                leading: Container(
+                                  alignment: Alignment.centerLeft,
+                                  width: 70,
+                                  child: Text(
+                                    snapshot.data!.docs[index].get('shortName'),
+                                    style: TextStyle(
+                                      color: main_color,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                trailing: Container(
+                                  width: 24,
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: main_color,
+                                  ),
+                                ),
+                                title: Text(
+                                  snapshot.data!.docs[index].get('name'),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),);
-                  });
-            },
-          )
-        ]));
+                        );
+                      });
+                },
+              )
+            ]));
   }
 }
