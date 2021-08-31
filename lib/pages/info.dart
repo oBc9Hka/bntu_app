@@ -174,19 +174,23 @@ class Info extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://firebasestorage.googleapis.com/v0/b/bntu-app.appspot.com/o/bntu.png?alt=media&token=5c28bbf8-4344-4882-b295-24fa09ee8343'),
+              backgroundImage: Image.asset('assets/bntu.png').image,
+              // backgroundImage: NetworkImage(
+              //     'https://firebasestorage.googleapis.com/v0/b/bntu-app.appspot.com/o/bntu.png?alt=media&token=5c28bbf8-4344-4882-b295-24fa09ee8343'),
             ),
           ],
         ),
       ),
       body: ListView(
         children: [
-          Text(
-            "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           Container(
@@ -195,22 +199,26 @@ class Info extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                    'https://firebasestorage.googleapis.com/v0/b/bntu-app.appspot.com/o/bntu.png?alt=media&token=5c28bbf8-4344-4882-b295-24fa09ee8343'),
-                fit: BoxFit.cover,
+                image: Image.asset('assets/BNTU_Logo.png').image,
+                // image: NetworkImage(
+                //     'https://firebasestorage.googleapis.com/v0/b/bntu-app.appspot.com/o/BNTU_Logo.png?alt=media&token=c6b4220f-8cf9-4ef1-b7f1-578926b90a5a'),
+                fit: BoxFit.contain,
               ),
             ),
           ),
-          Text(
-            'СТАНЬ СТУДЕНТОМ БНТУ!',
-            style: TextStyle(
-                color: main_color, fontSize: 20, fontWeight: FontWeight.w700),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              'СТАНЬ СТУДЕНТОМ БНТУ!',
+              style: TextStyle(
+                  color: main_color, fontSize: 20, fontWeight: FontWeight.w700),
+            ),
           ),
           firstCard,
           secondCard,
           thirdCard,
           fourthCard,
-          fifthCard
+          fifthCard,
         ],
       ),
     );

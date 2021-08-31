@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 enum CustomBrightness {light, dark}
 
-
 class ThemeProvider extends ChangeNotifier{
   ThemeData _currentTheme = themeLight;
   CustomBrightness _brightness = CustomBrightness.light;

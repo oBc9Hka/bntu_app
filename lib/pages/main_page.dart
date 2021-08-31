@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class MainPage extends StatefulWidget {
-  var title = 'MainPage';
 
-  MainPage({Key? key, required this.title}) : super(key: key);
+  MainPage({Key? key}) : super(key: key);
 
   @override
   _MainPageState createState() => _MainPageState();

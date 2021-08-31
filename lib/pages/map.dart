@@ -12,15 +12,54 @@ class BuildingsMap extends StatefulWidget {
 
 class _BuildingsMapState extends State<BuildingsMap> {
   static YandexMapController? controller;
-  static const Point _initialPoint =
-      Point(latitude: 53.922288, longitude: 27.593033);
+  static const Point _initialPoint = Point(
+    latitude: 53.922288,
+    longitude: 27.593033,
+  );
   static const Point _fitrPoint = Point(
-      latitude: 53.923535877325975,
-      longitude: 27.594567697065315); //53.923249, 27.594045
-  static const Point _stfPoint =
-      Point(latitude: 53.923110908637625, longitude: 27.595203159339945);
-  static const Point _mainPoint =
-      Point(latitude: 53.920923742676344, longitude: 27.59313709795913);
+    latitude: 53.923535877325975,
+    longitude: 27.594567697065315,
+  ); //53.923249, 27.594045
+  static const Point _stfPoint = Point(
+    latitude: 53.92081864094582,
+    longitude: 27.59123845256903,
+  );
+  static const Point _stf11Point = Point(
+    latitude: 53.923118058543665,
+    longitude: 27.59519077485521,
+  );
+  static const Point _atfPoint = Point(
+    latitude: 53.920566711381106,
+    longitude: 27.588723434350214,
+  );
+  static const Point _vtfPoint = Point(
+    latitude: 53.91910324719865,
+    longitude: 27.589826140063735,
+  );
+  static const Point _afPoint = Point(
+    latitude: 53.920630730257464,
+    longitude: 27.592178328101312,
+  );
+  static const Point _msfPoint = Point(
+    latitude: 53.92323901242053,
+    longitude: 27.59410660579215,
+  );
+  static const Point _psfPoint = Point(
+    latitude: 53.923462691462255,
+    longitude: 27.591747159328776,
+  );
+  static const Point _mtfPoint = Point(
+    latitude: 53.92400876345276,
+    longitude: 27.592709257715995,
+  );
+  static const Point _efPoint = Point(
+    latitude: 53.92233624395413,
+    longitude: 27.59204490826724,
+  );
+  static const Point _mainPoint = Point(
+    latitude: 53.920923742676344,
+    longitude: 27.59313709795913,
+  );
 
   bool isNightModeEnabled = false;
   bool isZoomGesturesEnabled = false;
@@ -36,8 +75,31 @@ class _BuildingsMapState extends State<BuildingsMap> {
     ),
   );
 
+  List<Map<String, dynamic>> _buildings = [
+    {'name': 'Главный корпус', 'point': _mainPoint},
+    {'name': 'Корпус №2 (ЭФ)', 'point': _efPoint},
+    {'name': 'Корпус №3', 'point': _mainPoint},
+    {'name': 'Корпус №4 ВТФ()', 'point': _vtfPoint},
+    {'name': 'Корпус №5 (СТФ)', 'point': _stfPoint},
+    {'name': 'Корпус №6 (МСФ)', 'point': _msfPoint},
+    {'name': 'Корпус №7 (МТФ)', 'point': _mtfPoint},
+    {'name': 'Корпус №8 (АТФ)', 'point': _atfPoint},
+    {'name': 'Корпус №9', 'point': _mainPoint},
+    {'name': 'Корпус №10', 'point': _mainPoint},
+    {'name': 'Корпус №11А (ФИТР)', 'point': _fitrPoint},
+    {'name': 'Корпус №11Б (Спортклуб БНТУ)', 'point': _stf11Point},
+    {'name': 'Корпус №12', 'point': _mainPoint},
+    {'name': 'Корпус №13', 'point': _mainPoint},
+    {'name': 'Корпус №14', 'point': _mainPoint},
+    {'name': 'Корпус №15', 'point': _mainPoint},
+    {'name': 'Корпус №16', 'point': _mainPoint},
+    {'name': 'Корпус №17 (ПСФ)', 'point': _psfPoint},
+    {'name': 'Корпус №18 (ФМПП/ФЭС)', 'point': _mainPoint},
+  ];
+
   @override
   void initState() {
+    setInitialPos();
     super.initState();
   }
 
@@ -51,7 +113,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
     if (point != _initialPoint) addPlacemark(point);
   }
 
-  void setInitialPos() async{
+  void setInitialPos() async {
     await controller!.move(
         point: _initialPoint,
         animation: const MapAnimation(smooth: true, duration: 1.0));
@@ -84,7 +146,6 @@ class _BuildingsMapState extends State<BuildingsMap> {
 
   @override
   Widget build(BuildContext context) {
-
     const Color main_color = Color.fromARGB(255, 0, 138, 94); // green color
     return Scaffold(
       appBar: AppBar(
@@ -127,59 +188,14 @@ class _BuildingsMapState extends State<BuildingsMap> {
           Expanded(
             child: ListView(
               children: [
-                ListTile(
-                  title: Text('Корпус 11А ФИТР'),
-                  onTap: () {
-                    // removePlacemark();
-                    setPos(_fitrPoint);
-                    // addPlacemark(_fitrPoint);
-                  },
-                ),
-                ListTile(
-                  title: Text('Корпус 11Б СТФ'),
-                  onTap: () {
-                    // removePlacemark();
-                    setPos(_stfPoint);
-                    // addPlacemark(_stfPoint);
-                  },
-                ),
-                ListTile(
-                  title: Text('Корпус 1 Главный'),
-                  onTap: () {
-                    // removePlacemark();
-                    setPos(_mainPoint);
-                    // addPlacemark(_mainPoint);
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setInitialPos();
-                  },
-                  child: Text('БНТУ'),
-                  style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(main_color),
-                  minimumSize: MaterialStateProperty.all(Size(220, 50)),
-                  elevation: MaterialStateProperty.all(10),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: main_color),
-                    ),
+                ..._buildings.map(
+                  (item) => ListTile(
+                    title: Text(item['name']),
+                    onTap: () {
+                      setPos(item['point']);
+                    },
                   ),
                 ),
-                ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     addPlacemark(_fitrPoint);
-                //   },
-                //   child: Text('Placemark'),
-                // ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     removePlacemark();
-                //   },
-                //   child: Text('Remove Placemark'),
-                // ),
               ],
             ),
           )

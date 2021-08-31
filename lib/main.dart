@@ -3,6 +3,7 @@
 import 'package:bntu_app/pages/main_page.dart';
 import 'package:bntu_app/pages/map.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bntu_app/pages/greeting_screen.dart';
 import 'package:bntu_app/pages/info.dart';
@@ -10,14 +11,18 @@ import 'package:custom_splash/custom_splash.dart';
 import 'package:provider/provider.dart';
 // import 'package:splashscreen/splashscreen.dart';
 
-void main() => runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ],
-        child: App(),
-      ),
-    );
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
+      child: App(),
+    ),
+  );
+}
 
 class App extends StatelessWidget {
   const App ({Key key}) : super(key: key);
@@ -38,7 +43,7 @@ class App extends StatelessWidget {
       theme: themeProvider.current,
       routes: {
         // '/': (context) => GreetingScreen(),
-        '/main_page': (context) => MainPage(title: 'MainPage'),
+        '/main_page': (context) => MainPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
       },

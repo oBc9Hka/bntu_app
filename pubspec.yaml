@@ -41,9 +41,6 @@ flutter:
   uses-material-design: true
 
   assets:
-     - assets/headerimage.jpg
-     - assets/fitr.jpg
-     - assets/atf.png
      - assets/
      - assets/yandex_images/place.png
 
