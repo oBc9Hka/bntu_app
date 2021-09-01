@@ -59,34 +59,11 @@ class GreetingScreen extends StatelessWidget {
             ),
           ),
         ),
-        // ButtonTheme(
-        //   minWidth: 220.0,
-        //   height: 50.0,
-        //   child: ElevatedButton.icon(
-        //     onPressed: () {
-        //       Navigator.pushNamed(context, '/map');
-        //     },
-        //     label: Text('Карта корпусов'),
-        //     icon: Icon(Icons.article_outlined),
-        //     style: ButtonStyle(
-        //       foregroundColor: MaterialStateProperty.all(main_color),
-        //       minimumSize: MaterialStateProperty.all(Size(220, 50)),
-        //       elevation: MaterialStateProperty.all(10),
-        //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        //         RoundedRectangleBorder(
-        //           borderRadius: BorderRadius.circular(18.0),
-        //           side: BorderSide(color: main_color),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
 
     Widget textSection = Container(
       alignment: Alignment.center,
-      // padding: const EdgeInsets.fromLTRB(30, 0, 50, 10),
       child: const ListTile(
         title: Text('АБИТУРИЕНТ?',
             style: TextStyle(fontSize: 35, fontWeight: FontWeight.w700)),
@@ -108,23 +85,9 @@ class GreetingScreen extends StatelessWidget {
             CircleAvatar(
               backgroundColor: Colors.white,
               backgroundImage: Image.asset('assets/bntu.png').image,
-              // backgroundImage: NetworkImage(
-              //     'https://firebasestorage.googleapis.com/v0/b/bntu-app.appspot.com/o/bntu.png?alt=media&token=5c28bbf8-4344-4882-b295-24fa09ee8343'),
             ),
           ],
         ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {
-        //       if (themeProvider.brightness == CustomBrightness.dark) {
-        //         themeProvider.toggle(CustomBrightness.light);
-        //       } else {
-        //         themeProvider.toggle(CustomBrightness.dark);
-        //       }
-        //     },
-        //     icon: themeProvider.currentIcon,
-        //   ),
-        // ],
       ),
       drawer: Drawer(
         child: SafeArea(
@@ -169,25 +132,6 @@ class GreetingScreen extends StatelessWidget {
               width: double.infinity,
               height: height / 2.5,
               alignment: Alignment.center,
-              // child: Image.network(
-              //   'https://firebasestorage.googleapis.com/v0/b/bntu-app.appspot.com/o/man.png?alt=media&token=e30fe84b-b63b-49bd-a567-b123ca17e4f9',
-              //   fit: BoxFit.cover,
-              //   loadingBuilder: (BuildContext context, Widget child,
-              //       ImageChunkEvent? loadingProgress) {
-              //     if (loadingProgress == null) {
-              //       return child;
-              //     }
-              //     return Center(
-              //       child: CircularProgressIndicator(
-              //         color: main_color,
-              //         value: loadingProgress.expectedTotalBytes != null
-              //             ? loadingProgress.cumulativeBytesLoaded /
-              //                 loadingProgress.expectedTotalBytes!
-              //             : null,
-              //       ),
-              //     );
-              //   },
-              // ),
               child: Image.asset('assets/man.png'),
             ),
             textSection,

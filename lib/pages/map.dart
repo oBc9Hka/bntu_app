@@ -1,3 +1,7 @@
+import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/themes/material_themes.dart';
+import 'package:bntu_app/util/buildings_model.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:bntu_app/yandex/widgets/dummy_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,94 +16,136 @@ class BuildingsMap extends StatefulWidget {
 
 class _BuildingsMapState extends State<BuildingsMap> {
   static YandexMapController? controller;
-  static const Point _initialPoint = Point(
-    latitude: 53.922288,
-    longitude: 27.593033,
-  );
-  static const Point _fitrPoint = Point(
-    latitude: 53.923535877325975,
-    longitude: 27.594567697065315,
-  ); //53.923249, 27.594045
-  static const Point _stfPoint = Point(
-    latitude: 53.92081864094582,
-    longitude: 27.59123845256903,
-  );
-  static const Point _stf11Point = Point(
-    latitude: 53.923118058543665,
-    longitude: 27.59519077485521,
-  );
-  static const Point _atfPoint = Point(
-    latitude: 53.920566711381106,
-    longitude: 27.588723434350214,
-  );
-  static const Point _vtfPoint = Point(
-    latitude: 53.91910324719865,
-    longitude: 27.589826140063735,
-  );
-  static const Point _afPoint = Point(
-    latitude: 53.920630730257464,
-    longitude: 27.592178328101312,
-  );
-  static const Point _msfPoint = Point(
-    latitude: 53.92323901242053,
-    longitude: 27.59410660579215,
-  );
-  static const Point _psfPoint = Point(
-    latitude: 53.923462691462255,
-    longitude: 27.591747159328776,
-  );
-  static const Point _mtfPoint = Point(
-    latitude: 53.92400876345276,
-    longitude: 27.592709257715995,
-  );
-  static const Point _efPoint = Point(
-    latitude: 53.92233624395413,
-    longitude: 27.59204490826724,
-  );
-  static const Point _mainPoint = Point(
-    latitude: 53.920923742676344,
-    longitude: 27.59313709795913,
-  );
+  final Data _data = Data();
+  bool _showOptional = true;
+  final Color mainColor = Color.fromARGB(255, 0, 138, 94);
+  Building _prevSelectedItem = Building(
+      name: '', optional: '', isActive: false, point: Data().initialPoint);
 
   bool isNightModeEnabled = false;
   bool isZoomGesturesEnabled = false;
   bool isTiltGesturesEnabled = false;
 
-  final Placemark _placemarkWithDynamicIcon = Placemark(
-    point: const Point(latitude: 30.320045, longitude: 59.945933),
-    onTap: (Placemark self, Point point) =>
-        print('Tapped me at ${point.latitude},${point.longitude}'),
-    style: PlacemarkStyle(
-      opacity: 0.95,
-      rawImageData: rawImageData,
-    ),
-  );
+  // final Placemark _placemarkWithDynamicIcon = Placemark(
+  //   point: const Point(latitude: 30.320045, longitude: 59.945933),
+  //   onTap: (Placemark self, Point point) =>
+  //       print('Tapped me at ${point.latitude},${point.longitude}'),
+  //   style: PlacemarkStyle(
+  //     opacity: 0.95,
+  //     rawImageData: rawImageData,
+  //   ),
+  // );
 
-  List<Map<String, dynamic>> _buildings = [
-    {'name': 'Главный корпус', 'point': _mainPoint},
-    {'name': 'Корпус №2 (ЭФ)', 'point': _efPoint},
-    {'name': 'Корпус №3', 'point': _mainPoint},
-    {'name': 'Корпус №4 ВТФ()', 'point': _vtfPoint},
-    {'name': 'Корпус №5 (СТФ)', 'point': _stfPoint},
-    {'name': 'Корпус №6 (МСФ)', 'point': _msfPoint},
-    {'name': 'Корпус №7 (МТФ)', 'point': _mtfPoint},
-    {'name': 'Корпус №8 (АТФ)', 'point': _atfPoint},
-    {'name': 'Корпус №9', 'point': _mainPoint},
-    {'name': 'Корпус №10', 'point': _mainPoint},
-    {'name': 'Корпус №11А (ФИТР)', 'point': _fitrPoint},
-    {'name': 'Корпус №11Б (Спортклуб БНТУ)', 'point': _stf11Point},
-    {'name': 'Корпус №12', 'point': _mainPoint},
-    {'name': 'Корпус №13', 'point': _mainPoint},
-    {'name': 'Корпус №14', 'point': _mainPoint},
-    {'name': 'Корпус №15', 'point': _mainPoint},
-    {'name': 'Корпус №16', 'point': _mainPoint},
-    {'name': 'Корпус №17 (ПСФ)', 'point': _psfPoint},
-    {'name': 'Корпус №18 (ФМПП/ФЭС)', 'point': _mainPoint},
+  List<Building> _buildings = [
+    Building(
+        name: 'Главный корпус',
+        optional: '',
+        isActive: false,
+        point: Data().mainPoint),
+    Building(
+        name: 'Корпус №2',
+        optional: 'Деканат ЭФ',
+        isActive: false,
+        point: Data().k2Point),
+    Building(
+        name: 'Корпус №3',
+        optional: '',
+        isActive: false,
+        point: Data().k3Point),
+    Building(
+        name: 'Корпус №4',
+        optional: 'Деканат ВТФ',
+        isActive: false,
+        point: Data().k4Point),
+    Building(
+        name: 'Корпус №5',
+        optional: 'Деканат СТФ',
+        isActive: false,
+        point: Data().k5Point),
+    Building(
+        name: 'Корпус №6',
+        optional: 'Деканат МСФ',
+        isActive: false,
+        point: Data().k6Point),
+    Building(
+        name: 'Корпус №7',
+        optional: 'Деканат МТФ',
+        isActive: false,
+        point: Data().k7Point),
+    Building(
+        name: 'Корпус №8',
+        optional: 'Деканат АТФ',
+        isActive: false,
+        point: Data().k8Point),
+    Building(
+        name: 'Корпус №9',
+        optional: '',
+        isActive: false,
+        point: Data().k9Point),
+    Building(
+        name: 'Корпус №10',
+        optional: '',
+        isActive: false,
+        point: Data().k10Point),
+    Building(
+        name: 'Корпус №11А',
+        optional: 'Деканат ФИТР',
+        isActive: false,
+        point: Data().k11APoint),
+    Building(
+        name: 'Корпус №11Б',
+        optional: 'Спортклуб БНТУ',
+        isActive: false,
+        point: Data().k11BPoint),
+    Building(
+        name: 'Корпус №12',
+        optional: '',
+        isActive: false,
+        point: Data().k12Point),
+    Building(
+        name: 'Корпус №13',
+        optional: '',
+        isActive: false,
+        point: Data().k13Point),
+    Building(
+        name: 'Корпус №14',
+        optional: '',
+        isActive: false,
+        point: Data().k14Point),
+    Building(
+        name: 'Корпус №15',
+        optional: '',
+        isActive: false,
+        point: Data().k15Point),
+    Building(
+        name: 'Корпус №16',
+        optional: '',
+        isActive: false,
+        point: Data().k16Point),
+    Building(
+        name: 'Корпус №17',
+        optional: 'Деканат ПСФ',
+        isActive: false,
+        point: Data().k17Point),
+    Building(
+        name: 'Корпус №18A',
+        optional: 'Деканат ФМПП/ФЭС',
+        isActive: false,
+        point: Data().k18APoint),
+    Building(
+        name: 'Корпус №18Б',
+        optional: 'Деканат ФМПП/ФЭС',
+        isActive: false,
+        point: Data().k18BPoint),
+    Building(
+        name: 'Корпус №20',
+        optional: '',
+        isActive: false,
+        point: Data().k20Point),
   ];
 
   @override
   void initState() {
-    setInitialPos();
     super.initState();
   }
 
@@ -110,12 +156,12 @@ class _BuildingsMapState extends State<BuildingsMap> {
         animation: const MapAnimation(smooth: true, duration: 1.0));
 
     removePlacemark();
-    if (point != _initialPoint) addPlacemark(point);
+    if (point != _data.initialPoint) addPlacemark(point);
   }
 
   void setInitialPos() async {
     await controller!.move(
-        point: _initialPoint,
+        point: _data.initialPoint,
         animation: const MapAnimation(smooth: true, duration: 1.0));
 
     removePlacemark();
@@ -146,57 +192,131 @@ class _BuildingsMapState extends State<BuildingsMap> {
 
   @override
   Widget build(BuildContext context) {
-    const Color main_color = Color.fromARGB(255, 0, 138, 94); // green color
     return Scaffold(
       appBar: AppBar(
         title: Text('Карта корпусов'),
+        actions: [
+          // IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: SwitchListTile(
+                  onChanged: (bool value) {
+                    setState(() {
+                      _showOptional = value;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  value: _showOptional,
+                  title: Text('Отображение доп.информации'),
+                ),
+                // child: ListTile(title: Text('Отображение факультетов'), trailing: Icon(Icons.toggle_on),),
+              ),
+            ],
+            icon: Icon(Icons.settings),
+          )
+        ],
       ),
       body: Column(
         children: [
           Expanded(
-            child: YandexMap(
-                onMapCreated: (YandexMapController yandexMapController) async {
-                  controller = yandexMapController;
-                },
-                onMapRendered: () async {
-                  print('Map rendered');
-                  setPos(_initialPoint);
-                  var tiltGesturesEnabled =
-                      await controller!.isTiltGesturesEnabled();
-                  var zoomGesturesEnabled =
-                      await controller!.isZoomGesturesEnabled();
-
-                  var zoom = await controller!.getZoom();
-                  var minZoom = await controller!.getMinZoom();
-                  var maxZoom = await controller!.getMaxZoom();
-
-                  print(
-                      'Current zoom: $zoom, minZoom: $minZoom, maxZoom: $maxZoom');
-
-                  setState(() {
-                    isTiltGesturesEnabled = tiltGesturesEnabled;
-                    isZoomGesturesEnabled = zoomGesturesEnabled;
-                  });
-                },
-                onMapSizeChanged: (MapSize size) =>
-                    print('Map size changed to ${size.width}x${size.height}'),
-                onMapTap: (Point point) =>
-                    print('Tapped map at ${point.latitude},${point.longitude}'),
-                onMapLongTap: (Point point) => print(
-                    'Long tapped map at ${point.latitude},${point.longitude}')),
-          ),
-          Expanded(
-            child: ListView(
+            child: Stack(
               children: [
-                ..._buildings.map(
-                  (item) => ListTile(
-                    title: Text(item['name']),
-                    onTap: () {
-                      setPos(item['point']);
-                    },
+                YandexMap(
+                  onMapCreated:
+                      (YandexMapController yandexMapController) async {
+                    controller = yandexMapController;
+                  },
+                  onMapRendered: () async {
+                    print('Map rendered');
+                    setInitialPos();
+                    var tiltGesturesEnabled =
+                        await controller!.isTiltGesturesEnabled();
+                    var zoomGesturesEnabled =
+                        await controller!.isZoomGesturesEnabled();
+
+                    var zoom = await controller!.getZoom();
+                    var minZoom = await controller!.getMinZoom();
+                    var maxZoom = await controller!.getMaxZoom();
+
+                    print(
+                        'Current zoom: $zoom, minZoom: $minZoom, maxZoom: $maxZoom');
+
+                    setState(() {
+                      isTiltGesturesEnabled = tiltGesturesEnabled;
+                      isZoomGesturesEnabled = zoomGesturesEnabled;
+                    });
+                  },
+                  onMapSizeChanged: (MapSize size) =>
+                      print('Map size changed to ${size.width}x${size.height}'),
+                  onMapTap: (Point point) => print(
+                      'Tapped map at ${point.latitude},${point.longitude}'),
+                  onMapLongTap: (Point point) => print(
+                      'Long tapped map at ${point.latitude},${point.longitude}'),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    width: 60,
+                    height: 160,
+                    child: Card(
+                      child: Column(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                controller!.zoomIn();
+                              },
+                              icon: Icon(Icons.add)),
+                          IconButton(
+                              onPressed: () {
+                                controller!.zoomOut();
+                              },
+                              icon: Icon(Icons.do_not_disturb_on_outlined)),
+                          IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _prevSelectedItem.isActive = false;
+                                });
+                                setInitialPos();
+                              },
+                              icon: Icon(Icons.zoom_out_map)),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
+            ),
+          ),
+          Expanded(
+            child: ListView.separated(
+              itemCount: _buildings.length,
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+              itemBuilder: (context, index) {
+                var item = _buildings[index];
+                String subtitle = _showOptional
+                    ? item.optional != ''
+                        ? ' (${item.optional})'
+                        : ''
+                    : '';
+                String title = item.name + subtitle;
+                return ListTile(
+                  title: Text(
+                    title,
+                    style: TextStyle(color: item.isActive ? mainColor : null),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      _prevSelectedItem.isActive = false;
+                      item.isActive = true;
+                      _prevSelectedItem = item;
+                    });
+                    setPos(item.point);
+                  },
+                );
+              },
             ),
           )
         ],
