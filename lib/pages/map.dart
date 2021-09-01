@@ -20,7 +20,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
   bool _showOptional = true;
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   Building _prevSelectedItem = Building(
-      name: '', optional: '', isActive: false, point: Data().initialPoint);
+      name: '', optional: '', isActive: false, point: Data.initialPoint);
 
   bool isNightModeEnabled = false;
   bool isZoomGesturesEnabled = false;
@@ -36,113 +36,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
   //   ),
   // );
 
-  List<Building> _buildings = [
-    Building(
-        name: 'Главный корпус',
-        optional: '',
-        isActive: false,
-        point: Data().mainPoint),
-    Building(
-        name: 'Корпус №2',
-        optional: 'Деканат ЭФ',
-        isActive: false,
-        point: Data().k2Point),
-    Building(
-        name: 'Корпус №3',
-        optional: '',
-        isActive: false,
-        point: Data().k3Point),
-    Building(
-        name: 'Корпус №4',
-        optional: 'Деканат ВТФ',
-        isActive: false,
-        point: Data().k4Point),
-    Building(
-        name: 'Корпус №5',
-        optional: 'Деканат СТФ',
-        isActive: false,
-        point: Data().k5Point),
-    Building(
-        name: 'Корпус №6',
-        optional: 'Деканат МСФ',
-        isActive: false,
-        point: Data().k6Point),
-    Building(
-        name: 'Корпус №7',
-        optional: 'Деканат МТФ',
-        isActive: false,
-        point: Data().k7Point),
-    Building(
-        name: 'Корпус №8',
-        optional: 'Деканат АТФ',
-        isActive: false,
-        point: Data().k8Point),
-    Building(
-        name: 'Корпус №9',
-        optional: '',
-        isActive: false,
-        point: Data().k9Point),
-    Building(
-        name: 'Корпус №10',
-        optional: '',
-        isActive: false,
-        point: Data().k10Point),
-    Building(
-        name: 'Корпус №11А',
-        optional: 'Деканат ФИТР',
-        isActive: false,
-        point: Data().k11APoint),
-    Building(
-        name: 'Корпус №11Б',
-        optional: 'Спортклуб БНТУ',
-        isActive: false,
-        point: Data().k11BPoint),
-    Building(
-        name: 'Корпус №12',
-        optional: '',
-        isActive: false,
-        point: Data().k12Point),
-    Building(
-        name: 'Корпус №13',
-        optional: '',
-        isActive: false,
-        point: Data().k13Point),
-    Building(
-        name: 'Корпус №14',
-        optional: '',
-        isActive: false,
-        point: Data().k14Point),
-    Building(
-        name: 'Корпус №15',
-        optional: '',
-        isActive: false,
-        point: Data().k15Point),
-    Building(
-        name: 'Корпус №16',
-        optional: '',
-        isActive: false,
-        point: Data().k16Point),
-    Building(
-        name: 'Корпус №17',
-        optional: 'Деканат ПСФ',
-        isActive: false,
-        point: Data().k17Point),
-    Building(
-        name: 'Корпус №18A',
-        optional: 'Деканат ФМПП/ФЭС',
-        isActive: false,
-        point: Data().k18APoint),
-    Building(
-        name: 'Корпус №18Б',
-        optional: 'Деканат ФМПП/ФЭС',
-        isActive: false,
-        point: Data().k18BPoint),
-    Building(
-        name: 'Корпус №20',
-        optional: '',
-        isActive: false,
-        point: Data().k20Point),
-  ];
+  List<Building> _buildings = Data().buildings;
 
   @override
   void initState() {
@@ -156,12 +50,12 @@ class _BuildingsMapState extends State<BuildingsMap> {
         animation: const MapAnimation(smooth: true, duration: 1.0));
 
     removePlacemark();
-    if (point != _data.initialPoint) addPlacemark(point);
+    if (point != Data.initialPoint) addPlacemark(point);
   }
 
   void setInitialPos() async {
     await controller!.move(
-        point: _data.initialPoint,
+        point: Data.initialPoint,
         animation: const MapAnimation(smooth: true, duration: 1.0));
 
     removePlacemark();
