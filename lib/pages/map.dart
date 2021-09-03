@@ -1,6 +1,6 @@
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/themes/material_themes.dart';
-import 'package:bntu_app/util/buildings_model.dart';
+import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/util/data.dart';
 import 'package:bntu_app/yandex/widgets/dummy_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,16 +25,6 @@ class _BuildingsMapState extends State<BuildingsMap> {
   bool isNightModeEnabled = false;
   bool isZoomGesturesEnabled = false;
   bool isTiltGesturesEnabled = false;
-
-  // final Placemark _placemarkWithDynamicIcon = Placemark(
-  //   point: const Point(latitude: 30.320045, longitude: 59.945933),
-  //   onTap: (Placemark self, Point point) =>
-  //       print('Tapped me at ${point.latitude},${point.longitude}'),
-  //   style: PlacemarkStyle(
-  //     opacity: 0.95,
-  //     rawImageData: rawImageData,
-  //   ),
-  // );
 
   List<Building> _buildings = Data().buildings;
 
@@ -103,6 +93,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   },
                   value: _showOptional,
                   title: Text('Отображение доп.информации'),
+                  activeColor: mainColor,
+                  activeTrackColor: mainColor,
                 ),
                 // child: ListTile(title: Text('Отображение факультетов'), trailing: Icon(Icons.toggle_on),),
               ),

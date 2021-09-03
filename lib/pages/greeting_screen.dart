@@ -79,14 +79,10 @@ class GreetingScreen extends StatelessWidget {
     var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: Image.asset('assets/bntu.png').image,
-            ),
-          ],
+        centerTitle: true,
+        title: CircleAvatar(
+          backgroundColor: Colors.white,
+          backgroundImage: Image.asset('assets/bntu.png').image,
         ),
       ),
       drawer: Drawer(

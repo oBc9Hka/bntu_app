@@ -1,8 +1,10 @@
+import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-import 'buildings_model.dart';
+import '../models/buildings_model.dart';
 
 class Data {
+  // Map data
   static Point initialPoint = Point(
     latitude: 53.922288,
     longitude: 27.593033,
@@ -87,6 +89,10 @@ class Data {
     latitude: 53.921912962179206,
     longitude: 27.59386104215173,
   );
+  static Point k19Point = Point(
+    latitude: 53.92864362453092,
+    longitude: 27.613752288620248,
+  );
   static Point k20Point = Point(
     latitude: 53.930665888895454,
     longitude: 27.668686985918043,
@@ -103,11 +109,7 @@ class Data {
         optional: 'Деканат ЭФ',
         isActive: false,
         point: k2Point),
-    Building(
-        name: 'Корпус №3',
-        optional: '',
-        isActive: false,
-        point: k3Point),
+    Building(name: 'Корпус №3', optional: '', isActive: false, point: k3Point),
     Building(
         name: 'Корпус №4',
         optional: 'Деканат ВТФ',
@@ -133,16 +135,9 @@ class Data {
         optional: 'Деканат АТФ',
         isActive: false,
         point: k8Point),
+    Building(name: 'Корпус №9', optional: '', isActive: false, point: k9Point),
     Building(
-        name: 'Корпус №9',
-        optional: '',
-        isActive: false,
-        point: k9Point),
-    Building(
-        name: 'Корпус №10',
-        optional: '',
-        isActive: false,
-        point: k10Point),
+        name: 'Корпус №10', optional: '', isActive: false, point: k10Point),
     Building(
         name: 'Корпус №11А',
         optional: 'Деканат ФИТР',
@@ -154,30 +149,15 @@ class Data {
         isActive: false,
         point: k11BPoint),
     Building(
-        name: 'Корпус №12',
-        optional: '',
-        isActive: false,
-        point: k12Point),
+        name: 'Корпус №12', optional: '', isActive: false, point: k12Point),
     Building(
-        name: 'Корпус №13',
-        optional: '',
-        isActive: false,
-        point: k13Point),
+        name: 'Корпус №13', optional: '', isActive: false, point: k13Point),
     Building(
-        name: 'Корпус №14',
-        optional: '',
-        isActive: false,
-        point: k14Point),
+        name: 'Корпус №14', optional: '', isActive: false, point: k14Point),
     Building(
-        name: 'Корпус №15',
-        optional: '',
-        isActive: false,
-        point: k15Point),
+        name: 'Корпус №15', optional: '', isActive: false, point: k15Point),
     Building(
-        name: 'Корпус №16',
-        optional: '',
-        isActive: false,
-        point: k16Point),
+        name: 'Корпус №16', optional: 'Деканат СФ', isActive: false, point: k16Point),
     Building(
         name: 'Корпус №17',
         optional: 'Деканат ПСФ',
@@ -185,18 +165,64 @@ class Data {
         point: k17Point),
     Building(
         name: 'Корпус №18A',
-        optional: 'Деканат ФМПП/ФЭС',
+        optional: 'Деканат ФМПП, ФЭС',
         isActive: false,
         point: k18APoint),
     Building(
         name: 'Корпус №18Б',
-        optional: 'Деканат ФМПП/ФЭС',
+        optional: 'Деканат ФМПП, ФЭС',
         isActive: false,
         point: k18BPoint),
     Building(
-        name: 'Корпус №20',
-        optional: '',
+        name: 'Корпус №19',
+        optional: 'Лицей БНТУ',
         isActive: false,
-        point: k20Point),
+        point: k19Point),
+    Building(
+      name: 'Корпус №20',
+      optional: 'ИПФ, ФТК',
+      isActive: false,
+      point: k20Point,
+    )
+  ];
+
+  //Info screen data
+  List<InfoCard> infoCards = [
+    InfoCard(
+        title: 'Определиться с будущей профессией',
+        subtitle: '\nВ этом поможет отдел профориентационной работы БНТУ.'),
+    InfoCard(
+        title: 'Сдать вступительные испытания',
+        subtitle: '\nЭто может быть централизованное тестирование (ЦТ), '
+            'письменный экзамен или творческие испытания, '
+            'что зависит от законченного ранее учреждения среднего '
+            'образования, а также формы получения образования и '
+            'выбранной специальности. \nПодробнее по специальностям '
+            'смотрите на сайте приемной комиссии БНТУ'),
+    InfoCard(title: 'Собрать необходимый пакет документов', subtitle: ''),
+    InfoCard(
+        title: 'Подать документы в установленные сроки',
+        subtitle:
+            '\nДля обучения за счет средств республиканского бюджета – с 20.07 по 26.07'
+            '\nДля обучения на платной основе при поступлении '
+            'по результатам экзаменов в БНТУ – с 20.07 по 26.07'
+            '\nДля обучения на платной основе при поступлении '
+            'на основе только сертификатов ЦТ – с 20.07 по 09.08'
+            '\n14.07 и 04.08 – рабочие дни.'),
+    InfoCard(
+        title: 'Перечень необходимых документов для поступления',
+        subtitle: '\nПаспорт (документ, удостоверяющий личность)'
+            '\nЗаявление (заполняется в вузе)'
+            '\nОригинал документа об образовании и приложения '
+            'к нему (аттестат об окончании школы или диплом'
+            'колледжа/училища/вуза)'
+            '\nОригиналы сертификатов ЦТ (2020-2021 годы)'
+            '\nМедицинская справка о состоянии здоровья'
+            '(1/здр/у-10, срок действия – 6 месяцев) '
+            'с обязательной записью (если нет противопоказаний '
+            'по здоровью) "Годен для обучения в вузе"'
+            '\nДокументы о праве на льготы (если таковые имеются)'
+            '\n4 цветные фотографий 3x4'
+            '\n14.07 и 04.08 – рабочие дни'),
   ];
 }
