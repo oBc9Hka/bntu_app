@@ -7,7 +7,7 @@ class Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color main_color = Color.fromARGB(255, 0, 138, 94); // green color
+    const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color
     var _infoCards = Data().infoCards;
     double height = MediaQuery.of(context).size.height;
 
@@ -45,15 +45,15 @@ class Info extends StatelessWidget {
             child: Text(
               'СТАНЬ СТУДЕНТОМ БНТУ!',
               style: TextStyle(
-                  color: main_color, fontSize: 20, fontWeight: FontWeight.w700),
+                  color: mainColor, fontSize: 20, fontWeight: FontWeight.w700),
             ),
           ),
           ..._infoCards.map((item) => Card(
                 margin: EdgeInsets.all(10),
-                shadowColor: main_color,
+                shadowColor: mainColor,
                 elevation: 10,
                 shape: RoundedRectangleBorder(
-                    side: BorderSide(color: main_color, width: 1),
+                    side: BorderSide(color: mainColor, width: 1),
                     borderRadius: BorderRadius.all(Radius.circular(15))),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -61,7 +61,7 @@ class Info extends StatelessWidget {
                     title: Text(item.title, style: TextStyle(fontSize: 20)),
                     subtitle: Text(item.subtitle),
                     leading: Icon(Icons.check_box_outlined,
-                        color: main_color, size: 45),
+                        color: mainColor, size: 45),
                   ),
                 ),
               ))

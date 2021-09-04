@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class GreetingScreen extends StatelessWidget {
@@ -8,6 +11,9 @@ class GreetingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     const Color main_color = Color.fromARGB(255, 0, 138, 94); // green color
     Widget buttonSection = Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,8 +81,22 @@ class GreetingScreen extends StatelessWidget {
       ),
     );
 
-    double height = MediaQuery.of(context).size.height;
-    var themeProvider = Provider.of<ThemeProvider>(context);
+    DateTime? backButtonPressedTime;
+    Future<bool> onWillPop() async {
+      DateTime currentTime = DateTime.now();
+      bool backButton = backButtonPressedTime == null ||
+          currentTime.difference(backButtonPressedTime!) > Duration(seconds: 2);
+      Fluttertoast.showToast(
+        msg: 'Нажмите ещё раз для выхода',
+      );
+
+      if (backButton) {
+        backButtonPressedTime = currentTime;
+        return false;
+      }
+      exit(0);
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -111,28 +131,31 @@ class GreetingScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // Padding(padding: EdgeInsets.only(left: 40)),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+      body: WillPopScope(
+        onWillPop: onWillPop,
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Padding(padding: EdgeInsets.only(left: 40)),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                ),
               ),
-            ),
 
-            Container(
-              width: double.infinity,
-              height: height / 2.5,
-              alignment: Alignment.center,
-              child: Image.asset('assets/man.png'),
-            ),
-            textSection,
-            buttonSection,
-          ],
+              Container(
+                width: double.infinity,
+                height: height / 2.5,
+                alignment: Alignment.center,
+                child: Image.asset('assets/man.png'),
+              ),
+              textSection,
+              buttonSection,
+            ],
+          ),
         ),
       ),
     );

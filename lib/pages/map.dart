@@ -193,6 +193,11 @@ class _BuildingsMapState extends State<BuildingsMap> {
                     title,
                     style: TextStyle(color: item.isActive ? mainColor : null),
                   ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    padding: EdgeInsets.all(0),
+                    icon: const Icon(Icons.info),
+                  ),
                   onTap: () {
                     setState(() {
                       _prevSelectedItem.isActive = false;
