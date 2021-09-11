@@ -1,8 +1,5 @@
-import 'package:bntu_app/providers/theme_provider.dart';
-import 'package:bntu_app/themes/material_themes.dart';
 import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/util/data.dart';
-import 'package:bntu_app/yandex/widgets/dummy_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -74,6 +71,64 @@ class _BuildingsMapState extends State<BuildingsMap> {
       controller!.removePlacemark(controller!.placemarks.first);
   }
 
+  void showBottomSheet(String title, String subtitle) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.4,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        subtitle != ''
+                            ? Text(
+                                subtitle,
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: 30,
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: Image.asset('assets/bntu_main.jpg').image,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,9 +149,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   value: _showOptional,
                   title: Text('Отображение доп.информации'),
                   activeColor: mainColor,
-                  activeTrackColor: mainColor,
+                  activeTrackColor: Color.fromARGB(120, 0, 138, 94),
                 ),
-                // child: ListTile(title: Text('Отображение факультетов'), trailing: Icon(Icons.toggle_on),),
               ),
             ],
             icon: Icon(Icons.settings),
@@ -194,7 +248,15 @@ class _BuildingsMapState extends State<BuildingsMap> {
                     style: TextStyle(color: item.isActive ? mainColor : null),
                   ),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        _prevSelectedItem.isActive = false;
+                        item.isActive = true;
+                        _prevSelectedItem = item;
+                      });
+                      setPos(item.point);
+                      showBottomSheet(item.name, item.optional);
+                    },
                     padding: EdgeInsets.all(0),
                     icon: const Icon(Icons.info),
                   ),

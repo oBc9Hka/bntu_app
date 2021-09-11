@@ -8,4 +8,5 @@ class Building {
 
   Building(
       {required this.name, required this.optional, required this.isActive, required this.point});
+  //TODO: add support with firebase
 }
