@@ -1,6 +1,7 @@
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FacultyAdd extends StatefulWidget {
   const FacultyAdd({Key? key}) : super(key: key);
@@ -16,6 +17,11 @@ class _FacultyAddState extends State<FacultyAdd> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _shortNameController = TextEditingController();
   TextEditingController _aboutController = TextEditingController();
+
+  TextEditingController _hotLineNumberController = TextEditingController();
+  TextEditingController _hotLineMailController = TextEditingController();
+  TextEditingController _forInquiriesNumberController = TextEditingController();
+  TextEditingController _forHostelNumberController = TextEditingController();
   TextEditingController _imagePathController = TextEditingController();
 
   void _addFaculty() {
@@ -24,9 +30,14 @@ class _FacultyAddState extends State<FacultyAdd> {
         _nameController.text,
         _shortNameController.text,
         _aboutController.text,
+        _hotLineNumberController.text,
+        _hotLineMailController.text,
+        _forInquiriesNumberController.text,
+        _forHostelNumberController.text,
         _imagePathController.text,
       );
       Navigator.of(context).pop();
+      Fluttertoast.showToast(msg: 'Факультет успешно удалён');
     }
   }
 

@@ -54,6 +54,7 @@ class _FacultyPageState extends State<FacultyPage> {
               : Container()
         ],
       ),
+      //TODO: contacts and show at map
       body: SingleChildScrollView(
         child: Column(
           children: [

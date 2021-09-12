@@ -3,6 +3,7 @@ import 'package:bntu_app/models/faculty_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FacultyEdit extends StatefulWidget {
   const FacultyEdit({Key? key, required this.faculty}) : super(key: key);
@@ -20,6 +21,10 @@ class _FacultyEditState extends State<FacultyEdit> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _shortNameController = TextEditingController();
   TextEditingController _aboutController = TextEditingController();
+  TextEditingController _hotLineNumberController = TextEditingController();
+  TextEditingController _hotLineMailController = TextEditingController();
+  TextEditingController _forInquiriesNumberController = TextEditingController();
+  TextEditingController _forHostelNumberController = TextEditingController();
   TextEditingController _imagePathController = TextEditingController();
 
   void _editFaculty() {
@@ -28,6 +33,10 @@ class _FacultyEditState extends State<FacultyEdit> {
         _nameController.text,
         _shortNameController.text,
         _aboutController.text,
+        _hotLineNumberController.text,
+        _hotLineMailController.text,
+        _forInquiriesNumberController.text,
+        _forHostelNumberController.text,
         _imagePathController.text,
         widget.faculty.id,
       );
@@ -55,6 +64,7 @@ class _FacultyEditState extends State<FacultyEdit> {
                 _faculty.removeFaculty(item.id);
                 Navigator.pop(context);
                 Navigator.pop(context);
+                Fluttertoast.showToast(msg: 'Факультет ${item['shortName']} успешно удалён');
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.red),
