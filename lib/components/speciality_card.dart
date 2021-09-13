@@ -299,6 +299,7 @@ class SpecialityCard extends StatelessWidget {
                                       ),
                                       Text(
                                         spec['description'].toString(),
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 10,
                                           color: isNotActive ? inactiveColor : null,
