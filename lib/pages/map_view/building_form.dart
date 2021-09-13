@@ -1,10 +1,16 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/util/auth_service.dart';
 import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class BuildingForm extends StatefulWidget {
@@ -28,12 +34,89 @@ class _BuildingFormState extends State<BuildingForm> {
   GeoPoint? _point;
   late Point _newPoint;
   String _imagePath = '';
+  bool _temporaryLoaded = false;
 
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Building _building = Building();
   AuthService _authService = AuthService();
   User? _user;
+
+  XFile? _image;
+  UploadTask? task;
+  final ImagePicker _picker = ImagePicker();
+
+  void getPhoto() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _image = image!;
+    });
+    if (_image != null) {
+      saveImage();
+    }
+  }
+
+  Future<void> saveImage() async {
+    Uint8List? data;
+    await File(_image!.path)
+        .readAsBytes()
+        .then((value) => {data = Uint8List.fromList(value)});
+
+    task = uploadFile(data!);
+    setState(() {});
+
+    if (task == null) return;
+
+    final TaskSnapshot storageTaskSnapshot = await task!.whenComplete(() {
+      task = null;
+    });
+    final String path = await storageTaskSnapshot.ref.getDownloadURL();
+
+    _imagePath = path;
+  }
+
+  UploadTask? uploadFile(Uint8List data) {
+    try {
+      final Reference storageReference = FirebaseStorage.instance
+          .ref('buildings/${_nameController.text}/photo.jpg');
+      // return storageReference.putFile(File(_image.path));
+
+      return storageReference.putData(data);
+    } on FirebaseException catch (e) {
+      return null;
+    }
+  }
+
+  Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
+        stream: task.snapshotEvents,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+
+            _temporaryLoaded = true;
+            final snap = snapshot.data;
+            final progress = snap!.bytesTransferred / snap.totalBytes;
+            final percentage = (progress * 100).toStringAsFixed(1);
+            return Container(
+              width: 80,
+              height: 80,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color.fromRGBO(0, 0, 0, 0.5),
+              ),
+              child: Center(
+                child: Text(
+                  '$percentage%',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ),
+            );
+          } else {
+            return Container();
+          }
+        },
+      );
+
+  void changeUploadStatus() {}
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -66,7 +149,8 @@ class _BuildingFormState extends State<BuildingForm> {
       );
       Navigator.of(context).pop();
       Fluttertoast.showToast(msg: 'Точка успешно добавлена');
-    }}
+    }
+  }
 
   void _removeBuilding(
       BuildContext context, QueryDocumentSnapshot<Object?>? item) {
@@ -79,9 +163,7 @@ class _BuildingFormState extends State<BuildingForm> {
             child: const Center(
                 child: Text(
               'Хотите удалить точку?',
-              style: TextStyle(
-                  fontSize:
-                      18),
+              style: TextStyle(fontSize: 18),
             )),
           ),
           actions: [
@@ -155,16 +237,18 @@ class _BuildingFormState extends State<BuildingForm> {
     if (bFinal) {
       removePlacemark();
       setState(() {
-        _newPoint = Point(latitude: arguments['latitude'], longitude: arguments['longitude']);
+        _newPoint = Point(
+            latitude: arguments['latitude'], longitude: arguments['longitude']);
       });
       await addPlacemark(_newPoint);
     }
   }
 
-  Future<void> enableCameraTracking() async{
+  Future<void> enableCameraTracking() async {
     final currentCameraTracking = await controller!.enableCameraTracking(
-        onCameraPositionChange: cameraPositionChanged,
-      style: const PlacemarkStyle(iconName: 'assets/yandex_images/place.png', opacity: 0.5),
+      onCameraPositionChange: cameraPositionChanged,
+      style: const PlacemarkStyle(
+          iconName: 'assets/yandex_images/place.png', opacity: 0.5),
     );
   }
 
@@ -176,9 +260,10 @@ class _BuildingFormState extends State<BuildingForm> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.isEdit){
+    if (widget.isEdit) {
       _nameController = TextEditingController(text: widget.building!['name']);
-      _optionalController = TextEditingController(text: widget.building!['optional']);
+      _optionalController =
+          TextEditingController(text: widget.building!['optional']);
       _point = widget.building!['point'];
       _imagePath = widget.building!['imagePath'];
     }
@@ -196,8 +281,11 @@ class _BuildingFormState extends State<BuildingForm> {
                 onMapRendered: () async {
                   print('Map rendered');
                   setInitialPos();
-                  if(widget.isEdit){
-                    setPos(Point(longitude: _point!.longitude, latitude: _point!.latitude, ));
+                  if (widget.isEdit) {
+                    setPos(Point(
+                      longitude: _point!.longitude,
+                      latitude: _point!.latitude,
+                    ));
                   }
                   enableCameraTracking();
                   var tiltGesturesEnabled =
@@ -223,7 +311,6 @@ class _BuildingFormState extends State<BuildingForm> {
                     print('Tapped map at ${point.latitude},${point.longitude}'),
                 onMapLongTap: (Point point) => print(
                     'Long tapped map at ${point.latitude},${point.longitude}'),
-
               ),
               Align(
                 alignment: Alignment.centerRight,
@@ -260,104 +347,134 @@ class _BuildingFormState extends State<BuildingForm> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(labelText: 'Название'),
-                  validator: (value) {
-                    if (value == '') return 'Введите название';
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _optionalController,
-                  decoration:
-                      const InputDecoration(labelText: 'Опциональное поле'),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(top: 10)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            widget.isEdit
-                ? ElevatedButton(
-                    onPressed: () {
-                      _editBuilding(widget.building!.id);
-                    },
-                    child: Text('Изменить'),
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(mainColor),
-                      minimumSize: MaterialStateProperty.all(Size(150, 50)),
-                      elevation: MaterialStateProperty.all(10),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: mainColor),
-                        ),
-                      ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(labelText: 'Название'),
+                      validator: (value) {
+                        if (value == '') return 'Введите название';
+                        return null;
+                      },
                     ),
-                  )
-                : ElevatedButton(
-                    onPressed: () {
-                      _addBuilding();
-                    },
-                    child: Text('Добавить'),
-                    style: ButtonStyle(
-                      // foregroundColor: MaterialStateProperty.all(mainColor),
-                      minimumSize: MaterialStateProperty.all(Size(120, 50)),
-                      elevation: MaterialStateProperty.all(10),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: mainColor),
-                        ),
-                      ),
+                    TextFormField(
+                      controller: _optionalController,
+                      decoration:
+                          const InputDecoration(labelText: 'Опциональное поле'),
                     ),
-                  ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Назад'),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(mainColor),
-                minimumSize: MaterialStateProperty.all(Size(120, 50)),
-                elevation: MaterialStateProperty.all(10),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: mainColor),
-                  ),
+                  ],
                 ),
               ),
-            ),
-            if (widget.isEdit)
+              ElevatedButton(
+                  onPressed: () {
+                    getPhoto();
+                  },
+                  child: Text('Загрузить изображение')),
+              (widget.isEdit && widget.building!['imagePath'] != '' &&
+                      _temporaryLoaded)
+                  ? SizedBox(
+                      height: 100,
+                      child: Image.network(widget.building!['imagePath']))
+                  : Text('Изображение не загружено'),
+              if (task != null)
+                // buildUploadStatus(task!)
+                // _temporaryLoaded = true
+                // changeUploadStatus()
+                Builder(builder: (BuildContext context) {
+                  // setState(() {
+                  // });
+                  return buildUploadStatus(task!);
+                })
+              else
+                Container(),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              widget.isEdit
+                  ? ElevatedButton(
+                      onPressed: () {
+                        _editBuilding(widget.building!.id);
+                      },
+                      child: Text('Изменить'),
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all(mainColor),
+                        minimumSize: MaterialStateProperty.all(Size(150, 50)),
+                        elevation: MaterialStateProperty.all(10),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: mainColor),
+                          ),
+                        ),
+                      ),
+                    )
+                  : ElevatedButton(
+                      onPressed: () {
+                        _addBuilding();
+                      },
+                      child: Text('Добавить'),
+                      style: ButtonStyle(
+                        // foregroundColor: MaterialStateProperty.all(mainColor),
+                        minimumSize: MaterialStateProperty.all(Size(120, 50)),
+                        elevation: MaterialStateProperty.all(10),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: mainColor),
+                          ),
+                        ),
+                      ),
+                    ),
               ElevatedButton(
                 onPressed: () {
-                  _removeBuilding(context, widget.building);
+                  Navigator.of(context).pop();
                 },
-                child: Icon(Icons.delete),
+                child: Text('Назад'),
                 style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                  minimumSize: MaterialStateProperty.all(Size(50, 50)),
+                  foregroundColor: MaterialStateProperty.all(mainColor),
+                  minimumSize: MaterialStateProperty.all(Size(120, 50)),
                   elevation: MaterialStateProperty.all(10),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.red),
+                      side: BorderSide(color: mainColor),
                     ),
                   ),
                 ),
               ),
-          ],
+              if (widget.isEdit)
+                ElevatedButton(
+                  onPressed: () {
+                    _removeBuilding(context, widget.building);
+                  },
+                  child: Icon(Icons.delete),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    minimumSize: MaterialStateProperty.all(Size(50, 50)),
+                    elevation: MaterialStateProperty.all(10),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.red),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ],
     );

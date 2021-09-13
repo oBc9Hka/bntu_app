@@ -84,7 +84,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
       controller!.removePlacemark(controller!.placemarks.first);
   }
 
-  void showBottomSheet(String title, String subtitle) {
+  void showBottomSheet(String title, String subtitle, String imagePath) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -130,7 +130,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: Image.asset('assets/bntu_main.jpg').image,
+                      // image: Image.asset('assets/bntu_main.jpg').image,
+                      image: Image.network(imagePath).image,
                     ),
                   ),
                 ),
@@ -274,7 +275,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   padding: const EdgeInsets.all(10.0),
                   child: ListView.builder(
                     // scrollDirection: Axis.vertical,
-                    physics: NeverScrollableScrollPhysics(),
+                    // physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -327,7 +328,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                   });
                                   setPos(_point);
                                   showBottomSheet(
-                                      item['name'], item['optional']);
+                                      item['name'], item['optional'], item['imagePath']);
                                 },
                                 padding: EdgeInsets.all(0),
                                 icon: const Icon(Icons.info),

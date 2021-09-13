@@ -46,4 +46,6 @@ class Building {
   void removeBuilding(String id) async{
     await dbRef.collection('buildings').doc(id).delete();
   }
+
+  void updateImage(){}
 }

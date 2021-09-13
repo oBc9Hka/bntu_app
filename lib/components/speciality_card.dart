@@ -253,79 +253,80 @@ class SpecialityCard extends StatelessWidget {
   }) {
     return Stack(
       children: [
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5.0),
-            side: BorderSide(
-                color: isNotActive ? inactiveColor : mainColor, width: 2.0),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Wrap(
-                  direction: Axis.horizontal,
-                  children: [
-                    ...list.map(
-                      (spec) => (item.get('${spec[dbField]}') != '')
-                          ? Container(
-                              width: 76,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+        Column(
+          children: [
+            SizedBox(height: 3,),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                side: BorderSide(
+                    color: isNotActive ? inactiveColor : mainColor, width: 2.0),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      children: [
+                        ...list.map(
+                          (spec) => (item.get('${spec[dbField]}') != '')
+                              ? Container(
+                                  width: 76,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            item.get('${spec[dbField]}'),
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color:
+                                                  isNotActive ? inactiveColor : null,
+                                            ),
+                                          ),
+                                          icon != null
+                                              ? Icon(
+                                                  icon,
+                                                  color: isNotActive
+                                                      ? inactiveColor
+                                                      : null,
+                                                )
+                                              : Container(),
+                                        ],
+                                      ),
                                       Text(
-                                        item.get('${spec[dbField]}'),
+                                        spec['description'].toString(),
                                         style: TextStyle(
-                                          fontSize: 18,
-                                          color:
-                                              isNotActive ? inactiveColor : null,
+                                          fontSize: 10,
+                                          color: isNotActive ? inactiveColor : null,
                                         ),
                                       ),
-                                      icon != null
-                                          ? Icon(
-                                              icon,
-                                              color: isNotActive
-                                                  ? inactiveColor
-                                                  : null,
-                                            )
-                                          : Container(),
                                     ],
                                   ),
-                                  Text(
-                                    spec['description'].toString(),
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: isNotActive ? inactiveColor : null,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
+                                )
+                              : Container(),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
-        Positioned(
-          //TODO: fix position
-          top: -3,
-          left: MediaQuery.of(context).size.width * 0.27,
-          child: Container(
-            color: _titleBackColor,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Center(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: isNotActive ? inactiveColor : mainColor,
-                  ),
+        Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Center(
+              child: Text(
+                ' $title ',
+                style: TextStyle(
+                  color: isNotActive ? inactiveColor : mainColor,
+                  backgroundColor: _titleBackColor,
                 ),
               ),
             ),
