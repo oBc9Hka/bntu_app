@@ -118,13 +118,6 @@ class _SpecialityFormState extends State<SpecialityForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   Speciality _speciality = Speciality();
-  bool _visibleDurations = false;
-  bool _visibleEntranceFull = false;
-  bool _visibleEntranceShort = false;
-  bool _visibleAdmissionsCurrent = false;
-  bool _visiblePassScoresPrevYear = false;
-  bool _visibleAdmissionsPrevYear = false;
-  bool _visiblePassScoresBeforeLastYear = false;
 
   void _getFullEntranceList(
     String first,
