@@ -1,5 +1,10 @@
 import 'package:bntu_app/models/buildings_model.dart';
+import 'package:bntu_app/pages/map_view/building_add.dart';
+import 'package:bntu_app/pages/map_view/building_edit.dart';
+import 'package:bntu_app/util/auth_service.dart';
 import 'package:bntu_app/util/data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -16,17 +21,25 @@ class _BuildingsMapState extends State<BuildingsMap> {
   final Data _data = Data();
   bool _showOptional = true;
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
-  Building _prevSelectedItem = Building(
-      name: '', optional: '', isActive: false, point: Data.initialPoint);
+  AuthService _authService = AuthService();
+  User? _user;
+
+  int _selectedIndex = -1;
+
+  Future<void> _getUser() async {
+    final user = await _authService.getCurrentUser();
+    setState(() {
+      _user = user as User;
+    });
+  }
 
   bool isNightModeEnabled = false;
   bool isZoomGesturesEnabled = false;
   bool isTiltGesturesEnabled = false;
 
-  List<Building> _buildings = Data().buildings;
-
   @override
   void initState() {
+    _getUser();
     super.initState();
   }
 
@@ -71,7 +84,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
       controller!.removePlacemark(controller!.placemarks.first);
   }
 
-  void showBottomSheet(String title, String subtitle) {
+  void showBottomSheet(String title, String subtitle, String imagePath) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -117,7 +130,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: Image.asset('assets/bntu_main.jpg').image,
+                      // image: Image.asset('assets/bntu_main.jpg').image,
+                      image: Image.network(imagePath).image,
                     ),
                   ),
                 ),
@@ -152,6 +166,16 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   activeTrackColor: Color.fromARGB(120, 0, 138, 94),
                 ),
               ),
+              if (_user != null)
+                PopupMenuItem(
+                  child: ListTile(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => BuildingAdd()));
+                    },
+                    title: Text('Добавить точку'),
+                  ),
+                ),
             ],
             icon: Icon(Icons.settings),
           )
@@ -215,7 +239,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                           IconButton(
                               onPressed: () {
                                 setState(() {
-                                  _prevSelectedItem.isActive = false;
+                                  _selectedIndex = -1;
                                 });
                                 setInitialPos();
                               },
@@ -229,45 +253,92 @@ class _BuildingsMapState extends State<BuildingsMap> {
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              itemCount: _buildings.length,
-              separatorBuilder: (context, index) {
-                return const Divider();
-              },
-              itemBuilder: (context, index) {
-                var item = _buildings[index];
-                String subtitle = _showOptional
-                    ? item.optional != ''
-                        ? ' (${item.optional})'
-                        : ''
-                    : '';
-                String title = item.name + subtitle;
-                return ListTile(
-                  title: Text(
-                    title,
-                    style: TextStyle(color: item.isActive ? mainColor : null),
-                  ),
-                  trailing: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _prevSelectedItem.isActive = false;
-                        item.isActive = true;
-                        _prevSelectedItem = item;
-                      });
-                      setPos(item.point);
-                      showBottomSheet(item.name, item.optional);
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('buildings')
+                  .orderBy('name')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData)
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(
+                        color: mainColor,
+                      ),
+                    ),
+                  );
+                if (snapshot.data!.docs.isEmpty) return Text('Данных нет');
+
+                return Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ListView.builder(
+                    // scrollDirection: Axis.vertical,
+                    // physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      QueryDocumentSnapshot<Object?> item =
+                          snapshot.data!.docs[index];
+                      if (index != snapshot.data!.docs.length)
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        );
+                      String subtitle = _showOptional
+                          ? item['optional'] != ''
+                              ? ' (${item['optional']})'
+                              : ''
+                          : '';
+                      String title = item['name'] + subtitle;
+                      bool _isSelected = false;
+                      GeoPoint _pointToCast = item['point'];
+                      Point _point = Point(
+                          latitude: _pointToCast.latitude,
+                          longitude: _pointToCast.longitude);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Wrap(
+                          children: [
+                            Visibility(
+                              visible: _user != null,
+                              child: IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          BuildingEdit(building: item)));
+                                },
+                                padding: EdgeInsets.all(0),
+                                icon: const Icon(Icons.edit),
+                              ),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                setState(() {
+                                  _selectedIndex = index;
+                                });
+                                setPos(_point);
+                              },
+                              title: Text(title),
+                              selected: index == _selectedIndex,
+                              trailing: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _selectedIndex = index;
+                                  });
+                                  setPos(_point);
+                                  showBottomSheet(
+                                      item['name'], item['optional'], item['imagePath']);
+                                },
+                                padding: EdgeInsets.all(0),
+                                icon: const Icon(Icons.info),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
                     },
-                    padding: EdgeInsets.all(0),
-                    icon: const Icon(Icons.info),
                   ),
-                  onTap: () {
-                    setState(() {
-                      _prevSelectedItem.isActive = false;
-                      item.isActive = true;
-                      _prevSelectedItem = item;
-                    });
-                    setPos(item.point);
-                  },
                 );
               },
             ),

@@ -98,92 +98,92 @@ class Data {
     longitude: 27.668686985918043,
   );
 
-  List<Building> buildings = [
-    Building(
-        name: 'Главный корпус',
-        optional: '',
-        isActive: false,
-        point: mainPoint),
-    Building(
-        name: 'Корпус №2',
-        optional: 'Деканат ЭФ',
-        isActive: false,
-        point: k2Point),
-    Building(name: 'Корпус №3', optional: '', isActive: false, point: k3Point),
-    Building(
-        name: 'Корпус №4',
-        optional: 'Деканат ВТФ',
-        isActive: false,
-        point: k4Point),
-    Building(
-        name: 'Корпус №5',
-        optional: 'Деканат СТФ',
-        isActive: false,
-        point: k5Point),
-    Building(
-        name: 'Корпус №6',
-        optional: 'Деканат МСФ',
-        isActive: false,
-        point: k6Point),
-    Building(
-        name: 'Корпус №7',
-        optional: 'Деканат МТФ',
-        isActive: false,
-        point: k7Point),
-    Building(
-        name: 'Корпус №8',
-        optional: 'Деканат АТФ',
-        isActive: false,
-        point: k8Point),
-    Building(name: 'Корпус №9', optional: '', isActive: false, point: k9Point),
-    Building(
-        name: 'Корпус №10', optional: '', isActive: false, point: k10Point),
-    Building(
-        name: 'Корпус №11А',
-        optional: 'Деканат ФИТР',
-        isActive: false,
-        point: k11APoint),
-    Building(
-        name: 'Корпус №11Б',
-        optional: 'Спортклуб БНТУ',
-        isActive: false,
-        point: k11BPoint),
-    Building(
-        name: 'Корпус №12', optional: '', isActive: false, point: k12Point),
-    Building(
-        name: 'Корпус №13', optional: '', isActive: false, point: k13Point),
-    Building(
-        name: 'Корпус №14', optional: '', isActive: false, point: k14Point),
-    Building(
-        name: 'Корпус №15', optional: '', isActive: false, point: k15Point),
-    Building(
-        name: 'Корпус №16', optional: 'Деканат СФ', isActive: false, point: k16Point),
-    Building(
-        name: 'Корпус №17',
-        optional: 'Деканат ПСФ',
-        isActive: false,
-        point: k17Point),
-    Building(
-        name: 'Корпус №18A',
-        optional: 'Деканат ФМПП, ФЭС',
-        isActive: false,
-        point: k18APoint),
-    Building(
-        name: 'Корпус №18Б',
-        optional: 'Деканат ФМПП, ФЭС',
-        isActive: false,
-        point: k18BPoint),
-    Building(
-        name: 'Корпус №19',
-        optional: 'Лицей БНТУ',
-        isActive: false,
-        point: k19Point),
-    Building(
-      name: 'Корпус №20',
-      optional: 'ИПФ, ФТК',
-      isActive: false,
-      point: k20Point,
-    )
-  ];
+  // List<Building> buildings = [
+  //   Building(
+  //       name: 'Главный корпус',
+  //       optional: '',
+  //       isActive: false,
+  //       point: mainPoint),
+  //   Building(
+  //       name: 'Корпус №2',
+  //       optional: 'Деканат ЭФ',
+  //       isActive: false,
+  //       point: k2Point),
+  //   Building(name: 'Корпус №3', optional: '', isActive: false, point: k3Point),
+  //   Building(
+  //       name: 'Корпус №4',
+  //       optional: 'Деканат ВТФ',
+  //       isActive: false,
+  //       point: k4Point),
+  //   Building(
+  //       name: 'Корпус №5',
+  //       optional: 'Деканат СТФ',
+  //       isActive: false,
+  //       point: k5Point),
+  //   Building(
+  //       name: 'Корпус №6',
+  //       optional: 'Деканат МСФ',
+  //       isActive: false,
+  //       point: k6Point),
+  //   Building(
+  //       name: 'Корпус №7',
+  //       optional: 'Деканат МТФ',
+  //       isActive: false,
+  //       point: k7Point),
+  //   Building(
+  //       name: 'Корпус №8',
+  //       optional: 'Деканат АТФ',
+  //       isActive: false,
+  //       point: k8Point),
+  //   Building(name: 'Корпус №9', optional: '', isActive: false, point: k9Point),
+  //   Building(
+  //       name: 'Корпус №10', optional: '', isActive: false, point: k10Point),
+  //   Building(
+  //       name: 'Корпус №11А',
+  //       optional: 'Деканат ФИТР',
+  //       isActive: false,
+  //       point: k11APoint),
+  //   Building(
+  //       name: 'Корпус №11Б',
+  //       optional: 'Спортклуб БНТУ',
+  //       isActive: false,
+  //       point: k11BPoint),
+  //   Building(
+  //       name: 'Корпус №12', optional: '', isActive: false, point: k12Point),
+  //   Building(
+  //       name: 'Корпус №13', optional: '', isActive: false, point: k13Point),
+  //   Building(
+  //       name: 'Корпус №14', optional: '', isActive: false, point: k14Point),
+  //   Building(
+  //       name: 'Корпус №15', optional: '', isActive: false, point: k15Point),
+  //   Building(
+  //       name: 'Корпус №16', optional: 'Деканат СФ', isActive: false, point: k16Point),
+  //   Building(
+  //       name: 'Корпус №17',
+  //       optional: 'Деканат ПСФ',
+  //       isActive: false,
+  //       point: k17Point),
+  //   Building(
+  //       name: 'Корпус №18A',
+  //       optional: 'Деканат ФМПП, ФЭС',
+  //       isActive: false,
+  //       point: k18APoint),
+  //   Building(
+  //       name: 'Корпус №18Б',
+  //       optional: 'Деканат ФМПП, ФЭС',
+  //       isActive: false,
+  //       point: k18BPoint),
+  //   Building(
+  //       name: 'Корпус №19',
+  //       optional: 'Лицей БНТУ',
+  //       isActive: false,
+  //       point: k19Point),
+  //   Building(
+  //     name: 'Корпус №20',
+  //     optional: 'ИПФ, ФТК',
+  //     isActive: false,
+  //     point: k20Point,
+  //   )
+  // ];
 
 }

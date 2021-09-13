@@ -1,7 +1,7 @@
 // @dart=2.9
 
 import 'package:bntu_app/pages/faculties_views/main_page.dart';
-import 'package:bntu_app/pages/map.dart';
+import 'package:bntu_app/pages/map_view/map.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

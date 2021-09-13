@@ -26,11 +26,13 @@ dependencies:
   firebase_core:
   cloud_firestore:
   firebase_auth:
+  firebase_storage:
   custom_splash: ^0.0.2
   yandex_mapkit: ^1.1.1
   permission_handler: ^6.1.1 # в будущем будет удалён, возможно
   provider: ^6.0.0
   fluttertoast: ^8.0.8
+  image_picker:
 
 
   cupertino_icons: ^1.0.2
