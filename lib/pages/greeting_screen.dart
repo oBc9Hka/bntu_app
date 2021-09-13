@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GreetingScreen extends StatefulWidget {
   const GreetingScreen({Key? key}) : super(key: key);
@@ -22,12 +23,16 @@ class _GreetingScreenState extends State<GreetingScreen> {
   TextEditingController _passwordController = TextEditingController();
   AuthService _authService = AuthService();
   User? _user;
+  static const _url = 'https://bntu.by';
 
   @override
   void initState() {
     _getUser();
     super.initState();
   }
+
+  void _launchURL() async =>
+      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -270,7 +275,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                   ),
                   ListTile(
                     onTap: () {
-                      //TODO: handle redirect
+                      _launchURL();
                     },
                     title: Text('На сайт БНТУ'),
                     trailing: Icon(Icons.open_in_browser),

@@ -130,8 +130,19 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      // image: Image.asset('assets/bntu_main.jpg').image,
-                      image: Image.network(imagePath).image,
+                      image: Image.network(imagePath,
+                          loadingBuilder: (BuildContext context,
+                          Widget child,
+                          ImageChunkEvent? loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 10,
+                          ),
+                        );
+                      }).image,
                     ),
                   ),
                 ),
@@ -149,7 +160,6 @@ class _BuildingsMapState extends State<BuildingsMap> {
       appBar: AppBar(
         title: Text('Карта корпусов'),
         actions: [
-          // IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
           PopupMenuButton(
             itemBuilder: (context) => [
               PopupMenuItem(
@@ -274,8 +284,6 @@ class _BuildingsMapState extends State<BuildingsMap> {
                 return Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: ListView.builder(
-                    // scrollDirection: Axis.vertical,
-                    // physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (BuildContext context, int index) {
@@ -291,7 +299,6 @@ class _BuildingsMapState extends State<BuildingsMap> {
                               : ''
                           : '';
                       String title = item['name'] + subtitle;
-                      bool _isSelected = false;
                       GeoPoint _pointToCast = item['point'];
                       Point _point = Point(
                           latitude: _pointToCast.latitude,
