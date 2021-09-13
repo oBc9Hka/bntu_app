@@ -118,13 +118,6 @@ class _SpecialityFormState extends State<SpecialityForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   Speciality _speciality = Speciality();
-  bool _visibleDurations = false;
-  bool _visibleEntranceFull = false;
-  bool _visibleEntranceShort = false;
-  bool _visibleAdmissionsCurrent = false;
-  bool _visiblePassScoresPrevYear = false;
-  bool _visibleAdmissionsPrevYear = false;
-  bool _visiblePassScoresBeforeLastYear = false;
 
   void _getFullEntranceList(
     String first,
@@ -575,506 +568,311 @@ class _SpecialityFormState extends State<SpecialityForm> {
                 },
               ),
 
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
-              ListTile(
-                onTap: () {
-                  setState(() {
-                    _visibleDurations = !_visibleDurations;
-                  });
-                },
+              ExpansionTile(
                 title: Text(
                   'Длительность обучения',
                   style: TextStyle(color: mainColor),
                 ),
-                trailing: Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: mainColor,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: mainColor),
-                ),
+                children: [
+                  TextFormField(
+                    controller: _trainingDurationDayFullController,
+                    decoration:
+                    const InputDecoration(labelText: 'Дневное полное'),
+                  ),
+                  TextFormField(
+                    controller: _trainingDurationDayShortController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное сокращённое'),
+                  ),
+                  TextFormField(
+                    controller: _trainingDurationCorrespondenceFullController,
+                    decoration:
+                    const InputDecoration(labelText: 'Заочное полное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _trainingDurationCorrespondenceShortController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое'),
+                  ),
+                ],
               ),
-              Visibility(
-                visible: _visibleDurations,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _trainingDurationDayFullController,
-                      decoration:
-                          const InputDecoration(labelText: 'Дневное полное'),
-                    ),
-                    TextFormField(
-                      controller: _trainingDurationDayShortController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное сокращённое'),
-                    ),
-                    TextFormField(
-                      controller: _trainingDurationCorrespondenceFullController,
-                      decoration:
-                          const InputDecoration(labelText: 'Заочное полное'),
-                    ),
-                    TextFormField(
-                      controller: _trainingDurationDayShortController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое'),
-                    ),
-                  ],
-                ),
-              ),
-
-              // ElevatedButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       _visibleEntranceFull = !_visibleEntranceFull;
-              //     });
-              //   },
-              //   child: Text('Вступительные исп. полное'),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
-              ListTile(
-                onTap: () {
-                  setState(() {
-                    _visibleEntranceFull = !_visibleEntranceFull;
-                  });
-                },
+              ExpansionTile(
                 title: Text(
                   'Вступительные исп. полное',
                   style: TextStyle(color: mainColor),
                 ),
-                trailing: Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: mainColor,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: mainColor),
-                ),
+                children: [
+                  TextFormField(
+                    controller: _entranceTestsFull1Controller,
+                    decoration: const InputDecoration(labelText: '№1'),
+                  ),
+                  TextFormField(
+                    controller: _entranceTestsFull2Controller,
+                    decoration: const InputDecoration(labelText: '№2'),
+                  ),
+                  TextFormField(
+                    controller: _entranceTestsFull3Controller,
+                    decoration: const InputDecoration(labelText: '№3'),
+                  ),
+                  TextFormField(
+                    controller: _entranceTestsFull4Controller,
+                    decoration: const InputDecoration(labelText: '№4'),
+                  ),
+                  TextFormField(
+                    controller: _entranceTestsFull5Controller,
+                    decoration: const InputDecoration(labelText: '№5'),
+                  ),
+                ],
               ),
-              Visibility(
-                visible: _visibleEntranceFull,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _entranceTestsFull1Controller,
-                      decoration: const InputDecoration(labelText: '№1'),
-                    ),
-                    TextFormField(
-                      controller: _entranceTestsFull2Controller,
-                      decoration: const InputDecoration(labelText: '№2'),
-                    ),
-                    TextFormField(
-                      controller: _entranceTestsFull3Controller,
-                      decoration: const InputDecoration(labelText: '№3'),
-                    ),
-                    TextFormField(
-                      controller: _entranceTestsFull4Controller,
-                      decoration: const InputDecoration(labelText: '№4'),
-                    ),
-                    TextFormField(
-                      controller: _entranceTestsFull5Controller,
-                      decoration: const InputDecoration(labelText: '№5'),
-                    ),
-                  ],
-                ),
-              ),
-
-              // ElevatedButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       _visibleEntranceShort = !_visibleEntranceShort;
-              //     });
-              //   },
-              //   child: Text('Вступительные исп. сокращенное'),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
-              ListTile(
-                onTap: () {
-                  setState(() {
-                    _visibleEntranceShort = !_visibleEntranceShort;
-                  });
-                },
+              ExpansionTile(
                 title: Text(
                   'Вступительные исп. сокращенное',
                   style: TextStyle(color: mainColor),
                 ),
-                trailing: Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: mainColor,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: mainColor),
-                ),
-              ),
-              Visibility(
-                visible: _visibleEntranceShort,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _entranceShort1Controller,
-                      decoration: const InputDecoration(labelText: '№1'),
-                    ),
-                    TextFormField(
-                      controller: _entranceShort2Controller,
-                      decoration: const InputDecoration(labelText: '№2'),
-                    ),
-                    TextFormField(
-                      controller: _entranceShort3Controller,
-                      decoration: const InputDecoration(labelText: '№3'),
-                    ),
-                    TextFormField(
-                      controller: _entranceShort4Controller,
-                      decoration: const InputDecoration(labelText: '№4'),
-                    ),
-                    TextFormField(
-                      controller: _entranceShort5Controller,
-                      decoration: const InputDecoration(labelText: '№5'),
-                    ),
-                  ],
-                ),
+                children: [
+                  TextFormField(
+                    controller: _entranceShort1Controller,
+                    decoration: const InputDecoration(labelText: '№1'),
+                  ),
+                  TextFormField(
+                    controller: _entranceShort2Controller,
+                    decoration: const InputDecoration(labelText: '№2'),
+                  ),
+                  TextFormField(
+                    controller: _entranceShort3Controller,
+                    decoration: const InputDecoration(labelText: '№3'),
+                  ),
+                  TextFormField(
+                    controller: _entranceShort4Controller,
+                    decoration: const InputDecoration(labelText: '№4'),
+                  ),
+                  TextFormField(
+                    controller: _entranceShort5Controller,
+                    decoration: const InputDecoration(labelText: '№5'),
+                  ),
+                ],
               ),
 
+
               // план приёма текущий год
-              // ElevatedButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       _visibleAdmissionsCurrent = !_visibleAdmissionsCurrent;
-              //     });
-              //   },
-              //   child: Text('План приёма 2021'),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
-              ListTile(
-                onTap: () {
-                  setState(() {
-                    _visibleAdmissionsCurrent = !_visibleAdmissionsCurrent;
-                  });
-                },
+              ExpansionTile(
                 title: Text(
                   'План приёма 2021',
                   style: TextStyle(color: mainColor),
                 ),
-                trailing: Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: mainColor,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: mainColor),
-                ),
-              ),
-              Visibility(
-                visible: _visibleAdmissionsCurrent,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _admissionCurrentDayFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller: _admissionCurrentDayShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller: _admissionCurrentDayFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное полное платное'),
-                    ),
-                    TextFormField(
-                      controller: _admissionCurrentDayShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное сокращённое платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionCurrentCorrespondenceFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionCurrentCorrespondenceShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionCurrentCorrespondenceFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionCurrentCorrespondenceShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое платное'),
-                    ),
-                  ],
-                ),
+                children: [
+                  TextFormField(
+                    controller: _admissionCurrentDayFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller: _admissionCurrentDayShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller: _admissionCurrentDayFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное полное платное'),
+                  ),
+                  TextFormField(
+                    controller: _admissionCurrentDayShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное сокращённое платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionCurrentCorrespondenceFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionCurrentCorrespondenceShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionCurrentCorrespondenceFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionCurrentCorrespondenceShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое платное'),
+                  ),
+                ],
               ),
 
+
               // проходные баллы прошлый год
-              // ElevatedButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       _visiblePassScoresPrevYear = !_visiblePassScoresPrevYear;
-              //     });
-              //   },
-              //   child: Text('Проходные баллы 2020'),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
-              ListTile(
-                onTap: () {
-                  setState(() {
-                    _visiblePassScoresPrevYear = !_visiblePassScoresPrevYear;
-                  });
-                },
+              ExpansionTile(
                 title: Text(
                   'Проходные баллы 2020',
                   style: TextStyle(color: mainColor),
                 ),
-                trailing: Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: mainColor,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: mainColor),
-                ),
-              ),
-              Visibility(
-                visible: _visiblePassScoresPrevYear,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _passScorePrevYearDayFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Девное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller: _passScorePrevYearDayShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Девное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller: _passScorePrevYearDayFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Девное полное платное'),
-                    ),
-                    TextFormField(
-                      controller: _passScorePrevYearDayShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Девное сокращённое платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScorePrevYearCorrespondenceFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScorePrevYearCorrespondenceShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScorePrevYearCorrespondenceFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScorePrevYearCorrespondenceShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое платное'),
-                    ),
-                  ],
-                ),
+                children: [
+                  TextFormField(
+                    controller: _passScorePrevYearDayFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Девное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller: _passScorePrevYearDayShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Девное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller: _passScorePrevYearDayFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Девное полное платное'),
+                  ),
+                  TextFormField(
+                    controller: _passScorePrevYearDayShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Девное сокращённое платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScorePrevYearCorrespondenceFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScorePrevYearCorrespondenceShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScorePrevYearCorrespondenceFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScorePrevYearCorrespondenceShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое платное'),
+                  ),
+                ],
               ),
 
               //план приема прошлый год
-              // ElevatedButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       _visibleAdmissionsPrevYear = !_visibleAdmissionsPrevYear;
-              //     });
-              //   },
-              //   child: Text('План приёма 2020'),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
-              ListTile(
-                onTap: () {
-                  setState(() {
-                    _visibleAdmissionsPrevYear = !_visibleAdmissionsPrevYear;
-                  });
-                },
+              ExpansionTile(
                 title: Text(
                   'План приёма 2020',
                   style: TextStyle(color: mainColor),
                 ),
-                trailing: Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: mainColor,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: mainColor),
-                ),
-              ),
-              Visibility(
-                visible: _visibleAdmissionsPrevYear,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: _admissionPrevYearDayFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller: _admissionPrevYearDayShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller: _admissionPrevYearDayFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное полное платное'),
-                    ),
-                    TextFormField(
-                      controller: _admissionPrevYearDayShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное сокращённое платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionPrevYearCorrespondenceFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionPrevYearCorrespondenceShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionPrevYearCorrespondenceFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _admissionPrevYearCorrespondenceShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое платное'),
-                    ),
-                  ],
-                ),
+                children: [
+                  TextFormField(
+                    controller: _admissionPrevYearDayFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller: _admissionPrevYearDayShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller: _admissionPrevYearDayFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное полное платное'),
+                  ),
+                  TextFormField(
+                    controller: _admissionPrevYearDayShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное сокращённое платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionPrevYearCorrespondenceFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionPrevYearCorrespondenceShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionPrevYearCorrespondenceFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _admissionPrevYearCorrespondenceShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое платное'),
+                  ),
+                ],
               ),
 
               //проходные баллы позапрошлый год
-              // ElevatedButton(
-              //   onPressed: () {
-              //     setState(() {
-              //       _visiblePassScoresBeforeLastYear = !_visiblePassScoresBeforeLastYear;
-              //     });
-              //   },
-              //   child: Text('Проходные баллы 2019'),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-              ),
-              ListTile(
-                onTap: () {
-                  setState(() {
-                    _visiblePassScoresBeforeLastYear =
-                        !_visiblePassScoresBeforeLastYear;
-                  });
-                },
+              ExpansionTile(
                 title: Text(
                   'Проходные баллы 2019',
                   style: TextStyle(color: mainColor),
                 ),
-                trailing: Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: mainColor,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: mainColor),
-                ),
-              ),
-              Visibility(
-                visible: _visiblePassScoresBeforeLastYear,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller:
-                          _passScoreBeforeLastYearDayFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScoreBeforeLastYearDayShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller: _passScoreBeforeLastYearDayFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное полное платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScoreBeforeLastYearDayShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Дневное сокращённое платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScoreBeforeLastYearCorrespondenceFullBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScoreBeforeLastYearCorrespondenceShortBudgetController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое бюджет'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScoreBeforeLastYearCorrespondenceFullPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное полное платное'),
-                    ),
-                    TextFormField(
-                      controller:
-                          _passScoreBeforeLastYearCorrespondenceShortPaidController,
-                      decoration: const InputDecoration(
-                          labelText: 'Заочное сокращённое платное'),
-                    ),
-                  ],
-                ),
+                children: [
+                  TextFormField(
+                    controller:
+                    _passScoreBeforeLastYearDayFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScoreBeforeLastYearDayShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller: _passScoreBeforeLastYearDayFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное полное платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScoreBeforeLastYearDayShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Дневное сокращённое платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScoreBeforeLastYearCorrespondenceFullBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScoreBeforeLastYearCorrespondenceShortBudgetController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое бюджет'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScoreBeforeLastYearCorrespondenceFullPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное полное платное'),
+                  ),
+                  TextFormField(
+                    controller:
+                    _passScoreBeforeLastYearCorrespondenceShortPaidController,
+                    decoration: const InputDecoration(
+                        labelText: 'Заочное сокращённое платное'),
+                  ),
+                ],
               ),
 
               TextFormField(
@@ -1122,7 +920,7 @@ class _SpecialityFormState extends State<SpecialityForm> {
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.red),
+                          side: BorderSide(color: mainColor),
                         ),
                       ),
                     ),

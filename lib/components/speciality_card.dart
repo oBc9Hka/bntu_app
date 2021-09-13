@@ -235,12 +235,12 @@ class SpecialityCard extends StatelessWidget {
     List temp = item.get(field);
     String tempString = '';
     for (int i = 0; i < temp.length; i++) {
-      tempString += ' ${temp[i]}';
+      tempString += '_${temp[i]}';
     }
 
-    String newTempString = tempString.trimLeft();
-    newTempString = newTempString.trimRight();
-    return newTempString.replaceAll(' ', ' • ');
+    String newTempString = tempString.replaceFirst('_', ' ');
+    newTempString = newTempString.trim();
+    return newTempString.replaceAll('_', ' • ');
   }
 
   Widget specGridCard({
@@ -299,6 +299,7 @@ class SpecialityCard extends StatelessWidget {
                                       ),
                                       Text(
                                         spec['description'].toString(),
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 10,
                                           color: isNotActive ? inactiveColor : null,

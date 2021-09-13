@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bntu_app/models/buildings_model.dart';
+import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
 import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class BuildingForm extends StatefulWidget {
@@ -34,7 +36,6 @@ class _BuildingFormState extends State<BuildingForm> {
   GeoPoint? _point;
   late Point _newPoint;
   String _imagePath = '';
-  bool _temporaryLoaded = false;
 
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -51,9 +52,6 @@ class _BuildingFormState extends State<BuildingForm> {
     setState(() {
       _image = image!;
     });
-    if (_image != null) {
-      saveImage();
-    }
   }
 
   Future<void> saveImage() async {
@@ -65,6 +63,27 @@ class _BuildingFormState extends State<BuildingForm> {
     task = uploadFile(data!);
     setState(() {});
 
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          var themeProvider = Provider.of<ThemeProvider>(context);
+          return AlertDialog(
+            title: Text('Пожалуйста, подождите'),
+            content: SizedBox(
+              height: 50,
+              child: Column(
+                children: [
+                  Text('Идёт сохранение изменений'),
+                  if (task != null) buildUploadStatus(task!)
+                ],
+              ),
+            ),
+            backgroundColor: themeProvider.brightness == CustomBrightness.light
+                ? Colors.white70
+                : Colors.black54,
+          );
+        });
+
     if (task == null) return;
 
     final TaskSnapshot storageTaskSnapshot = await task!.whenComplete(() {
@@ -74,6 +93,8 @@ class _BuildingFormState extends State<BuildingForm> {
 
     _imagePath = path;
   }
+
+  ThemeProvider _provider = ThemeProvider();
 
   UploadTask? uploadFile(Uint8List data) {
     try {
@@ -91,23 +112,13 @@ class _BuildingFormState extends State<BuildingForm> {
         stream: task.snapshotEvents,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-
-            _temporaryLoaded = true;
             final snap = snapshot.data;
             final progress = snap!.bytesTransferred / snap.totalBytes;
             final percentage = (progress * 100).toStringAsFixed(1);
+
             return Container(
-              width: 80,
-              height: 80,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color.fromRGBO(0, 0, 0, 0.5),
-              ),
               child: Center(
-                child: Text(
-                  '$percentage%',
-                  style: const TextStyle(fontSize: 12),
-                ),
+                child: Text('$percentage%'),
               ),
             );
           } else {
@@ -115,8 +126,6 @@ class _BuildingFormState extends State<BuildingForm> {
           }
         },
       );
-
-  void changeUploadStatus() {}
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -128,8 +137,8 @@ class _BuildingFormState extends State<BuildingForm> {
   void _addBuilding() {
     if (_formKey.currentState!.validate()) {
       _building.addBuilding(
-        _nameController.text,
-        _optionalController.text,
+        _nameController.text.trim(),
+        _optionalController.text.trim(),
         _newPoint,
         _imagePath,
       );
@@ -138,17 +147,29 @@ class _BuildingFormState extends State<BuildingForm> {
     }
   }
 
-  void _editBuilding(String id) {
-    if (_formKey.currentState!.validate()) {
-      _building.editBuilding(
-        _nameController.text,
-        _optionalController.text,
-        _newPoint,
-        _imagePath,
-        id,
-      );
-      Navigator.of(context).pop();
-      Fluttertoast.showToast(msg: 'Точка успешно добавлена');
+  void _editBuilding(String id) async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        _building.editBuilding(
+          _nameController.text.trim(),
+          _optionalController.text.trim(),
+          _newPoint,
+          _imagePath,
+          id,
+        );
+        if (_image != null) {
+          await saveImage().whenComplete(() {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Fluttertoast.showToast(msg: 'Точка успешно изменена');
+          });
+        } else {
+          Navigator.of(context).pop();
+          Fluttertoast.showToast(msg: 'Точка успешно изменена');
+        }
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -375,23 +396,39 @@ class _BuildingFormState extends State<BuildingForm> {
                     getPhoto();
                   },
                   child: Text('Загрузить изображение')),
-              (widget.isEdit && widget.building!['imagePath'] != '' &&
-                      _temporaryLoaded)
-                  ? SizedBox(
-                      height: 100,
-                      child: Image.network(widget.building!['imagePath']))
-                  : Text('Изображение не загружено'),
-              if (task != null)
-                // buildUploadStatus(task!)
-                // _temporaryLoaded = true
-                // changeUploadStatus()
-                Builder(builder: (BuildContext context) {
-                  // setState(() {
-                  // });
-                  return buildUploadStatus(task!);
-                })
-              else
-                Container(),
+              Stack(
+                children: [
+                  (widget.isEdit && widget.building!['imagePath'] != '')
+                      ? (_image == null)
+                          ? Center(
+                              child: Container(
+                                width: 200,
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.network(
+                                              widget.building!['imagePath'])
+                                          .image),
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: Container(
+                                width: 200,
+                                height: 100.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image:
+                                          Image.file(File(_image!.path)).image),
+                                ),
+                              ),
+                            )
+                      : Text('Изображение не загружено'),
+                  // if (task != null) Center(child: buildUploadStatus(task!)) else Container(),
+                ],
+              ),
             ],
           ),
         ),
