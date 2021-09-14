@@ -126,26 +126,28 @@ class _BuildingsMapState extends State<BuildingsMap> {
                 ],
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: Image.network(imagePath,
-                          loadingBuilder: (BuildContext context,
-                          Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 10,
+                child: (imagePath != '')
+                    ? Stack(
+                      children: [
+                        Center(child: CircularProgressIndicator()),
+                        Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: Image.network(imagePath, loadingBuilder:
+                                    (BuildContext context, Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  }
+                                  return CircularProgressIndicator();
+                                }).image,
+                              ),
+                            ),
                           ),
-                        );
-                      }).image,
-                    ),
-                  ),
-                ),
+                      ],
+                    )
+                    : Center(child: Text('Изображение отсутствует')),
               ),
             ],
           ),
@@ -334,8 +336,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                     _selectedIndex = index;
                                   });
                                   setPos(_point);
-                                  showBottomSheet(
-                                      item['name'], item['optional'], item['imagePath']);
+                                  showBottomSheet(item['name'],
+                                      item['optional'], item['imagePath']);
                                 },
                                 padding: EdgeInsets.all(0),
                                 icon: const Icon(Icons.info),

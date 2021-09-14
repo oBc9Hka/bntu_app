@@ -35,15 +35,16 @@ class _BuildingFormState extends State<BuildingForm> {
   TextEditingController _optionalController = TextEditingController();
   GeoPoint? _point;
   late Point _newPoint;
-  String _imagePath = '';
 
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Building _building = Building();
   AuthService _authService = AuthService();
+  ThemeProvider _provider = ThemeProvider();
   User? _user;
 
   XFile? _image;
+  String _imagePath = '';
   UploadTask? task;
   final ImagePicker _picker = ImagePicker();
 
@@ -62,7 +63,6 @@ class _BuildingFormState extends State<BuildingForm> {
 
     task = uploadFile(data!);
     setState(() {});
-
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -93,8 +93,6 @@ class _BuildingFormState extends State<BuildingForm> {
 
     _imagePath = path;
   }
-
-  ThemeProvider _provider = ThemeProvider();
 
   UploadTask? uploadFile(Uint8List data) {
     try {
@@ -134,22 +132,46 @@ class _BuildingFormState extends State<BuildingForm> {
     });
   }
 
-  void _addBuilding() {
+  void _addBuilding() async {
     if (_formKey.currentState!.validate()) {
-      _building.addBuilding(
-        _nameController.text.trim(),
-        _optionalController.text.trim(),
-        _newPoint,
-        _imagePath,
-      );
+      if (_image != null) {
+        await saveImage().whenComplete(() {
+          _building.addBuilding(
+            _nameController.text.trim(),
+            _optionalController.text.trim(),
+            _newPoint,
+            _imagePath,
+          );
+          Navigator.of(context).pop();
+        });
+      } else {
+        _building.addBuilding(
+          _nameController.text.trim(),
+          _optionalController.text.trim(),
+          _newPoint,
+          '',
+        );
+      }
       Navigator.of(context).pop();
       Fluttertoast.showToast(msg: 'Точка успешно добавлена');
     }
   }
 
   void _editBuilding(String id) async {
-    try {
-      if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
+
+      if (_image != null) {
+        await saveImage().whenComplete(() {
+          _building.editBuilding(
+            _nameController.text.trim(),
+            _optionalController.text.trim(),
+            _newPoint,
+            _imagePath,
+            id,
+          );
+          Navigator.of(context).pop();
+        });
+      } else {
         _building.editBuilding(
           _nameController.text.trim(),
           _optionalController.text.trim(),
@@ -157,19 +179,9 @@ class _BuildingFormState extends State<BuildingForm> {
           _imagePath,
           id,
         );
-        if (_image != null) {
-          await saveImage().whenComplete(() {
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
-            Fluttertoast.showToast(msg: 'Точка успешно изменена');
-          });
-        } else {
-          Navigator.of(context).pop();
-          Fluttertoast.showToast(msg: 'Точка успешно изменена');
-        }
       }
-    } catch (e) {
-      print(e);
+      Navigator.of(context).pop();
+      Fluttertoast.showToast(msg: 'Точка успешно изменена');
     }
   }
 
@@ -191,6 +203,10 @@ class _BuildingFormState extends State<BuildingForm> {
             ElevatedButton(
               onPressed: () {
                 _building.removeBuilding(item!.id);
+                print(_nameController.text);
+                FirebaseStorage.instance
+                    .ref('buildings/${_nameController.text}/photo.jpg')
+                    .delete();
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Fluttertoast.showToast(msg: 'Точка успешно удалена');
@@ -396,39 +412,34 @@ class _BuildingFormState extends State<BuildingForm> {
                     getPhoto();
                   },
                   child: Text('Загрузить изображение')),
-              Stack(
-                children: [
-                  (widget.isEdit && widget.building!['imagePath'] != '')
-                      ? (_image == null)
-                          ? Center(
-                              child: Container(
-                                width: 200,
-                                height: 100.0,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: Image.network(
-                                              widget.building!['imagePath'])
-                                          .image),
-                                ),
-                              ),
-                            )
-                          : Center(
-                              child: Container(
-                                width: 200,
-                                height: 100.0,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image:
-                                          Image.file(File(_image!.path)).image),
-                                ),
-                              ),
-                            )
-                      : Text('Изображение не загружено'),
-                  // if (task != null) Center(child: buildUploadStatus(task!)) else Container(),
-                ],
-              ),
+              if (_image != null)
+                Center(
+                  child: Container(
+                    width: 200,
+                    height: 100.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: Image.file(File(_image!.path)).image),
+                    ),
+                  ),
+                )
+              else if (widget.building != null && widget.building!['imagePath'] != '')
+                Center(
+                  child: Container(
+                    width: 200,
+                    height: 100.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image:
+                            Image.network(widget.building!['imagePath']).image,
+                      ),
+                    ),
+                  ),
+                )
+              else
+                Text('Изображение не загружено'),
             ],
           ),
         ),
