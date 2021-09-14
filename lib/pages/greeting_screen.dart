@@ -93,6 +93,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                     decoration: const InputDecoration(labelText: 'Логин'),
                   ),
                   TextFormField(
+                    obscureText: true,
                     controller: _passwordController,
                     validator: (value) {
                       if (value == '' && !_authService.hasEmailError) {
@@ -112,7 +113,6 @@ class _GreetingScreenState extends State<GreetingScreen> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                // _authService.isAdmin = true;
                 _signIn();
               },
               child: Text('Войти'),

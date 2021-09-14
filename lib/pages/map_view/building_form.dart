@@ -203,7 +203,6 @@ class _BuildingFormState extends State<BuildingForm> {
             ElevatedButton(
               onPressed: () {
                 _building.removeBuilding(item!.id);
-                print(_nameController.text);
                 FirebaseStorage.instance
                     .ref('buildings/${_nameController.text}/photo.jpg')
                     .delete();
