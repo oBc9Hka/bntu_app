@@ -74,7 +74,6 @@ class _MainPageState extends State<MainPage> {
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ListView.builder(
-                  // scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: snapshot.data!.docs.length,
