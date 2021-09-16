@@ -22,6 +22,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _user = user as User;
     });
+
   }
 
   @override
@@ -70,6 +71,7 @@ class _MainPageState extends State<MainPage> {
                     ),
                   ),
                 );
+
 
               return Padding(
                 padding: const EdgeInsets.all(10.0),

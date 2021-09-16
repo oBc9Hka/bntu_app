@@ -18,7 +18,6 @@ class BuildingsMap extends StatefulWidget {
 
 class _BuildingsMapState extends State<BuildingsMap> {
   static YandexMapController? controller;
-  final Data _data = Data();
   bool _showOptional = true;
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   AuthService _authService = AuthService();

@@ -3,17 +3,19 @@ import 'package:bntu_app/pages/speciality_views/speciality_edit.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/themes/material_themes.dart';
 import 'package:bntu_app/util/auth_service.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SpecialityCard extends StatelessWidget {
-  const SpecialityCard({Key? key, required this.item, this.user}) : super(key: key);
+  const SpecialityCard({Key? key, required this.item, this.user, required this.currentYear}) : super(key: key);
   final QueryDocumentSnapshot<Object?> item;
   final User? user;
   static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
   static const Color inactiveColor = Colors.grey;
+  final int currentYear;
 
   static Color _secColor = Colors.grey;
   static Color _titleBackColor = Colors.white;
@@ -120,25 +122,25 @@ class SpecialityCard extends StatelessWidget {
               Padding(padding: EdgeInsets.only(top: 5)),
               specGridCard(
                   list: Speciality().admissionsCurrentYearList,
-                  title: 'План приёма 2021',
+                  title: 'План приёма $currentYear',
                   dbField: 'admission',
                   icon: Icons.emoji_people,
                   context: context),
               specGridCard(
                   list: Speciality().passScorePrevYearList,
-                  title: 'Проходные баллы 2020',
+                  title: 'Проходные баллы ${currentYear - 1}',
                   dbField: 'passScore',
                   context: context),
               specGridCard(
                   list: Speciality().admissionsPrevYearList,
-                  title: 'План приёма 2020',
+                  title: 'План приёма ${currentYear - 1}',
                   dbField: 'admission',
                   icon: Icons.emoji_people,
                   isNotActive: true,
                   context: context),
               specGridCard(
                   list: Speciality().passScoreBeforeLastYearList,
-                  title: 'Проходные баллы 2019',
+                  title: 'Проходные баллы ${currentYear - 2}',
                   dbField: 'passScore',
                   isNotActive: true,
                   context: context),

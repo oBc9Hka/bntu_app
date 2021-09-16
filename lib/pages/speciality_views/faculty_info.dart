@@ -2,6 +2,7 @@ import 'package:bntu_app/components/speciality_card.dart';
 import 'package:bntu_app/pages/speciality_views/speciality_add.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,12 +21,14 @@ class FacultyPage extends StatefulWidget {
 class _FacultyPageState extends State<FacultyPage> {
   AuthService _authService = AuthService();
   User? _user;
+  late String _currentYear;
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
     setState(() {
       _user = user as User;
     });
+    _currentYear = await Data().getCurrentAdmissionYear();
   }
 
   @override
@@ -130,7 +133,7 @@ class _FacultyPageState extends State<FacultyPage> {
                         item.get('facultyBased')) {
                       return SpecialityCard(
                         item: item,
-                        user: _user,
+                        user: _user, currentYear: int.parse(_currentYear),
                       );
                     }
 
