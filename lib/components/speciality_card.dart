@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SpecialityCard extends StatelessWidget {
-  const SpecialityCard({Key? key, required this.item, this.user, required this.currentYear}) : super(key: key);
+  const SpecialityCard(
+      {Key? key, required this.item, this.user, required this.currentYear})
+      : super(key: key);
   final QueryDocumentSnapshot<Object?> item;
   final User? user;
   static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
@@ -63,15 +65,14 @@ class SpecialityCard extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: Card(
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
+        children: [
+          Card(
+            elevation: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Wrap(
                     children: [
@@ -86,149 +87,153 @@ class SpecialityCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  user != null
-                      ? IconButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    SpecialityAdd(speciality: item)));
-                          },
-                          icon: Icon(Icons.edit))
-                      : Container(),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  showAlertDialog(context, item);
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: mainColor,
-                ),
-                child: Text(
-                  'Описание специальности',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Квалификация:'),
-                  Text(
-                    item.get('qualification'),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  )
-                ],
-              ),
-              Padding(padding: EdgeInsets.only(top: 5)),
-              specGridCard(
-                  list: Speciality().admissionsCurrentYearList,
-                  title: 'План приёма $currentYear',
-                  dbField: 'admission',
-                  icon: Icons.emoji_people,
-                  context: context),
-              specGridCard(
-                  list: Speciality().passScorePrevYearList,
-                  title: 'Проходные баллы ${currentYear - 1}',
-                  dbField: 'passScore',
-                  context: context),
-              specGridCard(
-                  list: Speciality().admissionsPrevYearList,
-                  title: 'План приёма ${currentYear - 1}',
-                  dbField: 'admission',
-                  icon: Icons.emoji_people,
-                  isNotActive: true,
-                  context: context),
-              specGridCard(
-                  list: Speciality().passScoreBeforeLastYearList,
-                  title: 'Проходные баллы ${currentYear - 2}',
-                  dbField: 'passScore',
-                  isNotActive: true,
-                  context: context),
-              Row(
-                children: [
-                  if (item.get('trainingDurationDayFull') != '' ||
-                      item.get('trainingDurationCorrespondenceFull') != '')
+                  ElevatedButton(
+                    onPressed: () {
+                      showAlertDialog(context, item);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: mainColor,
+                    ),
+                    child: Text(
+                      'Описание специальности',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Квалификация:'),
+                      Text(
+                        item.get('qualification'),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      )
+                    ],
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 5)),
+                  specGridCard(
+                      list: Speciality().admissionsCurrentYearList,
+                      title: 'План приёма $currentYear',
+                      dbField: 'admission',
+                      icon: Icons.emoji_people,
+                      context: context),
+                  specGridCard(
+                      list: Speciality().passScorePrevYearList,
+                      title: 'Проходные баллы ${currentYear - 1}',
+                      dbField: 'passScore',
+                      context: context),
+                  specGridCard(
+                      list: Speciality().admissionsPrevYearList,
+                      title: 'План приёма ${currentYear - 1}',
+                      dbField: 'admission',
+                      icon: Icons.emoji_people,
+                      isNotActive: true,
+                      context: context),
+                  specGridCard(
+                      list: Speciality().passScoreBeforeLastYearList,
+                      title: 'Проходные баллы ${currentYear - 2}',
+                      dbField: 'passScore',
+                      isNotActive: true,
+                      context: context),
+                  Row(
+                    children: [
+                      if (item.get('trainingDurationDayFull') != '' ||
+                          item.get('trainingDurationCorrespondenceFull') != '')
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              width: 80,
+                              color: _secColor,
+                              child: Text('ПОЛНОЕ'),
+                            ),
+                            if (item.get('trainingDurationDayFull') != '')
+                              Text('Срок обучения:'),
+                            Text(
+                              item.get('trainingDurationDayFull'),
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            if (item.get(
+                                    'trainingDurationCorrespondenceFull') !=
+                                '')
+                              Text('Срок обучения:'),
+                            Text(
+                              item.get('trainingDurationCorrespondenceFull'),
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      if (item.get('trainingDurationDayShort') != '' ||
+                          item.get('trainingDurationCorrespondenceShort') != '')
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                width: 130,
+                                color: _secColor,
+                                child: Text('СОКРАЩЕННОЕ'),
+                              ),
+                              if (item.get('trainingDurationDayShort') != '')
+                                Text('Срок обучения:'),
+                              Text(
+                                item.get('trainingDurationDayShort'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              if (item.get(
+                                      'trainingDurationCorrespondenceShort') !=
+                                  '')
+                                Text('Срок обучения:'),
+                              Text(
+                                item.get('trainingDurationCorrespondenceShort'),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        )
+                    ],
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 10)),
+                  if (item.get('entranceTestsFull').isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          alignment: Alignment.center,
-                          width: 80,
-                          color: _secColor,
-                          child: Text('ПОЛНОЕ'),
-                        ),
-                        if (item.get('trainingDurationDayFull') != '')
-                          Text('Срок обучения:'),
+                        Text('Вступительные экзамены (полное)'),
                         Text(
-                          item.get('trainingDurationDayFull'),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        if (item.get('trainingDurationCorrespondenceFull') !=
-                            '')
-                          Text('Срок обучения:'),
-                        Text(
-                          item.get('trainingDurationCorrespondenceFull'),
+                          getStringFromList('entranceTestsFull'),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
-                  if (item.get('trainingDurationDayShort') != '' ||
-                      item.get('trainingDurationCorrespondenceShort') != '')
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            width: 130,
-                            color: _secColor,
-                            child: Text('СОКРАЩЕННОЕ'),
-                          ),
-                          if (item.get('trainingDurationDayShort') != '')
-                            Text('Срок обучения:'),
-                          Text(
-                            item.get('trainingDurationDayShort'),
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          if (item.get('trainingDurationCorrespondenceShort') !=
-                              '')
-                            Text('Срок обучения:'),
-                          Text(
-                            item.get('trainingDurationCorrespondenceShort'),
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    )
+                  if (item.get('entranceShort').isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Вступительные экзамены (сокращенное)'),
+                        Text(
+                          getStringFromList('entranceShort'),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                 ],
               ),
-              Padding(padding: EdgeInsets.only(top: 10)),
-              if (item.get('entranceTestsFull').isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Вступительные экзамены (полное)'),
-                    Text(
-                      getStringFromList('entranceTestsFull'),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              if (item.get('entranceShort').isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Вступительные экзамены (сокращенное)'),
-                    Text(
-                      getStringFromList('entranceShort'),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-            ],
+            ),
           ),
-        ),
+          if (user != null)
+            Positioned(
+              right: 5,
+              child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SpecialityAdd(speciality: item)));
+                  },
+                  icon: Icon(Icons.edit)),
+            ),
+        ],
       ),
     );
   }
@@ -257,65 +262,65 @@ class SpecialityCard extends StatelessWidget {
       children: [
         Column(
           children: [
-            SizedBox(height: 3,),
+            SizedBox(
+              height: 3,
+            ),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0),
                 side: BorderSide(
                     color: isNotActive ? inactiveColor : mainColor, width: 2.0),
               ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      children: [
-                        ...list.map(
-                          (spec) => (item.get('${spec[dbField]}') != '')
-                              ? Container(
-                                  width: 76,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            item.get('${spec[dbField]}'),
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color:
-                                                  isNotActive ? inactiveColor : null,
-                                            ),
-                                          ),
-                                          icon != null
-                                              ? Icon(
-                                                  icon,
-                                                  color: isNotActive
-                                                      ? inactiveColor
-                                                      : null,
-                                                )
-                                              : Container(),
-                                        ],
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  direction: Axis.horizontal,
+                  children: [
+                    ...list.map(
+                      (spec) {
+                        if (item.get('${spec[dbField]}') != '')
+                          return Container(
+                            // color: Colors.green,
+                            width: 76,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      item.get('${spec[dbField]}'),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color:
+                                            isNotActive ? inactiveColor : null,
                                       ),
-                                      Text(
-                                        spec['description'].toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: isNotActive ? inactiveColor : null,
-                                        ),
+                                    ),
+                                    if (icon != null)
+                                      Icon(
+                                        icon,
+                                        color:
+                                            isNotActive ? inactiveColor : null,
                                       ),
-                                    ],
+                                  ],
+                                ),
+                                Text(
+                                  spec['description'].toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: isNotActive ? inactiveColor : null,
                                   ),
-                                )
-                              : Container(),
-                        ),
-                      ],
+                                ),
+                              ],
+                            ),
+                          );
+                        return Container(color: Colors.blue);
+                      },
                     ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
           ],

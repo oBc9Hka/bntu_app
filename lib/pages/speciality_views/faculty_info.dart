@@ -21,19 +21,25 @@ class FacultyPage extends StatefulWidget {
 class _FacultyPageState extends State<FacultyPage> {
   AuthService _authService = AuthService();
   User? _user;
-  late String _currentYear;
+  String _currentYear = '';
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
     setState(() {
       _user = user as User;
     });
-    _currentYear = await Data().getCurrentAdmissionYear();
   }
+
+  Future<void> _getSettingsData() async {
+    _currentYear = await Data()
+        .getCurrentAdmissionYear()
+        .whenComplete(() => setState(() {}));
+}
 
   @override
   void initState() {
     _getUser();
+    _getSettingsData();
     super.initState();
   }
 
@@ -62,7 +68,7 @@ class _FacultyPageState extends State<FacultyPage> {
               : Container()
         ],
       ),
-      //TODO: contacts and show at map
+      //TODO: show at map
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -133,7 +139,8 @@ class _FacultyPageState extends State<FacultyPage> {
                         item.get('facultyBased')) {
                       return SpecialityCard(
                         item: item,
-                        user: _user, currentYear: int.parse(_currentYear),
+                        user: _user,
+                        currentYear: int.parse(_currentYear),
                       );
                     }
 
@@ -145,9 +152,6 @@ class _FacultyPageState extends State<FacultyPage> {
             Padding(padding: EdgeInsets.only(top: 10)),
             Container(
               width: MediaQuery.of(context).size.width,
-              // color: (themeProvider.brightness == CustomBrightness.dark)
-              //     ? Colors.black
-              //     : Colors.white,
               decoration: BoxDecoration(
                   color: (themeProvider.brightness == CustomBrightness.dark)
                       ? Colors.black
@@ -164,17 +168,14 @@ class _FacultyPageState extends State<FacultyPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Text('Горячая линия', style: TextStyle(color: Colors.red)),
                     Text(widget.faculty['hotLineNumber'],
                         style: TextStyle(fontSize: 20)),
                     Text(widget.faculty['hotLineMail']),
-
                     Text('\nПо вопросам получения справок',
                         style: TextStyle(color: mainColor)),
                     Text(widget.faculty['forInquiriesNumber'],
                         style: TextStyle(fontSize: 20)),
-
                     Text('\nПо вопросам заселения в общежитие',
                         style: TextStyle(color: mainColor)),
                     Text(widget.faculty['forHostelNumber'],
