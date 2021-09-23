@@ -274,6 +274,7 @@ class _FacultyFormState extends State<FacultyForm> {
                       },
                       decoration:
                           const InputDecoration(labelText: 'Полное название'),
+                      minLines: 1,
                       maxLines: 2,
                     ),
                     TextFormField(
@@ -295,6 +296,7 @@ class _FacultyFormState extends State<FacultyForm> {
                         return null;
                       },
                       decoration: const InputDecoration(labelText: 'Описание'),
+                      minLines: 1,
                       maxLines: 8,
                     ),
 

@@ -1,4 +1,5 @@
 import 'package:bntu_app/models/speciality_model.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -118,6 +119,7 @@ class _SpecialityFormState extends State<SpecialityForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
   Speciality _speciality = Speciality();
+  String _currentYear = '';
 
   void _getFullEntranceList(
     String first,
@@ -298,7 +300,7 @@ class _SpecialityFormState extends State<SpecialityForm> {
               'Хотите удалить специальность?',
               style: TextStyle(
                   fontSize:
-                      18), //TODO: дообавить проверку намерения путём написания аббревиатуры
+                      18),
             )),
           ),
           actions: [
@@ -333,6 +335,135 @@ class _SpecialityFormState extends State<SpecialityForm> {
           ],
         );
       },
+    );
+  }
+  Future<void> _getSettingsData() async {
+    _currentYear = await Data().getCurrentAdmissionYear().whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    _getSettingsData();
+    super.initState();
+  }
+
+  Widget _expandedTileAdmission(
+    int year,
+    dynamic c1,
+    dynamic c2,
+    dynamic c3,
+    dynamic c4,
+    dynamic c5,
+    dynamic c6,
+    dynamic c7,
+    dynamic c8,
+  ) {
+    return ExpansionTile(
+      title: Text(
+        'План приёма $year',
+        style: TextStyle(color: mainColor),
+      ),
+      children: [
+        TextFormField(
+          controller: c1,
+          decoration: const InputDecoration(labelText: 'Дневное полное бюджет'),
+        ),
+        TextFormField(
+          controller: c2,
+          decoration:
+              const InputDecoration(labelText: 'Дневное сокращённое бюджет'),
+        ),
+        TextFormField(
+          controller: c3,
+          decoration:
+              const InputDecoration(labelText: 'Дневное полное платное'),
+        ),
+        TextFormField(
+          controller: c4,
+          decoration:
+              const InputDecoration(labelText: 'Дневное сокращённое платное'),
+        ),
+        TextFormField(
+          controller: c5,
+          decoration: const InputDecoration(labelText: 'Заочное полное бюджет'),
+        ),
+        TextFormField(
+          controller: c6,
+          decoration:
+              const InputDecoration(labelText: 'Заочное сокращённое бюджет'),
+        ),
+        TextFormField(
+          controller: c7,
+          decoration:
+              const InputDecoration(labelText: 'Заочное полное платное'),
+        ),
+        TextFormField(
+          controller: c8,
+          decoration:
+              const InputDecoration(labelText: 'Заочное сокращённое платное'),
+        ),
+      ],
+    );
+  }
+
+  Widget _expandedTilePassScore(
+    int year,
+    dynamic c1,
+    dynamic c2,
+    dynamic c3,
+    dynamic c4,
+    dynamic c5,
+    dynamic c6,
+    dynamic c7,
+    dynamic c8,
+  ) {
+    return ExpansionTile(
+      title: Text(
+        'Проходные баллы $year',
+        style: TextStyle(color: mainColor),
+      ),
+      children: [
+        TextFormField(
+          controller: c1,
+          decoration: const InputDecoration(labelText: 'Дневное полное бюджет'),
+        ),
+        TextFormField(
+          controller: c2,
+          decoration:
+              const InputDecoration(labelText: 'Дневное сокращённое бюджет'),
+        ),
+        TextFormField(
+          controller: c3,
+          decoration:
+              const InputDecoration(labelText: 'Дневное полное платное'),
+        ),
+        TextFormField(
+          controller: c4,
+          decoration:
+              const InputDecoration(labelText: 'Дневное сокращённое платное'),
+        ),
+        TextFormField(
+          controller: c5,
+          decoration: const InputDecoration(labelText: 'Заочное полное бюджет'),
+        ),
+        TextFormField(
+          controller: c6,
+          decoration:
+              const InputDecoration(labelText: 'Заочное сокращённое бюджет'),
+        ),
+        TextFormField(
+          controller: c7,
+          decoration:
+              const InputDecoration(labelText: 'Заочное полное платное'),
+        ),
+        TextFormField(
+          controller: c8,
+          decoration:
+              const InputDecoration(labelText: 'Заочное сокращённое платное'),
+        ),
+      ],
     );
   }
 
@@ -577,23 +708,22 @@ class _SpecialityFormState extends State<SpecialityForm> {
                   TextFormField(
                     controller: _trainingDurationDayFullController,
                     decoration:
-                    const InputDecoration(labelText: 'Дневное полное'),
+                        const InputDecoration(labelText: 'Дневное полное'),
                   ),
                   TextFormField(
                     controller: _trainingDurationDayShortController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное сокращённое'),
+                    decoration:
+                        const InputDecoration(labelText: 'Дневное сокращённое'),
                   ),
                   TextFormField(
                     controller: _trainingDurationCorrespondenceFullController,
                     decoration:
-                    const InputDecoration(labelText: 'Заочное полное'),
+                        const InputDecoration(labelText: 'Заочное полное'),
                   ),
                   TextFormField(
-                    controller:
-                    _trainingDurationCorrespondenceShortController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое'),
+                    controller: _trainingDurationCorrespondenceShortController,
+                    decoration:
+                        const InputDecoration(labelText: 'Заочное сокращённое'),
                   ),
                 ],
               ),
@@ -654,225 +784,53 @@ class _SpecialityFormState extends State<SpecialityForm> {
                 ],
               ),
 
-
               // план приёма текущий год
-              ExpansionTile(
-                title: Text(
-                  'План приёма 2021',
-                  style: TextStyle(color: mainColor),
-                ),
-                children: [
-                  TextFormField(
-                    controller: _admissionCurrentDayFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller: _admissionCurrentDayShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller: _admissionCurrentDayFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное полное платное'),
-                  ),
-                  TextFormField(
-                    controller: _admissionCurrentDayShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное сокращённое платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionCurrentCorrespondenceFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionCurrentCorrespondenceShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionCurrentCorrespondenceFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionCurrentCorrespondenceShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое платное'),
-                  ),
-                ],
+              _expandedTileAdmission(
+                int.parse(_currentYear),
+                _admissionCurrentDayFullBudgetController,
+                _admissionCurrentDayShortBudgetController,
+                _admissionCurrentDayFullPaidController,
+                _admissionCurrentDayShortPaidController,
+                _admissionCurrentCorrespondenceFullBudgetController,
+                _admissionCurrentCorrespondenceShortBudgetController,
+                _admissionCurrentCorrespondenceFullPaidController,
+                _admissionCurrentCorrespondenceShortPaidController,
               ),
-
-
               // проходные баллы прошлый год
-              ExpansionTile(
-                title: Text(
-                  'Проходные баллы 2020',
-                  style: TextStyle(color: mainColor),
-                ),
-                children: [
-                  TextFormField(
-                    controller: _passScorePrevYearDayFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Девное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller: _passScorePrevYearDayShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Девное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller: _passScorePrevYearDayFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Девное полное платное'),
-                  ),
-                  TextFormField(
-                    controller: _passScorePrevYearDayShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Девное сокращённое платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScorePrevYearCorrespondenceFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScorePrevYearCorrespondenceShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScorePrevYearCorrespondenceFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScorePrevYearCorrespondenceShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое платное'),
-                  ),
-                ],
+              _expandedTilePassScore(
+                int.parse(_currentYear) - 1,
+                _passScorePrevYearDayFullBudgetController,
+                _passScorePrevYearDayShortBudgetController,
+                _passScorePrevYearDayFullPaidController,
+                _passScorePrevYearDayShortPaidController,
+                _passScorePrevYearCorrespondenceFullBudgetController,
+                _passScorePrevYearCorrespondenceShortBudgetController,
+                _passScorePrevYearCorrespondenceFullPaidController,
+                _passScorePrevYearCorrespondenceShortPaidController,
               ),
-
               //план приема прошлый год
-              ExpansionTile(
-                title: Text(
-                  'План приёма 2020',
-                  style: TextStyle(color: mainColor),
-                ),
-                children: [
-                  TextFormField(
-                    controller: _admissionPrevYearDayFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller: _admissionPrevYearDayShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller: _admissionPrevYearDayFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное полное платное'),
-                  ),
-                  TextFormField(
-                    controller: _admissionPrevYearDayShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное сокращённое платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionPrevYearCorrespondenceFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionPrevYearCorrespondenceShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionPrevYearCorrespondenceFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _admissionPrevYearCorrespondenceShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое платное'),
-                  ),
-                ],
+              _expandedTileAdmission(
+                int.parse(_currentYear) - 1,
+                _admissionPrevYearDayFullBudgetController,
+                _admissionPrevYearDayShortBudgetController,
+                _admissionPrevYearDayFullPaidController,
+                _admissionPrevYearDayShortPaidController,
+                _admissionPrevYearCorrespondenceFullBudgetController,
+                _admissionPrevYearCorrespondenceShortBudgetController,
+                _admissionPrevYearCorrespondenceFullPaidController,
+                _admissionPrevYearCorrespondenceShortPaidController,
               ),
-
               //проходные баллы позапрошлый год
-              ExpansionTile(
-                title: Text(
-                  'Проходные баллы 2019',
-                  style: TextStyle(color: mainColor),
-                ),
-                children: [
-                  TextFormField(
-                    controller:
-                    _passScoreBeforeLastYearDayFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScoreBeforeLastYearDayShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller: _passScoreBeforeLastYearDayFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное полное платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScoreBeforeLastYearDayShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Дневное сокращённое платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScoreBeforeLastYearCorrespondenceFullBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScoreBeforeLastYearCorrespondenceShortBudgetController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое бюджет'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScoreBeforeLastYearCorrespondenceFullPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное полное платное'),
-                  ),
-                  TextFormField(
-                    controller:
-                    _passScoreBeforeLastYearCorrespondenceShortPaidController,
-                    decoration: const InputDecoration(
-                        labelText: 'Заочное сокращённое платное'),
-                  ),
-                ],
+              _expandedTilePassScore(
+                int.parse(_currentYear) - 2,
+                _passScoreBeforeLastYearDayFullBudgetController,
+                _passScoreBeforeLastYearDayShortBudgetController,
+                _passScoreBeforeLastYearDayFullPaidController,
+                _passScoreBeforeLastYearDayShortPaidController,
+                _passScoreBeforeLastYearCorrespondenceFullBudgetController,
+                _passScoreBeforeLastYearCorrespondenceShortBudgetController,
+                _passScoreBeforeLastYearCorrespondenceFullPaidController,
+                _passScoreBeforeLastYearCorrespondenceShortPaidController,
               ),
 
               TextFormField(
@@ -882,6 +840,8 @@ class _SpecialityFormState extends State<SpecialityForm> {
                   if (value == '') return 'Введите описание';
                   return null;
                 },
+                minLines: 1,
+                maxLines: 20,
               ),
             ],
           ),

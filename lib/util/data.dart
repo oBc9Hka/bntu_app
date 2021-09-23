@@ -16,10 +16,16 @@ class Data {
 
   final dbRef = FirebaseFirestore.instance.collection('settings');
 
+  final dbErrorRef = FirebaseFirestore.instance.collection('errorMessages');
+
   void editSettings(String currentAdmissionYear) async {
     await dbRef
         .doc('commonSettings')
         .update({'currentAdmissionYear': currentAdmissionYear});
+  }
+
+  void submitErrorMessage(String msg) async {
+    await dbErrorRef.add({'message':msg});
   }
 
   Future<String> getCurrentAdmissionYear() async {

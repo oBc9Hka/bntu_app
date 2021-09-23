@@ -2,8 +2,6 @@ import 'package:bntu_app/models/speciality_model.dart';
 import 'package:bntu_app/pages/speciality_views/speciality_edit.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/themes/material_themes.dart';
-import 'package:bntu_app/util/auth_service.dart';
-import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -265,61 +263,64 @@ class SpecialityCard extends StatelessWidget {
             SizedBox(
               height: 3,
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                side: BorderSide(
-                    color: isNotActive ? inactiveColor : mainColor, width: 2.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  direction: Axis.horizontal,
-                  children: [
-                    ...list.map(
-                      (spec) {
-                        if (item.get('${spec[dbField]}') != '')
-                          return Container(
-                            // color: Colors.green,
-                            width: 76,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      item.get('${spec[dbField]}'),
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color:
-                                            isNotActive ? inactiveColor : null,
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                  side: BorderSide(
+                      color: isNotActive ? inactiveColor : mainColor, width: 2.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    direction: Axis.horizontal,
+                    children: [
+                      ...list.map(
+                        (spec) {
+                          if (item.get('${spec[dbField]}') != '')
+                            return Container(
+                              // color: Colors.green,
+                              width: 76,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        item.get('${spec[dbField]}'),
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color:
+                                              isNotActive ? inactiveColor : null,
+                                        ),
                                       ),
-                                    ),
-                                    if (icon != null)
-                                      Icon(
-                                        icon,
-                                        color:
-                                            isNotActive ? inactiveColor : null,
-                                      ),
-                                  ],
-                                ),
-                                Text(
-                                  spec['description'].toString(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: isNotActive ? inactiveColor : null,
+                                      if (icon != null)
+                                        Icon(
+                                          icon,
+                                          color:
+                                              isNotActive ? inactiveColor : null,
+                                        ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        return Container(color: Colors.blue);
-                      },
-                    ),
-                  ],
+                                  Text(
+                                    spec['description'].toString(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: isNotActive ? inactiveColor : null,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          return SizedBox(height: 1, width: 1,);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
