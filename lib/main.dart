@@ -37,12 +37,14 @@ class App extends StatelessWidget {
     var themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
       home: CustomSplash(
-        imagePath: 'assets/bntu.png',
+        imagePath: themeProvider.brightness == CustomBrightness.dark
+            ? 'assets/bntu_logo_dark.png'
+            : 'assets/bntu_logo.png',
         duration: 3000,
         home: GreetingScreen(),
         type: CustomSplashType.StaticDuration,
         backGroundColor: themeProvider.brightness == CustomBrightness.dark
-            ? Colors.black
+            ? Color.fromARGB(255, 17, 17, 17)
             : Colors.white,
         animationEffect: 'fade-in',
         logoSize: 225,

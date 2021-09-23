@@ -363,13 +363,14 @@ class _GreetingScreenState extends State<GreetingScreen> {
                     title: Text('Сообщить об ошибке'),
                     trailing: Icon(Icons.mail),
                   ),
-                  ListTile(
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/settings');
-                    },
-                    title: Text('Общие настройки'),
-                    trailing: Icon(Icons.settings),
-                  ),
+                  if (_user != null)
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/settings');
+                      },
+                      title: Text('Общие настройки'),
+                      trailing: Icon(Icons.settings),
+                    ),
                 ],
               ),
               Padding(
