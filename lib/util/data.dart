@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-import '../models/buildings_model.dart';
-
 class Data {
   // Map data
   static Point initialPoint = Point(
@@ -22,10 +20,6 @@ class Data {
     await dbRef
         .doc('commonSettings')
         .update({'currentAdmissionYear': currentAdmissionYear});
-  }
-
-  void submitErrorMessage(String msg) async {
-    await dbErrorRef.add({'message':msg});
   }
 
   Future<String> getCurrentAdmissionYear() async {
