@@ -11,15 +11,18 @@ import 'package:bntu_app/pages/greeting_screen.dart';
 import 'package:bntu_app/pages/admission_info/info.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:splashscreen/splashscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final prefs = await SharedPreferences.getInstance();
+  final theme = prefs.getString('theme') ?? 'light';
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider(theme)),
       ],
       child: App(),
     ),
@@ -38,13 +41,14 @@ class App extends StatelessWidget {
         duration: 3000,
         home: GreetingScreen(),
         type: CustomSplashType.StaticDuration,
-        backGroundColor: Colors.white,
+        backGroundColor: themeProvider.brightness == CustomBrightness.dark
+            ? Colors.black
+            : Colors.white,
         animationEffect: 'fade-in',
         logoSize: 225,
       ),
       theme: themeProvider.current,
       routes: {
-        // '/': (context) => GreetingScreen(),
         '/main_page': (context) => MainPage(),
         '/settings': (context) => SettingsPage(),
         '/messages': (context) => MessagesPage(),

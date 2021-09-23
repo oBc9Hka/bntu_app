@@ -40,7 +40,6 @@ class _BuildingFormState extends State<BuildingForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Building _building = Building();
   AuthService _authService = AuthService();
-  ThemeProvider _provider = ThemeProvider();
   User? _user;
 
   XFile? _image;
