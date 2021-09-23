@@ -34,7 +34,7 @@ dependencies:
   fluttertoast: ^8.0.8
   image_picker:
   url_launcher: ^6.0.10
-
+  shared_preferences: ^2.0.8
 
   cupertino_icons: ^1.0.2
 
