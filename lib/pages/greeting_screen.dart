@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,8 +20,10 @@ class GreetingScreen extends StatefulWidget {
 
 class _GreetingScreenState extends State<GreetingScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _errorFormKey = GlobalKey<FormState>();
   TextEditingController _loginController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _errorDescriptionController = TextEditingController();
   AuthService _authService = AuthService();
   User? _user;
   static const _url = 'https://bntu.by';
@@ -31,8 +34,80 @@ class _GreetingScreenState extends State<GreetingScreen> {
     super.initState();
   }
 
-  void _launchURL() async =>
-      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  void _handleErrorMessageByUser() {
+    if (_errorFormKey.currentState!.validate()) {
+      if (_errorDescriptionController.text == 'Admin') {
+        Navigator.of(context).pop();
+        if (_user == null) {
+          _showAlertDialog();
+        } else {
+          Fluttertoast.showToast(msg: 'Вы уже в режиме администратора');
+        }
+      } else {
+        Data().submitErrorMessage(_errorDescriptionController.text);
+        Navigator.of(context).pop();
+        Fluttertoast.showToast(
+          msg: 'Сообщение отправлено в поддержку',
+        );
+      }
+      _errorDescriptionController.text = '';
+      _errorFormKey.currentState!.reset();
+    }
+  }
+
+  void _sendErrorMessage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Сообщить об ошибке'),
+          content: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Form(
+              key: _errorFormKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      'Если вы обнаружили ошибку, пожалуйста, подробно опишите её, чтобы мы могли её скорее исправить'),
+                  TextFormField(
+                    controller: _errorDescriptionController,
+                    validator: (value) {
+                      if (value == '') {
+                        return 'Введите текст ошибки';
+                      }
+                      return null;
+                    },
+                    decoration:
+                        const InputDecoration(labelText: 'Текст ошибки'),
+                    maxLines: 10,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                _handleErrorMessageByUser();
+              },
+              child: Text('Отправить'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Отмена'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _launchURL() async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -52,7 +127,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
     _formKey.currentState!.save();
     _formKey.currentState!.validate();
     _user = await _authService.singIn(
-        _loginController.text, _passwordController.text) as User;
+        _loginController.text.trim(), _passwordController.text.trim()) as User;
     if (_authService.hasError) {
       _formKey.currentState!.validate();
     } else {
@@ -63,7 +138,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
     setState(() {});
   }
 
-  void _showAlertDialog(BuildContext context) {
+  void _showAlertDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -82,7 +157,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                       if (value == '') {
                         return 'Введите почту';
                       }
-                      if (!validateEmail(value!)) {
+                      if (!validateEmail(value!.trim())) {
                         return 'Поле email заполнено не корректно';
                       }
                       if (_authService.hasEmailError) {
@@ -210,7 +285,6 @@ class _GreetingScreenState extends State<GreetingScreen> {
           backgroundImage: Image.asset('assets/bntu.png').image,
         ),
         actions: [
-          // _authService.isAdmin
           _user != null
               ? ElevatedButton.icon(
                   onPressed: () {
@@ -245,10 +319,12 @@ class _GreetingScreenState extends State<GreetingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 20, bottom: 5),
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 20, bottom: 5),
                     child: Text(
                       'Меню абитуриента',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Divider(),
@@ -282,25 +358,24 @@ class _GreetingScreenState extends State<GreetingScreen> {
                   ),
                   ListTile(
                     onTap: () {
-                      //TODO: handle message errors by users
+                      _sendErrorMessage(context);
                     },
                     title: Text('Сообщить об ошибке'),
                     trailing: Icon(Icons.mail),
                   ),
+                  ListTile(
+                    onTap: () {
+                      //TODO: navigate to settings page
+                    },
+                    title: Text('Общие настройки'),
+                    trailing: Icon(Icons.settings),
+                  ),
                 ],
               ),
-              TextButton(
-                //TODO: add gesture detector
-                onPressed: () {
-                  if (_user == null) {
-                    _showAlertDialog(context);
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: 'Вы уже в режиме администратора');
-                  }
-                },
+              Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: Text(
-                  'About text',
+                  'БНТУ 2021',
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
