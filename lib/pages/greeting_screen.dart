@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
-import 'package:bntu_app/util/data.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,7 +44,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
           Fluttertoast.showToast(msg: 'Вы уже в режиме администратора');
         }
       } else {
-        Data().submitErrorMessage(_errorDescriptionController.text);
+        ErrorMessage().submitErrorMessage(_errorDescriptionController.text);
         Navigator.of(context).pop();
         Fluttertoast.showToast(
           msg: 'Сообщение отправлено в поддержку',
@@ -365,7 +365,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                   ),
                   ListTile(
                     onTap: () {
-                      //TODO: navigate to settings page
+                      Navigator.of(context).pushNamed('/settings');
                     },
                     title: Text('Общие настройки'),
                     trailing: Icon(Icons.settings),

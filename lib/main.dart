@@ -2,6 +2,8 @@
 
 import 'package:bntu_app/pages/faculties_views/main_page.dart';
 import 'package:bntu_app/pages/map_view/map.dart';
+import 'package:bntu_app/pages/messages_page.dart';
+import 'package:bntu_app/pages/settings_page.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  const App ({Key key}) : super(key: key);
+  const App({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,8 @@ class App extends StatelessWidget {
       routes: {
         // '/': (context) => GreetingScreen(),
         '/main_page': (context) => MainPage(),
+        '/settings': (context) => SettingsPage(),
+        '/messages': (context) => MessagesPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
       },
