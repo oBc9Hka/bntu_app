@@ -270,6 +270,13 @@ class _GreetingScreenState extends State<GreetingScreen> {
                   ),
                   ListTile(
                     onTap: () {
+                      Navigator.pushNamed(context, '/test');
+                    },
+                    title: Text('Пройти тестирование'),
+                    trailing: Icon(Icons.speaker_notes_rounded),
+                  ),
+                  ListTile(
+                    onTap: () {
                       //TODO: handle redirect
                     },
                     title: Text('На сайт БНТУ'),

@@ -36,8 +36,16 @@ dependencies:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.7.4
   flutter_test:
     sdk: flutter
+
+  get: ^4.1.4
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/BNTU_Logo.png"
 
 flutter:
   uses-material-design: true
