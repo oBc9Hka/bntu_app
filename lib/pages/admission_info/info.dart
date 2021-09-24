@@ -20,7 +20,7 @@ class _InfoState extends State<Info> {
   AuthService _authService = AuthService();
   User? _user;
 
-  InfoCard _info = InfoCard();
+  InfoCard _infoCard = InfoCard();
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -109,7 +109,6 @@ class _InfoState extends State<Info> {
                     ),
                   ),
                 );
-              _info.getNewOrderId();
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ListView.builder(
@@ -133,32 +132,70 @@ class _InfoState extends State<Info> {
                           borderRadius: BorderRadius.all(Radius.circular(15))),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: ListTile(
-                          title: Text(item['title'] as String,
-                              style: TextStyle(fontSize: 20)),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(item['subtitle'] as String),
-                          ),
-                          leading: _user != null
-                              ? IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AdmissionInfoEdit(
-                                          infoCard: item,
-                                        ),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(item['title'] as String,
+                                  style: TextStyle(fontSize: 20)),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Text(item['subtitle'] as String),
+                              ),
+                              leading: _user != null
+                                  ? IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AdmissionInfoEdit(
+                                              infoCard: item,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: mainColor,
                                       ),
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: mainColor,
+                                    )
+                                  : Icon(Icons.check_box_outlined,
+                                      color: mainColor, size: 45),
+                            ),
+                            if (_user != null)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      if (index > 0)
+                                        _infoCard.moveUp(
+                                            snapshot.data!.docs[index].id,
+                                            snapshot.data!.docs[index - 1].id);
+                                    },
+                                    tooltip: 'Поднять в списке',
+                                    icon: Icon(
+                                      Icons.arrow_upward,
+                                      color: mainColor,
+                                    ),
                                   ),
-                                )
-                              : Icon(Icons.check_box_outlined,
-                                  color: mainColor, size: 45),
+                                  IconButton(
+                                    onPressed: () {
+                                      try {
+                                        _infoCard.moveDown(
+                                            snapshot.data!.docs[index].id,
+                                            snapshot.data!.docs[index + 1].id);
+                                      } catch (e) {}
+                                    },
+                                    tooltip: 'Опустить в списке',
+                                    icon: Icon(
+                                      Icons.arrow_downward,
+                                      color: mainColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
                         ),
                       ),
                     );

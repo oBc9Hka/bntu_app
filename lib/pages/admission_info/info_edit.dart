@@ -18,7 +18,6 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
   InfoCard _info = InfoCard();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _subtitleController = TextEditingController();
-  TextEditingController _orderController = TextEditingController();
 
   void showAlertDialog(
       BuildContext context, QueryDocumentSnapshot<Object?> item) {
@@ -31,7 +30,7 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
             child: const Center(
                 child: Text(
                   'Хотите удалить карточку?',
-                  style: TextStyle(fontSize: 18),//TODO: дообавить проверку намерения путём написания аббревиатуры
+                  style: TextStyle(fontSize: 18),
                 )),
           ),
           actions: [
@@ -44,7 +43,7 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.red),
               ),
-              child: const Text('Удалить'),
+              child: const Text('Удалить', style: TextStyle(color: Colors.white),),
             ),
             ElevatedButton(
               onPressed: () {
@@ -54,7 +53,7 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.black38),
               ),
-              child: const Text('Отмена'),
+              child: const Text('Отмена', style: TextStyle(color: Colors.white),),
             )
           ],
         );
@@ -67,7 +66,6 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
       _info.editCard(
         _titleController.text,
         _subtitleController.text,
-        int.parse(_orderController.text),
         id,
       );
       Navigator.of(context).pop();
@@ -77,7 +75,6 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
   Widget build(BuildContext context) {
     _titleController = TextEditingController(text: widget.infoCard['title']);
     _subtitleController = TextEditingController(text: widget.infoCard['subtitle']);
-    _orderController = TextEditingController(text: widget.infoCard['orderId'].toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -102,26 +99,14 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
                     },
                     decoration:
                     const InputDecoration(labelText: 'Оглавление'),
+                    minLines: 1,
                     maxLines: 2,
-                    cursorColor: Colors.black,
                   ),
                   TextFormField(
                     controller: _subtitleController,
                     decoration: const InputDecoration(labelText: 'Описание'),
-                    maxLines: 8,
-                    cursorColor: Colors.black,
-                  ),
-                  TextFormField(
-                    controller: _orderController,
-                    validator: (value) {
-                      if (value == '') {
-                        return 'Введите ID';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(labelText: 'ID'),
-                    maxLines: 1,
-                    cursorColor: Colors.black,
+                    minLines: 1,
+                    maxLines: 18,
                   ),
                 ],
               ),
