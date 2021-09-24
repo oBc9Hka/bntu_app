@@ -80,7 +80,7 @@ class _InfoState extends State<Info> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: Image.asset('assets/BNTU_Logo.png').image,
+                image: Image.asset('assets/bntu_logo.png').image,
                 fit: BoxFit.contain,
               ),
             ),
@@ -109,7 +109,6 @@ class _InfoState extends State<Info> {
                     ),
                   ),
                 );
-              // print(snapshot.data!.docs.sort());
               _info.getNewOrderId();
               return Padding(
                 padding: const EdgeInsets.all(10.0),
