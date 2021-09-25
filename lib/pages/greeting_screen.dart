@@ -210,9 +210,17 @@ class _GreetingScreenState extends State<GreetingScreen> {
     var themeProvider = Provider.of<ThemeProvider>(context);
     const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color
 
-    List<Map<String, String>> _buttons = [
-      {'text': 'Выбери факультет', 'link': '/main_page'},
-      {'text': 'Узнай как поступить', 'link': '/info'},
+    List<Map<String, dynamic>> _buttons = [
+      {
+        'text': 'Выбери факультет',
+        'link': '/main_page',
+        'icon': Icon(Icons.account_balance_outlined),
+      },
+      {
+        'text': 'Узнай как поступить',
+        'link': '/info',
+        'icon': Icon(Icons.info_outline),
+      },
     ];
 
     Widget buttonSection = Column(
@@ -221,15 +229,22 @@ class _GreetingScreenState extends State<GreetingScreen> {
         ..._buttons.map(
           (item) => Padding(
             padding: EdgeInsets.only(bottom: 10),
-            child: ButtonTheme(
-              minWidth: 220.0,
-              height: 50.0,
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: 50,
+                maxHeight: 50,
+                minWidth: 150,
+                maxWidth: 300,
+              ),
               child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pushNamed(context, item['link'].toString());
                 },
-                label: Text(item['text'].toString()),
-                icon: Icon(Icons.account_balance_outlined),
+                label: Text(
+                  item['text'].toString(),
+                  style: TextStyle(inherit: false, color: mainColor),
+                ),
+                icon: item['icon'],
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all(mainColor),
                   minimumSize: MaterialStateProperty.all(Size(220, 50)),
@@ -286,24 +301,30 @@ class _GreetingScreenState extends State<GreetingScreen> {
         ),
         actions: [
           _user != null
-              ? ElevatedButton.icon(
-                  onPressed: () {
-                    _signOut();
-                  },
-                  icon: const Icon(
-                    Icons.exit_to_app,
-                    color: mainColor,
+              ? Container(
+                  constraints: BoxConstraints(
+                    minWidth: 100,
+                    maxWidth: 110,
                   ),
-                  label: const Text(
-                    'Выход',
-                    style: TextStyle(color: mainColor),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(0, 0, 0, 0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      _signOut();
+                    },
+                    icon: const Icon(
+                      Icons.exit_to_app,
+                      color: mainColor,
                     ),
-                    shadowColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(0, 0, 0, 0),
+                    label: const Text(
+                      'Выход',
+                      style: TextStyle(inherit: false, color: mainColor),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(0, 0, 0, 0),
+                      ),
+                      shadowColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(0, 0, 0, 0),
+                      ),
                     ),
                   ),
                 )
@@ -387,6 +408,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
       body: WillPopScope(
         onWillPop: onWillPop,
         child: Container(
+          // constraints: BoxConstraints(maxWidth: 600),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
