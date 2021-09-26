@@ -40,7 +40,7 @@ class App extends StatelessWidget {
         imagePath: themeProvider.brightness == CustomBrightness.dark
             ? 'assets/bntu_logo_dark.png'
             : 'assets/bntu_logo.png',
-        duration: 3000,
+        duration: 2500,
         home: GreetingScreen(),
         type: CustomSplashType.StaticDuration,
         backGroundColor: themeProvider.brightness == CustomBrightness.dark

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,16 +28,24 @@ class _GreetingScreenState extends State<GreetingScreen> {
   AuthService _authService = AuthService();
   User? _user;
   static const _url = 'https://bntu.by';
+  String _key = 'secretKey';
+
+  void _initKey() async {
+    _key = await Data()
+        .getFieldData('secretKey')
+        .whenComplete(() => setState(() {}));
+  }
 
   @override
   void initState() {
     _getUser();
+    _initKey();
     super.initState();
   }
 
   void _handleErrorMessageByUser() {
     if (_errorFormKey.currentState!.validate()) {
-      if (_errorDescriptionController.text == 'Admin') {
+      if (_errorDescriptionController.text == _key) {
         Navigator.of(context).pop();
         if (_user == null) {
           _showAlertDialog();
@@ -55,11 +64,14 @@ class _GreetingScreenState extends State<GreetingScreen> {
     }
   }
 
+  static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
+
   void _sendErrorMessage(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          scrollable: true,
           title: Text('Сообщить об ошибке'),
           content: Padding(
             padding: const EdgeInsets.all(0),
@@ -70,17 +82,38 @@ class _GreetingScreenState extends State<GreetingScreen> {
                 children: [
                   Text(
                       'Если вы обнаружили ошибку, пожалуйста, подробно опишите её, чтобы мы могли её скорее исправить'),
-                  TextFormField(
-                    controller: _errorDescriptionController,
-                    validator: (value) {
-                      if (value == '') {
-                        return 'Введите текст ошибки';
-                      }
-                      return null;
-                    },
-                    decoration:
-                        const InputDecoration(labelText: 'Текст ошибки'),
-                    maxLines: 10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: TextFormField(
+                      controller: _errorDescriptionController,
+                      validator: (value) {
+                        if (value == '') {
+                          return 'Введите текст ошибки';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Текст ошибки',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 2)),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: mainColor, width: 2),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                        ),
+                      ),
+                      minLines: 1,
+                      maxLines: 8,
+                    ),
                   ),
                 ],
               ),
@@ -89,15 +122,15 @@ class _GreetingScreenState extends State<GreetingScreen> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                _handleErrorMessageByUser();
-              },
-              child: Text('Отправить'),
-            ),
-            ElevatedButton(
-              onPressed: () {
                 Navigator.of(context).pop();
               },
               child: Text('Отмена'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _handleErrorMessageByUser();
+              },
+              child: Text('Отправить'),
             ),
           ],
         );
@@ -133,9 +166,23 @@ class _GreetingScreenState extends State<GreetingScreen> {
     } else {
       _getUser();
       Navigator.of(context).pop();
+      Navigator.of(context).pop();
       _formKey.currentState!.reset();
     }
     setState(() {});
+  }
+
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: LinearProgressIndicator(
+            color: mainColor,
+          ),
+        );
+      },
+    );
   }
 
   void _showAlertDialog() {
@@ -153,12 +200,13 @@ class _GreetingScreenState extends State<GreetingScreen> {
                 children: [
                   TextFormField(
                     controller: _loginController,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == '') {
                         return 'Введите почту';
                       }
                       if (!validateEmail(value!.trim())) {
-                        return 'Поле email заполнено не корректно';
+                        return 'Почта заполнена некорректно';
                       }
                       if (_authService.hasEmailError) {
                         return _authService.errorEmailMessage;
@@ -188,15 +236,16 @@ class _GreetingScreenState extends State<GreetingScreen> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                _signIn();
-              },
-              child: Text('Войти'),
-            ),
-            ElevatedButton(
-              onPressed: () {
                 Navigator.of(context).pop();
               },
               child: Text('Отмена'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _showLoadingDialog();
+                _signIn();
+              },
+              child: Text('Войти'),
             ),
           ],
         );
@@ -407,28 +456,25 @@ class _GreetingScreenState extends State<GreetingScreen> {
       ),
       body: WillPopScope(
         onWillPop: onWillPop,
-        child: Container(
-          // constraints: BoxConstraints(maxWidth: 600),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(
+                "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
-              Container(
-                width: double.infinity,
-                height: height / 2.5,
-                alignment: Alignment.center,
-                child: Image.asset('assets/man.png'),
-              ),
-              textSection,
-              buttonSection,
-            ],
-          ),
+            ),
+            Container(
+              width: double.infinity,
+              height: height / 2.5,
+              alignment: Alignment.center,
+              child: Image.asset('assets/man.png'),
+            ),
+            textSection,
+            buttonSection,
+          ],
         ),
       ),
     );

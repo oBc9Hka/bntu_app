@@ -23,7 +23,7 @@ class SpecialityCard extends StatelessWidget {
   showAlertDialog(BuildContext context, QueryDocumentSnapshot<Object?> item) {
     Widget okButton = TextButton(
       child: Text(
-        "Понял!",
+        "Закрыть",
         style: TextStyle(
           color: mainColor,
         ),
@@ -146,20 +146,20 @@ class SpecialityCard extends StatelessWidget {
                               color: _secColor,
                               child: Text('ПОЛНОЕ'),
                             ),
+                            Text('Срок обучения:'),
                             if (item.get('trainingDurationDayFull') != '')
-                              Text('Срок обучения:'),
-                            Text(
-                              item.get('trainingDurationDayFull'),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                              Text(
+                                '${item.get('trainingDurationDayFull')} (дневное)',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             if (item.get(
                                     'trainingDurationCorrespondenceFull') !=
                                 '')
-                              Text('Срок обучения:'),
-                            Text(
-                              item.get('trainingDurationCorrespondenceFull'),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
+                              Text(
+                                '${item.get('trainingDurationCorrespondenceFull'
+                                )} (заочное)',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                           ],
                         ),
                       if (item.get('trainingDurationDayShort') != '' ||
@@ -175,20 +175,19 @@ class SpecialityCard extends StatelessWidget {
                                 color: _secColor,
                                 child: Text('СОКРАЩЕННОЕ'),
                               ),
+                              Text('Срок обучения:'),
                               if (item.get('trainingDurationDayShort') != '')
-                                Text('Срок обучения:'),
-                              Text(
-                                item.get('trainingDurationDayShort'),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
+                                Text(
+                                  '${item.get('trainingDurationDayShort')} (дневное)',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               if (item.get(
                                       'trainingDurationCorrespondenceShort') !=
                                   '')
-                                Text('Срок обучения:'),
-                              Text(
-                                item.get('trainingDurationCorrespondenceShort'),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
+                                Text(
+                                  '${item.get('trainingDurationCorrespondenceShort')} (заочное)',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                             ],
                           ),
                         )
@@ -269,7 +268,8 @@ class SpecialityCard extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                   side: BorderSide(
-                      color: isNotActive ? inactiveColor : mainColor, width: 2.0),
+                      color: isNotActive ? inactiveColor : mainColor,
+                      width: 2.0),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -293,15 +293,17 @@ class SpecialityCard extends StatelessWidget {
                                         item.get('${spec[dbField]}'),
                                         style: TextStyle(
                                           fontSize: 18,
-                                          color:
-                                              isNotActive ? inactiveColor : null,
+                                          color: isNotActive
+                                              ? inactiveColor
+                                              : null,
                                         ),
                                       ),
                                       if (icon != null)
                                         Icon(
                                           icon,
-                                          color:
-                                              isNotActive ? inactiveColor : null,
+                                          color: isNotActive
+                                              ? inactiveColor
+                                              : null,
                                         ),
                                     ],
                                   ),
@@ -316,7 +318,10 @@ class SpecialityCard extends StatelessWidget {
                                 ],
                               ),
                             );
-                          return SizedBox(height: 1, width: 1,);
+                          return SizedBox(
+                            height: 1,
+                            width: 1,
+                          );
                         },
                       ),
                     ],

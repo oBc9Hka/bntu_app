@@ -1,7 +1,6 @@
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/pages/admission_info/info_edit.dart';
 import 'package:bntu_app/util/auth_service.dart';
-import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,6 +38,65 @@ class _InfoState extends State<Info> {
   Widget build(BuildContext context) {
     const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color
     double height = MediaQuery.of(context).size.height;
+
+    Widget customTile(
+      String title,
+      String subtitle,
+      QueryDocumentSnapshot<Object?> item,
+    ) {
+      return ListTile(
+        title: Text(title, style: TextStyle(fontSize: 20)),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Text(subtitle),
+        ),
+        leading: _user != null
+            ? IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdmissionInfoEdit(
+                        infoCard: item,
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.edit,
+                  color: mainColor,
+                ),
+              )
+            : Icon(Icons.check_box_outlined, color: mainColor, size: 45),
+      );
+    }
+
+    Widget customTileWithoutSubtitle(
+      String title,
+      QueryDocumentSnapshot<Object?> item,
+    ) {
+      return ListTile(
+        title: Text(title, style: TextStyle(fontSize: 20)),
+        leading: _user != null
+            ? IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdmissionInfoEdit(
+                        infoCard: item,
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.edit,
+                  color: mainColor,
+                ),
+              )
+            : Icon(Icons.check_box_outlined, color: mainColor, size: 45),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -134,34 +192,10 @@ class _InfoState extends State<Info> {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Column(
                           children: [
-                            ListTile(
-                              title: Text(item['title'] as String,
-                                  style: TextStyle(fontSize: 20)),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Text(item['subtitle'] as String),
-                              ),
-                              leading: _user != null
-                                  ? IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                AdmissionInfoEdit(
-                                              infoCard: item,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: mainColor,
-                                      ),
-                                    )
-                                  : Icon(Icons.check_box_outlined,
-                                      color: mainColor, size: 45),
-                            ),
+                            if(item['subtitle'] != '')
+                              customTile(item['title'], item['subtitle'], item)
+                            else
+                              customTileWithoutSubtitle(item['title'], item),
                             if (_user != null)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,

@@ -1,5 +1,4 @@
 import 'package:bntu_app/models/info_cards_model.dart';
-import 'package:bntu_app/pages/admission_info/info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
