@@ -400,7 +400,7 @@ class _BuildingFormState extends State<BuildingForm> {
                     TextFormField(
                       controller: _optionalController,
                       decoration:
-                          const InputDecoration(labelText: 'Опциональное поле'),
+                          const InputDecoration(labelText: 'Дополнительная информация'),
                     ),
                   ],
                 ),

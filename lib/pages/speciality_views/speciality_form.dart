@@ -173,10 +173,10 @@ class _SpecialityFormState extends State<SpecialityForm> {
         _numberController.text,
         _aboutController.text,
         _qualificationController.text,
-        _trainingDurationDayFullController.text,
-        _trainingDurationDayShortController.text,
-        _trainingDurationCorrespondenceFullController.text,
-        _trainingDurationCorrespondenceShortController.text,
+        _trainingDurationDayFullController.text.trim(),
+        _trainingDurationDayShortController.text.trim(),
+        _trainingDurationCorrespondenceFullController.text.trim(),
+        _trainingDurationCorrespondenceShortController.text.trim(),
         _entranceTestsFullList,
         _entranceShortList,
         _admissionCurrentDayFullBudgetController.text,
@@ -240,10 +240,10 @@ class _SpecialityFormState extends State<SpecialityForm> {
         _numberController.text,
         _aboutController.text,
         _qualificationController.text,
-        _trainingDurationDayFullController.text,
-        _trainingDurationDayShortController.text,
-        _trainingDurationCorrespondenceFullController.text,
-        _trainingDurationCorrespondenceShortController.text,
+        _trainingDurationDayFullController.text.trim(),
+        _trainingDurationDayShortController.text.trim(),
+        _trainingDurationCorrespondenceFullController.text.trim(),
+        _trainingDurationCorrespondenceShortController.text.trim(),
         _entranceTestsFullList,
         _entranceShortList,
         _admissionCurrentDayFullBudgetController.text,
@@ -298,9 +298,7 @@ class _SpecialityFormState extends State<SpecialityForm> {
             child: const Center(
                 child: Text(
               'Хотите удалить специальность?',
-              style: TextStyle(
-                  fontSize:
-                      18),
+              style: TextStyle(fontSize: 18),
             )),
           ),
           actions: [
@@ -337,6 +335,7 @@ class _SpecialityFormState extends State<SpecialityForm> {
       },
     );
   }
+
   Future<void> _getSettingsData() async {
     _currentYear = await Data().getCurrentAdmissionYear().whenComplete(() {
       setState(() {});
@@ -368,41 +367,49 @@ class _SpecialityFormState extends State<SpecialityForm> {
       children: [
         TextFormField(
           controller: c1,
-          decoration: const InputDecoration(labelText: 'Дневное полное бюджет'),
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Бюджет дневное'),
         ),
         TextFormField(
           controller: c2,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Дневное сокращённое бюджет'),
-        ),
-        TextFormField(
-          controller: c3,
-          decoration:
-              const InputDecoration(labelText: 'Дневное полное платное'),
-        ),
-        TextFormField(
-          controller: c4,
-          decoration:
-              const InputDecoration(labelText: 'Дневное сокращённое платное'),
+              const InputDecoration(labelText: 'Бюджет дневное сокращённое'),
         ),
         TextFormField(
           controller: c5,
-          decoration: const InputDecoration(labelText: 'Заочное полное бюджет'),
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Бюджет заочное'),
         ),
         TextFormField(
           controller: c6,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Заочное сокращённое бюджет'),
+              const InputDecoration(labelText: 'Бюджет заочное сокращённое'),
+        ),
+        TextFormField(
+          controller: c3,
+          keyboardType: TextInputType.number,
+          decoration:
+          const InputDecoration(labelText: 'Платное дневное'),
+        ),
+        TextFormField(
+          controller: c4,
+          keyboardType: TextInputType.number,
+          decoration:
+          const InputDecoration(labelText: 'Платное дневное сокращённое'),
         ),
         TextFormField(
           controller: c7,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Заочное полное платное'),
+              const InputDecoration(labelText: 'Платное заочное'),
         ),
         TextFormField(
           controller: c8,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Заочное сокращённое платное'),
+              const InputDecoration(labelText: 'Платное заочное сокращённое'),
         ),
       ],
     );
@@ -427,41 +434,49 @@ class _SpecialityFormState extends State<SpecialityForm> {
       children: [
         TextFormField(
           controller: c1,
-          decoration: const InputDecoration(labelText: 'Дневное полное бюджет'),
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Бюджет дневное'),
         ),
         TextFormField(
           controller: c2,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Дневное сокращённое бюджет'),
-        ),
-        TextFormField(
-          controller: c3,
-          decoration:
-              const InputDecoration(labelText: 'Дневное полное платное'),
-        ),
-        TextFormField(
-          controller: c4,
-          decoration:
-              const InputDecoration(labelText: 'Дневное сокращённое платное'),
+              const InputDecoration(labelText: 'Бюджет дневное сокращённое'),
         ),
         TextFormField(
           controller: c5,
-          decoration: const InputDecoration(labelText: 'Заочное полное бюджет'),
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Бюджет заочное'),
         ),
         TextFormField(
           controller: c6,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Заочное сокращённое бюджет'),
+              const InputDecoration(labelText: 'Бюджет заочное сокращённое'),
+        ),
+        TextFormField(
+          controller: c3,
+          keyboardType: TextInputType.number,
+          decoration:
+          const InputDecoration(labelText: 'Платное дневное'),
+        ),
+        TextFormField(
+          controller: c4,
+          keyboardType: TextInputType.number,
+          decoration:
+          const InputDecoration(labelText: 'Платное дневное сокращённое'),
         ),
         TextFormField(
           controller: c7,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Заочное полное платное'),
+              const InputDecoration(labelText: 'Платное заочное'),
         ),
         TextFormField(
           controller: c8,
+          keyboardType: TextInputType.number,
           decoration:
-              const InputDecoration(labelText: 'Заочное сокращённое платное'),
+              const InputDecoration(labelText: 'Платное заочное сокращённое'),
         ),
       ],
     );
@@ -674,6 +689,8 @@ class _SpecialityFormState extends State<SpecialityForm> {
               // ),
               TextFormField(
                 controller: _nameController,
+                minLines: 1,
+                maxLines: 3,
                 decoration:
                     const InputDecoration(labelText: 'Название специальности*'),
                 validator: (value) {
@@ -683,6 +700,7 @@ class _SpecialityFormState extends State<SpecialityForm> {
               ),
               TextFormField(
                 controller: _numberController,
+                keyboardType: TextInputType.number,
                 decoration:
                     const InputDecoration(labelText: 'Номер специальности*'),
                 validator: (value) {

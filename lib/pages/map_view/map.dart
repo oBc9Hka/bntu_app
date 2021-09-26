@@ -1,4 +1,3 @@
-import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/pages/map_view/building_add.dart';
 import 'package:bntu_app/pages/map_view/building_edit.dart';
 import 'package:bntu_app/util/auth_service.dart';
@@ -127,9 +126,9 @@ class _BuildingsMapState extends State<BuildingsMap> {
               Expanded(
                 child: (imagePath != '')
                     ? Stack(
-                      children: [
-                        Center(child: CircularProgressIndicator()),
-                        Container(
+                        children: [
+                          Center(child: CircularProgressIndicator()),
+                          Container(
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 fit: BoxFit.cover,
@@ -144,8 +143,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                               ),
                             ),
                           ),
-                      ],
-                    )
+                        ],
+                      )
                     : Center(child: Text('Изображение отсутствует')),
               ),
             ],
@@ -246,7 +245,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                               onPressed: () {
                                 controller!.zoomOut();
                               },
-                              icon: Icon(Icons.do_not_disturb_on_outlined)),
+                              icon: Icon(Icons.remove)),
                           IconButton(
                               onPressed: () {
                                 setState(() {
@@ -282,71 +281,70 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   );
                 if (snapshot.data!.docs.isEmpty) return Text('Данных нет');
 
-                return Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      QueryDocumentSnapshot<Object?> item =
-                          snapshot.data!.docs[index];
-                      if (index != snapshot.data!.docs.length)
-                        Padding(
-                          padding: EdgeInsets.only(top: 10),
-                        );
-                      String subtitle = _showOptional
-                          ? item['optional'] != ''
-                              ? ' (${item['optional']})'
-                              : ''
-                          : '';
-                      String title = item['name'] + subtitle;
-                      GeoPoint _pointToCast = item['point'];
-                      Point _point = Point(
-                          latitude: _pointToCast.latitude,
-                          longitude: _pointToCast.longitude);
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Wrap(
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    QueryDocumentSnapshot<Object?> item =
+                        snapshot.data!.docs[index];
+                    if (index != snapshot.data!.docs.length)
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                      );
+                    String subtitle = _showOptional
+                        ? item['optional'] != ''
+                            ? ' (${item['optional']})'
+                            : ''
+                        : '';
+                    String title = item['name'] + subtitle;
+                    GeoPoint _pointToCast = item['point'];
+                    Point _point = Point(
+                        latitude: _pointToCast.latitude,
+                        longitude: _pointToCast.longitude);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        onTap: () {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                          setPos(_point);
+                        },
+                        title: Text(title),
+                        selected: index == _selectedIndex,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Visibility(
-                              visible: _user != null,
-                              child: IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          BuildingEdit(building: item)));
-                                },
-                                padding: EdgeInsets.all(0),
-                                icon: const Icon(Icons.edit),
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () {
+                            IconButton(
+                              onPressed: () {
                                 setState(() {
                                   _selectedIndex = index;
                                 });
                                 setPos(_point);
+                                showBottomSheet(item['name'],
+                                    item['optional'], item['imagePath']);
                               },
-                              title: Text(title),
-                              selected: index == _selectedIndex,
-                              trailing: IconButton(
+                              padding: EdgeInsets.all(0),
+                              icon: const Icon(Icons.info),
+                            ),
+                            if (_user != null)
+                              IconButton(
                                 onPressed: () {
-                                  setState(() {
-                                    _selectedIndex = index;
-                                  });
-                                  setPos(_point);
-                                  showBottomSheet(item['name'],
-                                      item['optional'], item['imagePath']);
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              BuildingEdit(
+                                                  building: item)));
                                 },
                                 padding: EdgeInsets.all(0),
-                                icon: const Icon(Icons.info),
+                                icon: const Icon(Icons.edit),
                               ),
-                            ),
                           ],
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 );
               },
             ),

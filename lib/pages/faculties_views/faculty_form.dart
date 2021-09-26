@@ -303,6 +303,7 @@ class _FacultyFormState extends State<FacultyForm> {
 
                     TextFormField(
                       controller: _hotLineNumberController,
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == '') {
                           return 'Введите номер';
@@ -313,12 +314,13 @@ class _FacultyFormState extends State<FacultyForm> {
                     ),
                     TextFormField(
                       controller: _hotLineMailController,
+                      keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == '') {
                           return 'Введите почту';
                         }
                         if (!validateEmail(value!.trim())) {
-                          return 'Почта заполнена не корректно';
+                          return 'Почта заполнена некорректно';
                         }
                         return null;
                       },
@@ -326,16 +328,18 @@ class _FacultyFormState extends State<FacultyForm> {
                     ),
                     TextFormField(
                       controller: _forInquiriesNumberController,
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == '') {
                           return 'Введите номер';
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'Номер по вопросам по справкам'),
+                      decoration: const InputDecoration(labelText: 'Номер для вопросов по справкам'),
                     ),
                     TextFormField(
                       controller: _forHostelNumberController,
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == '') {
                           return 'Введите номер';
