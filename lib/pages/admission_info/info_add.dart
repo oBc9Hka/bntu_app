@@ -1,5 +1,4 @@
 import 'package:bntu_app/models/info_cards_model.dart';
-import 'package:bntu_app/pages/admission_info/info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,14 +15,12 @@ class _AdmissionInfoAddState extends State<AdmissionInfoAdd> {
   InfoCard _info = InfoCard();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _subtitleController = TextEditingController();
-  TextEditingController _orderController = TextEditingController();
 
   void _onSubmit() {
     if (_formKey.currentState!.validate()) {
       _info.addCard(
         _titleController.text,
         _subtitleController.text,
-        int.parse(_orderController.text),
       );
       Navigator.of(context).pop();
     }
@@ -53,27 +50,14 @@ class _AdmissionInfoAddState extends State<AdmissionInfoAdd> {
                     },
                     decoration:
                     const InputDecoration(labelText: 'Оглавление'),
+                    minLines: 1,
                     maxLines: 2,
-                    cursorColor: Colors.black,
                   ),
                   TextFormField(
                     controller: _subtitleController,
                     decoration: const InputDecoration(labelText: 'Описание'),
-                    maxLines: 8,
-                    cursorColor: Colors.black,
-                  ),
-                  TextFormField(
-                    controller: _orderController,
-                    validator: (value) {
-                      if (value == '') {
-                        return 'Введите ID';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(labelText: 'ID'),
-                    keyboardType: TextInputType.number,
-                    maxLines: 1,
-                    cursorColor: Colors.black,
+                    minLines: 1,
+                    maxLines: 18,
                   ),
                 ],
               ),

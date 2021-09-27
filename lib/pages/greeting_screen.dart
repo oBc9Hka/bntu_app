@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GreetingScreen extends StatefulWidget {
   const GreetingScreen({Key? key}) : super(key: key);
@@ -18,16 +21,126 @@ class GreetingScreen extends StatefulWidget {
 
 class _GreetingScreenState extends State<GreetingScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _errorFormKey = GlobalKey<FormState>();
   TextEditingController _loginController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _errorDescriptionController = TextEditingController();
   AuthService _authService = AuthService();
   User? _user;
+  static const _url = 'https://bntu.by';
+  String _key = 'secretKey';
+
+  void _initKey() async {
+    _key = await Data()
+        .getFieldData('secretKey')
+        .whenComplete(() => setState(() {}));
+  }
 
   @override
   void initState() {
     _getUser();
+    _initKey();
     super.initState();
   }
+
+  void _handleErrorMessageByUser() {
+    if (_errorFormKey.currentState!.validate()) {
+      if (_errorDescriptionController.text == _key) {
+        Navigator.of(context).pop();
+        if (_user == null) {
+          _showAlertDialog();
+        } else {
+          Fluttertoast.showToast(msg: 'Вы уже в режиме администратора');
+        }
+      } else {
+        ErrorMessage().submitErrorMessage(_errorDescriptionController.text);
+        Navigator.of(context).pop();
+        Fluttertoast.showToast(
+          msg: 'Сообщение отправлено в поддержку',
+        );
+      }
+      _errorDescriptionController.text = '';
+      _errorFormKey.currentState!.reset();
+    }
+  }
+
+  static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
+
+  void _sendErrorMessage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Text('Сообщить об ошибке'),
+          content: Padding(
+            padding: const EdgeInsets.all(0),
+            child: Form(
+              key: _errorFormKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      'Если вы обнаружили ошибку, пожалуйста, подробно опишите её, чтобы мы могли её скорее исправить'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: TextFormField(
+                      controller: _errorDescriptionController,
+                      validator: (value) {
+                        if (value == '') {
+                          return 'Введите текст ошибки';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Текст ошибки',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 2)),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: mainColor, width: 2),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: Colors.red, width: 2),
+                        ),
+                      ),
+                      minLines: 1,
+                      maxLines: 8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Отмена'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _handleErrorMessageByUser();
+              },
+              child: Text('Отправить'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _launchURL() async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -47,18 +160,32 @@ class _GreetingScreenState extends State<GreetingScreen> {
     _formKey.currentState!.save();
     _formKey.currentState!.validate();
     _user = await _authService.singIn(
-        _loginController.text, _passwordController.text) as User;
+        _loginController.text.trim(), _passwordController.text.trim()) as User;
     if (_authService.hasError) {
       _formKey.currentState!.validate();
     } else {
       _getUser();
+      Navigator.of(context).pop();
       Navigator.of(context).pop();
       _formKey.currentState!.reset();
     }
     setState(() {});
   }
 
-  void _showAlertDialog(BuildContext context) {
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: LinearProgressIndicator(
+            color: mainColor,
+          ),
+        );
+      },
+    );
+  }
+
+  void _showAlertDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -73,12 +200,13 @@ class _GreetingScreenState extends State<GreetingScreen> {
                 children: [
                   TextFormField(
                     controller: _loginController,
+                    keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == '') {
                         return 'Введите почту';
                       }
-                      if (!validateEmail(value!)) {
-                        return 'Поле email заполнено не корректно';
+                      if (!validateEmail(value!.trim())) {
+                        return 'Почта заполнена некорректно';
                       }
                       if (_authService.hasEmailError) {
                         return _authService.errorEmailMessage;
@@ -88,6 +216,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                     decoration: const InputDecoration(labelText: 'Логин'),
                   ),
                   TextFormField(
+                    obscureText: true,
                     controller: _passwordController,
                     validator: (value) {
                       if (value == '' && !_authService.hasEmailError) {
@@ -107,16 +236,16 @@ class _GreetingScreenState extends State<GreetingScreen> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                // _authService.isAdmin = true;
-                _signIn();
-              },
-              child: Text('Войти'),
-            ),
-            ElevatedButton(
-              onPressed: () {
                 Navigator.of(context).pop();
               },
               child: Text('Отмена'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _showLoadingDialog();
+                _signIn();
+              },
+              child: Text('Войти'),
             ),
           ],
         );
@@ -130,9 +259,17 @@ class _GreetingScreenState extends State<GreetingScreen> {
     var themeProvider = Provider.of<ThemeProvider>(context);
     const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color
 
-    List<Map<String, String>> _buttons = [
-      {'text': 'Выбери факультет', 'link': '/main_page'},
-      {'text': 'Узнай как поступить', 'link': '/info'},
+    List<Map<String, dynamic>> _buttons = [
+      {
+        'text': 'Выбери факультет',
+        'link': '/main_page',
+        'icon': Icon(Icons.account_balance_outlined),
+      },
+      {
+        'text': 'Узнай как поступить',
+        'link': '/info',
+        'icon': Icon(Icons.info_outline),
+      },
     ];
 
     Widget buttonSection = Column(
@@ -141,15 +278,22 @@ class _GreetingScreenState extends State<GreetingScreen> {
         ..._buttons.map(
           (item) => Padding(
             padding: EdgeInsets.only(bottom: 10),
-            child: ButtonTheme(
-              minWidth: 220.0,
-              height: 50.0,
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: 50,
+                maxHeight: 50,
+                minWidth: 150,
+                maxWidth: 300,
+              ),
               child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.pushNamed(context, item['link'].toString());
                 },
-                label: Text(item['text'].toString()),
-                icon: Icon(Icons.account_balance_outlined),
+                label: Text(
+                  item['text'].toString(),
+                  style: TextStyle(inherit: false, color: mainColor),
+                ),
+                icon: item['icon'],
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all(mainColor),
                   minimumSize: MaterialStateProperty.all(Size(220, 50)),
@@ -205,26 +349,31 @@ class _GreetingScreenState extends State<GreetingScreen> {
           backgroundImage: Image.asset('assets/bntu.png').image,
         ),
         actions: [
-          // _authService.isAdmin
           _user != null
-              ? ElevatedButton.icon(
-                  onPressed: () {
-                    _signOut();
-                  },
-                  icon: const Icon(
-                    Icons.exit_to_app,
-                    color: mainColor,
+              ? Container(
+                  constraints: BoxConstraints(
+                    minWidth: 100,
+                    maxWidth: 110,
                   ),
-                  label: const Text(
-                    'Выход',
-                    style: TextStyle(color: mainColor),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(0, 0, 0, 0),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      _signOut();
+                    },
+                    icon: const Icon(
+                      Icons.exit_to_app,
+                      color: mainColor,
                     ),
-                    shadowColor: MaterialStateProperty.all<Color>(
-                      Color.fromARGB(0, 0, 0, 0),
+                    label: const Text(
+                      'Выход',
+                      style: TextStyle(inherit: false, color: mainColor),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(0, 0, 0, 0),
+                      ),
+                      shadowColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(0, 0, 0, 0),
+                      ),
                     ),
                   ),
                 )
@@ -240,10 +389,12 @@ class _GreetingScreenState extends State<GreetingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, top: 20, bottom: 5),
+                    padding:
+                        const EdgeInsets.only(left: 20, top: 20, bottom: 5),
                     child: Text(
                       'Меню абитуриента',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Divider(),
@@ -277,32 +428,32 @@ class _GreetingScreenState extends State<GreetingScreen> {
                   ),
                   ListTile(
                     onTap: () {
-                      //TODO: handle redirect
+                      _launchURL();
                     },
                     title: Text('На сайт БНТУ'),
                     trailing: Icon(Icons.open_in_browser),
                   ),
                   ListTile(
                     onTap: () {
-                      //TODO: handle message errors by users
+                      _sendErrorMessage(context);
                     },
                     title: Text('Сообщить об ошибке'),
                     trailing: Icon(Icons.mail),
                   ),
+                  if (_user != null)
+                    ListTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/settings');
+                      },
+                      title: Text('Общие настройки'),
+                      trailing: Icon(Icons.settings),
+                    ),
                 ],
               ),
-              TextButton(
-                //TODO: add gesture detector
-                onPressed: () {
-                  if (_user == null) {
-                    _showAlertDialog(context);
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: 'Вы уже в режиме администратора');
-                  }
-                },
+              Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: Text(
-                  'About text',
+                  'БНТУ 2021',
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
@@ -312,27 +463,25 @@ class _GreetingScreenState extends State<GreetingScreen> {
       ),
       body: WillPopScope(
         onWillPop: onWillPop,
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
-                  "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(
+                "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
-              Container(
-                width: double.infinity,
-                height: height / 2.5,
-                alignment: Alignment.center,
-                child: Image.asset('assets/man.png'),
-              ),
-              textSection,
-              buttonSection,
-            ],
-          ),
+            ),
+            Container(
+              width: double.infinity,
+              height: height / 2.5,
+              alignment: Alignment.center,
+              child: Image.asset('assets/man.png'),
+            ),
+            textSection,
+            buttonSection,
+          ],
         ),
       ),
     );

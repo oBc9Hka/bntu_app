@@ -1,10 +1,13 @@
 import 'package:bntu_app/components/speciality_card.dart';
 import 'package:bntu_app/pages/speciality_views/speciality_add.dart';
+import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FacultyPage extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> faculty;
@@ -18,6 +21,7 @@ class FacultyPage extends StatefulWidget {
 class _FacultyPageState extends State<FacultyPage> {
   AuthService _authService = AuthService();
   User? _user;
+  String _currentYear = '';
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -26,15 +30,23 @@ class _FacultyPageState extends State<FacultyPage> {
     });
   }
 
+  Future<void> _getSettingsData() async {
+    _currentYear = await Data()
+        .getCurrentAdmissionYear()
+        .whenComplete(() => setState(() {}));
+}
+
   @override
   void initState() {
     _getUser();
+    _getSettingsData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color;
+    var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +58,9 @@ class _FacultyPageState extends State<FacultyPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SpecialityAdd(faculty: widget.faculty,),
+                        builder: (context) => SpecialityAdd(
+                          faculty: widget.faculty,
+                        ),
                       ),
                     );
                   },
@@ -54,6 +68,7 @@ class _FacultyPageState extends State<FacultyPage> {
               : Container()
         ],
       ),
+      //TODO: show at map
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -125,6 +140,7 @@ class _FacultyPageState extends State<FacultyPage> {
                       return SpecialityCard(
                         item: item,
                         user: _user,
+                        currentYear: int.parse(_currentYear),
                       );
                     }
 
@@ -132,6 +148,41 @@ class _FacultyPageState extends State<FacultyPage> {
                   },
                 );
               },
+            ),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: (themeProvider.brightness == CustomBrightness.dark)
+                      ? Colors.black
+                      : Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 0.1,
+                      blurRadius: 5,
+                    )
+                  ]),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Горячая линия', style: TextStyle(color: Colors.red)),
+                    Text(widget.faculty['hotLineNumber'],
+                        style: TextStyle(fontSize: 20)),
+                    Text(widget.faculty['hotLineMail']),
+                    Text('\nПо вопросам получения справок',
+                        style: TextStyle(color: mainColor)),
+                    Text(widget.faculty['forInquiriesNumber'],
+                        style: TextStyle(fontSize: 20)),
+                    Text('\nПо вопросам заселения в общежитие',
+                        style: TextStyle(color: mainColor)),
+                    Text(widget.faculty['forHostelNumber'],
+                        style: TextStyle(fontSize: 20)),
+                  ],
+                ),
+              ),
             )
           ],
         ),
