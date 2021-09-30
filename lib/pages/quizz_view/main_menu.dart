@@ -34,7 +34,7 @@ class _MainMenuState extends State<MainMenu> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: Image.asset('assets/BNTU_Logo.png').image,
+                  image: Image.asset('assets/bntu_logo.png').image,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -44,7 +44,7 @@ class _MainMenuState extends State<MainMenu> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child:  Text(
-                    "Пройди тест и узнай какие факультеты тебе подходят",
+                    "Пройди тест и узнай, какие факультеты тебе подходят",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 24,
@@ -59,7 +59,7 @@ class _MainMenuState extends State<MainMenu> {
                 child: RawMaterialButton(
                   onPressed: () {
                     //Navigating the the Quizz Screen
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => QuizzScreen(),
@@ -72,7 +72,7 @@ class _MainMenuState extends State<MainMenu> {
                     padding:
                         EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
                     child: Text(
-                      "Start the Quizz",
+                      "Начать тест",
                       style: TextStyle(
                         fontSize: 26.0,
                         color: mainColor,

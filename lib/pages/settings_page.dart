@@ -172,7 +172,16 @@ class _SettingsPageState extends State<SettingsPage> {
                             icon: Icon(Icons.copy))
                       ],
                     ),
-                  )
+                  ),
+                  Divider(),
+                  ListTile(
+                    onTap: () {
+                      Navigator.of(context).pushNamed('/testList');
+                    },
+                    title: Text('Список вопросов'),
+                    trailing: Icon(Icons.question_answer_outlined),
+                  ),
+                  Divider(),
                 ],
               ),
             ),
