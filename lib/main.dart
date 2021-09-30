@@ -1,8 +1,8 @@
 // @dart=2.9
 
 import 'package:bntu_app/pages/faculties_views/main_page.dart';
-import 'package:bntu_app/pages/map.dart';
-import 'package:bntu_app/pages/testDirection/main_menu.dart';
+import 'package:bntu_app/pages/quizz_view/quiz_list.dart';
+import 'package:bntu_app/pages/quizz_view/main_menu.dart';
 import 'package:bntu_app/pages/map_view/map.dart';
 import 'package:bntu_app/pages/messages_page.dart';
 import 'package:bntu_app/pages/settings_page.dart';
@@ -14,7 +14,6 @@ import 'package:bntu_app/pages/admission_info/info.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:splashscreen/splashscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +58,7 @@ class App extends StatelessWidget {
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
         '/test': (context) => MainMenu(),
+        '/testList': (context) => QuizList(),
       },
     );
   }

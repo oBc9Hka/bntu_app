@@ -13,7 +13,7 @@
 //           child: const Center(
 //               child: Text(
 //                 'Хотите удалить факультет?',
-//                 style: TextStyle(fontSize: 18),//TODO: дообавить проверку намерения путём написания аббревиатуры
+//                 style: TextStyle(fontSize: 18),
 //               )),
 //         ),
 //         actions: [
