@@ -56,16 +56,29 @@ class _QuizzScreenState extends State<QuizzScreen> {
     });
   }
 
+  bool isError = false;
+  String errorMsg = '';
+
   void initQuiz() async {
-    _questions =
-        await Data().initQuestions().whenComplete(() => isLoading = false);
-    answers = _questions[0].answers;
-    setState(() {});
-    checkedAnswers = {};
-    answers.keys.forEach((e) {
-      checkedAnswers[e] = false;
+    _questions = await Data()
+        .initQuestions()
+        .whenComplete(() => isLoading = false)
+        .onError((error, stackTrace) {
+      errorMsg = error.toString();
+      isError = true;
+      setState(() {});
+      return [];
     });
-    setState(() {});
+    if (!isError) {
+      answers = _questions[0].answers;
+      setState(() {});
+      checkedAnswers = {};
+      answers.keys.forEach((e) {
+        checkedAnswers[e] = false;
+      });
+
+      setState(() {});
+    }
   }
 
   @override
@@ -83,119 +96,128 @@ class _QuizzScreenState extends State<QuizzScreen> {
         // centerTitle: true,
         title: Text('Тест'),
       ),
-      body: PageView.builder(
-        controller: _controller!,
-        onPageChanged: (page) {
-          initAnswers();
-          if (page == _questions.length - 1) {
-            setState(() {
-              btnText = "Увидеть результат";
-            });
-          }
-          setState(() {
-            answered = false;
-          });
-        },
-        physics: new NeverScrollableScrollPhysics(),
-        itemCount: _questions.length,
-        itemBuilder: (context, index) {
-          answers = _questions[index].answers;
-          return isLoading
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Data().mainColor,
+              ),
+            )
+          : isError
               ? Center(
-                  child: CircularProgressIndicator(
-                    color: Data().mainColor,
+                  child: Text(
+                    errorMsg,
+                    textAlign: TextAlign.center,
                   ),
                 )
-              : Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
+              : PageView.builder(
+                  controller: _controller!,
+                  onPageChanged: (page) {
+                    initAnswers();
+                    if (_questions.length != 0) {
+                      if (page == _questions.length - 1) {
+                        setState(() {
+                          btnText = "Увидеть результат";
+                        });
+                      }
+                    }
+                    setState(() {
+                      answered = false;
+                    });
+                  },
+                  physics: new NeverScrollableScrollPhysics(),
+                  itemCount: _questions.length,
+                  itemBuilder: (context, index) {
+                    answers = _questions[index].answers;
+                    return Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              "Вопрос ${index + 1}",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                fontSize: 28.0,
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  "Вопрос ${index + 1}",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    fontSize: 28.0,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Divider(
+                                color: mainColor,
+                              ),
+                              Visibility(
+                                visible: showMsg,
+                                child: Text(
+                                  'Необходимо выбрать минимум один вариант ответа',
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              )
+                            ],
                           ),
-                          Divider(
-                            color: mainColor,
+                          Column(
+                            children: [
+                              Text(
+                                _questions[index].question,
+                                style: TextStyle(fontSize: 24),
+                              ),
+                              ...checkedAnswers.keys.map((key) {
+                                return CheckboxListTile(
+                                  title: Text(key),
+                                  value: checkedAnswers[key],
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      checkedAnswers[key] = value!;
+                                    });
+                                  },
+                                );
+                              }),
+                            ],
                           ),
-                          Visibility(
-                            visible: showMsg,
+                          RawMaterialButton(
+                            onPressed: () {
+                              getCheckboxItems(_controller!.page!.toInt());
+                              if (!checkedAnswers.values.contains(true)) {
+                                setState(() {
+                                  showMsg = true;
+                                });
+                              } else {
+                                showMsg = false;
+                                if (_controller!.page?.toInt() ==
+                                    _questions.length - 1) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ResultScreen(
+                                                tagsList: tagsArray,
+                                              )));
+                                } else {
+                                  _controller!.nextPage(
+                                      duration: Duration(milliseconds: 250),
+                                      curve: Curves.easeInExpo);
+                                  setState(() {
+                                    btnPressed = false;
+                                  });
+                                }
+                              }
+                            },
+                            shape: StadiumBorder(),
+                            fillColor: Colors.white,
+                            padding: EdgeInsets.all(18.0),
+                            elevation: 10.0,
                             child: Text(
-                              'Необходимо выбрать минимум один вариант ответа',
-                              style: TextStyle(color: Colors.red),
+                              btnText,
+                              style: TextStyle(color: mainColor),
                             ),
                           )
                         ],
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            _questions[index].question,
-                            style: TextStyle(fontSize: 24),
-                          ),
-                          ...checkedAnswers.keys.map((key) {
-                            return CheckboxListTile(
-                              title: Text(key),
-                              value: checkedAnswers[key],
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  checkedAnswers[key] = value!;
-                                });
-                              },
-                            );
-                          }),
-                        ],
-                      ),
-                      RawMaterialButton(
-                        onPressed: () {
-                          getCheckboxItems(_controller!.page!.toInt());
-                          if (!checkedAnswers.values.contains(true)) {
-                            setState(() {
-                              showMsg = true;
-                            });
-                          } else {
-                            showMsg = false;
-                            if (_controller!.page?.toInt() ==
-                                _questions.length - 1) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ResultScreen(
-                                            tagsList: tagsArray,
-                                          )));
-                            } else {
-                              _controller!.nextPage(
-                                  duration: Duration(milliseconds: 250),
-                                  curve: Curves.easeInExpo);
-                              setState(() {
-                                btnPressed = false;
-                              });
-                            }
-                          }
-                        },
-                        shape: StadiumBorder(),
-                        fillColor: Colors.white,
-                        padding: EdgeInsets.all(18.0),
-                        elevation: 10.0,
-                        child: Text(
-                          btnText,
-                          style: TextStyle(color: mainColor),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-        },
-      ),
+                    );
+                  },
+                ),
     );
   }
 }

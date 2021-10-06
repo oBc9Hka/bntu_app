@@ -66,6 +66,35 @@ class _GreetingScreenState extends State<GreetingScreen> {
 
   static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
 
+  customElevatedButtonStyle() {
+    return ButtonStyle(
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          side: BorderSide(color: mainColor),
+        ),
+      ),
+    );
+  }
+
+
+  // Widget buttonWidget(String msg, ){
+  //   return ElevatedButton(
+  //     onPressed: () {
+  //       Navigator.of(context).pop();
+  //     },
+  //     child: Text('Отмена'),
+  //     style: ButtonStyle(
+  //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+  //         RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10.0),
+  //           side: BorderSide(color: mainColor),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   void _sendErrorMessage(BuildContext context) {
     showDialog(
       context: context,
@@ -83,7 +112,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                   Text(
                       'Если вы обнаружили ошибку, пожалуйста, подробно опишите её, чтобы мы могли её скорее исправить'),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 5),
                     child: TextFormField(
                       controller: _errorDescriptionController,
                       validator: (value) {
@@ -97,18 +126,18 @@ class _GreetingScreenState extends State<GreetingScreen> {
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             borderSide:
-                                BorderSide(color: Colors.grey, width: 2)),
+                            BorderSide(color: Colors.grey, width: 1)),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(color: mainColor, width: 2),
+                          borderSide: BorderSide(color: mainColor, width: 1),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(color: Colors.red, width: 2),
+                          borderSide: BorderSide(color: Colors.red, width: 1),
                         ),
                         focusedErrorBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(color: Colors.red, width: 2),
+                          borderSide: BorderSide(color: Colors.red, width: 1),
                         ),
                       ),
                       minLines: 1,
@@ -125,12 +154,14 @@ class _GreetingScreenState extends State<GreetingScreen> {
                 Navigator.of(context).pop();
               },
               child: Text('Отмена'),
+              style: customElevatedButtonStyle(),
             ),
             ElevatedButton(
               onPressed: () {
                 _handleErrorMessageByUser();
               },
               child: Text('Отправить'),
+              style: customElevatedButtonStyle(),
             ),
           ],
         );
@@ -138,9 +169,10 @@ class _GreetingScreenState extends State<GreetingScreen> {
     );
   }
 
-  void _launchURL() async => await canLaunch(_url)
-      ? await launch(_url)
-      : throw 'Could not launch $_url';
+  void _launchURL() async =>
+      await canLaunch(_url)
+          ? await launch(_url)
+          : throw 'Could not launch $_url';
 
   Future<void> _getUser() async {
     final user = await _authService.getCurrentUser();
@@ -235,17 +267,19 @@ class _GreetingScreenState extends State<GreetingScreen> {
           ),
           actions: [
             ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Отмена'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Отмена'),
+                style: customElevatedButtonStyle(),
             ),
             ElevatedButton(
-              onPressed: () {
-                _showLoadingDialog();
-                _signIn();
-              },
-              child: Text('Войти'),
+                onPressed: () {
+                  _showLoadingDialog();
+                  _signIn();
+                },
+                child: Text('Войти'),
+                style: customElevatedButtonStyle(),
             ),
           ],
         );
@@ -255,7 +289,10 @@ class _GreetingScreenState extends State<GreetingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
     var themeProvider = Provider.of<ThemeProvider>(context);
     const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color
 
@@ -276,38 +313,39 @@ class _GreetingScreenState extends State<GreetingScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         ..._buttons.map(
-          (item) => Padding(
-            padding: EdgeInsets.only(bottom: 10),
-            child: Container(
-              constraints: BoxConstraints(
-                minHeight: 50,
-                maxHeight: 50,
-                minWidth: 150,
-                maxWidth: 300,
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, item['link'].toString());
-                },
-                label: Text(
-                  item['text'].toString(),
-                  style: TextStyle(inherit: false, color: mainColor),
-                ),
-                icon: item['icon'],
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(mainColor),
-                  minimumSize: MaterialStateProperty.all(Size(220, 50)),
-                  elevation: MaterialStateProperty.all(10),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: mainColor),
+              (item) =>
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: Container(
+                  constraints: BoxConstraints(
+                    minHeight: 50,
+                    maxHeight: 50,
+                    minWidth: 150,
+                    maxWidth: 300,
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, item['link'].toString());
+                    },
+                    label: Text(
+                      item['text'].toString(),
+                      style: TextStyle(inherit: false, color: mainColor),
+                    ),
+                    icon: item['icon'],
+                    style: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(mainColor),
+                      minimumSize: MaterialStateProperty.all(Size(220, 50)),
+                      elevation: MaterialStateProperty.all(10),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: mainColor),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
         ),
       ],
     );
@@ -346,37 +384,39 @@ class _GreetingScreenState extends State<GreetingScreen> {
         centerTitle: true,
         title: CircleAvatar(
           backgroundColor: Colors.white,
-          backgroundImage: Image.asset('assets/bntu.png').image,
+          backgroundImage: Image
+              .asset('assets/bntu.png')
+              .image,
         ),
         actions: [
           _user != null
               ? Container(
-                  constraints: BoxConstraints(
-                    minWidth: 100,
-                    maxWidth: 110,
-                  ),
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      _signOut();
-                    },
-                    icon: const Icon(
-                      Icons.exit_to_app,
-                      color: mainColor,
-                    ),
-                    label: const Text(
-                      'Выход',
-                      style: TextStyle(inherit: false, color: mainColor),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(0, 0, 0, 0),
-                      ),
-                      shadowColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(0, 0, 0, 0),
-                      ),
-                    ),
-                  ),
-                )
+            constraints: BoxConstraints(
+              minWidth: 100,
+              maxWidth: 110,
+            ),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                _signOut();
+              },
+              icon: const Icon(
+                Icons.exit_to_app,
+                color: mainColor,
+              ),
+              label: const Text(
+                'Выход',
+                style: TextStyle(inherit: false, color: mainColor),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Color.fromARGB(0, 0, 0, 0),
+                ),
+                shadowColor: MaterialStateProperty.all<Color>(
+                  Color.fromARGB(0, 0, 0, 0),
+                ),
+              ),
+            ),
+          )
               : Container()
         ],
       ),
@@ -390,11 +430,11 @@ class _GreetingScreenState extends State<GreetingScreen> {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 20, top: 20, bottom: 5),
+                    const EdgeInsets.only(left: 20, top: 20, bottom: 5),
                     child: Text(
                       'Меню абитуриента',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Divider(),
@@ -423,7 +463,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
                     onTap: () {
                       Navigator.pushNamed(context, '/test');
                     },
-                    title: Text('Пройти тестирование'),
+                    title: Text('Помощь с выбором факультета'),
                     trailing: Icon(Icons.speaker_notes_rounded),
                   ),
                   ListTile(
