@@ -13,6 +13,9 @@ class Data {
   Color mainColor = Color.fromARGB(255, 0, 138, 94);
 
   String? currentAdmissionYear;
+  String unexpectedError = 'Произошла нерпедвиденная ошибка';
+  String timeOutError =
+      'Ошибка соединения, пожалуйста, проверьте своё подключение к интернету';
 
   Data({this.currentAdmissionYear});
 
@@ -55,17 +58,24 @@ class Data {
 
   Future<List<QuestionModel>> initQuestions() async {
     List<QuestionModel> questions = [];
-    QuerySnapshot<Map<String, dynamic>> temp = await dbQuizRef.get();
-    for (var item in temp.docs) {
-      String id = item.id;
-      int orderId = item['orderId'];
-      String question = item['question'];
-      Map<String, dynamic> answers = item['answers'];
-      questions.add(QuestionModel(
-          id: id, orderId: orderId, question: question, answers: answers));
+    try {
+      QuerySnapshot<Map<String, dynamic>> temp = await dbQuizRef.get();
+      if(temp.docs.isEmpty){
+        throw timeOutError;
+      }
+      for (var item in temp.docs) {
+        String id = item.id;
+        int orderId = item['orderId'];
+        String question = item['question'];
+        Map<String, dynamic> answers = item['answers'];
+        questions.add(QuestionModel(
+            id: id, orderId: orderId, question: question, answers: answers));
+      }
+      questions.sort((a, b) => a.orderId!.compareTo(b.orderId!));
+      return questions;
+    } catch (e) {
+      throw e.toString();
     }
-    questions.sort((a, b) => a.orderId!.compareTo(b.orderId!));
-    return questions;
   }
 
   final dbRefUniversal = FirebaseFirestore.instance;
@@ -81,7 +91,8 @@ class Data {
     return shortNames;
   }
 
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getFacultiesList() async {
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      getFacultiesList() async {
     List<QueryDocumentSnapshot<Map<String, dynamic>>> faculties = [];
     QuerySnapshot<Map<String, dynamic>> temp =
         await dbRefUniversal.collection('faculties').get();

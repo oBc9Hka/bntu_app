@@ -270,82 +270,111 @@ class _BuildingsMapState extends State<BuildingsMap> {
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData)
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(
-                        color: mainColor,
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: CircularProgressIndicator(
+                          color: mainColor,
+                        ),
                       ),
-                    ),
-                  );
-                if (snapshot.data!.docs.isEmpty) return Text('Данных нет');
+                    );
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    try {
+                      if (snapshot.data!.docs.isEmpty)
+                        return Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Center(
+                            child: Text(
+                              Data().timeOutError,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
 
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    QueryDocumentSnapshot<Object?> item =
-                        snapshot.data!.docs[index];
-                    if (index != snapshot.data!.docs.length)
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                      );
-                    String subtitle = _showOptional
-                        ? item['optional'] != ''
-                            ? ' (${item['optional']})'
-                            : ''
-                        : '';
-                    String title = item['name'] + subtitle;
-                    GeoPoint _pointToCast = item['point'];
-                    Point _point = Point(
-                        latitude: _pointToCast.latitude,
-                        longitude: _pointToCast.longitude);
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: ListTile(
-                        onTap: () {
-                          setState(() {
-                            _selectedIndex = index;
-                          });
-                          setPos(_point);
-                        },
-                        title: Text(title),
-                        selected: index == _selectedIndex,
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              onPressed: () {
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          QueryDocumentSnapshot<Object?> item =
+                              snapshot.data!.docs[index];
+                          if (index != snapshot.data!.docs.length)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                            );
+                          String subtitle = _showOptional
+                              ? item['optional'] != ''
+                                  ? ' (${item['optional']})'
+                                  : ''
+                              : '';
+                          String title = item['name'] + subtitle;
+                          GeoPoint _pointToCast = item['point'];
+                          Point _point = Point(
+                              latitude: _pointToCast.latitude,
+                              longitude: _pointToCast.longitude);
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: ListTile(
+                              onTap: () {
                                 setState(() {
                                   _selectedIndex = index;
                                 });
                                 setPos(_point);
-                                showBottomSheet(item['name'],
-                                    item['optional'], item['imagePath']);
                               },
-                              padding: EdgeInsets.all(0),
-                              icon: const Icon(Icons.info),
-                            ),
-                            if (_user != null)
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              BuildingEdit(
-                                                  building: item)));
-                                },
-                                padding: EdgeInsets.all(0),
-                                icon: const Icon(Icons.edit),
+                              title: Text(title),
+                              selected: index == _selectedIndex,
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedIndex = index;
+                                      });
+                                      setPos(_point);
+                                      showBottomSheet(item['name'],
+                                          item['optional'], item['imagePath']);
+                                    },
+                                    padding: EdgeInsets.all(0),
+                                    icon: const Icon(Icons.info),
+                                  ),
+                                  if (_user != null)
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    BuildingEdit(
+                                                        building: item)));
+                                      },
+                                      padding: EdgeInsets.all(0),
+                                      icon: const Icon(Icons.edit),
+                                    ),
+                                ],
                               ),
-                          ],
+                            ),
+                          );
+                        },
+                      );
+                    } catch (e) {
+                      return Center(
+                        child: Text(Data().unexpectedError),
+                      );
+                    }
+                  case ConnectionState.none:
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Center(
+                        child: Text(
+                          Data().timeOutError,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     );
-                  },
-                );
+                }
               },
             ),
           )

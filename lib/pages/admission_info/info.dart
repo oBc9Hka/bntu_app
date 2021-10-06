@@ -1,6 +1,7 @@
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/pages/admission_info/info_edit.dart';
 import 'package:bntu_app/util/auth_service.dart';
+import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -158,84 +159,120 @@ class _InfoState extends State<Info> {
                 .snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData)
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(
-                      color: mainColor,
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(
+                        color: mainColor,
+                      ),
                     ),
-                  ),
-                );
-              return Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: ListView.builder(
-                  // scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    QueryDocumentSnapshot<Object?> item =
-                        snapshot.data!.docs[index];
-                    if (index != snapshot.data!.docs.length)
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
+                  );
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  try {
+                    if (snapshot.data!.docs.isEmpty)
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: Text(
+                            Data().timeOutError,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       );
-                    return Card(
-                      margin: EdgeInsets.all(10),
-                      shadowColor: mainColor,
-                      elevation: 10,
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(color: mainColor, width: 1),
-                          borderRadius: BorderRadius.all(Radius.circular(15))),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Column(
-                          children: [
-                            if(item['subtitle'] != '')
-                              customTile(item['title'], item['subtitle'], item)
-                            else
-                              customTileWithoutSubtitle(item['title'], item),
-                            if (_user != null)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+
+                    return Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          QueryDocumentSnapshot<Object?> item =
+                              snapshot.data!.docs[index];
+                          if (index != snapshot.data!.docs.length)
+                            Padding(
+                              padding: EdgeInsets.only(top: 10),
+                            );
+                          return Card(
+                            margin: EdgeInsets.all(10),
+                            shadowColor: mainColor,
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(color: mainColor, width: 1),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Column(
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      if (index > 0)
-                                        _infoCard.moveUp(
-                                            snapshot.data!.docs[index].id,
-                                            snapshot.data!.docs[index - 1].id);
-                                    },
-                                    tooltip: 'Поднять в списке',
-                                    icon: Icon(
-                                      Icons.arrow_upward,
-                                      color: mainColor,
+                                  if (item['subtitle'] != '')
+                                    customTile(
+                                        item['title'], item['subtitle'], item)
+                                  else
+                                    customTileWithoutSubtitle(
+                                        item['title'], item),
+                                  if (_user != null)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            if (index > 0)
+                                              _infoCard.moveUp(
+                                                  snapshot.data!.docs[index].id,
+                                                  snapshot.data!.docs[index - 1]
+                                                      .id);
+                                          },
+                                          tooltip: 'Поднять в списке',
+                                          icon: Icon(
+                                            Icons.arrow_upward,
+                                            color: mainColor,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            try {
+                                              _infoCard.moveDown(
+                                                  snapshot.data!.docs[index].id,
+                                                  snapshot.data!.docs[index + 1]
+                                                      .id);
+                                            } catch (e) {}
+                                          },
+                                          tooltip: 'Опустить в списке',
+                                          icon: Icon(
+                                            Icons.arrow_downward,
+                                            color: mainColor,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      try {
-                                        _infoCard.moveDown(
-                                            snapshot.data!.docs[index].id,
-                                            snapshot.data!.docs[index + 1].id);
-                                      } catch (e) {}
-                                    },
-                                    tooltip: 'Опустить в списке',
-                                    icon: Icon(
-                                      Icons.arrow_downward,
-                                      color: mainColor,
-                                    ),
-                                  ),
                                 ],
                               ),
-                          ],
-                        ),
+                            ),
+                          );
+                        },
                       ),
                     );
-                  },
-                ),
-              );
+                  } catch (e) {
+                    return Center(
+                      child: Text(Data().unexpectedError),
+                    );
+                  }
+                case ConnectionState.none:
+                  return Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Center(
+                      child: Text(
+                        Data().timeOutError,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+              }
             },
           )
         ],
