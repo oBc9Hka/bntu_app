@@ -1,16 +1,16 @@
 // @dart=2.9
 
-import 'package:bntu_app/pages/faculties_views/main_page.dart';
-import 'package:bntu_app/pages/quizz_view/quiz_list.dart';
-import 'package:bntu_app/pages/quizz_view/main_menu.dart';
-import 'package:bntu_app/pages/map_view/map.dart';
-import 'package:bntu_app/pages/messages_page.dart';
-import 'package:bntu_app/pages/settings_page.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/ui/pages/admission_info/info.dart';
+import 'package:bntu_app/ui/pages/faculties_views/main_page.dart';
+import 'package:bntu_app/ui/pages/greeting_screen.dart';
+import 'package:bntu_app/ui/pages/map_view/map.dart';
+import 'package:bntu_app/ui/pages/messages_page.dart';
+import 'package:bntu_app/ui/pages/quizz_view/main_menu.dart';
+import 'package:bntu_app/ui/pages/quizz_view/quiz_list.dart';
+import 'package:bntu_app/ui/pages/settings_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:bntu_app/pages/greeting_screen.dart';
-import 'package:bntu_app/pages/admission_info/info.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
