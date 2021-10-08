@@ -4,11 +4,8 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 class Building {
   String? name;
   String? optional;
-
-  // bool isActive;
   Point? point;
   String? imagePath;
-
 
   Building({this.name, this.optional, this.point, this.imagePath});
 

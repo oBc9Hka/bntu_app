@@ -1,9 +1,12 @@
+import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
+import 'package:bntu_app/ui/widgets/faculty_item.dart';
 import 'package:bntu_app/util/auth_service.dart';
 import 'package:bntu_app/util/data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'faculty_add.dart';
 import 'faculty_edit.dart';
@@ -34,158 +37,65 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    const Color mainColor = Color.fromARGB(255, 0, 138, 94);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Список факультетов'),
-        elevation: 3,
-        actions: [
-          _user != null
-              ? IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FacultyAdd(),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.add))
-              : Container()
-        ],
-      ),
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        children: [
-          StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('faculties')
-                .orderBy('shortName')
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(
-                        color: mainColor,
-                      ),
-                    ),
-                  );
-                case ConnectionState.active:
-                case ConnectionState.done:
-                  try {
-                    if (snapshot.data!.docs.isEmpty)
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Center(
-                          child: Text(
-                            Data().timeOutError,
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      );
+    return Consumer<AppProvider>(
+      builder: (context, state, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Список факультетов'),
+            elevation: 3,
+            // actions: [
+            //   _user != null
+            //       ? IconButton(
+            //           onPressed: () {
+            //             Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                 builder: (context) => FacultyAdd(),
+            //               ),
+            //             );
+            //           },
+            //           icon: Icon(Icons.add))
+            //       : Container()
+            // ],
+          ),
+          body: (!state.isFacultiesLoaded)
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: state.faculties.length,
+                  itemBuilder: (BuildContext context, int index) {
                     return Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          QueryDocumentSnapshot<Object?> item =
-                              snapshot.data!.docs[index];
-                          if (index != snapshot.data!.docs.length)
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                            );
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            child: ListTile(
-                              key: Key(snapshot.data!.docs[index].id),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FacultyPage(
-                                      faculty: item,
-                                    ),
-                                  ),
-                                );
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: mainColor),
-                              ),
-                              leading: Container(
-                                alignment: Alignment.centerLeft,
-                                width: 70,
-                                child: Text(
-                                  snapshot.data!.docs[index].get('shortName'),
-                                  style: TextStyle(
-                                    color: mainColor,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                              trailing: _user != null
-                                  ? IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => FacultyEdit(
-                                              faculty: item,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: mainColor,
-                                      ),
-                                    )
-                                  : Container(
-                                      width: 24,
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: mainColor,
-                                      ),
-                                    ),
-                              title: Text(
-                                snapshot.data!.docs[index].get('name'),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 10),
+                      child: FacultyItem(
+                        shortName: state.faculties[index].shortName.toString(),
+                        name: state.faculties[index].name.toString(),
+                        user: _user,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FacultyPage(
+                                faculty: state.faculties[index],
                               ),
                             ),
                           );
                         },
+                        onEditPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => FacultyEdit(
+                          //       faculty: item,
+                          //     ),
+                          //   ),
+                          // );
+                        },
                       ),
                     );
-                  } catch (e) {
-                    return Center(
-                      child: Text(Data().unexpectedError),
-                    );
-                  }
-                case ConnectionState.none:
-                  return Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Center(
-                      child: Text(
-                        Data().timeOutError,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-              }
-            },
-          )
-        ],
-      ),
+                  },
+                ),
+        );
+      },
     );
   }
 }

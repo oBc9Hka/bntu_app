@@ -1,3 +1,4 @@
+import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/pages/speciality_views/speciality_add.dart';
 import 'package:bntu_app/ui/widgets/speciality_card.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FacultyPage extends StatefulWidget {
-  final QueryDocumentSnapshot<Object?> faculty;
+  final Faculty faculty;
 
   FacultyPage({Key? key, required this.faculty}) : super(key: key);
 
@@ -50,19 +51,19 @@ class _FacultyPageState extends State<FacultyPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.faculty.get('shortName')),
+        title: Text(widget.faculty.shortName.toString()),
         actions: [
           _user != null
               ? IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SpecialityAdd(
-                          faculty: widget.faculty,
-                        ),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => SpecialityAdd(
+                    //       faculty: widget.faculty,
+                    //     ),
+                    //   ),
+                    // );
                   },
                   icon: Icon(Icons.add))
               : Container()
@@ -72,12 +73,12 @@ class _FacultyPageState extends State<FacultyPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            (widget.faculty.get('imagePath') == '')
+            (widget.faculty.imagePath == '')
                 ? Text('Нет фото')
                 : Container(
                     height: 150,
                     child: Image.network(
-                      '${widget.faculty.get('imagePath')}',
+                      '${widget.faculty.imagePath}',
                       loadingBuilder: (BuildContext context, Widget child,
                           ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) {
@@ -98,13 +99,13 @@ class _FacultyPageState extends State<FacultyPage> {
             Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
-                widget.faculty.get('about'),
+                widget.faculty.about.toString(),
                 style: TextStyle(
                   fontSize: 16,
                 ),
               ),
             ),
-            if (widget.faculty.get('shortName') != 'ВТФ')
+            if (widget.faculty.shortName != 'ВТФ')
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: Text(
@@ -135,7 +136,7 @@ class _FacultyPageState extends State<FacultyPage> {
                   itemBuilder: (BuildContext context, int index) {
                     QueryDocumentSnapshot<Object?> item =
                         snapshot.data!.docs[index];
-                    if (widget.faculty.get('shortName') ==
+                    if (widget.faculty.shortName ==
                         item.get('facultyBased')) {
                       return SpecialityCard(
                         item: item,
@@ -169,16 +170,16 @@ class _FacultyPageState extends State<FacultyPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Горячая линия', style: TextStyle(color: Colors.red)),
-                    Text(widget.faculty['hotLineNumber'],
+                    Text(widget.faculty.hotLineNumber.toString(),
                         style: TextStyle(fontSize: 20)),
-                    Text(widget.faculty['hotLineMail']),
+                    Text(widget.faculty.hotLineMail.toString()),
                     Text('\nПо вопросам получения справок',
                         style: TextStyle(color: mainColor)),
-                    Text(widget.faculty['forInquiriesNumber'],
+                    Text(widget.faculty.forInquiriesNumber.toString(),
                         style: TextStyle(fontSize: 20)),
                     Text('\nПо вопросам заселения в общежитие',
                         style: TextStyle(color: mainColor)),
-                    Text(widget.faculty['forHostelNumber'],
+                    Text(widget.faculty.forHostelNumber.toString(),
                         style: TextStyle(fontSize: 20)),
                   ],
                 ),
