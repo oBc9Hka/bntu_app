@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Speciality {
+  String? id;
   String? facultyBased;
   String? name;
   String? number;
@@ -74,7 +73,8 @@ class Speciality {
       passScoreBeforeLastYearCorrespondenceShortPaid; //баллы заочное сокращённое платное
 
   Speciality(
-      {this.facultyBased,
+      {this.id,
+      this.facultyBased,
       this.name,
       this.number,
       this.about,
@@ -118,8 +118,9 @@ class Speciality {
       this.passScoreBeforeLastYearCorrespondenceFullPaid,
       this.passScoreBeforeLastYearCorrespondenceShortPaid});
 
-  Speciality.fromMap(Map<String, dynamic> data)
+  Speciality.fromMap(Map<String, dynamic> data, String id)
       : this(
+          id: id,
           facultyBased: data['facultyBased'],
           name: data['name'],
           number: data['number'],
@@ -191,7 +192,4 @@ class Speciality {
           passScoreBeforeLastYearCorrespondenceShortPaid:
               data['passScoreBeforeLastYearCorrespondenceShortPaid'],
         );
-
-
-
 }

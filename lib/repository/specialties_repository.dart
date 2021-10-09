@@ -17,7 +17,7 @@ class SpecialtiesFirestoreRepository extends SpecialtiesRepository {
     }
 
     for (var speciality in temp.docs) {
-      list.add(Speciality.fromMap(speciality.data()));
+      list.add(Speciality.fromMap(speciality.data(), speciality.id));
     }
 
     list.sort((a, b) => a.name!.compareTo(b.name!));

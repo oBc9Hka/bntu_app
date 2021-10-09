@@ -1,13 +1,10 @@
 import 'package:bntu_app/models/faculty_model.dart';
-import 'package:bntu_app/models/speciality_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/speciality_views/speciality_add.dart';
 import 'package:bntu_app/ui/widgets/speciality_card.dart';
 import 'package:bntu_app/util/auth_service.dart';
-import 'package:bntu_app/util/data.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,16 +31,9 @@ class _FacultyPageState extends State<FacultyPage> {
     });
   }
 
-  // Future<void> _getSettingsData() async {
-  //   _currentYear = await Data()
-  //       .getCurrentAdmissionYear()
-  //       .whenComplete(() => setState(() {}));
-  // }
-
   @override
   void initState() {
     _getUser();
-    // _getSettingsData();
     super.initState();
   }
 
@@ -63,14 +53,14 @@ class _FacultyPageState extends State<FacultyPage> {
                   children: [
                     IconButton(
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => SpecialityAdd(
-                          //       faculty: widget.faculty,
-                          //     ),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SpecialityAdd(
+                                faculty: widget.faculty,
+                              ),
+                            ),
+                          );
                         },
                         icon: Icon(Icons.add)),
                     IconButton(

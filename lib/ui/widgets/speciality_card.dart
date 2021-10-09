@@ -1,5 +1,6 @@
 import 'package:bntu_app/models/speciality_model.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/ui/pages/speciality_views/speciality_edit.dart';
 import 'package:bntu_app/ui/themes/material_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -218,8 +219,11 @@ class SpecialityCard extends StatelessWidget {
               right: 5,
               child: IconButton(
                   onPressed: () {
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => SpecialityAdd(faculty: item)));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SpecialityEdit(speciality: item),
+                      ),
+                    );
                   },
                   icon: Icon(Icons.edit)),
             ),
@@ -239,7 +243,7 @@ class SpecialityCard extends StatelessWidget {
     return newTempString.replaceAll('_', ' • ');
   }
 
-  List<Map<String, dynamic>> _getAdmissionsCurrentYearList(){
+  List<Map<String, dynamic>> _getAdmissionsCurrentYearList() {
     return [
       {
         'num': item.admissionCurrentDayFullBudget,
@@ -349,8 +353,6 @@ class SpecialityCard extends StatelessWidget {
       },
     ];
   }
-
-
 
   List<Map<String, String>> _getPassScoreBeforeLastYearList() {
     return [
