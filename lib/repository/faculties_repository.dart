@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FacultiesFirestoreRepository extends FacultiesRepository {
 
@@ -63,7 +64,7 @@ class FacultiesFirestoreRepository extends FacultiesRepository {
     }
 
     for (var faculty in temp.docs){
-      list.add(Faculty.fromMap(faculty.data()));
+      list.add(Faculty.fromMap(faculty.data(), faculty.id));
     }
 
     list.sort((a, b) => a.shortName!.compareTo(b.shortName!));
@@ -72,7 +73,10 @@ class FacultiesFirestoreRepository extends FacultiesRepository {
   }
 
   @override
-  Future<void> removeFaculty(String id) async {
+  Future<void> removeFaculty(String id, String name) async {
+    FirebaseStorage.instance
+        .ref('faculties/$name/photo.jpg')
+        .delete();
     await dbRef.doc(id).delete();
   }
 }

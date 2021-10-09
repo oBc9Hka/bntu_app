@@ -4,6 +4,8 @@ import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:bntu_app/repository/faculties_repository.dart';
+import 'package:bntu_app/repository/settings_repository.dart';
+import 'package:bntu_app/repository/specialties_repository.dart';
 import 'package:bntu_app/ui/pages/admission_info/info.dart';
 import 'package:bntu_app/ui/pages/faculties_views/main_page.dart';
 import 'package:bntu_app/ui/pages/greeting_screen.dart';
@@ -27,7 +29,12 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider(theme)),
-        ChangeNotifierProvider(create: (context) => AppProvider(FacultiesFirestoreRepository())),
+        ChangeNotifierProvider(
+            create: (context) => AppProvider(
+                  FacultiesFirestoreRepository(),
+                  SpecialtiesFirestoreRepository(),
+                  SettingsFirestoreRepository(),
+                )),
       ],
       child: App(),
     ),
@@ -57,7 +64,7 @@ class App extends StatelessWidget {
       theme: themeProvider.current,
       routes: {
         '/main_page': (context) => MainPage(),
-        '/settings': (context) => SettingsPage(),
+        // '/settings': (context) => SettingsPage(),
         '/messages': (context) => MessagesPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),

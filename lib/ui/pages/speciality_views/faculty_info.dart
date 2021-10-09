@@ -1,5 +1,8 @@
 import 'package:bntu_app/models/faculty_model.dart';
+import 'package:bntu_app/models/speciality_model.dart';
+import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/speciality_views/speciality_add.dart';
 import 'package:bntu_app/ui/widgets/speciality_card.dart';
 import 'package:bntu_app/util/auth_service.dart';
@@ -31,47 +34,59 @@ class _FacultyPageState extends State<FacultyPage> {
     });
   }
 
-  Future<void> _getSettingsData() async {
-    _currentYear = await Data()
-        .getCurrentAdmissionYear()
-        .whenComplete(() => setState(() {}));
-}
+  // Future<void> _getSettingsData() async {
+  //   _currentYear = await Data()
+  //       .getCurrentAdmissionYear()
+  //       .whenComplete(() => setState(() {}));
+  // }
 
   @override
   void initState() {
     _getUser();
-    _getSettingsData();
+    // _getSettingsData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color;
+    Color mainColor = Constants().mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
+    late AppProvider _state;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.faculty.shortName.toString()),
         actions: [
           _user != null
-              ? IconButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => SpecialityAdd(
-                    //       faculty: widget.faculty,
-                    //     ),
-                    //   ),
-                    // );
-                  },
-                  icon: Icon(Icons.add))
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => SpecialityAdd(
+                          //       faculty: widget.faculty,
+                          //     ),
+                          //   ),
+                          // );
+                        },
+                        icon: Icon(Icons.add)),
+                    IconButton(
+                        onPressed: () {
+                          _state.initSpecialties();
+                        },
+                        icon: Icon(Icons.refresh)),
+                  ],
+                )
               : Container()
         ],
       ),
       //TODO: show at map
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             (widget.faculty.imagePath == '')
                 ? Text('Нет фото')
@@ -116,40 +131,24 @@ class _FacultyPageState extends State<FacultyPage> {
                   ),
                 ),
               ),
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('specialties')
-                  .orderBy('name')
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData)
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: mainColor,
-                    ),
-                  );
-                return ListView.builder(
+            Consumer<AppProvider>(builder: (context, state, child) {
+              _state = state;
+              return ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
+                  itemCount: state.specialties.length,
                   itemBuilder: (BuildContext context, int index) {
-                    QueryDocumentSnapshot<Object?> item =
-                        snapshot.data!.docs[index];
-                    if (widget.faculty.shortName ==
-                        item.get('facultyBased')) {
+                    if (state.specialties[index].facultyBased ==
+                        widget.faculty.shortName) {
                       return SpecialityCard(
-                        item: item,
+                        currentYear: int.parse(state.currentAdmissionYear),
+                        item: state.specialties[index],
                         user: _user,
-                        currentYear: int.parse(_currentYear),
                       );
                     }
-
                     return Container();
-                  },
-                );
-              },
-            ),
+                  });
+            }),
             Padding(padding: EdgeInsets.only(top: 10)),
             Container(
               width: MediaQuery.of(context).size.width,

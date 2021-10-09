@@ -1,4 +1,5 @@
 class Faculty {
+  String? id;
   String? name;
   String? shortName;
   String? about;
@@ -9,7 +10,8 @@ class Faculty {
   String? imagePath;
 
   Faculty(
-      {this.name,
+      {this.id,
+      this.name,
       this.shortName,
       this.about,
       this.hotLineNumber,
@@ -18,8 +20,9 @@ class Faculty {
       this.forHostelNumber,
       this.imagePath});
 
-  Faculty.fromMap(Map<String, dynamic> data)
+  Faculty.fromMap(Map<String, dynamic> data, String id)
       : this(
+          id: id,
           name: data['name'],
           shortName: data['shortName'],
           about: data['about'],

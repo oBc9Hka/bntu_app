@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bntu_app/models/error_message_model.dart';
+import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
 import 'package:bntu_app/util/data.dart';
@@ -28,29 +29,29 @@ class _GreetingScreenState extends State<GreetingScreen> {
   AuthService _authService = AuthService();
   User? _user;
   static const _url = 'https://bntu.by';
-  String _key = 'secretKey';
+  // String _key = 'secretKey';
 
-  void _initKey() async {
-    _key = await Data()
-        .getFieldData('secretKey')
-        .whenComplete(() => setState(() {}));
-  }
+  // void _initKey() async {
+  //   _key = await Data()
+  //       .getFieldData('secretKey')
+  //       .whenComplete(() => setState(() {}));
+  // }
 
   @override
   void initState() {
     _getUser();
-    _initKey();
+    // _initKey();
     super.initState();
   }
 
-  void _handleErrorMessageByUser() {
+  void _handleErrorMessageByUser(String key) {
     if (_errorFormKey.currentState!.validate()) {
-      if (_errorDescriptionController.text == _key) {
+      if (_errorDescriptionController.text == key) {
         Navigator.of(context).pop();
         if (_user == null) {
           _showAlertDialog();
         } else {
-          Fluttertoast.showToast(msg: 'Вы уже в режиме администратора');
+          Fluttertoast.showToast(msg: 'Вы уже в режиме редактора');
         }
       } else {
         ErrorMessage().submitErrorMessage(_errorDescriptionController.text);
@@ -156,13 +157,16 @@ class _GreetingScreenState extends State<GreetingScreen> {
               child: Text('Отмена'),
               style: customElevatedButtonStyle(),
             ),
-            ElevatedButton(
-              onPressed: () {
-                _handleErrorMessageByUser();
-              },
-              child: Text('Отправить'),
-              style: customElevatedButtonStyle(),
-            ),
+            Consumer<AppProvider>(builder: (context, state, child){
+              return ElevatedButton(
+                onPressed: () {
+                  _handleErrorMessageByUser(state.secretKey);
+                },
+                child: Text('Отправить'),
+                style: customElevatedButtonStyle(),
+              );
+            }),
+
           ],
         );
       },
