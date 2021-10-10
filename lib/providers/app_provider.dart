@@ -25,12 +25,10 @@ class AppProvider with ChangeNotifier {
   String currentAdmissionYear = '';
   late String secretKey;
 
-  AppProvider(
-    this._facultiesRepository,
-    this._specialtiesRepository,
-    this._settingsRepository,
-    this._infoCardsRepository,
-  ) {
+  AppProvider(this._facultiesRepository,
+      this._specialtiesRepository,
+      this._settingsRepository,
+      this._infoCardsRepository,) {
     initFaculties();
     initSpecialties();
     initSettings();
@@ -58,16 +56,14 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addFaculty(
-    String name,
-    String shortName,
-    String about,
-    String hotLineNumber,
-    String hotLineMail,
-    String forInquiriesNumber,
-    String forHostelNumber,
-    String imagePath,
-  ) {
+  void addFaculty(String name,
+      String shortName,
+      String about,
+      String hotLineNumber,
+      String hotLineMail,
+      String forInquiriesNumber,
+      String forHostelNumber,
+      String imagePath,) {
     try {
       _facultiesRepository.addFaculty(
         name,
@@ -85,8 +81,7 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editFaculty(
-      String name,
+  void editFaculty(String name,
       String shortName,
       String about,
       String hotLineNumber,
@@ -114,51 +109,49 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addSpeciality(
-    facultyBased,
-    name,
-    number,
-    about,
-    qualification,
-    trainingDurationDayFull,
-    trainingDurationDayShort,
-    trainingDurationCorrespondenceFull,
-    trainingDurationCorrespondenceShort,
-    entranceTestsFull,
-    entranceShort,
-    admissionCurrentDayFullBudget,
-    admissionCurrentDayShortBudget,
-    admissionCurrentDayFullPaid,
-    admissionCurrentDayShortPaid,
-    admissionCurrentCorrespondenceFullBudget,
-    admissionCurrentCorrespondenceShortBudget,
-    admissionCurrentCorrespondenceFullPaid,
-    admissionCurrentCorrespondenceShortPaid,
-    passScorePrevYearDayFullBudget,
-    passScorePrevYearDayShortBudget,
-    passScorePrevYearDayFullPaid,
-    passScorePrevYearDayShortPaid,
-    passScorePrevYearCorrespondenceFullBudget,
-    passScorePrevYearCorrespondenceShortBudget,
-    passScorePrevYearCorrespondenceFullPaid,
-    passScorePrevYearCorrespondenceShortPaid,
-    admissionPrevYearDayFullBudget,
-    admissionPrevYearDayShortBudget,
-    admissionPrevYearDayFullPaid,
-    admissionPrevYearDayShortPaid,
-    admissionPrevYearCorrespondenceFullBudget,
-    admissionPrevYearCorrespondenceShortBudget,
-    admissionPrevYearCorrespondenceFullPaid,
-    admissionPrevYearCorrespondenceShortPaid,
-    passScoreBeforeLastYearDayFullBudget,
-    passScoreBeforeLastYearDayShortBudget,
-    passScoreBeforeLastYearDayFullPaid,
-    passScoreBeforeLastYearDayShortPaid,
-    passScoreBeforeLastYearCorrespondenceFullBudget,
-    passScoreBeforeLastYearCorrespondenceShortBudget,
-    passScoreBeforeLastYearCorrespondenceFullPaid,
-    passScoreBeforeLastYearCorrespondenceShortPaid,
-  ) {
+  void addSpeciality(facultyBased,
+      name,
+      number,
+      about,
+      qualification,
+      trainingDurationDayFull,
+      trainingDurationDayShort,
+      trainingDurationCorrespondenceFull,
+      trainingDurationCorrespondenceShort,
+      entranceTestsFull,
+      entranceShort,
+      admissionCurrentDayFullBudget,
+      admissionCurrentDayShortBudget,
+      admissionCurrentDayFullPaid,
+      admissionCurrentDayShortPaid,
+      admissionCurrentCorrespondenceFullBudget,
+      admissionCurrentCorrespondenceShortBudget,
+      admissionCurrentCorrespondenceFullPaid,
+      admissionCurrentCorrespondenceShortPaid,
+      passScorePrevYearDayFullBudget,
+      passScorePrevYearDayShortBudget,
+      passScorePrevYearDayFullPaid,
+      passScorePrevYearDayShortPaid,
+      passScorePrevYearCorrespondenceFullBudget,
+      passScorePrevYearCorrespondenceShortBudget,
+      passScorePrevYearCorrespondenceFullPaid,
+      passScorePrevYearCorrespondenceShortPaid,
+      admissionPrevYearDayFullBudget,
+      admissionPrevYearDayShortBudget,
+      admissionPrevYearDayFullPaid,
+      admissionPrevYearDayShortPaid,
+      admissionPrevYearCorrespondenceFullBudget,
+      admissionPrevYearCorrespondenceShortBudget,
+      admissionPrevYearCorrespondenceFullPaid,
+      admissionPrevYearCorrespondenceShortPaid,
+      passScoreBeforeLastYearDayFullBudget,
+      passScoreBeforeLastYearDayShortBudget,
+      passScoreBeforeLastYearDayFullPaid,
+      passScoreBeforeLastYearDayShortPaid,
+      passScoreBeforeLastYearCorrespondenceFullBudget,
+      passScoreBeforeLastYearCorrespondenceShortBudget,
+      passScoreBeforeLastYearCorrespondenceFullPaid,
+      passScoreBeforeLastYearCorrespondenceShortPaid,) {
     _specialtiesRepository.addSpeciality(
       facultyBased,
       name,
@@ -207,52 +200,50 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editSpeciality(
-    facultyBased,
-    name,
-    number,
-    about,
-    qualification,
-    trainingDurationDayFull,
-    trainingDurationDayShort,
-    trainingDurationCorrespondenceFull,
-    trainingDurationCorrespondenceShort,
-    entranceTestsFull,
-    entranceShort,
-    admissionCurrentDayFullBudget,
-    admissionCurrentDayShortBudget,
-    admissionCurrentDayFullPaid,
-    admissionCurrentDayShortPaid,
-    admissionCurrentCorrespondenceFullBudget,
-    admissionCurrentCorrespondenceShortBudget,
-    admissionCurrentCorrespondenceFullPaid,
-    admissionCurrentCorrespondenceShortPaid,
-    passScorePrevYearDayFullBudget,
-    passScorePrevYearDayShortBudget,
-    passScorePrevYearDayFullPaid,
-    passScorePrevYearDayShortPaid,
-    passScorePrevYearCorrespondenceFullBudget,
-    passScorePrevYearCorrespondenceShortBudget,
-    passScorePrevYearCorrespondenceFullPaid,
-    passScorePrevYearCorrespondenceShortPaid,
-    admissionPrevYearDayFullBudget,
-    admissionPrevYearDayShortBudget,
-    admissionPrevYearDayFullPaid,
-    admissionPrevYearDayShortPaid,
-    admissionPrevYearCorrespondenceFullBudget,
-    admissionPrevYearCorrespondenceShortBudget,
-    admissionPrevYearCorrespondenceFullPaid,
-    admissionPrevYearCorrespondenceShortPaid,
-    passScoreBeforeLastYearDayFullBudget,
-    passScoreBeforeLastYearDayShortBudget,
-    passScoreBeforeLastYearDayFullPaid,
-    passScoreBeforeLastYearDayShortPaid,
-    passScoreBeforeLastYearCorrespondenceFullBudget,
-    passScoreBeforeLastYearCorrespondenceShortBudget,
-    passScoreBeforeLastYearCorrespondenceFullPaid,
-    passScoreBeforeLastYearCorrespondenceShortPaid,
-    id,
-  ) {
+  void editSpeciality(facultyBased,
+      name,
+      number,
+      about,
+      qualification,
+      trainingDurationDayFull,
+      trainingDurationDayShort,
+      trainingDurationCorrespondenceFull,
+      trainingDurationCorrespondenceShort,
+      entranceTestsFull,
+      entranceShort,
+      admissionCurrentDayFullBudget,
+      admissionCurrentDayShortBudget,
+      admissionCurrentDayFullPaid,
+      admissionCurrentDayShortPaid,
+      admissionCurrentCorrespondenceFullBudget,
+      admissionCurrentCorrespondenceShortBudget,
+      admissionCurrentCorrespondenceFullPaid,
+      admissionCurrentCorrespondenceShortPaid,
+      passScorePrevYearDayFullBudget,
+      passScorePrevYearDayShortBudget,
+      passScorePrevYearDayFullPaid,
+      passScorePrevYearDayShortPaid,
+      passScorePrevYearCorrespondenceFullBudget,
+      passScorePrevYearCorrespondenceShortBudget,
+      passScorePrevYearCorrespondenceFullPaid,
+      passScorePrevYearCorrespondenceShortPaid,
+      admissionPrevYearDayFullBudget,
+      admissionPrevYearDayShortBudget,
+      admissionPrevYearDayFullPaid,
+      admissionPrevYearDayShortPaid,
+      admissionPrevYearCorrespondenceFullBudget,
+      admissionPrevYearCorrespondenceShortBudget,
+      admissionPrevYearCorrespondenceFullPaid,
+      admissionPrevYearCorrespondenceShortPaid,
+      passScoreBeforeLastYearDayFullBudget,
+      passScoreBeforeLastYearDayShortBudget,
+      passScoreBeforeLastYearDayFullPaid,
+      passScoreBeforeLastYearDayShortPaid,
+      passScoreBeforeLastYearCorrespondenceFullBudget,
+      passScoreBeforeLastYearCorrespondenceShortBudget,
+      passScoreBeforeLastYearCorrespondenceFullPaid,
+      passScoreBeforeLastYearCorrespondenceShortPaid,
+      id,) {
     _specialtiesRepository.editSpeciality(
       facultyBased,
       name,
@@ -337,6 +328,12 @@ class AppProvider with ChangeNotifier {
     _infoCardsRepository
         .moveDown(currId, nextId)
         .whenComplete(() => initInfoCards());
+    notifyListeners();
+  }
+
+  void editSettings(String currentAdmissionYear, String key) {
+    _settingsRepository.editSettings(currentAdmissionYear, key)
+        .whenComplete(() => initSettings());
     notifyListeners();
   }
 }

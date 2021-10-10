@@ -13,6 +13,7 @@ import 'package:bntu_app/ui/pages/map_view/map.dart';
 import 'package:bntu_app/ui/pages/messages_page.dart';
 import 'package:bntu_app/ui/pages/quizz_view/main_menu.dart';
 import 'package:bntu_app/ui/pages/quizz_view/quiz_list.dart';
+import 'package:bntu_app/ui/pages/settings_page.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class App extends StatelessWidget {
       theme: themeProvider.current,
       routes: {
         '/main_page': (context) => MainPage(),
-        // '/settings': (context) => SettingsPage(),
+        '/settings': (context) => SettingsPage(),
         '/messages': (context) => MessagesPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
