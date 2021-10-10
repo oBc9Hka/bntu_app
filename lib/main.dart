@@ -2,8 +2,8 @@
 
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
-import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:bntu_app/repository/faculties_repository.dart';
+import 'package:bntu_app/repository/info_cards_repository.dart';
 import 'package:bntu_app/repository/settings_repository.dart';
 import 'package:bntu_app/repository/specialties_repository.dart';
 import 'package:bntu_app/ui/pages/admission_info/info.dart';
@@ -13,10 +13,9 @@ import 'package:bntu_app/ui/pages/map_view/map.dart';
 import 'package:bntu_app/ui/pages/messages_page.dart';
 import 'package:bntu_app/ui/pages/quizz_view/main_menu.dart';
 import 'package:bntu_app/ui/pages/quizz_view/quiz_list.dart';
-import 'package:bntu_app/ui/pages/settings_page.dart';
+import 'package:custom_splash/custom_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:custom_splash/custom_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,6 +33,7 @@ void main() async {
                   FacultiesFirestoreRepository(),
                   SpecialtiesFirestoreRepository(),
                   SettingsFirestoreRepository(),
+                  InfoCardsFirestoreRepository(),
                 )),
       ],
       child: App(),

@@ -1,4 +1,5 @@
 import 'package:bntu_app/models/faculty_model.dart';
+import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ class AppProvider with ChangeNotifier {
   final FacultiesRepository _facultiesRepository;
   final SpecialtiesRepository _specialtiesRepository;
   final SettingsRepository _settingsRepository;
+  final InfoCardsRepository _infoCardsRepository;
 
   List<Faculty> faculties = [];
 
@@ -16,14 +18,23 @@ class AppProvider with ChangeNotifier {
 
   bool get isSpecialtiesLoaded => specialties.isNotEmpty;
 
+  List<InfoCard> infoCards = [];
+
+  bool get isInfoCardsLoaded => infoCards.isNotEmpty;
+
   String currentAdmissionYear = '';
   late String secretKey;
 
-  AppProvider(this._facultiesRepository, this._specialtiesRepository,
-      this._settingsRepository) {
+  AppProvider(
+    this._facultiesRepository,
+    this._specialtiesRepository,
+    this._settingsRepository,
+    this._infoCardsRepository,
+  ) {
     initFaculties();
     initSpecialties();
     initSettings();
+    initInfoCards();
   }
 
   void initFaculties() async {
@@ -39,6 +50,11 @@ class AppProvider with ChangeNotifier {
   void initSettings() async {
     currentAdmissionYear = await _settingsRepository.getCurrentAdmissionYear();
     secretKey = await _settingsRepository.getSecretKey();
+    notifyListeners();
+  }
+
+  void initInfoCards() async {
+    infoCards = await _infoCardsRepository.getCards();
     notifyListeners();
   }
 
@@ -90,10 +106,12 @@ class AppProvider with ChangeNotifier {
       imagePath,
       id,
     );
+    notifyListeners();
   }
 
   void removeFaculty(String id, String packageName) {
     _facultiesRepository.removeFaculty(id, packageName);
+    notifyListeners();
   }
 
   void addSpeciality(
@@ -186,6 +204,7 @@ class AppProvider with ChangeNotifier {
       passScoreBeforeLastYearCorrespondenceFullPaid,
       passScoreBeforeLastYearCorrespondenceShortPaid,
     );
+    notifyListeners();
   }
 
   void editSpeciality(
@@ -280,8 +299,44 @@ class AppProvider with ChangeNotifier {
       passScoreBeforeLastYearCorrespondenceShortPaid,
       id,
     );
+    notifyListeners();
   }
-  void removeSpeciality(String id){
+
+  void removeSpeciality(String id) {
     _specialtiesRepository.removeSpeciality(id);
+    notifyListeners();
+  }
+
+  void addInfoCard(String title, String subtitle) {
+    _infoCardsRepository
+        .addCard(title, subtitle)
+        .whenComplete(() => initInfoCards());
+    notifyListeners();
+  }
+
+  void editInfoCard(String title, String subtitle, String id) {
+    _infoCardsRepository
+        .editCard(title, subtitle, id)
+        .whenComplete(() => initInfoCards());
+    notifyListeners();
+  }
+
+  void removeInfoCard(String id) {
+    _infoCardsRepository.removeCard(id).whenComplete(() => initInfoCards());
+    notifyListeners();
+  }
+
+  void moveUpInfoCard(String currId, String prevId) {
+    _infoCardsRepository
+        .moveUp(currId, prevId)
+        .whenComplete(() => initInfoCards());
+    notifyListeners();
+  }
+
+  void moveDownInfoCard(String currId, String nextId) {
+    _infoCardsRepository
+        .moveDown(currId, nextId)
+        .whenComplete(() => initInfoCards());
+    notifyListeners();
   }
 }
