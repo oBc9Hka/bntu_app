@@ -1,3 +1,4 @@
+import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
@@ -9,6 +10,7 @@ class AppProvider with ChangeNotifier {
   final SpecialtiesRepository _specialtiesRepository;
   final SettingsRepository _settingsRepository;
   final InfoCardsRepository _infoCardsRepository;
+  final ErrorMessagesRepository _errorMessagesRepository;
 
   List<Faculty> faculties = [];
 
@@ -22,17 +24,27 @@ class AppProvider with ChangeNotifier {
 
   bool get isInfoCardsLoaded => infoCards.isNotEmpty;
 
-  String currentAdmissionYear = '';
-  late String secretKey;
+  List<ErrorMessage> errorMessages = [];
 
-  AppProvider(this._facultiesRepository,
-      this._specialtiesRepository,
-      this._settingsRepository,
-      this._infoCardsRepository,) {
+  bool get isErrorMessagesLoaded => errorMessages.isNotEmpty;
+
+  String currentAdmissionYear = '';
+  String secretKey = '';
+  String unseenCount = '';
+
+
+  AppProvider(
+    this._facultiesRepository,
+    this._specialtiesRepository,
+    this._settingsRepository,
+    this._infoCardsRepository,
+    this._errorMessagesRepository,
+  ) {
     initFaculties();
     initSpecialties();
     initSettings();
     initInfoCards();
+    initErrorMessages();
   }
 
   void initFaculties() async {
@@ -56,14 +68,22 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addFaculty(String name,
-      String shortName,
-      String about,
-      String hotLineNumber,
-      String hotLineMail,
-      String forInquiriesNumber,
-      String forHostelNumber,
-      String imagePath,) {
+  void initErrorMessages() async {
+    errorMessages = await _errorMessagesRepository.getErrorMessagesList();
+    unseenCount = await _errorMessagesRepository.getUnseenMessages();
+    notifyListeners();
+  }
+
+  void addFaculty(
+    String name,
+    String shortName,
+    String about,
+    String hotLineNumber,
+    String hotLineMail,
+    String forInquiriesNumber,
+    String forHostelNumber,
+    String imagePath,
+  ) {
     try {
       _facultiesRepository.addFaculty(
         name,
@@ -81,7 +101,8 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editFaculty(String name,
+  void editFaculty(
+      String name,
       String shortName,
       String about,
       String hotLineNumber,
@@ -109,49 +130,51 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addSpeciality(facultyBased,
-      name,
-      number,
-      about,
-      qualification,
-      trainingDurationDayFull,
-      trainingDurationDayShort,
-      trainingDurationCorrespondenceFull,
-      trainingDurationCorrespondenceShort,
-      entranceTestsFull,
-      entranceShort,
-      admissionCurrentDayFullBudget,
-      admissionCurrentDayShortBudget,
-      admissionCurrentDayFullPaid,
-      admissionCurrentDayShortPaid,
-      admissionCurrentCorrespondenceFullBudget,
-      admissionCurrentCorrespondenceShortBudget,
-      admissionCurrentCorrespondenceFullPaid,
-      admissionCurrentCorrespondenceShortPaid,
-      passScorePrevYearDayFullBudget,
-      passScorePrevYearDayShortBudget,
-      passScorePrevYearDayFullPaid,
-      passScorePrevYearDayShortPaid,
-      passScorePrevYearCorrespondenceFullBudget,
-      passScorePrevYearCorrespondenceShortBudget,
-      passScorePrevYearCorrespondenceFullPaid,
-      passScorePrevYearCorrespondenceShortPaid,
-      admissionPrevYearDayFullBudget,
-      admissionPrevYearDayShortBudget,
-      admissionPrevYearDayFullPaid,
-      admissionPrevYearDayShortPaid,
-      admissionPrevYearCorrespondenceFullBudget,
-      admissionPrevYearCorrespondenceShortBudget,
-      admissionPrevYearCorrespondenceFullPaid,
-      admissionPrevYearCorrespondenceShortPaid,
-      passScoreBeforeLastYearDayFullBudget,
-      passScoreBeforeLastYearDayShortBudget,
-      passScoreBeforeLastYearDayFullPaid,
-      passScoreBeforeLastYearDayShortPaid,
-      passScoreBeforeLastYearCorrespondenceFullBudget,
-      passScoreBeforeLastYearCorrespondenceShortBudget,
-      passScoreBeforeLastYearCorrespondenceFullPaid,
-      passScoreBeforeLastYearCorrespondenceShortPaid,) {
+  void addSpeciality(
+    facultyBased,
+    name,
+    number,
+    about,
+    qualification,
+    trainingDurationDayFull,
+    trainingDurationDayShort,
+    trainingDurationCorrespondenceFull,
+    trainingDurationCorrespondenceShort,
+    entranceTestsFull,
+    entranceShort,
+    admissionCurrentDayFullBudget,
+    admissionCurrentDayShortBudget,
+    admissionCurrentDayFullPaid,
+    admissionCurrentDayShortPaid,
+    admissionCurrentCorrespondenceFullBudget,
+    admissionCurrentCorrespondenceShortBudget,
+    admissionCurrentCorrespondenceFullPaid,
+    admissionCurrentCorrespondenceShortPaid,
+    passScorePrevYearDayFullBudget,
+    passScorePrevYearDayShortBudget,
+    passScorePrevYearDayFullPaid,
+    passScorePrevYearDayShortPaid,
+    passScorePrevYearCorrespondenceFullBudget,
+    passScorePrevYearCorrespondenceShortBudget,
+    passScorePrevYearCorrespondenceFullPaid,
+    passScorePrevYearCorrespondenceShortPaid,
+    admissionPrevYearDayFullBudget,
+    admissionPrevYearDayShortBudget,
+    admissionPrevYearDayFullPaid,
+    admissionPrevYearDayShortPaid,
+    admissionPrevYearCorrespondenceFullBudget,
+    admissionPrevYearCorrespondenceShortBudget,
+    admissionPrevYearCorrespondenceFullPaid,
+    admissionPrevYearCorrespondenceShortPaid,
+    passScoreBeforeLastYearDayFullBudget,
+    passScoreBeforeLastYearDayShortBudget,
+    passScoreBeforeLastYearDayFullPaid,
+    passScoreBeforeLastYearDayShortPaid,
+    passScoreBeforeLastYearCorrespondenceFullBudget,
+    passScoreBeforeLastYearCorrespondenceShortBudget,
+    passScoreBeforeLastYearCorrespondenceFullPaid,
+    passScoreBeforeLastYearCorrespondenceShortPaid,
+  ) {
     _specialtiesRepository.addSpeciality(
       facultyBased,
       name,
@@ -200,50 +223,52 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void editSpeciality(facultyBased,
-      name,
-      number,
-      about,
-      qualification,
-      trainingDurationDayFull,
-      trainingDurationDayShort,
-      trainingDurationCorrespondenceFull,
-      trainingDurationCorrespondenceShort,
-      entranceTestsFull,
-      entranceShort,
-      admissionCurrentDayFullBudget,
-      admissionCurrentDayShortBudget,
-      admissionCurrentDayFullPaid,
-      admissionCurrentDayShortPaid,
-      admissionCurrentCorrespondenceFullBudget,
-      admissionCurrentCorrespondenceShortBudget,
-      admissionCurrentCorrespondenceFullPaid,
-      admissionCurrentCorrespondenceShortPaid,
-      passScorePrevYearDayFullBudget,
-      passScorePrevYearDayShortBudget,
-      passScorePrevYearDayFullPaid,
-      passScorePrevYearDayShortPaid,
-      passScorePrevYearCorrespondenceFullBudget,
-      passScorePrevYearCorrespondenceShortBudget,
-      passScorePrevYearCorrespondenceFullPaid,
-      passScorePrevYearCorrespondenceShortPaid,
-      admissionPrevYearDayFullBudget,
-      admissionPrevYearDayShortBudget,
-      admissionPrevYearDayFullPaid,
-      admissionPrevYearDayShortPaid,
-      admissionPrevYearCorrespondenceFullBudget,
-      admissionPrevYearCorrespondenceShortBudget,
-      admissionPrevYearCorrespondenceFullPaid,
-      admissionPrevYearCorrespondenceShortPaid,
-      passScoreBeforeLastYearDayFullBudget,
-      passScoreBeforeLastYearDayShortBudget,
-      passScoreBeforeLastYearDayFullPaid,
-      passScoreBeforeLastYearDayShortPaid,
-      passScoreBeforeLastYearCorrespondenceFullBudget,
-      passScoreBeforeLastYearCorrespondenceShortBudget,
-      passScoreBeforeLastYearCorrespondenceFullPaid,
-      passScoreBeforeLastYearCorrespondenceShortPaid,
-      id,) {
+  void editSpeciality(
+    facultyBased,
+    name,
+    number,
+    about,
+    qualification,
+    trainingDurationDayFull,
+    trainingDurationDayShort,
+    trainingDurationCorrespondenceFull,
+    trainingDurationCorrespondenceShort,
+    entranceTestsFull,
+    entranceShort,
+    admissionCurrentDayFullBudget,
+    admissionCurrentDayShortBudget,
+    admissionCurrentDayFullPaid,
+    admissionCurrentDayShortPaid,
+    admissionCurrentCorrespondenceFullBudget,
+    admissionCurrentCorrespondenceShortBudget,
+    admissionCurrentCorrespondenceFullPaid,
+    admissionCurrentCorrespondenceShortPaid,
+    passScorePrevYearDayFullBudget,
+    passScorePrevYearDayShortBudget,
+    passScorePrevYearDayFullPaid,
+    passScorePrevYearDayShortPaid,
+    passScorePrevYearCorrespondenceFullBudget,
+    passScorePrevYearCorrespondenceShortBudget,
+    passScorePrevYearCorrespondenceFullPaid,
+    passScorePrevYearCorrespondenceShortPaid,
+    admissionPrevYearDayFullBudget,
+    admissionPrevYearDayShortBudget,
+    admissionPrevYearDayFullPaid,
+    admissionPrevYearDayShortPaid,
+    admissionPrevYearCorrespondenceFullBudget,
+    admissionPrevYearCorrespondenceShortBudget,
+    admissionPrevYearCorrespondenceFullPaid,
+    admissionPrevYearCorrespondenceShortPaid,
+    passScoreBeforeLastYearDayFullBudget,
+    passScoreBeforeLastYearDayShortBudget,
+    passScoreBeforeLastYearDayFullPaid,
+    passScoreBeforeLastYearDayShortPaid,
+    passScoreBeforeLastYearCorrespondenceFullBudget,
+    passScoreBeforeLastYearCorrespondenceShortBudget,
+    passScoreBeforeLastYearCorrespondenceFullPaid,
+    passScoreBeforeLastYearCorrespondenceShortPaid,
+    id,
+  ) {
     _specialtiesRepository.editSpeciality(
       facultyBased,
       name,
@@ -332,8 +357,31 @@ class AppProvider with ChangeNotifier {
   }
 
   void editSettings(String currentAdmissionYear, String key) {
-    _settingsRepository.editSettings(currentAdmissionYear, key)
+    _settingsRepository
+        .editSettings(currentAdmissionYear, key)
         .whenComplete(() => initSettings());
     notifyListeners();
   }
+
+  void submitErrorMessage(String msg) {
+    _errorMessagesRepository
+        .submitErrorMessage(msg)
+        .whenComplete(() => initErrorMessages());
+    notifyListeners();
+  }
+
+  void changeViewedState(String id) {
+    _errorMessagesRepository
+        .changeViewedState(id)
+        .whenComplete(() => initErrorMessages());
+    notifyListeners();
+  }
+
+  void removeErrorMessage(String id) {
+    _errorMessagesRepository
+        .removeErrorMessage(id)
+        .whenComplete(() => initErrorMessages());
+    notifyListeners();
+  }
+
 }

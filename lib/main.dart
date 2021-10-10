@@ -2,6 +2,7 @@
 
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/repository/error_messages_repository.dart';
 import 'package:bntu_app/repository/faculties_repository.dart';
 import 'package:bntu_app/repository/info_cards_repository.dart';
 import 'package:bntu_app/repository/settings_repository.dart';
@@ -35,6 +36,7 @@ void main() async {
                   SpecialtiesFirestoreRepository(),
                   SettingsFirestoreRepository(),
                   InfoCardsFirestoreRepository(),
+                  ErrorMessagesFirestoreRepository(),
                 )),
       ],
       child: App(),

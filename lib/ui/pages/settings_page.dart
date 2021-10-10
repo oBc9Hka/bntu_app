@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
@@ -18,15 +17,9 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   Color mainColor = Constants().mainColor;
-  String _unseenCount = '';
   TextEditingController _yearController = TextEditingController();
   TextEditingController _keyController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  _getSettings() async {
-    _unseenCount = await ErrorMessage().getUnseenMessages();
-    setState(() {});
-  }
 
   _showAlertDialog(GestureTapCallback onPressed) {
     showDialog(
@@ -63,12 +56,6 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   @override
-  void initState() {
-    _getSettings();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     var _themeProvider = Provider.of<ThemeProvider>(context);
     return Consumer<AppProvider>(
@@ -76,6 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _yearController =
             TextEditingController(text: state.currentAdmissionYear);
         _keyController = TextEditingController(text: state.secretKey);
+        String _unseenCount = state.unseenCount;
 
         return Scaffold(
           appBar: AppBar(

@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/util/auth_service.dart';
-import 'package:bntu_app/util/data.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,7 +42,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
     super.initState();
   }
 
-  void _handleErrorMessageByUser(String key) {
+  void _handleErrorMessageByUser(String key, AppProvider state) {
     if (_errorFormKey.currentState!.validate()) {
       if (_errorDescriptionController.text == key) {
         Navigator.of(context).pop();
@@ -54,7 +52,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
           Fluttertoast.showToast(msg: 'Вы уже в режиме редактора');
         }
       } else {
-        ErrorMessage().submitErrorMessage(_errorDescriptionController.text);
+        state.submitErrorMessage(_errorDescriptionController.text);
         Navigator.of(context).pop();
         Fluttertoast.showToast(
           msg: 'Сообщение отправлено в поддержку',
@@ -160,7 +158,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
             Consumer<AppProvider>(builder: (context, state, child){
               return ElevatedButton(
                 onPressed: () {
-                  _handleErrorMessageByUser(state.secretKey);
+                  _handleErrorMessageByUser(state.secretKey, state);
                 },
                 child: Text('Отправить'),
                 style: customElevatedButtonStyle(),

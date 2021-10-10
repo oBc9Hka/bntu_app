@@ -1,3 +1,4 @@
+import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
@@ -152,7 +153,17 @@ abstract class BuildingsRepository {}
 
 abstract class QuestionsRepository {}
 
-abstract class ErrorMessagesRepository {}
+abstract class ErrorMessagesRepository {
+  Future<List<ErrorMessage>> getErrorMessagesList();
+
+  Future<void> submitErrorMessage(String msg);
+
+  Future<void> changeViewedState(String id);
+
+  Future<void> removeErrorMessage(String id);
+
+  Future<String> getUnseenMessages();
+}
 
 abstract class SettingsRepository {
   Future<String> getCurrentAdmissionYear();
