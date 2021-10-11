@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class Building {
@@ -6,41 +5,24 @@ class Building {
   String? optional;
   Point? point;
   String? imagePath;
+  String? docId;
+  int? orderId;
 
-  Building({this.name, this.optional, this.point, this.imagePath});
+  Building({
+    this.name,
+    this.optional,
+    this.point,
+    this.imagePath,
+    this.docId,
+    this.orderId,
+  });
 
-  final dbRef = FirebaseFirestore.instance;
-
-  void addBuilding(
-    String name,
-    String optional,
-    Point point,
-    String imagePath,
-  ) async {
-    await dbRef.collection('buildings').add({
-      'name': name,
-      'optional': optional,
-      'point': GeoPoint(point.latitude, point.longitude),
-      'imagePath': imagePath,
-    });
-  }
-
-  void editBuilding(
-      String name,
-      String optional,
-      Point point,
-      String imagePath,
-      String id,
-      ) async {
-    await dbRef.collection('buildings').doc(id).update({
-      'name': name,
-      'optional': optional,
-      'point': GeoPoint(point.latitude, point.longitude),
-      'imagePath': imagePath,
-    });
-  }
-
-  void removeBuilding(String id) async{
-    await dbRef.collection('buildings').doc(id).delete();
-  }
+  Building.fromMap(Map<String, dynamic> data, String id) : this(
+    name: data['name'],
+      optional : data['optional'],
+      point : Point(latitude: data['point'].latitude, longitude: data['point'].longitude),
+      imagePath : data['imagePath'],
+      docId : id,
+      orderId : data['orderId'],
+  );
 }

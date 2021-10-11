@@ -27,13 +27,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
   AuthService _authService = AuthService();
   User? _user;
   static const _url = 'https://bntu.by';
-  // String _key = 'secretKey';
 
-  // void _initKey() async {
-  //   _key = await Data()
-  //       .getFieldData('secretKey')
-  //       .whenComplete(() => setState(() {}));
-  // }
 
   @override
   void initState() {
@@ -224,7 +218,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Вход в режим администратора'),
+          title: Text('Вход в режим редактора'),
           content: Padding(
             padding: const EdgeInsets.all(0),
             child: Form(

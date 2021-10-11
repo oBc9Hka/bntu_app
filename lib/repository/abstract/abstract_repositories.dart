@@ -1,7 +1,9 @@
+import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/models/error_message_model.dart';
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 abstract class FacultiesRepository {
   const FacultiesRepository();
@@ -149,7 +151,21 @@ abstract class InfoCardsRepository {
   Future<void> moveDown(String currId, String nextId);
 }
 
-abstract class BuildingsRepository {}
+abstract class BuildingsRepository {
+  Future<List<Building>> getBuildingsList();
+
+  Future<void> addBuilding(
+      String name, String optional, Point point, String imagePath);
+
+  Future<void> editBuilding(
+      String name, String optional, Point point, String imagePath, String id);
+
+  Future<void> removeBuilding(String id);
+
+  Future<void> moveUp(String currId, String prevId);
+
+  Future<void> moveDown(String currId, String nextId);
+}
 
 abstract class QuestionsRepository {}
 

@@ -257,7 +257,7 @@ class _FacultyEditState extends State<FacultyEdit> {
                         getPhoto();
                       },
                       image: _image,
-                      faculty: widget.faculty,
+                      item: widget.faculty,
                     )
                   ],
                 ),
