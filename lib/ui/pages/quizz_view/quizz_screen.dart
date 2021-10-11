@@ -1,6 +1,8 @@
 import 'package:bntu_app/models/question_model.dart';
-import 'package:bntu_app/util/data.dart';
+import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'result_screen.dart';
 
@@ -18,7 +20,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
   bool answered = false;
   bool showMsg = false;
 
-  List _questions = [];
+  List<QuestionModel> _questions = [];
 
   Map<String, bool> checkedAnswers = {};
   var tmpArray = [];
@@ -56,29 +58,17 @@ class _QuizzScreenState extends State<QuizzScreen> {
     });
   }
 
-  bool isError = false;
   String errorMsg = '';
 
   void initQuiz() async {
-    _questions = await Data()
-        .initQuestions()
-        .whenComplete(() => isLoading = false)
-        .onError((error, stackTrace) {
-      errorMsg = error.toString();
-      isError = true;
-      setState(() {});
-      return [];
+    answers = _questions[0].answers!;
+    setState(() {});
+    checkedAnswers = {};
+    answers.keys.forEach((e) {
+      checkedAnswers[e] = false;
     });
-    if (!isError) {
-      answers = _questions[0].answers;
-      setState(() {});
-      checkedAnswers = {};
-      answers.keys.forEach((e) {
-        checkedAnswers[e] = false;
-      });
 
-      setState(() {});
-    }
+    setState(() {});
   }
 
   @override
@@ -90,23 +80,19 @@ class _QuizzScreenState extends State<QuizzScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color
-    return Scaffold(
-      appBar: AppBar(
-        // centerTitle: true,
-        title: Text('Тест'),
-      ),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-                color: Data().mainColor,
-              ),
-            )
-          : isError
+    const Color mainColor = Constants.mainColor;
+    return Consumer<AppProvider>(
+      builder: (context, state, child) {
+        _questions = state.questions;
+        return Scaffold(
+          appBar: AppBar(
+            // centerTitle: true,
+            title: Text('Тест'),
+          ),
+          body: isLoading
               ? Center(
-                  child: Text(
-                    errorMsg,
-                    textAlign: TextAlign.center,
+                  child: CircularProgressIndicator(
+                    color: mainColor,
                   ),
                 )
               : PageView.builder(
@@ -127,7 +113,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
                   physics: new NeverScrollableScrollPhysics(),
                   itemCount: _questions.length,
                   itemBuilder: (context, index) {
-                    answers = _questions[index].answers;
+                    answers = _questions[index].answers!;
                     return Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
@@ -161,7 +147,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
                           Column(
                             children: [
                               Text(
-                                _questions[index].question,
+                                _questions[index].question!,
                                 style: TextStyle(fontSize: 24),
                               ),
                               ...checkedAnswers.keys.map((key) {
@@ -218,6 +204,8 @@ class _QuizzScreenState extends State<QuizzScreen> {
                     );
                   },
                 ),
+        );
+      },
     );
   }
 }

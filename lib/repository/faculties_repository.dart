@@ -79,4 +79,28 @@ class FacultiesFirestoreRepository extends FacultiesRepository {
         .delete();
     await dbRef.doc(id).delete();
   }
+
+  @override
+  Future<List<String>> getFacultiesShortNames() async {
+    List<String> shortNames = [];
+    QuerySnapshot<Map<String, dynamic>> temp =
+    await dbRef.get();
+    for (var item in temp.docs) {
+      String shortName = item['shortName'];
+      shortNames.add(shortName);
+    }
+    return shortNames;
+  }
+
+  @override
+  Future<Faculty> getFacultyByShortName(String name) async {
+    QuerySnapshot<Map<String, dynamic>> temp =
+    await dbRef.get();
+    for (var item in temp.docs) {
+      if (item['shortName'] == name) {
+        return Faculty.fromMap(item.data(), item.id);
+      }
+    }
+    throw 'Факультет не найден';
+  }
 }

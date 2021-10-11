@@ -6,6 +6,7 @@ import 'package:bntu_app/repository/buildings_repository.dart';
 import 'package:bntu_app/repository/error_messages_repository.dart';
 import 'package:bntu_app/repository/faculties_repository.dart';
 import 'package:bntu_app/repository/info_cards_repository.dart';
+import 'package:bntu_app/repository/questions_repository.dart';
 import 'package:bntu_app/repository/settings_repository.dart';
 import 'package:bntu_app/repository/specialties_repository.dart';
 import 'package:bntu_app/ui/pages/admission_info/info.dart';
@@ -39,6 +40,7 @@ void main() async {
                   InfoCardsFirestoreRepository(),
                   ErrorMessagesFirestoreRepository(),
                   BuildingsFirestoreRepository(),
+                  QuestionsFirestoreRepository(),
                 )),
       ],
       child: App(),

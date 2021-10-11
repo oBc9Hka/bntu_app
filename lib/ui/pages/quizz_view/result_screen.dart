@@ -1,9 +1,12 @@
+import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
-import 'package:bntu_app/util/data.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+
 import 'main_menu.dart';
 
 class ResultScreen extends StatefulWidget {
@@ -16,21 +19,16 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
-  List<QueryDocumentSnapshot<Map<String, dynamic>>> _facultiesList = [];
   String _fit = '...';
   String _mayFit = '...';
   List list = [];
-  List<MapEntry<String, int>> sortedList = [];
+  List<MapEntry<String, int>> _sortedList = [];
   Map<String, int> _tagsFrequency = {};
   int maxFrequency = 0;
   bool _mayFitVisibility = true;
 
-  Future<void> getData() async {
-    _facultiesList = await Data().getFacultiesList();
-    setState(() {});
-  }
 
-  void getTagsFrequencyList() {
+  void _getTagsFrequencyList() {
     list = [];
     for (var item in widget.tagsList) {
       if (list.contains(item)) {
@@ -45,17 +43,17 @@ class _ResultScreenState extends State<ResultScreen> {
     print(_tagsFrequency);
   }
 
-  void sortTagsFrequencyList() {
-    sortedList = [];
+  void _sortTagsFrequencyList() {
+    _sortedList = [];
     _tagsFrequency.entries.forEach((element) {
-      sortedList.add(element);
+      _sortedList.add(element);
     });
-    print('unsorted: $sortedList');
-    sortedList.sort((a, b) => b.value.compareTo(a.value));
-    print('sorted: $sortedList');
+    print('unsorted: $_sortedList');
+    _sortedList.sort((a, b) => b.value.compareTo(a.value));
+    print('sorted: $_sortedList');
   }
 
-  void getMaxFrequency() {
+  void _getMaxFrequency() {
     maxFrequency = 0;
     _tagsFrequency.forEach((key, value) {
       if (value > maxFrequency) maxFrequency = value;
@@ -63,7 +61,7 @@ class _ResultScreenState extends State<ResultScreen> {
     print('maxFrequency: $maxFrequency');
   }
 
-  void setTitles() {
+  void _setTitles() {
     int maxFrequencyCount = 0;
     _tagsFrequency.forEach((key, value) {
       if (value == maxFrequency) ++maxFrequencyCount;
@@ -89,156 +87,162 @@ class _ResultScreenState extends State<ResultScreen> {
 
   @override
   void initState() {
-    getData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    getTagsFrequencyList();
-    sortTagsFrequencyList();
-    getMaxFrequency();
-    setTitles();
+    _getTagsFrequencyList();
+    _sortTagsFrequencyList();
+    _getMaxFrequency();
+    _setTitles();
 
-    List<MapEntry<dynamic, int>> sortedQueryList = [];
-    for (var sortedListItem in sortedList) {
-      for (var facultiesListItem in _facultiesList) {
-        if (facultiesListItem.get('shortName') == sortedListItem.key)
-          sortedQueryList
-              .add(MapEntry(facultiesListItem, sortedListItem.value));
-      }
-    }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Результаты'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                "Результат теста:",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+
+    const Color mainColor = Constants.mainColor;
+    return Consumer<AppProvider>(
+        builder: (context, state, child) {
+
+          List<MapEntry<dynamic, int>> sortedQueryList = [];
+          for (var sortedListItem in _sortedList) {
+            for (var facultiesListItem in state.faculties) {
+              if (facultiesListItem.shortName == sortedListItem.key)
+                sortedQueryList
+                    .add(MapEntry(facultiesListItem, sortedListItem.value));
+            }
+          }
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Результаты'),
             ),
-            Column(
-              children: [
-                Text(
-                  _fit,
-                  style: TextStyle(
-                    color: Data().mainColor,
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                for (var item in sortedQueryList)
-                  if (item.value == maxFrequency)
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FacultyPage(
-                              faculty: item.key,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        item.key.get('shortName'),
-                        style: TextStyle(fontSize: 26, color: Data().mainColor),
+            body: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      "Результат теста:",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 40.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-              ],
-            ),
-            Visibility(
-              visible: _mayFitVisibility,
-              child: Column(
-                children: [
-                  Text(
-                    _mayFit,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
                   ),
-                  Container(
-                    constraints: BoxConstraints(
-                        minWidth: 50,
-                        maxWidth: MediaQuery.of(context).size.width * 0.7),
-                    child: CarouselSlider(
-                      items: [
-                        for (var item in sortedQueryList)
-                          if (item.value < maxFrequency)
-                            Container(
-                              constraints: BoxConstraints(
-                                  minWidth: 50,
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => FacultyPage(
-                                        faculty: item.key,
+                  Column(
+                    children: [
+                      Text(
+                        _fit,
+                        style: TextStyle(
+                          color: mainColor,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      for (var item in sortedQueryList)
+                        if (item.value == maxFrequency)
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FacultyPage(
+                                    faculty: item.key,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              item.key.get('shortName'),
+                              style: TextStyle(fontSize: 26, color: mainColor),
+                            ),
+                          ),
+                    ],
+                  ),
+                  Visibility(
+                    visible: _mayFitVisibility,
+                    child: Column(
+                      children: [
+                        Text(
+                          _mayFit,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          constraints: BoxConstraints(
+                              minWidth: 50,
+                              maxWidth: MediaQuery.of(context).size.width * 0.7),
+                          child: CarouselSlider(
+                            items: [
+                              for (var item in sortedQueryList)
+                                if (item.value < maxFrequency)
+                                  Container(
+                                    constraints: BoxConstraints(
+                                        minWidth: 50,
+                                        maxWidth:
+                                        MediaQuery.of(context).size.width * 0.8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => FacultyPage(
+                                              faculty: item.key,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        item.key.get('shortName'),
+                                        style: TextStyle(color: Colors.grey),
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  item.key.get('shortName'),
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ),
-                            ),
+                                  ),
+                            ],
+                            options: CarouselOptions(
+                                height: MediaQuery.of(context).size.height * 0.2,
+                                scrollDirection: Axis.vertical,
+                                enableInfiniteScroll: false,
+                                viewportFraction: 0.35,
+                                enlargeCenterPage: true,
+                                scrollPhysics: PageScrollPhysics()),
+                          ),
+                        ),
                       ],
-                      options: CarouselOptions(
-                          height: MediaQuery.of(context).size.height * 0.2,
-                          scrollDirection: Axis.vertical,
-                          enableInfiniteScroll: false,
-                          viewportFraction: 0.35,
-                          enlargeCenterPage: true,
-                          scrollPhysics: PageScrollPhysics()),
+                    ),
+                  ),
+                  RawMaterialButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MainMenu(),
+                          ));
+                    },
+                    fillColor: Colors.white,
+                    elevation: 10,
+                    shape: StadiumBorder(),
+                    padding: EdgeInsets.all(18.0),
+                    child: Text(
+                      "Пройти тест заново",
+                      style: TextStyle(color: mainColor),
                     ),
                   ),
                 ],
               ),
             ),
-            RawMaterialButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainMenu(),
-                    ));
-              },
-              fillColor: Colors.white,
-              elevation: 10,
-              shape: StadiumBorder(),
-              padding: EdgeInsets.all(18.0),
-              child: Text(
-                "Пройти тест заново",
-                style: TextStyle(color: Data().mainColor),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
+
   }
 }
