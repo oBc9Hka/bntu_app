@@ -50,6 +50,7 @@ class AppProvider with ChangeNotifier {
     initSettings();
     initInfoCards();
     initErrorMessages();
+    initBuildings();
   }
 
   void initFaculties() async {
