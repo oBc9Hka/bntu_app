@@ -16,7 +16,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  Color mainColor = Constants().mainColor;
+  Color mainColor = Constants.mainColor;
   TextEditingController _yearController = TextEditingController();
   TextEditingController _keyController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();

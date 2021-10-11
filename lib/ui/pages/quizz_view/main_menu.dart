@@ -1,25 +1,21 @@
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'quizz_screen.dart';
 
-class MainMenu extends StatefulWidget {
+class MainMenu extends StatelessWidget {
   const MainMenu({Key? key}) : super(key: key);
 
   @override
-  _MainMenuState createState() => _MainMenuState();
-}
-
-class _MainMenuState extends State<MainMenu> {
-  @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    const Color mainColor = Color.fromARGB(255, 0, 138, 94); // green color
+    Color mainColor = Constants.mainColor;
+
     return Scaffold(
-        appBar: AppBar(
-        // centerTitle: true,
-        title: Text('Tест'),
-        ),
-    body: Padding(
+      appBar: AppBar(
+        title: Text('Тест'),
+      ),
+      body: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 48.0,
           horizontal: 12.0,
@@ -43,27 +39,27 @@ class _MainMenuState extends State<MainMenu> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.only(top: 30),
-                child:  Text(
-                    "Пройди тест и узнай, какие факультеты тебе подходят",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: mainColor,
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  "Пройди тест и узнай, какие факультеты тебе подходят",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: mainColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
+              ),
             ),
             Expanded(
               child: Center(
                 child: RawMaterialButton(
                   onPressed: () {
-                    //Navigating the the Quizz Screen
                     Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => QuizzScreen(),
-                        ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuizzScreen(),
+                      ),
+                    );
                   },
                   shape: const StadiumBorder(),
                   elevation: 10,
@@ -75,7 +71,7 @@ class _MainMenuState extends State<MainMenu> {
                       "Начать тест",
                       style: TextStyle(
                         fontSize: 26.0,
-                        color: mainColor,
+                        // color: mainColor,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -83,7 +79,6 @@ class _MainMenuState extends State<MainMenu> {
                 ),
               ),
             ),
-
           ],
         ),
       ),

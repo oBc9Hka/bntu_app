@@ -39,7 +39,7 @@ class _FacultyPageState extends State<FacultyPage> {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants().mainColor;
+    Color mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
     late AppProvider _state;
 

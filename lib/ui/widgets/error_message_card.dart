@@ -15,7 +15,7 @@ class ErrorMessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants().mainColor;
+    Color mainColor = Constants.mainColor;
 
     return Padding(
       padding: const EdgeInsets.all(5.0),

@@ -10,7 +10,7 @@ class AddButtonsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mainColor = Constants().mainColor;
+    final mainColor = Constants.mainColor;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/util/auth_service.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,7 +58,7 @@ class _GreetingScreenState extends State<GreetingScreen> {
     }
   }
 
-  static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
+  static const Color mainColor = Constants.mainColor;
 
   customElevatedButtonStyle() {
     return ButtonStyle(

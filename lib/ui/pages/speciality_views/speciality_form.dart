@@ -140,13 +140,7 @@ class SpecialityForm extends StatelessWidget {
   final TextEditingController
       passScoreBeforeLastYearCorrespondenceShortPaidController;
 
-  static Color mainColor = Constants().mainColor;
-
-
-
-
-
-
+  static Color mainColor = Constants.mainColor;
 
   Widget _expandedTileAdmission(
     int year,
@@ -280,8 +274,6 @@ class SpecialityForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -303,8 +295,8 @@ class SpecialityForm extends StatelessWidget {
                   controller: nameController,
                   minLines: 1,
                   maxLines: 3,
-                  decoration:
-                      const InputDecoration(labelText: 'Название специальности*'),
+                  decoration: const InputDecoration(
+                      labelText: 'Название специальности*'),
                   validator: (value) {
                     if (value == '') return 'Введите название';
                     return null;
@@ -342,8 +334,8 @@ class SpecialityForm extends StatelessWidget {
                     ),
                     TextFormField(
                       controller: trainingDurationDayShortController,
-                      decoration:
-                          const InputDecoration(labelText: 'Дневное сокращённое'),
+                      decoration: const InputDecoration(
+                          labelText: 'Дневное сокращённое'),
                     ),
                     TextFormField(
                       controller: trainingDurationCorrespondenceFullController,
@@ -352,8 +344,8 @@ class SpecialityForm extends StatelessWidget {
                     ),
                     TextFormField(
                       controller: trainingDurationCorrespondenceShortController,
-                      decoration:
-                          const InputDecoration(labelText: 'Заочное сокращённое'),
+                      decoration: const InputDecoration(
+                          labelText: 'Заочное сокращённое'),
                     ),
                   ],
                 ),

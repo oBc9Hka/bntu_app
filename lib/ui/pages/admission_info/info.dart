@@ -36,7 +36,7 @@ class _InfoState extends State<Info> {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants().mainColor;
+    Color mainColor = Constants.mainColor;
     double height = MediaQuery.of(context).size.height;
 
     return Consumer<AppProvider>(builder: (context, state, child) {

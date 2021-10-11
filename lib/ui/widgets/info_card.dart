@@ -17,7 +17,7 @@ class InfoCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants().mainColor;
+    Color mainColor = Constants.mainColor;
 
     Widget customTile(
       String title,
