@@ -1,4 +1,4 @@
-import 'package:bntu_app/util/data.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +20,7 @@ class FacultyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Data().mainColor;
+    Color mainColor = Constants.mainColor;
 
     return ListTile(
       onTap: onTap,
