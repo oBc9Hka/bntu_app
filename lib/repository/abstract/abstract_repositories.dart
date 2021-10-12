@@ -4,6 +4,7 @@ import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 abstract class FacultiesRepository {
@@ -205,4 +206,26 @@ abstract class SettingsRepository {
   Future<String> getSecretKey();
 
   Future<void> editSettings(String currentAdmissionYear, String key);
+}
+
+abstract class UserRepository{
+  late String errorMessage;
+  late String errorEmailMessage;
+  late String errorPasswordMessage;
+  bool hasError = false;
+  bool hasEmailError = false;
+  bool hasPasswordError = false;
+  bool tooManyRequestsError = false;
+
+  Map<String, dynamic> getErrors();
+
+  Future<void> signUp(String email, String password);
+
+  Future<void> signIn(String email, String password);
+
+  Future<void> signOut();
+
+  Future<User?> getCurrentUser();
+
+  // Future<void> getUsersList();
 }

@@ -2,8 +2,6 @@ import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/buildings_modal.dart';
-import 'package:bntu_app/util/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,27 +21,12 @@ class _BuildingsMapState extends State<BuildingsMap> {
   static YandexMapController? controller;
   bool _showOptional = true;
   final Color mainColor = Color.fromARGB(255, 0, 138, 94);
-  AuthService _authService = AuthService();
-  User? _user;
 
   int _selectedIndex = -1;
-
-  Future<void> _getUser() async {
-    final user = await _authService.getCurrentUser();
-    setState(() {
-      _user = user as User;
-    });
-  }
 
   bool isNightModeEnabled = false;
   bool isZoomGesturesEnabled = false;
   bool isTiltGesturesEnabled = false;
-
-  @override
-  void initState() {
-    _getUser();
-    super.initState();
-  }
 
   void setPos(Point point) async {
     await controller!.move(
@@ -120,7 +103,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                       activeTrackColor: Color.fromARGB(120, 0, 138, 94),
                     ),
                   ),
-                  if (_user != null)
+                  if (state.user != null)
                     PopupMenuItem(
                       child: ListTile(
                         onTap: () {
@@ -134,12 +117,13 @@ class _BuildingsMapState extends State<BuildingsMap> {
                 tooltip: 'Настройки',
                 icon: Icon(Icons.settings),
               ),
-              IconButton(
-                  onPressed: () {
-                    state.initBuildings();
-                  },
-                  tooltip: 'Обновить список',
-                  icon: Icon(Icons.refresh)),
+              if (state.user != null)
+                IconButton(
+                    onPressed: () {
+                      state.initBuildings();
+                    },
+                    tooltip: 'Обновить список',
+                    icon: Icon(Icons.refresh)),
             ],
           ),
           body: Column(
@@ -248,14 +232,14 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                       onPressed: () {
                                         _selectedIndex = index;
                                         setPos(item.point!);
-                                        _showBottomSheet(item.name!, item.optional!,
-                                            item.imagePath!);
+                                        _showBottomSheet(item.name!,
+                                            item.optional!, item.imagePath!);
                                       },
                                       tooltip: 'Показать фото',
                                       padding: EdgeInsets.all(0),
                                       icon: const Icon(Icons.info),
                                     ),
-                                    if (_user != null)
+                                    if (state.user != null)
                                       IconButton(
                                         onPressed: () {
                                           Navigator.of(context).push(
@@ -269,73 +253,42 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                         padding: EdgeInsets.all(0),
                                         icon: const Icon(Icons.edit),
                                       ),
-                                    IconButton(
-                                      onPressed: () {
-                                        try {
-                                          state.moveUpBuilding(
-                                            state.buildings[index].docId.toString(),
-                                            state.buildings[index - 1].docId.toString(),
-                                          );
-                                        } catch (e) {}
-                                      },
-                                      tooltip: 'Поднять в списке',
-                                      icon: Icon(
-                                        Icons.arrow_upward,
+                                    if (state.user != null)
+                                      IconButton(
+                                        onPressed: () {
+                                          try {
+                                            state.moveUpBuilding(
+                                              state.buildings[index].docId
+                                                  .toString(),
+                                              state.buildings[index - 1].docId
+                                                  .toString(),
+                                            );
+                                          } catch (e) {}
+                                        },
+                                        tooltip: 'Поднять в списке',
+                                        icon: Icon(
+                                          Icons.arrow_upward,
+                                        ),
                                       ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        try {
-                                          state.moveDownBuilding(
-                                            state.buildings[index].docId.toString(),
-                                            state.buildings[index + 1].docId.toString(),
-                                          );
-                                        } catch (e) {}
-                                      },
-                                      tooltip: 'Опустить в списке',
-                                      icon: Icon(
-                                        Icons.arrow_downward,
+                                    if (state.user != null)
+                                      IconButton(
+                                        onPressed: () {
+                                          try {
+                                            state.moveDownBuilding(
+                                              state.buildings[index].docId
+                                                  .toString(),
+                                              state.buildings[index + 1].docId
+                                                  .toString(),
+                                            );
+                                          } catch (e) {}
+                                        },
+                                        tooltip: 'Опустить в списке',
+                                        icon: Icon(
+                                          Icons.arrow_downward,
+                                        ),
                                       ),
-                                    ),
                                   ],
                                 ),
-                                // if (_user != null)
-                                //   Row(
-                                //     mainAxisSize: MainAxisSize.min,
-                                //     mainAxisAlignment: MainAxisAlignment.end,
-                                //     children: [
-                                //       IconButton(
-                                //         onPressed: () {
-                                //           try {
-                                //             state.moveUpInfoCard(
-                                //               state.buildings[index].docId.toString(),
-                                //               state.buildings[index - 1].docId.toString(),
-                                //             );
-                                //           } catch (e) {}
-                                //         },
-                                //         tooltip: 'Поднять в списке',
-                                //         icon: Icon(
-                                //           Icons.arrow_upward,
-                                //           color: mainColor,
-                                //         ),
-                                //       ),
-                                //       IconButton(
-                                //         onPressed: () {
-                                //           try {
-                                //             state.moveDownInfoCard(
-                                //               state.buildings[index].docId.toString(),
-                                //               state.buildings[index + 1].docId.toString(),
-                                //             );
-                                //           } catch (e) {}
-                                //         },
-                                //         tooltip: 'Опустить в списке',
-                                //         icon: Icon(
-                                //           Icons.arrow_downward,
-                                //           color: mainColor,
-                                //         ),
-                                //       ),
-                                //     ],
-                                //   ),
                               ],
                             ),
                           );

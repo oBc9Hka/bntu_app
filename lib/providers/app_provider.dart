@@ -5,10 +5,13 @@ import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class AppProvider with ChangeNotifier {
+  final UserRepository _userRepository;
+
   final FacultiesRepository _facultiesRepository;
   final SpecialtiesRepository _specialtiesRepository;
   final SettingsRepository _settingsRepository;
@@ -16,6 +19,9 @@ class AppProvider with ChangeNotifier {
   final ErrorMessagesRepository _errorMessagesRepository;
   final BuildingsRepository _buildingsRepository;
   final QuestionsRepository _questionsRepository;
+
+  User? user;
+  Map<String, dynamic> errorsMap = {};
 
   List<Faculty> faculties = [];
   List<String> facultiesShortNames = [];
@@ -60,7 +66,9 @@ class AppProvider with ChangeNotifier {
     this._errorMessagesRepository,
     this._buildingsRepository,
     this._questionsRepository,
+    this._userRepository,
   ) {
+    initUser();
     initFaculties();
     initSpecialties();
     initSettings();
@@ -68,6 +76,14 @@ class AppProvider with ChangeNotifier {
     initErrorMessages();
     initBuildings();
     initQuestions();
+  }
+
+  void initUser() async {
+    user = await _userRepository
+        .getCurrentUser()
+        .whenComplete(() => initErrorsMap());
+
+    notifyListeners();
   }
 
   void initFaculties() async {
@@ -487,6 +503,31 @@ class AppProvider with ChangeNotifier {
     _questionsRepository
         .moveDown(currId, nextId)
         .whenComplete(() => initQuestions());
+    notifyListeners();
+  }
+
+  void signUp(String email, String password) {
+    _userRepository.signUp(email, password).whenComplete(() => initUser());
+    notifyListeners();
+  }
+
+  Future<void> signIn(String email, String password) async{
+    await _userRepository
+        .signIn(email, password)
+        .whenComplete(() {
+      initUser();
+      initErrorsMap();
+    });
+    notifyListeners();
+  }
+
+  void signOut() {
+    _userRepository.signOut().whenComplete(() => initUser());
+    notifyListeners();
+  }
+
+  void initErrorsMap() {
+    errorsMap = _userRepository.getErrors();
     notifyListeners();
   }
 }

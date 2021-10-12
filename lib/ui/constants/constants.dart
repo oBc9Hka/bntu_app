@@ -8,4 +8,6 @@ class Constants{
     latitude: 53.922288,
     longitude: 27.593033,
   );
+
+  static const url = 'https://bntu.by';
 }

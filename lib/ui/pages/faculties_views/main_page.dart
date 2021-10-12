@@ -1,37 +1,14 @@
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
 import 'package:bntu_app/ui/widgets/faculty_item.dart';
-import 'package:bntu_app/util/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'faculty_add.dart';
 import 'faculty_edit.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends StatelessWidget {
   MainPage({Key? key}) : super(key: key);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  AuthService _authService = AuthService();
-  User? _user;
-
-  Future<void> _getUser() async {
-    final user = await _authService.getCurrentUser();
-    setState(() {
-      _user = user as User;
-    });
-  }
-
-  @override
-  void initState() {
-    _getUser();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +19,7 @@ class _MainPageState extends State<MainPage> {
             title: Text('Список факультетов'),
             elevation: 3,
             actions: [
-              _user != null
+              state.user != null
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -77,7 +54,7 @@ class _MainPageState extends State<MainPage> {
                       child: FacultyItem(
                         shortName: state.faculties[index].shortName.toString(),
                         name: state.faculties[index].name.toString(),
-                        user: _user,
+                        user: state.user,
                         onTap: () {
                           Navigator.push(
                             context,

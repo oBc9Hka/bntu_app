@@ -9,6 +9,7 @@ import 'package:bntu_app/repository/info_cards_repository.dart';
 import 'package:bntu_app/repository/questions_repository.dart';
 import 'package:bntu_app/repository/settings_repository.dart';
 import 'package:bntu_app/repository/specialties_repository.dart';
+import 'package:bntu_app/repository/user_repository.dart';
 import 'package:bntu_app/ui/pages/admission_info/info.dart';
 import 'package:bntu_app/ui/pages/faculties_views/main_page.dart';
 import 'package:bntu_app/ui/pages/greeting_screen.dart';
@@ -33,14 +34,16 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider(theme)),
         ChangeNotifierProvider(
-            create: (context) => AppProvider(
-                  FacultiesFirestoreRepository(),
-                  SpecialtiesFirestoreRepository(),
-                  SettingsFirestoreRepository(),
-                  InfoCardsFirestoreRepository(),
-                  ErrorMessagesFirestoreRepository(),
-                  BuildingsFirestoreRepository(),
-                  QuestionsFirestoreRepository(),
+            create: (context) =>
+                AppProvider(
+                    FacultiesFirestoreRepository(),
+                    SpecialtiesFirestoreRepository(),
+                    SettingsFirestoreRepository(),
+                    InfoCardsFirestoreRepository(),
+                    ErrorMessagesFirestoreRepository(),
+                    BuildingsFirestoreRepository(),
+                    QuestionsFirestoreRepository(),
+                    UserFirestoreRepository(),
                 )),
       ],
       child: App(),

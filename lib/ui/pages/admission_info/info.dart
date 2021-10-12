@@ -1,38 +1,14 @@
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/info_card.dart';
-import 'package:bntu_app/util/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'info_add.dart';
 
-class Info extends StatefulWidget {
+class Info extends StatelessWidget {
   const Info({Key? key}) : super(key: key);
-
-  @override
-  _InfoState createState() => _InfoState();
-}
-
-class _InfoState extends State<Info> {
-  AuthService _authService = AuthService();
-  User? _user;
-
-
-  Future<void> _getUser() async {
-    final user = await _authService.getCurrentUser();
-    setState(() {
-      _user = user as User;
-    });
-  }
-
-  @override
-  void initState() {
-    _getUser();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +22,7 @@ class _InfoState extends State<Info> {
           title: Text('Как поступить?'),
 
           actions: [
-            _user != null
+            state.user != null
                 ? Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -107,7 +83,7 @@ class _InfoState extends State<Info> {
             ),
             InfoCardWidget(
                 list: state.infoCards,
-                user: _user,
+                user: state.user,
               ),
           ],
         ),
