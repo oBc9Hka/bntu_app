@@ -1,78 +1,59 @@
 import 'package:bntu_app/models/error_message_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/ui/widgets/error_message_card.dart';
+import 'package:bntu_app/ui/widgets/remove_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class MessagesPage extends StatelessWidget {
   const MessagesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const Color mainColor = Color.fromARGB(255, 0, 138, 94);
-    ErrorMessage _errorMessage = ErrorMessage();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Сообщения об ошибках'),
-      ),
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        children: [
-          StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('errorMessages')
-                .orderBy('added', descending: true)
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData)
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: CircularProgressIndicator(
-                      color: mainColor,
-                    ),
-                  ),
-                );
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (BuildContext context, index) {
-                    QueryDocumentSnapshot<Object?> item =
-                        snapshot.data!.docs[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: ListTile(
-                        key: Key(item.id),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(
-                              color:
-                                  item.get('viewed') ? Colors.grey : mainColor),
-                        ),
-                        onTap: () {
-                          _errorMessage.changeViewedState(item.id);
-                          Fluttertoast.showToast(msg: 'Прочитано');
+    return Consumer<AppProvider>(
+      builder: (context, state, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Сообщения об ошибках'),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: state.errorMessages.length,
+                itemBuilder: (BuildContext context, index) {
+                  ErrorMessage item = state.errorMessages[index];
+                  return ErrorMessageCard(
+                    item: item,
+                    onTap: () {
+                      state.changeViewedState(item.id!);
+                      Fluttertoast.showToast(msg: 'Прочитано');
+                    },
+                    onRemovePressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return RemoveItem(
+                            itemName: 'сообщение',
+                            onRemovePressed: () {
+                              state.removeErrorMessage(item.id!);
+                              Navigator.of(context).pop();
+                              Fluttertoast.showToast(msg: 'Сообщение удалено');
+                            },
+                          );
                         },
-                        title: Text(item.get('message')),
-                        trailing: IconButton(
-                          onPressed: () {
-                            _errorMessage.removeErrorMessage(item.id);
-                          },
-                          icon: Icon(Icons.delete),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          )
-        ],
-      ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

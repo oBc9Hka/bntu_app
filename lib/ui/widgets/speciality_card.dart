@@ -1,18 +1,19 @@
 import 'package:bntu_app/models/speciality_model.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
-import 'package:bntu_app/ui/pages/speciality_views/speciality_add.dart';
+import 'package:bntu_app/ui/pages/speciality_views/speciality_edit.dart';
 import 'package:bntu_app/ui/themes/material_themes.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SpecialityCard extends StatelessWidget {
   const SpecialityCard(
-      {Key? key, required this.item, this.user, required this.currentYear})
+      {Key? key,
+      required this.item,
+      required this.user,
+      required this.currentYear})
       : super(key: key);
-  final QueryDocumentSnapshot<Object?> item;
-  final User? user;
+  final Speciality item;
+  final user;
   static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
   static const Color inactiveColor = Colors.grey;
   final int currentYear;
@@ -20,7 +21,7 @@ class SpecialityCard extends StatelessWidget {
   static Color _secColor = Colors.grey;
   static Color _titleBackColor = Colors.white;
 
-  showAlertDialog(BuildContext context, QueryDocumentSnapshot<Object?> item) {
+  showAlertDialog(BuildContext context, Speciality item) {
     Widget okButton = TextButton(
       child: Text(
         "Закрыть",
@@ -34,9 +35,9 @@ class SpecialityCard extends StatelessWidget {
     );
 
     AlertDialog alert = AlertDialog(
-      title: Text(item.get('name')),
+      title: Text(item.name.toString()),
       content: SingleChildScrollView(
-        child: Text(item.get('about')),
+        child: Text(item.about.toString()),
       ),
       actions: [
         okButton,
@@ -71,16 +72,17 @@ class SpecialityCard extends StatelessWidget {
               padding: const EdgeInsets.all(5.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Wrap(
                     children: [
                       Text(
-                        item.get('name') + ':',
+                        item.name! + ':',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       Text(
-                        item.get('number'),
+                        item.number.toString(),
                         style: TextStyle(fontSize: 18),
                       ),
                     ],
@@ -102,7 +104,7 @@ class SpecialityCard extends StatelessWidget {
                     children: [
                       Text('Квалификация:'),
                       Text(
-                        item.get('qualification'),
+                        item.qualification.toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       )
@@ -110,33 +112,29 @@ class SpecialityCard extends StatelessWidget {
                   ),
                   Padding(padding: EdgeInsets.only(top: 5)),
                   specGridCard(
-                      list: Speciality().admissionsCurrentYearList,
+                      list: _getAdmissionsCurrentYearList(),
                       title: 'План приёма $currentYear',
-                      dbField: 'admission',
                       icon: Icons.emoji_people,
                       context: context),
                   specGridCard(
-                      list: Speciality().passScorePrevYearList,
+                      list: _getPassScorePrevYearList(),
                       title: 'Проходные баллы ${currentYear - 1}',
-                      dbField: 'passScore',
                       context: context),
                   specGridCard(
-                      list: Speciality().admissionsPrevYearList,
+                      list: _getAdmissionsPrevYearList(),
                       title: 'План приёма ${currentYear - 1}',
-                      dbField: 'admission',
                       icon: Icons.emoji_people,
                       isNotActive: true,
                       context: context),
                   specGridCard(
-                      list: Speciality().passScoreBeforeLastYearList,
+                      list: _getPassScoreBeforeLastYearList(),
                       title: 'Проходные баллы ${currentYear - 2}',
-                      dbField: 'passScore',
                       isNotActive: true,
                       context: context),
                   Row(
                     children: [
-                      if (item.get('trainingDurationDayFull') != '' ||
-                          item.get('trainingDurationCorrespondenceFull') != '')
+                      if (item.trainingDurationDayFull != '' ||
+                          item.trainingDurationCorrespondenceFull != '')
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -147,23 +145,20 @@ class SpecialityCard extends StatelessWidget {
                               child: Text('ПОЛНОЕ'),
                             ),
                             Text('Срок обучения:'),
-                            if (item.get('trainingDurationDayFull') != '')
+                            if (item.trainingDurationDayFull != '')
                               Text(
-                                '${item.get('trainingDurationDayFull')} (дневное)',
+                                '${item.trainingDurationDayFull} (дневное)',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                            if (item.get(
-                                    'trainingDurationCorrespondenceFull') !=
-                                '')
+                            if (item.trainingDurationCorrespondenceFull != '')
                               Text(
-                                '${item.get('trainingDurationCorrespondenceFull'
-                                )} (заочное)',
+                                '${item.trainingDurationCorrespondenceFull} (заочное)',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                           ],
                         ),
-                      if (item.get('trainingDurationDayShort') != '' ||
-                          item.get('trainingDurationCorrespondenceShort') != '')
+                      if (item.trainingDurationDayShort != '' ||
+                          item.trainingDurationCorrespondenceShort != '')
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: Column(
@@ -176,16 +171,15 @@ class SpecialityCard extends StatelessWidget {
                                 child: Text('СОКРАЩЕННОЕ'),
                               ),
                               Text('Срок обучения:'),
-                              if (item.get('trainingDurationDayShort') != '')
+                              if (item.trainingDurationDayShort != '')
                                 Text(
-                                  '${item.get('trainingDurationDayShort')} (дневное)',
+                                  '${item.trainingDurationDayShort} (дневное)',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                              if (item.get(
-                                      'trainingDurationCorrespondenceShort') !=
+                              if (item.trainingDurationCorrespondenceShort !=
                                   '')
                                 Text(
-                                  '${item.get('trainingDurationCorrespondenceShort')} (заочное)',
+                                  '${item.trainingDurationCorrespondenceShort} (заочное)',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                             ],
@@ -194,24 +188,24 @@ class SpecialityCard extends StatelessWidget {
                     ],
                   ),
                   Padding(padding: EdgeInsets.only(top: 10)),
-                  if (item.get('entranceTestsFull').isNotEmpty)
+                  if (item.entranceTestsFull!.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Вступительные экзамены (полное)'),
                         Text(
-                          getStringFromList('entranceTestsFull'),
+                          getStringFromList(item.entranceTestsFull),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
-                  if (item.get('entranceShort').isNotEmpty)
+                  if (item.entranceShort!.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Вступительные экзамены (сокращенное)'),
                         Text(
-                          getStringFromList('entranceShort'),
+                          getStringFromList(item.entranceShort),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -225,8 +219,11 @@ class SpecialityCard extends StatelessWidget {
               right: 5,
               child: IconButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SpecialityAdd(faculty: item)));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => SpecialityEdit(speciality: item),
+                      ),
+                    );
                   },
                   icon: Icon(Icons.edit)),
             ),
@@ -235,10 +232,9 @@ class SpecialityCard extends StatelessWidget {
     );
   }
 
-  String getStringFromList(String field) {
-    List temp = item.get(field);
+  String getStringFromList(List<dynamic>? temp) {
     String tempString = '';
-    for (int i = 0; i < temp.length; i++) {
+    for (int i = 0; i < temp!.length; i++) {
       tempString += '_${temp[i]}';
     }
 
@@ -247,10 +243,157 @@ class SpecialityCard extends StatelessWidget {
     return newTempString.replaceAll('_', ' • ');
   }
 
+  List<Map<String, dynamic>> _getAdmissionsCurrentYearList() {
+    return [
+      {
+        'num': item.admissionCurrentDayFullBudget,
+        'description': 'Бюджет дневное'
+      },
+      {
+        'num': item.admissionCurrentDayShortBudget,
+        'description': 'Бюджет дневное (сокращенное)'
+      },
+      {
+        'num': item.admissionCurrentDayFullPaid,
+        'description': 'Платное дневное'
+      },
+      {
+        'num': item.admissionCurrentDayShortPaid,
+        'description': 'Платное дневное (сокращенное)'
+      },
+      {
+        'num': item.admissionCurrentCorrespondenceFullBudget,
+        'description': 'Бюджет заочное'
+      },
+      {
+        'num': item.admissionCurrentCorrespondenceShortBudget,
+        'description': 'Бюджет заочное (сокращенное)'
+      },
+      {
+        'num': item.admissionCurrentCorrespondenceFullPaid,
+        'description': 'Платное заочное'
+      },
+      {
+        'num': item.admissionCurrentCorrespondenceShortPaid,
+        'description': 'Платное заочное (сокращенное)'
+      },
+    ];
+  }
+
+  List<Map<String, dynamic>> _getPassScorePrevYearList() {
+    return [
+      {
+        'num': item.passScorePrevYearDayFullBudget,
+        'description': 'Бюджет дневное'
+      },
+      {
+        'num': item.passScorePrevYearDayShortBudget,
+        'description': 'Бюджет дневное (сокращенное)'
+      },
+      {
+        'num': item.passScorePrevYearDayFullPaid,
+        'description': 'Платное дневное'
+      },
+      {
+        'num': item.passScorePrevYearDayShortPaid,
+        'description': 'Платное дневное (сокращенное)'
+      },
+      {
+        'num': item.passScorePrevYearCorrespondenceFullBudget,
+        'description': 'Бюджет заочное'
+      },
+      {
+        'num': item.passScorePrevYearCorrespondenceShortBudget,
+        'description': 'Бюджет заочное (сокращенное)'
+      },
+      {
+        'num': item.passScorePrevYearCorrespondenceFullPaid,
+        'description': 'Платное заочное'
+      },
+      {
+        'num': item.passScorePrevYearCorrespondenceShortPaid,
+        'description': 'Платное заочное (сокращенное)'
+      },
+    ];
+  }
+
+  List<Map<String, dynamic>> _getAdmissionsPrevYearList() {
+    return [
+      {
+        'num': item.admissionPrevYearDayFullBudget,
+        'description': 'Бюджет дневное'
+      },
+      {
+        'num': item.admissionPrevYearDayShortBudget,
+        'description': 'Бюджет дневное (сокращенное)'
+      },
+      {
+        'num': item.admissionPrevYearDayFullPaid,
+        'description': 'Платное дневное'
+      },
+      {
+        'num': item.admissionPrevYearDayShortPaid,
+        'description': 'Платное дневное (сокращенное)'
+      },
+      {
+        'num': item.admissionPrevYearCorrespondenceFullBudget,
+        'description': 'Бюджет заочное'
+      },
+      {
+        'num': item.admissionPrevYearCorrespondenceShortBudget,
+        'description': 'Бюджет заочное (сокращенное)'
+      },
+      {
+        'num': item.admissionPrevYearCorrespondenceFullPaid,
+        'description': 'Платное заочное'
+      },
+      {
+        'num': item.admissionPrevYearCorrespondenceShortPaid,
+        'description': 'Платное заочное (сокращенное)'
+      },
+    ];
+  }
+
+  List<Map<String, String>> _getPassScoreBeforeLastYearList() {
+    return [
+      {
+        'num': item.passScoreBeforeLastYearDayFullBudget.toString(),
+        'description': 'Бюджет дневное'
+      },
+      {
+        'num': item.passScoreBeforeLastYearDayShortBudget.toString(),
+        'description': 'Бюджет дневное (сокращенное)'
+      },
+      {
+        'num': item.passScoreBeforeLastYearDayFullPaid.toString(),
+        'description': 'Платное дневное'
+      },
+      {
+        'num': item.passScoreBeforeLastYearDayShortPaid.toString(),
+        'description': 'Платное дневное (сокращенное)'
+      },
+      {
+        'num': item.passScoreBeforeLastYearCorrespondenceFullBudget.toString(),
+        'description': 'Бюджет заочное'
+      },
+      {
+        'num': item.passScoreBeforeLastYearCorrespondenceShortBudget.toString(),
+        'description': 'Бюджет заочное (сокращенное)'
+      },
+      {
+        'num': item.passScoreBeforeLastYearCorrespondenceFullPaid.toString(),
+        'description': 'Платное заочное'
+      },
+      {
+        'num': item.passScoreBeforeLastYearCorrespondenceShortPaid.toString(),
+        'description': 'Платное заочное (сокращенное)'
+      },
+    ];
+  }
+
   Widget specGridCard({
-    required List<Map<String, String>> list,
+    required List<Map<String, dynamic>> list,
     required String title,
-    required String dbField,
     IconData? icon,
     bool isNotActive = false,
     required BuildContext context,
@@ -279,7 +422,7 @@ class SpecialityCard extends StatelessWidget {
                     children: [
                       ...list.map(
                         (spec) {
-                          if (item.get('${spec[dbField]}') != '')
+                          if (spec['num'].toString() != '')
                             return Container(
                               // color: Colors.green,
                               width: 76,
@@ -290,7 +433,7 @@ class SpecialityCard extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        item.get('${spec[dbField]}'),
+                                        spec['num'].toString(),
                                         style: TextStyle(
                                           fontSize: 18,
                                           color: isNotActive

@@ -33,7 +33,7 @@ ThemeData themeLight = _themeLight.copyWith(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       // foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-      textStyle: MaterialStateProperty.all(TextStyle(color: Colors.black)),
+      // textStyle: MaterialStateProperty.all(TextStyle(color: Colors.black)),
       backgroundColor: MaterialStateProperty.all<Color>(
         Colors.white,
       ),

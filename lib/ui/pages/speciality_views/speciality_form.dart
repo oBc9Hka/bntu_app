@@ -1,352 +1,146 @@
+import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
-import 'package:bntu_app/util/data.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-class SpecialityForm extends StatefulWidget {
-  const SpecialityForm(
-      {Key? key, this.speciality, this.faculty, required this.isEdit})
-      : super(key: key);
+class SpecialityForm extends StatelessWidget {
+  const SpecialityForm({
+    Key? key,
+    this.faculty,
+    this.speciality,
+    required this.currentYear,
+    required this.formKey,
+    required this.facultyBasedController,
+    required this.nameController,
+    required this.numberController,
+    required this.aboutController,
+    required this.qualificationController,
+    required this.trainingDurationDayFullController,
+    required this.trainingDurationDayShortController,
+    required this.trainingDurationCorrespondenceFullController,
+    required this.trainingDurationCorrespondenceShortController,
+    this.entranceTestsFullList,
+    this.entranceShortList,
+    required this.entranceTestsFull1Controller,
+    required this.entranceTestsFull2Controller,
+    required this.entranceTestsFull3Controller,
+    required this.entranceTestsFull4Controller,
+    required this.entranceTestsFull5Controller,
+    required this.entranceShort1Controller,
+    required this.entranceShort2Controller,
+    required this.entranceShort3Controller,
+    required this.entranceShort4Controller,
+    required this.entranceShort5Controller,
+    required this.admissionCurrentDayFullBudgetController,
+    required this.admissionCurrentDayShortBudgetController,
+    required this.admissionCurrentDayFullPaidController,
+    required this.admissionCurrentDayShortPaidController,
+    required this.admissionCurrentCorrespondenceFullBudgetController,
+    required this.admissionCurrentCorrespondenceShortBudgetController,
+    required this.admissionCurrentCorrespondenceFullPaidController,
+    required this.admissionCurrentCorrespondenceShortPaidController,
+    required this.passScorePrevYearDayFullBudgetController,
+    required this.passScorePrevYearDayShortBudgetController,
+    required this.passScorePrevYearDayFullPaidController,
+    required this.passScorePrevYearDayShortPaidController,
+    required this.passScorePrevYearCorrespondenceFullBudgetController,
+    required this.passScorePrevYearCorrespondenceShortBudgetController,
+    required this.passScorePrevYearCorrespondenceFullPaidController,
+    required this.passScorePrevYearCorrespondenceShortPaidController,
+    required this.admissionPrevYearDayFullBudgetController,
+    required this.admissionPrevYearDayShortBudgetController,
+    required this.admissionPrevYearDayFullPaidController,
+    required this.admissionPrevYearDayShortPaidController,
+    required this.admissionPrevYearCorrespondenceFullBudgetController,
+    required this.admissionPrevYearCorrespondenceShortBudgetController,
+    required this.admissionPrevYearCorrespondenceFullPaidController,
+    required this.admissionPrevYearCorrespondenceShortPaidController,
+    required this.passScoreBeforeLastYearDayFullBudgetController,
+    required this.passScoreBeforeLastYearDayShortBudgetController,
+    required this.passScoreBeforeLastYearDayFullPaidController,
+    required this.passScoreBeforeLastYearDayShortPaidController,
+    required this.passScoreBeforeLastYearCorrespondenceFullBudgetController,
+    required this.passScoreBeforeLastYearCorrespondenceShortBudgetController,
+    required this.passScoreBeforeLastYearCorrespondenceFullPaidController,
+    required this.passScoreBeforeLastYearCorrespondenceShortPaidController,
+  }) : super(key: key);
 
-  final QueryDocumentSnapshot<Object?>? faculty;
-  final QueryDocumentSnapshot<Object?>? speciality;
-  final bool isEdit;
+  final Faculty? faculty;
+  final Speciality? speciality;
+  final int currentYear;
 
-  @override
-  _SpecialityFormState createState() => _SpecialityFormState();
-}
+  final GlobalKey<FormState> formKey;
+  final TextEditingController facultyBasedController;
+  final TextEditingController nameController;
+  final TextEditingController numberController;
+  final TextEditingController aboutController;
+  final TextEditingController qualificationController;
+  final TextEditingController trainingDurationDayFullController;
+  final TextEditingController trainingDurationDayShortController;
+  final TextEditingController trainingDurationCorrespondenceFullController;
+  final TextEditingController trainingDurationCorrespondenceShortController;
 
-class _SpecialityFormState extends State<SpecialityForm> {
-  TextEditingController _facultyBasedController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _numberController = TextEditingController();
-  TextEditingController _aboutController = TextEditingController();
-  TextEditingController _qualificationController = TextEditingController();
-  TextEditingController _trainingDurationDayFullController =
-      TextEditingController();
-  TextEditingController _trainingDurationDayShortController =
-      TextEditingController();
-  TextEditingController _trainingDurationCorrespondenceFullController =
-      TextEditingController();
-  TextEditingController _trainingDurationCorrespondenceShortController =
-      TextEditingController();
+  final List<String>? entranceTestsFullList;
+  final List<String>? entranceShortList;
+  final TextEditingController entranceTestsFull1Controller;
+  final TextEditingController entranceTestsFull2Controller;
+  final TextEditingController entranceTestsFull3Controller;
+  final TextEditingController entranceTestsFull4Controller;
+  final TextEditingController entranceTestsFull5Controller;
 
-  List<String> _entranceTestsFullList = [];
-  List<String> _entranceShortList = [];
-  TextEditingController _entranceTestsFull1Controller = TextEditingController();
-  TextEditingController _entranceTestsFull2Controller = TextEditingController();
-  TextEditingController _entranceTestsFull3Controller = TextEditingController();
-  TextEditingController _entranceTestsFull4Controller = TextEditingController();
-  TextEditingController _entranceTestsFull5Controller = TextEditingController();
+  final TextEditingController entranceShort1Controller;
+  final TextEditingController entranceShort2Controller;
+  final TextEditingController entranceShort3Controller;
+  final TextEditingController entranceShort4Controller;
+  final TextEditingController entranceShort5Controller;
 
-  TextEditingController _entranceShort1Controller = TextEditingController();
-  TextEditingController _entranceShort2Controller = TextEditingController();
-  TextEditingController _entranceShort3Controller = TextEditingController();
-  TextEditingController _entranceShort4Controller = TextEditingController();
-  TextEditingController _entranceShort5Controller = TextEditingController();
+  final TextEditingController admissionCurrentDayFullBudgetController;
+  final TextEditingController admissionCurrentDayShortBudgetController;
+  final TextEditingController admissionCurrentDayFullPaidController;
+  final TextEditingController admissionCurrentDayShortPaidController;
+  final TextEditingController
+      admissionCurrentCorrespondenceFullBudgetController;
+  final TextEditingController
+      admissionCurrentCorrespondenceShortBudgetController;
+  final TextEditingController admissionCurrentCorrespondenceFullPaidController;
+  final TextEditingController admissionCurrentCorrespondenceShortPaidController;
+  final TextEditingController passScorePrevYearDayFullBudgetController;
+  final TextEditingController passScorePrevYearDayShortBudgetController;
+  final TextEditingController passScorePrevYearDayFullPaidController;
+  final TextEditingController passScorePrevYearDayShortPaidController;
+  final TextEditingController
+      passScorePrevYearCorrespondenceFullBudgetController;
+  final TextEditingController
+      passScorePrevYearCorrespondenceShortBudgetController;
+  final TextEditingController passScorePrevYearCorrespondenceFullPaidController;
+  final TextEditingController
+      passScorePrevYearCorrespondenceShortPaidController;
+  final TextEditingController admissionPrevYearDayFullBudgetController;
+  final TextEditingController admissionPrevYearDayShortBudgetController;
+  final TextEditingController admissionPrevYearDayFullPaidController;
+  final TextEditingController admissionPrevYearDayShortPaidController;
+  final TextEditingController
+      admissionPrevYearCorrespondenceFullBudgetController;
+  final TextEditingController
+      admissionPrevYearCorrespondenceShortBudgetController;
+  final TextEditingController admissionPrevYearCorrespondenceFullPaidController;
+  final TextEditingController
+      admissionPrevYearCorrespondenceShortPaidController;
+  final TextEditingController passScoreBeforeLastYearDayFullBudgetController;
+  final TextEditingController passScoreBeforeLastYearDayShortBudgetController;
+  final TextEditingController passScoreBeforeLastYearDayFullPaidController;
+  final TextEditingController passScoreBeforeLastYearDayShortPaidController;
+  final TextEditingController
+      passScoreBeforeLastYearCorrespondenceFullBudgetController;
+  final TextEditingController
+      passScoreBeforeLastYearCorrespondenceShortBudgetController;
+  final TextEditingController
+      passScoreBeforeLastYearCorrespondenceFullPaidController;
+  final TextEditingController
+      passScoreBeforeLastYearCorrespondenceShortPaidController;
 
-  TextEditingController _admissionCurrentDayFullBudgetController =
-      TextEditingController();
-  TextEditingController _admissionCurrentDayShortBudgetController =
-      TextEditingController();
-  TextEditingController _admissionCurrentDayFullPaidController =
-      TextEditingController();
-  TextEditingController _admissionCurrentDayShortPaidController =
-      TextEditingController();
-  TextEditingController _admissionCurrentCorrespondenceFullBudgetController =
-      TextEditingController();
-  TextEditingController _admissionCurrentCorrespondenceShortBudgetController =
-      TextEditingController();
-  TextEditingController _admissionCurrentCorrespondenceFullPaidController =
-      TextEditingController();
-  TextEditingController _admissionCurrentCorrespondenceShortPaidController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearDayFullBudgetController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearDayShortBudgetController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearDayFullPaidController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearDayShortPaidController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearCorrespondenceFullBudgetController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearCorrespondenceShortBudgetController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearCorrespondenceFullPaidController =
-      TextEditingController();
-  TextEditingController _passScorePrevYearCorrespondenceShortPaidController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearDayFullBudgetController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearDayShortBudgetController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearDayFullPaidController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearDayShortPaidController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearCorrespondenceFullBudgetController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearCorrespondenceShortBudgetController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearCorrespondenceFullPaidController =
-      TextEditingController();
-  TextEditingController _admissionPrevYearCorrespondenceShortPaidController =
-      TextEditingController();
-  TextEditingController _passScoreBeforeLastYearDayFullBudgetController =
-      TextEditingController();
-  TextEditingController _passScoreBeforeLastYearDayShortBudgetController =
-      TextEditingController();
-  TextEditingController _passScoreBeforeLastYearDayFullPaidController =
-      TextEditingController();
-  TextEditingController _passScoreBeforeLastYearDayShortPaidController =
-      TextEditingController();
-  TextEditingController
-      _passScoreBeforeLastYearCorrespondenceFullBudgetController =
-      TextEditingController();
-  TextEditingController
-      _passScoreBeforeLastYearCorrespondenceShortBudgetController =
-      TextEditingController();
-  TextEditingController
-      _passScoreBeforeLastYearCorrespondenceFullPaidController =
-      TextEditingController();
-  TextEditingController
-      _passScoreBeforeLastYearCorrespondenceShortPaidController =
-      TextEditingController();
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final Color mainColor = Color.fromARGB(255, 0, 138, 94);
-  Speciality _speciality = Speciality();
-  String _currentYear = '';
-
-  void _getFullEntranceList(
-    String first,
-    String second,
-    String third,
-    String fourth,
-    String fifth,
-  ) {
-    if (first != '') _entranceTestsFullList.add(first);
-    if (second != '') _entranceTestsFullList.add(second);
-    if (third != '') _entranceTestsFullList.add(third);
-    if (fourth != '') _entranceTestsFullList.add(fourth);
-    if (fifth != '') _entranceTestsFullList.add(fifth);
-    setState(() {});
-    print(_entranceTestsFullList);
-  }
-
-  void _getShortEntranceList(
-    String first,
-    String second,
-    String third,
-    String fourth,
-    String fifth,
-  ) {
-    if (first != '') _entranceShortList.add(first);
-    if (second != '') _entranceShortList.add(second);
-    if (third != '') _entranceShortList.add(third);
-    if (fourth != '') _entranceShortList.add(fourth);
-    if (fifth != '') _entranceShortList.add(fifth);
-  }
-
-  void _addSpeciality() {
-    if (_formKey.currentState!.validate()) {
-      _getFullEntranceList(
-          _entranceTestsFull1Controller.text,
-          _entranceTestsFull2Controller.text,
-          _entranceTestsFull3Controller.text,
-          _entranceTestsFull4Controller.text,
-          _entranceTestsFull5Controller.text);
-      _getShortEntranceList(
-          _entranceShort1Controller.text,
-          _entranceShort2Controller.text,
-          _entranceShort3Controller.text,
-          _entranceShort4Controller.text,
-          _entranceShort5Controller.text);
-
-      _speciality.addSpeciality(
-        // _facultyBasedController.text,
-        widget.faculty?['shortName'],
-        _nameController.text,
-        _numberController.text,
-        _aboutController.text,
-        _qualificationController.text,
-        _trainingDurationDayFullController.text.trim(),
-        _trainingDurationDayShortController.text.trim(),
-        _trainingDurationCorrespondenceFullController.text.trim(),
-        _trainingDurationCorrespondenceShortController.text.trim(),
-        _entranceTestsFullList,
-        _entranceShortList,
-        _admissionCurrentDayFullBudgetController.text,
-        _admissionCurrentDayShortBudgetController.text,
-        _admissionCurrentDayFullPaidController.text,
-        _admissionCurrentDayShortPaidController.text,
-        _admissionCurrentCorrespondenceFullBudgetController.text,
-        _admissionCurrentCorrespondenceShortBudgetController.text,
-        _admissionCurrentCorrespondenceFullPaidController.text,
-        _admissionCurrentCorrespondenceShortPaidController.text,
-        _passScorePrevYearDayFullBudgetController.text,
-        _passScorePrevYearDayShortBudgetController.text,
-        _passScorePrevYearDayFullPaidController.text,
-        _passScorePrevYearDayShortPaidController.text,
-        _passScorePrevYearCorrespondenceFullBudgetController.text,
-        _passScorePrevYearCorrespondenceShortBudgetController.text,
-        _passScorePrevYearCorrespondenceFullPaidController.text,
-        _passScorePrevYearCorrespondenceShortPaidController.text,
-        _admissionPrevYearDayFullBudgetController.text,
-        _admissionPrevYearDayShortBudgetController.text,
-        _admissionPrevYearDayFullPaidController.text,
-        _admissionPrevYearDayShortPaidController.text,
-        _admissionPrevYearCorrespondenceFullBudgetController.text,
-        _admissionPrevYearCorrespondenceShortBudgetController.text,
-        _admissionPrevYearCorrespondenceFullPaidController.text,
-        _admissionPrevYearCorrespondenceShortPaidController.text,
-        _passScoreBeforeLastYearDayFullBudgetController.text,
-        _passScoreBeforeLastYearDayShortBudgetController.text,
-        _passScoreBeforeLastYearDayFullPaidController.text,
-        _passScoreBeforeLastYearDayShortPaidController.text,
-        _passScoreBeforeLastYearCorrespondenceFullBudgetController.text,
-        _passScoreBeforeLastYearCorrespondenceShortBudgetController.text,
-        _passScoreBeforeLastYearCorrespondenceFullPaidController.text,
-        _passScoreBeforeLastYearCorrespondenceShortPaidController.text,
-      );
-
-      _formKey.currentState!.reset();
-      Navigator.of(context).pop();
-      Fluttertoast.showToast(msg: 'Специальность успешно добавлена');
-    }
-  }
-
-  void _editSpeciality(String id) {
-    if (_formKey.currentState!.validate()) {
-      _getFullEntranceList(
-          _entranceTestsFull1Controller.text,
-          _entranceTestsFull2Controller.text,
-          _entranceTestsFull3Controller.text,
-          _entranceTestsFull4Controller.text,
-          _entranceTestsFull5Controller.text);
-      _getShortEntranceList(
-          _entranceShort1Controller.text,
-          _entranceShort2Controller.text,
-          _entranceShort3Controller.text,
-          _entranceShort4Controller.text,
-          _entranceShort5Controller.text);
-
-      _speciality.editSpeciality(
-        _facultyBasedController.text,
-        _nameController.text,
-        _numberController.text,
-        _aboutController.text,
-        _qualificationController.text,
-        _trainingDurationDayFullController.text.trim(),
-        _trainingDurationDayShortController.text.trim(),
-        _trainingDurationCorrespondenceFullController.text.trim(),
-        _trainingDurationCorrespondenceShortController.text.trim(),
-        _entranceTestsFullList,
-        _entranceShortList,
-        _admissionCurrentDayFullBudgetController.text,
-        _admissionCurrentDayShortBudgetController.text,
-        _admissionCurrentDayFullPaidController.text,
-        _admissionCurrentDayShortPaidController.text,
-        _admissionCurrentCorrespondenceFullBudgetController.text,
-        _admissionCurrentCorrespondenceShortBudgetController.text,
-        _admissionCurrentCorrespondenceFullPaidController.text,
-        _admissionCurrentCorrespondenceShortPaidController.text,
-        _passScorePrevYearDayFullBudgetController.text,
-        _passScorePrevYearDayShortBudgetController.text,
-        _passScorePrevYearDayFullPaidController.text,
-        _passScorePrevYearDayShortPaidController.text,
-        _passScorePrevYearCorrespondenceFullBudgetController.text,
-        _passScorePrevYearCorrespondenceShortBudgetController.text,
-        _passScorePrevYearCorrespondenceFullPaidController.text,
-        _passScorePrevYearCorrespondenceShortPaidController.text,
-        _admissionPrevYearDayFullBudgetController.text,
-        _admissionPrevYearDayShortBudgetController.text,
-        _admissionPrevYearDayFullPaidController.text,
-        _admissionPrevYearDayShortPaidController.text,
-        _admissionPrevYearCorrespondenceFullBudgetController.text,
-        _admissionPrevYearCorrespondenceShortBudgetController.text,
-        _admissionPrevYearCorrespondenceFullPaidController.text,
-        _admissionPrevYearCorrespondenceShortPaidController.text,
-        _passScoreBeforeLastYearDayFullBudgetController.text,
-        _passScoreBeforeLastYearDayShortBudgetController.text,
-        _passScoreBeforeLastYearDayFullPaidController.text,
-        _passScoreBeforeLastYearDayShortPaidController.text,
-        _passScoreBeforeLastYearCorrespondenceFullBudgetController.text,
-        _passScoreBeforeLastYearCorrespondenceShortBudgetController.text,
-        _passScoreBeforeLastYearCorrespondenceFullPaidController.text,
-        _passScoreBeforeLastYearCorrespondenceShortPaidController.text,
-        id,
-      );
-
-      _formKey.currentState!.reset();
-      Navigator.of(context).pop();
-      Fluttertoast.showToast(msg: 'Специальность успешно изменена');
-    }
-  }
-
-  void _showAlertDialog(
-      BuildContext context, QueryDocumentSnapshot<Object?>? item) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Container(
-            height: 40,
-            child: const Center(
-                child: Text(
-              'Хотите удалить специальность?',
-              style: TextStyle(fontSize: 18),
-            )),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                _speciality.removeSpeciality(item!.id);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Fluttertoast.showToast(msg: 'Специальность успешно удалена');
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-              ),
-              child: const Text(
-                'Удалить',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                setState(() {});
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.black38),
-              ),
-              child: const Text(
-                'Отмена',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _getSettingsData() async {
-    _currentYear = await Data().getCurrentAdmissionYear().whenComplete(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void initState() {
-    _getSettingsData();
-    super.initState();
-  }
+  static Color mainColor = Constants.mainColor;
 
   Widget _expandedTileAdmission(
     int year,
@@ -390,20 +184,18 @@ class _SpecialityFormState extends State<SpecialityForm> {
         TextFormField(
           controller: c3,
           keyboardType: TextInputType.number,
-          decoration:
-          const InputDecoration(labelText: 'Платное дневное'),
+          decoration: const InputDecoration(labelText: 'Платное дневное'),
         ),
         TextFormField(
           controller: c4,
           keyboardType: TextInputType.number,
           decoration:
-          const InputDecoration(labelText: 'Платное дневное сокращённое'),
+              const InputDecoration(labelText: 'Платное дневное сокращённое'),
         ),
         TextFormField(
           controller: c7,
           keyboardType: TextInputType.number,
-          decoration:
-              const InputDecoration(labelText: 'Платное заочное'),
+          decoration: const InputDecoration(labelText: 'Платное заочное'),
         ),
         TextFormField(
           controller: c8,
@@ -457,20 +249,18 @@ class _SpecialityFormState extends State<SpecialityForm> {
         TextFormField(
           controller: c3,
           keyboardType: TextInputType.number,
-          decoration:
-          const InputDecoration(labelText: 'Платное дневное'),
+          decoration: const InputDecoration(labelText: 'Платное дневное'),
         ),
         TextFormField(
           controller: c4,
           keyboardType: TextInputType.number,
           decoration:
-          const InputDecoration(labelText: 'Платное дневное сокращённое'),
+              const InputDecoration(labelText: 'Платное дневное сокращённое'),
         ),
         TextFormField(
           controller: c7,
           keyboardType: TextInputType.number,
-          decoration:
-              const InputDecoration(labelText: 'Платное заочное'),
+          decoration: const InputDecoration(labelText: 'Платное заочное'),
         ),
         TextFormField(
           controller: c8,
@@ -484,464 +274,202 @@ class _SpecialityFormState extends State<SpecialityForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.isEdit) {
-      _facultyBasedController =
-          TextEditingController(text: widget.speciality!['facultyBased']);
-      _nameController = TextEditingController(text: widget.speciality!['name']);
-      _numberController =
-          TextEditingController(text: widget.speciality!['number']);
-      _aboutController =
-          TextEditingController(text: widget.speciality!['about']);
-      _qualificationController =
-          TextEditingController(text: widget.speciality!['qualification']);
-      _trainingDurationDayFullController = TextEditingController(
-          text: widget.speciality!['trainingDurationDayFull']);
-      _trainingDurationDayShortController = TextEditingController(
-          text: widget.speciality!['trainingDurationDayShort']);
-      _trainingDurationCorrespondenceFullController = TextEditingController(
-          text: widget.speciality!['trainingDurationCorrespondenceFull']);
-      _trainingDurationCorrespondenceShortController = TextEditingController(
-          text: widget.speciality!['trainingDurationCorrespondenceShort']);
-
-      List _entranceTestsFull = widget.speciality!['entranceTestsFull'];
-      int _count = 0;
-      String _entranceTestsFull1 = '';
-      String _entranceTestsFull2 = '';
-      String _entranceTestsFull3 = '';
-      String _entranceTestsFull4 = '';
-      String _entranceTestsFull5 = '';
-      for (var e in _entranceTestsFull) {
-        ++_count;
-        if (_count > 0 && _count < 2) {
-          _entranceTestsFull1 = _entranceTestsFull[0] as String;
-        }
-        if (_count > 1 && _count < 3) {
-          _entranceTestsFull2 = _entranceTestsFull[1] as String;
-        }
-        if (_count > 2 && _count < 4) {
-          _entranceTestsFull3 = _entranceTestsFull[2] as String;
-        }
-        if (_count > 3 && _count < 5) {
-          _entranceTestsFull4 = _entranceTestsFull[3] as String;
-        }
-        if (_count > 4 && _count < 6) {
-          _entranceTestsFull5 = _entranceTestsFull[4] as String;
-        }
-      }
-
-      List _entranceTestsShort = widget.speciality!['entranceShort'];
-      _count = 0;
-      String _entranceTestsShort1 = '';
-      String _entranceTestsShort2 = '';
-      String _entranceTestsShort3 = '';
-      String _entranceTestsShort4 = '';
-      String _entranceTestsShort5 = '';
-      for (var e in _entranceTestsShort) {
-        ++_count;
-        if (_count == 1) {
-          _entranceTestsShort1 = _entranceTestsShort[0] as String;
-        }
-        if (_count == 2) {
-          _entranceTestsShort2 = _entranceTestsShort[1] as String;
-        }
-        if (_count == 3) {
-          _entranceTestsShort3 = _entranceTestsShort[2] as String;
-        }
-        if (_count == 4) {
-          _entranceTestsShort4 = _entranceTestsShort[3] as String;
-        }
-        if (_count == 5) {
-          _entranceTestsShort5 = _entranceTestsShort[4] as String;
-        }
-      }
-
-      _entranceTestsFull1Controller =
-          TextEditingController(text: _entranceTestsFull1);
-      _entranceTestsFull2Controller =
-          TextEditingController(text: _entranceTestsFull2);
-      _entranceTestsFull3Controller =
-          TextEditingController(text: _entranceTestsFull3);
-      _entranceTestsFull4Controller =
-          TextEditingController(text: _entranceTestsFull4);
-      _entranceTestsFull5Controller =
-          TextEditingController(text: _entranceTestsFull5);
-      _entranceShort1Controller =
-          TextEditingController(text: _entranceTestsShort1);
-      _entranceShort2Controller =
-          TextEditingController(text: _entranceTestsShort2);
-      _entranceShort3Controller =
-          TextEditingController(text: _entranceTestsShort3);
-      _entranceShort4Controller =
-          TextEditingController(text: _entranceTestsShort4);
-      _entranceShort5Controller =
-          TextEditingController(text: _entranceTestsShort5);
-
-      _admissionCurrentDayFullBudgetController = TextEditingController(
-          text: widget.speciality!['admissionCurrentDayFullBudget']);
-      _admissionCurrentDayShortBudgetController = TextEditingController(
-          text: widget.speciality!['admissionCurrentDayShortBudget']);
-      _admissionCurrentDayFullPaidController = TextEditingController(
-          text: widget.speciality!['admissionCurrentDayFullPaid']);
-      _admissionCurrentDayShortPaidController = TextEditingController(
-          text: widget.speciality!['admissionCurrentDayShortPaid']);
-      _admissionCurrentCorrespondenceFullBudgetController =
-          TextEditingController(
-              text: widget
-                  .speciality!['admissionCurrentCorrespondenceFullBudget']);
-      _admissionCurrentCorrespondenceShortBudgetController =
-          TextEditingController(
-              text: widget
-                  .speciality!['admissionCurrentCorrespondenceShortBudget']);
-      _admissionCurrentCorrespondenceFullPaidController = TextEditingController(
-          text: widget.speciality!['admissionCurrentCorrespondenceFullPaid']);
-      _admissionCurrentCorrespondenceShortPaidController =
-          TextEditingController(
-              text: widget
-                  .speciality!['admissionCurrentCorrespondenceShortPaid']);
-      _passScorePrevYearDayFullBudgetController = TextEditingController(
-          text: widget.speciality!['passScorePrevYearDayFullBudget']);
-      _passScorePrevYearDayShortBudgetController = TextEditingController(
-          text: widget.speciality!['passScorePrevYearDayShortBudget']);
-      _passScorePrevYearDayFullPaidController = TextEditingController(
-          text: widget.speciality!['passScorePrevYearDayFullPaid']);
-      _passScorePrevYearDayShortPaidController = TextEditingController(
-          text: widget.speciality!['passScorePrevYearDayShortPaid']);
-      _passScorePrevYearCorrespondenceFullBudgetController =
-          TextEditingController(
-              text: widget
-                  .speciality!['passScorePrevYearCorrespondenceFullBudget']);
-      _passScorePrevYearCorrespondenceShortBudgetController =
-          TextEditingController(
-              text: widget
-                  .speciality!['passScorePrevYearCorrespondenceShortBudget']);
-      _passScorePrevYearCorrespondenceFullPaidController =
-          TextEditingController(
-              text: widget
-                  .speciality!['passScorePrevYearCorrespondenceFullPaid']);
-      _passScorePrevYearCorrespondenceShortPaidController =
-          TextEditingController(
-              text: widget
-                  .speciality!['passScorePrevYearCorrespondenceShortPaid']);
-      _admissionPrevYearDayFullBudgetController = TextEditingController(
-          text: widget.speciality!['admissionPrevYearDayFullBudget']);
-      _admissionPrevYearDayShortBudgetController = TextEditingController(
-          text: widget.speciality!['admissionPrevYearDayShortBudget']);
-      _admissionPrevYearDayFullPaidController = TextEditingController(
-          text: widget.speciality!['admissionPrevYearDayFullPaid']);
-      _admissionPrevYearDayShortPaidController = TextEditingController(
-          text: widget.speciality!['admissionPrevYearDayShortPaid']);
-      _admissionPrevYearCorrespondenceFullBudgetController =
-          TextEditingController(
-              text: widget
-                  .speciality!['admissionPrevYearCorrespondenceFullBudget']);
-      _admissionPrevYearCorrespondenceShortBudgetController =
-          TextEditingController(
-              text: widget
-                  .speciality!['admissionPrevYearCorrespondenceShortBudget']);
-      _admissionPrevYearCorrespondenceFullPaidController =
-          TextEditingController(
-              text: widget
-                  .speciality!['admissionPrevYearCorrespondenceFullPaid']);
-      _admissionPrevYearCorrespondenceShortPaidController =
-          TextEditingController(
-              text: widget
-                  .speciality!['admissionPrevYearCorrespondenceShortPaid']);
-      _passScoreBeforeLastYearDayFullBudgetController = TextEditingController(
-          text: widget.speciality!['passScoreBeforeLastYearDayFullBudget']);
-      _passScoreBeforeLastYearDayShortBudgetController = TextEditingController(
-          text: widget.speciality!['passScoreBeforeLastYearDayShortBudget']);
-      _passScoreBeforeLastYearDayFullPaidController = TextEditingController(
-          text: widget.speciality!['passScoreBeforeLastYearDayFullPaid']);
-      _passScoreBeforeLastYearDayShortPaidController = TextEditingController(
-          text: widget.speciality!['passScoreBeforeLastYearDayShortPaid']);
-      _passScoreBeforeLastYearCorrespondenceFullBudgetController =
-          TextEditingController(
-              text: widget.speciality![
-                  'passScoreBeforeLastYearCorrespondenceFullBudget']);
-      _passScoreBeforeLastYearCorrespondenceShortBudgetController =
-          TextEditingController(
-              text: widget.speciality![
-                  'passScoreBeforeLastYearCorrespondenceShortBudget']);
-      _passScoreBeforeLastYearCorrespondenceFullPaidController =
-          TextEditingController(
-              text: widget.speciality![
-                  'passScoreBeforeLastYearCorrespondenceFullPaid']);
-      _passScoreBeforeLastYearCorrespondenceShortPaidController =
-          TextEditingController(
-              text: widget.speciality![
-                  'passScoreBeforeLastYearCorrespondenceShortPaid']);
-    }
-
-    return Column(
-      children: [
-        Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              // TextFormField(
-              //   controller: _facultyBasedController,
-              //   decoration: const InputDecoration(
-              //       labelText: 'Аббревиатура факультета*'),
-              //   validator: (value) {
-              //     if (value == '') return 'Введите факультет';
-              //     return null;
-              //   },
-              // ),
-              TextFormField(
-                controller: _nameController,
-                minLines: 1,
-                maxLines: 3,
-                decoration:
-                    const InputDecoration(labelText: 'Название специальности*'),
-                validator: (value) {
-                  if (value == '') return 'Введите название';
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _numberController,
-                keyboardType: TextInputType.number,
-                decoration:
-                    const InputDecoration(labelText: 'Номер специальности*'),
-                validator: (value) {
-                  if (value == '') return 'Введите номер';
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _qualificationController,
-                decoration: const InputDecoration(labelText: 'Квалификация*'),
-                validator: (value) {
-                  if (value == '') return 'Введите квалификацию';
-                  return null;
-                },
-              ),
-
-              ExpansionTile(
-                title: Text(
-                  'Длительность обучения',
-                  style: TextStyle(color: mainColor),
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        children: [
+          Form(
+            key: formKey,
+            child: Column(
+              children: [
+                // TextFormField(
+                //   controller: _facultyBasedController,
+                //   decoration: const InputDecoration(
+                //       labelText: 'Аббревиатура факультета*'),
+                //   validator: (value) {
+                //     if (value == '') return 'Введите факультет';
+                //     return null;
+                //   },
+                // ),
+                TextFormField(
+                  controller: nameController,
+                  minLines: 1,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      labelText: 'Название специальности*'),
+                  validator: (value) {
+                    if (value == '') return 'Введите название';
+                    return null;
+                  },
                 ),
-                children: [
-                  TextFormField(
-                    controller: _trainingDurationDayFullController,
-                    decoration:
-                        const InputDecoration(labelText: 'Дневное полное'),
-                  ),
-                  TextFormField(
-                    controller: _trainingDurationDayShortController,
-                    decoration:
-                        const InputDecoration(labelText: 'Дневное сокращённое'),
-                  ),
-                  TextFormField(
-                    controller: _trainingDurationCorrespondenceFullController,
-                    decoration:
-                        const InputDecoration(labelText: 'Заочное полное'),
-                  ),
-                  TextFormField(
-                    controller: _trainingDurationCorrespondenceShortController,
-                    decoration:
-                        const InputDecoration(labelText: 'Заочное сокращённое'),
-                  ),
-                ],
-              ),
-              ExpansionTile(
-                title: Text(
-                  'Вступительные исп. полное',
-                  style: TextStyle(color: mainColor),
+                TextFormField(
+                  controller: numberController,
+                  keyboardType: TextInputType.number,
+                  decoration:
+                      const InputDecoration(labelText: 'Номер специальности*'),
+                  validator: (value) {
+                    if (value == '') return 'Введите номер';
+                    return null;
+                  },
                 ),
-                children: [
-                  TextFormField(
-                    controller: _entranceTestsFull1Controller,
-                    decoration: const InputDecoration(labelText: '№1'),
-                  ),
-                  TextFormField(
-                    controller: _entranceTestsFull2Controller,
-                    decoration: const InputDecoration(labelText: '№2'),
-                  ),
-                  TextFormField(
-                    controller: _entranceTestsFull3Controller,
-                    decoration: const InputDecoration(labelText: '№3'),
-                  ),
-                  TextFormField(
-                    controller: _entranceTestsFull4Controller,
-                    decoration: const InputDecoration(labelText: '№4'),
-                  ),
-                  TextFormField(
-                    controller: _entranceTestsFull5Controller,
-                    decoration: const InputDecoration(labelText: '№5'),
-                  ),
-                ],
-              ),
-              ExpansionTile(
-                title: Text(
-                  'Вступительные исп. сокращенное',
-                  style: TextStyle(color: mainColor),
+                TextFormField(
+                  controller: qualificationController,
+                  decoration: const InputDecoration(labelText: 'Квалификация*'),
+                  validator: (value) {
+                    if (value == '') return 'Введите квалификацию';
+                    return null;
+                  },
                 ),
-                children: [
-                  TextFormField(
-                    controller: _entranceShort1Controller,
-                    decoration: const InputDecoration(labelText: '№1'),
-                  ),
-                  TextFormField(
-                    controller: _entranceShort2Controller,
-                    decoration: const InputDecoration(labelText: '№2'),
-                  ),
-                  TextFormField(
-                    controller: _entranceShort3Controller,
-                    decoration: const InputDecoration(labelText: '№3'),
-                  ),
-                  TextFormField(
-                    controller: _entranceShort4Controller,
-                    decoration: const InputDecoration(labelText: '№4'),
-                  ),
-                  TextFormField(
-                    controller: _entranceShort5Controller,
-                    decoration: const InputDecoration(labelText: '№5'),
-                  ),
-                ],
-              ),
 
-              // план приёма текущий год
-              _expandedTileAdmission(
-                int.parse(_currentYear),
-                _admissionCurrentDayFullBudgetController,
-                _admissionCurrentDayShortBudgetController,
-                _admissionCurrentDayFullPaidController,
-                _admissionCurrentDayShortPaidController,
-                _admissionCurrentCorrespondenceFullBudgetController,
-                _admissionCurrentCorrespondenceShortBudgetController,
-                _admissionCurrentCorrespondenceFullPaidController,
-                _admissionCurrentCorrespondenceShortPaidController,
-              ),
-              // проходные баллы прошлый год
-              _expandedTilePassScore(
-                int.parse(_currentYear) - 1,
-                _passScorePrevYearDayFullBudgetController,
-                _passScorePrevYearDayShortBudgetController,
-                _passScorePrevYearDayFullPaidController,
-                _passScorePrevYearDayShortPaidController,
-                _passScorePrevYearCorrespondenceFullBudgetController,
-                _passScorePrevYearCorrespondenceShortBudgetController,
-                _passScorePrevYearCorrespondenceFullPaidController,
-                _passScorePrevYearCorrespondenceShortPaidController,
-              ),
-              //план приема прошлый год
-              _expandedTileAdmission(
-                int.parse(_currentYear) - 1,
-                _admissionPrevYearDayFullBudgetController,
-                _admissionPrevYearDayShortBudgetController,
-                _admissionPrevYearDayFullPaidController,
-                _admissionPrevYearDayShortPaidController,
-                _admissionPrevYearCorrespondenceFullBudgetController,
-                _admissionPrevYearCorrespondenceShortBudgetController,
-                _admissionPrevYearCorrespondenceFullPaidController,
-                _admissionPrevYearCorrespondenceShortPaidController,
-              ),
-              //проходные баллы позапрошлый год
-              _expandedTilePassScore(
-                int.parse(_currentYear) - 2,
-                _passScoreBeforeLastYearDayFullBudgetController,
-                _passScoreBeforeLastYearDayShortBudgetController,
-                _passScoreBeforeLastYearDayFullPaidController,
-                _passScoreBeforeLastYearDayShortPaidController,
-                _passScoreBeforeLastYearCorrespondenceFullBudgetController,
-                _passScoreBeforeLastYearCorrespondenceShortBudgetController,
-                _passScoreBeforeLastYearCorrespondenceFullPaidController,
-                _passScoreBeforeLastYearCorrespondenceShortPaidController,
-              ),
-
-              TextFormField(
-                controller: _aboutController,
-                decoration: const InputDecoration(labelText: 'Описание*'),
-                validator: (value) {
-                  if (value == '') return 'Введите описание';
-                  return null;
-                },
-                minLines: 1,
-                maxLines: 20,
-              ),
-            ],
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(top: 10)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            widget.isEdit
-                ? ElevatedButton(
-                    onPressed: () {
-                      _editSpeciality(widget.speciality!.id);
-                    },
-                    child: Text('Изменить'),
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(mainColor),
-                      minimumSize: MaterialStateProperty.all(Size(150, 50)),
-                      elevation: MaterialStateProperty.all(10),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: mainColor),
-                        ),
-                      ),
+                ExpansionTile(
+                  title: Text(
+                    'Длительность обучения',
+                    style: TextStyle(color: mainColor),
+                  ),
+                  children: [
+                    TextFormField(
+                      controller: trainingDurationDayFullController,
+                      decoration:
+                          const InputDecoration(labelText: 'Дневное полное'),
                     ),
-                  )
-                : ElevatedButton(
-                    onPressed: () {
-                      _addSpeciality();
-                    },
-                    child: Text('Добавить'),
-                    style: ButtonStyle(
-                      // foregroundColor: MaterialStateProperty.all(mainColor),
-                      minimumSize: MaterialStateProperty.all(Size(120, 50)),
-                      elevation: MaterialStateProperty.all(10),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: mainColor),
-                        ),
-                      ),
+                    TextFormField(
+                      controller: trainingDurationDayShortController,
+                      decoration: const InputDecoration(
+                          labelText: 'Дневное сокращённое'),
                     ),
-                  ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Отмена'),
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(mainColor),
-                minimumSize: MaterialStateProperty.all(Size(120, 50)),
-                elevation: MaterialStateProperty.all(10),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                    side: BorderSide(color: mainColor),
-                  ),
+                    TextFormField(
+                      controller: trainingDurationCorrespondenceFullController,
+                      decoration:
+                          const InputDecoration(labelText: 'Заочное полное'),
+                    ),
+                    TextFormField(
+                      controller: trainingDurationCorrespondenceShortController,
+                      decoration: const InputDecoration(
+                          labelText: 'Заочное сокращённое'),
+                    ),
+                  ],
                 ),
-              ),
+                ExpansionTile(
+                  title: Text(
+                    'Вступительные исп. полное',
+                    style: TextStyle(color: mainColor),
+                  ),
+                  children: [
+                    TextFormField(
+                      controller: entranceTestsFull1Controller,
+                      decoration: const InputDecoration(labelText: '№1'),
+                    ),
+                    TextFormField(
+                      controller: entranceTestsFull2Controller,
+                      decoration: const InputDecoration(labelText: '№2'),
+                    ),
+                    TextFormField(
+                      controller: entranceTestsFull3Controller,
+                      decoration: const InputDecoration(labelText: '№3'),
+                    ),
+                    TextFormField(
+                      controller: entranceTestsFull4Controller,
+                      decoration: const InputDecoration(labelText: '№4'),
+                    ),
+                    TextFormField(
+                      controller: entranceTestsFull5Controller,
+                      decoration: const InputDecoration(labelText: '№5'),
+                    ),
+                  ],
+                ),
+                ExpansionTile(
+                  title: Text(
+                    'Вступительные исп. сокращенное',
+                    style: TextStyle(color: mainColor),
+                  ),
+                  children: [
+                    TextFormField(
+                      controller: entranceShort1Controller,
+                      decoration: const InputDecoration(labelText: '№1'),
+                    ),
+                    TextFormField(
+                      controller: entranceShort2Controller,
+                      decoration: const InputDecoration(labelText: '№2'),
+                    ),
+                    TextFormField(
+                      controller: entranceShort3Controller,
+                      decoration: const InputDecoration(labelText: '№3'),
+                    ),
+                    TextFormField(
+                      controller: entranceShort4Controller,
+                      decoration: const InputDecoration(labelText: '№4'),
+                    ),
+                    TextFormField(
+                      controller: entranceShort5Controller,
+                      decoration: const InputDecoration(labelText: '№5'),
+                    ),
+                  ],
+                ),
+
+                // план приёма текущий год
+                _expandedTileAdmission(
+                  currentYear,
+                  admissionCurrentDayFullBudgetController,
+                  admissionCurrentDayShortBudgetController,
+                  admissionCurrentDayFullPaidController,
+                  admissionCurrentDayShortPaidController,
+                  admissionCurrentCorrespondenceFullBudgetController,
+                  admissionCurrentCorrespondenceShortBudgetController,
+                  admissionCurrentCorrespondenceFullPaidController,
+                  admissionCurrentCorrespondenceShortPaidController,
+                ),
+                // проходные баллы прошлый год
+                _expandedTilePassScore(
+                  currentYear - 1,
+                  passScorePrevYearDayFullBudgetController,
+                  passScorePrevYearDayShortBudgetController,
+                  passScorePrevYearDayFullPaidController,
+                  passScorePrevYearDayShortPaidController,
+                  passScorePrevYearCorrespondenceFullBudgetController,
+                  passScorePrevYearCorrespondenceShortBudgetController,
+                  passScorePrevYearCorrespondenceFullPaidController,
+                  passScorePrevYearCorrespondenceShortPaidController,
+                ),
+                //план приема прошлый год
+                _expandedTileAdmission(
+                  currentYear - 1,
+                  admissionPrevYearDayFullBudgetController,
+                  admissionPrevYearDayShortBudgetController,
+                  admissionPrevYearDayFullPaidController,
+                  admissionPrevYearDayShortPaidController,
+                  admissionPrevYearCorrespondenceFullBudgetController,
+                  admissionPrevYearCorrespondenceShortBudgetController,
+                  admissionPrevYearCorrespondenceFullPaidController,
+                  admissionPrevYearCorrespondenceShortPaidController,
+                ),
+                //проходные баллы позапрошлый год
+                _expandedTilePassScore(
+                  currentYear - 2,
+                  passScoreBeforeLastYearDayFullBudgetController,
+                  passScoreBeforeLastYearDayShortBudgetController,
+                  passScoreBeforeLastYearDayFullPaidController,
+                  passScoreBeforeLastYearDayShortPaidController,
+                  passScoreBeforeLastYearCorrespondenceFullBudgetController,
+                  passScoreBeforeLastYearCorrespondenceShortBudgetController,
+                  passScoreBeforeLastYearCorrespondenceFullPaidController,
+                  passScoreBeforeLastYearCorrespondenceShortPaidController,
+                ),
+
+                TextFormField(
+                  controller: aboutController,
+                  decoration: const InputDecoration(labelText: 'Описание*'),
+                  validator: (value) {
+                    if (value == '') return 'Введите описание';
+                    return null;
+                  },
+                  minLines: 1,
+                  maxLines: 20,
+                ),
+              ],
             ),
-            if (widget.isEdit)
-              ElevatedButton(
-                onPressed: () {
-                  _showAlertDialog(context, widget.speciality);
-                },
-                child: Icon(Icons.delete),
-                style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(Colors.white),
-                  backgroundColor: MaterialStateProperty.all(Colors.red),
-                  minimumSize: MaterialStateProperty.all(Size(50, 50)),
-                  elevation: MaterialStateProperty.all(10),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: mainColor),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

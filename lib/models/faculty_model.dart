@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Faculty {
+  String? id;
   String? name;
   String? shortName;
   String? about;
@@ -11,7 +10,8 @@ class Faculty {
   String? imagePath;
 
   Faculty(
-      {this.name,
+      {this.id,
+      this.name,
       this.shortName,
       this.about,
       this.hotLineNumber,
@@ -20,54 +20,16 @@ class Faculty {
       this.forHostelNumber,
       this.imagePath});
 
-  final dbRef = FirebaseFirestore.instance;
-
-  void addFaculty(
-    String name,
-    String shortName,
-    String about,
-    String hotLineNumber,
-    String hotLineMail,
-    String forInquiriesNumber,
-    String forHostelNumber,
-    String imagePath,
-  ) async {
-    await dbRef.collection('faculties').add({
-      'name': name,
-      'shortName': shortName,
-      'about': about,
-      'hotLineNumber': hotLineNumber,
-      'hotLineMail': hotLineMail,
-      'forInquiriesNumber': forInquiriesNumber,
-      'forHostelNumber': forHostelNumber,
-      'imagePath': imagePath,
-    });
-  }
-
-  void editFaculty(
-    String name,
-    String shortName,
-    String about,
-    String hotLineNumber,
-    String hotLineMail,
-    String forInquiriesNumber,
-    String forHostelNumber,
-    String imagePath,
-    String id,
-  ) async {
-    await dbRef.collection('faculties').doc(id).update({
-      'name': name,
-      'shortName': shortName,
-      'about': about,
-      'hotLineNumber': hotLineNumber,
-      'hotLineMail': hotLineMail,
-      'forInquiriesNumber': forInquiriesNumber,
-      'forHostelNumber': forHostelNumber,
-      'imagePath': imagePath,
-    });
-  }
-
-  void removeFaculty(String id) async {
-    await dbRef.collection('faculties').doc(id).delete();
-  }
+  Faculty.fromMap(Map<String, dynamic> data, String id)
+      : this(
+          id: id,
+          name: data['name'],
+          shortName: data['shortName'],
+          about: data['about'],
+          hotLineNumber: data['hotLineNumber'],
+          hotLineMail: data['hotLineMail'],
+          forInquiriesNumber: data['forInquiriesNumber'],
+          forHostelNumber: data['forHostelNumber'],
+          imagePath: data['imagePath'],
+        );
 }
