@@ -19,9 +19,16 @@ class _SettingsPageState extends State<SettingsPage> {
   Color mainColor = Constants.mainColor;
   TextEditingController _yearController = TextEditingController();
   TextEditingController _keyController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isYearChanged = false;
+  bool isKeyChanged = false;
+  bool isInited = false;
 
-  _showAlertDialog(GestureTapCallback onPressed) {
+  var oldYearState;
+  var oldKeyState;
+  var _unseenCount;
+
+  void _showAlertDialog(GestureTapCallback onPressed) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -43,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
         });
   }
 
-  _saveSettings(AppProvider state) {
+  void _saveSettings(AppProvider state) {
     if (_formKey.currentState!.validate()) {
       state.editSettings(
         _yearController.text.trim(),
@@ -60,10 +67,16 @@ class _SettingsPageState extends State<SettingsPage> {
     var _themeProvider = Provider.of<ThemeProvider>(context);
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        _yearController =
-            TextEditingController(text: state.currentAdmissionYear);
-        _keyController = TextEditingController(text: state.secretKey);
-        String _unseenCount = state.unseenCount;
+        if (!isInited) {
+          _yearController =
+              TextEditingController(text: state.currentAdmissionYear);
+          _keyController = TextEditingController(text: state.secretKey);
+
+          oldYearState = state.currentAdmissionYear;
+          oldKeyState = state.secretKey;
+          _unseenCount = state.unseenCount;
+          isInited = true;
+        }
 
         return Scaffold(
           appBar: AppBar(
@@ -117,6 +130,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: TextFormField(
                               textAlign: TextAlign.center,
                               controller: _yearController,
+                              onChanged: (value) {
+                                if (value != oldYearState) {
+                                  setState(() {
+                                    isYearChanged = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    isYearChanged = false;
+                                  });
+                                }
+                              },
                             ),
                           ),
                         ),
@@ -129,7 +153,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 onPressed: () {
                                   var _chars =
                                       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-                                  Random _rnd = Random();
+                                  var _rnd = Random();
                                   _keyController.text = String.fromCharCodes(
                                       Iterable.generate(
                                           10,
@@ -137,10 +161,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                               _rnd.nextInt(_chars.length))));
                                   setState(() {});
                                 },
-                                child: Text('Сгенерировать'),
                                 style: ButtonStyle(
                                     padding: MaterialStateProperty.all(
                                         EdgeInsets.all(0))),
+                                child: Text('Сгенерировать'),
                               ),
                             ],
                           ),
@@ -152,11 +176,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: TextFormField(
                                   textAlign: TextAlign.center,
                                   controller: _keyController,
+                                  onChanged: (value) {
+                                    if (value != oldKeyState) {
+                                      setState(() {
+                                        isKeyChanged = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        isKeyChanged = false;
+                                      });
+                                    }
+                                  },
                                 ),
                               ),
                               IconButton(
                                   onPressed: () {
-                                    Clipboard.setData(new ClipboardData(
+                                    Clipboard.setData(ClipboardData(
                                         text: _keyController.text));
                                     Fluttertoast.showToast(
                                         msg: 'Скопировано в буфер обмена');
@@ -184,36 +219,55 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _showAlertDialog(
-                          () {
-                            _saveSettings(state);
-                          },
-                        );
-                      },
-                      child: Text('Изменить'),
-                      style: ButtonStyle(
-                        // foregroundColor: MaterialStateProperty.all(mainColor),
-                        minimumSize: MaterialStateProperty.all(Size(150, 50)),
-                        elevation: MaterialStateProperty.all(10),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: mainColor),
+                    (isYearChanged || isKeyChanged)
+                        ? ElevatedButton(
+                            onPressed: () {
+                              _showAlertDialog(
+                                () {
+                                  _saveSettings(state);
+                                },
+                              );
+                            },
+                            style: ButtonStyle(
+                              minimumSize:
+                                  MaterialStateProperty.all(Size(150, 50)),
+                              elevation: MaterialStateProperty.all(10),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: mainColor),
+                                ),
+                              ),
+                            ),
+                            child: Text('Сохранить измененения'),
+                          )
+                        : ElevatedButton(
+                            onPressed: () {},
+                            style: ButtonStyle(
+                              minimumSize:
+                                  MaterialStateProperty.all(Size(150, 50)),
+                              elevation: MaterialStateProperty.all(10),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: Colors.grey),
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              'Сохранить измененения',
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Назад'),
                       style: ButtonStyle(
                         foregroundColor: MaterialStateProperty.all(mainColor),
-                        minimumSize: MaterialStateProperty.all(Size(150, 50)),
+                        minimumSize: MaterialStateProperty.all(Size(130, 50)),
                         elevation: MaterialStateProperty.all(10),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -223,6 +277,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                       ),
+                      child: Text('Назад'),
                     ),
                   ],
                 ),
