@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-class Constants{
+class Constants {
   static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
 
   static Point initialPoint = Point(
@@ -10,4 +10,13 @@ class Constants{
   );
 
   static const url = 'https://bntu.by';
+
+  static ButtonStyle customElevatedButtonStyle = ButtonStyle(
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+        side: BorderSide(color: mainColor),
+      ),
+    ),
+  );
 }

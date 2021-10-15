@@ -217,7 +217,9 @@ class _BuildingsMapState extends State<BuildingsMap> {
                           String title = item.name! + subtitle;
                           return ListTile(
                             onTap: () {
-                              _selectedIndex = index;
+                              setState(() {
+                                _selectedIndex = index;
+                              });
                               setPos(item.point!);
                             },
                             title: Text(title),

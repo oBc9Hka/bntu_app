@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
 import 'package:bntu_app/ui/widgets/image_loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,7 +35,10 @@ class _FacultyEditState extends State<FacultyEdit> {
   TextEditingController _hotLineMailController = TextEditingController();
   TextEditingController _forInquiriesNumberController = TextEditingController();
   TextEditingController _forHostelNumberController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _checkForRemove = TextEditingController();
+  final GlobalKey<FormState> _checkFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   XFile? _image;
   String _imagePath = '';
@@ -42,7 +46,7 @@ class _FacultyEditState extends State<FacultyEdit> {
   final ImagePicker _picker = ImagePicker();
 
   void getPhoto() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image!;
     });
@@ -56,7 +60,7 @@ class _FacultyEditState extends State<FacultyEdit> {
 
     task = uploadFile(data!);
     setState(() {});
-    showDialog(
+    await showDialog(
         context: context,
         builder: (BuildContext context) {
           var themeProvider = Provider.of<ThemeProvider>(context);
@@ -79,10 +83,10 @@ class _FacultyEditState extends State<FacultyEdit> {
 
     if (task == null) return;
 
-    final TaskSnapshot storageTaskSnapshot = await task!.whenComplete(() {
+    final storageTaskSnapshot = await task!.whenComplete(() {
       task = null;
     });
-    final String path = await storageTaskSnapshot.ref.getDownloadURL();
+    final path = await storageTaskSnapshot.ref.getDownloadURL();
 
     _imagePath = path;
     setState(() {});
@@ -90,9 +94,8 @@ class _FacultyEditState extends State<FacultyEdit> {
 
   UploadTask? uploadFile(Uint8List data) {
     try {
-      final Reference storageReference = FirebaseStorage.instance
+      final storageReference = FirebaseStorage.instance
           .ref('faculties/${_shortNameController.text.trim()}/photo.jpg');
-      // return storageReference.putFile(File(_image.path));
 
       return storageReference.putData(data);
     } on FirebaseException catch (e) {
@@ -161,7 +164,7 @@ class _FacultyEditState extends State<FacultyEdit> {
       }
       Navigator.of(context).pop();
       state.initFaculties();
-      Fluttertoast.showToast(msg: 'Факультет успешно изменён');
+      await Fluttertoast.showToast(msg: 'Факультет успешно изменён');
     }
   }
 
@@ -170,18 +173,54 @@ class _FacultyEditState extends State<FacultyEdit> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        var toCheck = item.shortName;
         return AlertDialog(
           content: Container(
-            height: 40,
+            height: 175,
             child: Center(
               child: Column(
                 children: [
                   Text(
                     'Хотите удалить факультет?',
                     style: TextStyle(fontSize: 18),
-                    //TODO: дообавить проверку намерения путём написания аббревиатуры
                   ),
-                  Text(item.shortName.toString()),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5, bottom: 10),
+                    child: Text(
+                        'Напишите аббревиатуру факультета, чтобы подтвердить своё действие'),
+                  ),
+                  Form(
+                    key: _checkFormKey,
+                    child: TextFormField(
+                      controller: _checkForRemove,
+                      validator: (value) {
+                        if (value == '' || value != toCheck) {
+                          return 'Введите аббревиатуру';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        hintText: toCheck,
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide:
+                                BorderSide(color: Colors.grey, width: 1)),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide:
+                              BorderSide(color: Constants.mainColor, width: 1),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: Colors.red, width: 1),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(color: Colors.red, width: 1),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -277,15 +316,17 @@ class _FacultyEditState extends State<FacultyEdit> {
                 },
                 onRemovePressed: () {
                   _removeFaculty(context, widget.faculty, () {
-                    state.removeFaculty(widget.faculty.id.toString(),
-                        _shortNameController.text.trim());
+                    if (_checkFormKey.currentState!.validate()) {
+                      state.removeFaculty(widget.faculty.id.toString(),
+                          _shortNameController.text.trim());
 
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    state.initFaculties();
-                    Fluttertoast.showToast(
-                        msg:
-                            'Факультет ${widget.faculty.shortName} успешно удалён');
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      state.initFaculties();
+                      Fluttertoast.showToast(
+                          msg:
+                              'Факультет ${widget.faculty.shortName} успешно удалён');
+                    }
                   });
                 },
               ),
