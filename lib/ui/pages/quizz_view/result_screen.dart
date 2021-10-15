@@ -10,14 +10,7 @@ import 'main_menu.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({Key? key, required this.tagsList}) : super(key: key);
-
   final tagsList;
-
-//   @override
-//   _ResultScreenState createState() => _ResultScreenState();
-// }
-//
-// class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
