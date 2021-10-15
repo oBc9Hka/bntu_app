@@ -61,7 +61,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
   String errorMsg = '';
 
   void initQuiz() async {
-    try{
+    try {
       answers = _questions[0].answers!;
       print(answers);
       // setState(() {});
@@ -71,7 +71,9 @@ class _QuizzScreenState extends State<QuizzScreen> {
       });
       print(checkedAnswers);
       isLoading = false;
-    }catch(e){ print('catch');}
+    } catch (e) {
+      print('catch');
+    }
     // setState(() {});
   }
 
@@ -85,11 +87,11 @@ class _QuizzScreenState extends State<QuizzScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const Color mainColor = Constants.mainColor;
+    const mainColor = Constants.mainColor;
     return Consumer<AppProvider>(
       builder: (context, state, child) {
         _questions = state.questions;
-        if(!isInited) {
+        if (!isInited) {
           initQuiz();
           isInited = true;
         }
@@ -116,10 +118,10 @@ class _QuizzScreenState extends State<QuizzScreen> {
                   controller: _controller!,
                   onPageChanged: (page) {
                     initAnswers();
-                    if (_questions.length != 0) {
+                    if (_questions.isNotEmpty) {
                       if (page == _questions.length - 1) {
                         setState(() {
-                          btnText = "Увидеть результат";
+                          btnText = 'Увидеть результат';
                         });
                       }
                     }
@@ -127,7 +129,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
                       answered = false;
                     });
                   },
-                  physics: new NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemCount: _questions.length,
                   itemBuilder: (context, index) {
                     answers = _questions[index].answers!;
@@ -142,7 +144,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  "Вопрос ${index + 1}",
+                                  'Вопрос ${index + 1}',
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     fontSize: 28.0,
@@ -171,6 +173,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
                                 return CheckboxListTile(
                                   title: Text(key),
                                   value: checkedAnswers[key],
+                                  activeColor: mainColor,
                                   onChanged: (bool? value) {
                                     setState(() {
                                       checkedAnswers[key] = value!;
@@ -180,7 +183,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
                               }),
                             ],
                           ),
-                          RawMaterialButton(
+                          ElevatedButton(
                             onPressed: () {
                               getCheckboxItems(_controller!.page!.toInt());
                               if (!checkedAnswers.values.contains(true)) {
@@ -207,15 +210,16 @@ class _QuizzScreenState extends State<QuizzScreen> {
                                 }
                               }
                             },
-                            shape: StadiumBorder(),
-                            fillColor: Colors.white,
-                            padding: EdgeInsets.all(18.0),
-                            elevation: 10.0,
-                            child: Text(
-                              btnText,
-                              style: TextStyle(color: mainColor),
+                            style: Constants.customElevatedButtonStyle,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 12.0, horizontal: 24.0),
+                              child: Text(
+                                btnText,
+                                style: TextStyle(color: mainColor),
+                              ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     );

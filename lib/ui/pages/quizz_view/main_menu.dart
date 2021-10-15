@@ -8,8 +8,8 @@ class MainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    Color mainColor = Constants.mainColor;
+    var height = MediaQuery.of(context).size.height;
+    var mainColor = Constants.mainColor;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +40,7 @@ class MainMenu extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
-                  "Пройди тест и узнай, какие факультеты тебе подходят",
+                  'Пройди тест и узнай, какие факультеты тебе подходят',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -52,7 +52,7 @@ class MainMenu extends StatelessWidget {
             ),
             Expanded(
               child: Center(
-                child: RawMaterialButton(
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -61,14 +61,12 @@ class MainMenu extends StatelessWidget {
                       ),
                     );
                   },
-                  shape: const StadiumBorder(),
-                  elevation: 10,
-                  fillColor: Colors.white,
+                  style: Constants.customElevatedButtonStyle,
                   child: const Padding(
                     padding:
-                        EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                    EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
                     child: Text(
-                      "Начать тест",
+                      'Начать тест',
                       style: TextStyle(
                         fontSize: 26.0,
                         // color: mainColor,
@@ -76,7 +74,7 @@ class MainMenu extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
+                )
               ),
             ),
           ],

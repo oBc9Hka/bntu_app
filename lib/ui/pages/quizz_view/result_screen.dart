@@ -1,5 +1,6 @@
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
+import 'package:bntu_app/ui/pages/greeting_screen.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,20 +15,19 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    String _fit = '...';
-    String _mayFit = '...';
-    List list = [];
-    List<MapEntry<String, int>> _sortedList = [];
-    Map<String, int> _tagsFrequency = {};
-    int maxFrequency = 0;
-    bool _mayFitVisibility = true;
+    var _fit = '...';
+    var _mayFit = '...';
+    var list = [];
+    var _sortedList = <MapEntry<String, int>>[];
+    var _tagsFrequency = <String, int>{};
+    var maxFrequency = 0;
+    var _mayFitVisibility = true;
 
     void _getTagsFrequencyList() {
       list = [];
       for (var item in tagsList) {
         if (list.contains(item)) {
-          int? count = _tagsFrequency[item];
+          var count = _tagsFrequency[item];
           _tagsFrequency[item] = count! + 1;
         } else {
           _tagsFrequency[item] = 1;
@@ -57,7 +57,7 @@ class ResultScreen extends StatelessWidget {
     }
 
     void _setTitles() {
-      int maxFrequencyCount = 0;
+      var maxFrequencyCount = 0;
       _tagsFrequency.forEach((key, value) {
         if (value == maxFrequency) ++maxFrequencyCount;
       });
@@ -85,14 +85,15 @@ class ResultScreen extends StatelessWidget {
     _getMaxFrequency();
     _setTitles();
 
-    const Color mainColor = Constants.mainColor;
+    const mainColor = Constants.mainColor;
     return Consumer<AppProvider>(builder: (context, state, child) {
-      List<MapEntry<dynamic, int>> sortedQueryList = [];
+      var sortedQueryList = <MapEntry<dynamic, int>>[];
       for (var sortedListItem in _sortedList) {
         for (var facultiesListItem in state.faculties) {
-          if (facultiesListItem.shortName == sortedListItem.key)
+          if (facultiesListItem.shortName == sortedListItem.key) {
             sortedQueryList
                 .add(MapEntry(facultiesListItem, sortedListItem.value));
+          }
         }
       }
       return Scaffold(
@@ -113,7 +114,7 @@ class ResultScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: Text(
-                  "Результат теста:",
+                  'Результат теста:',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 40.0,
@@ -211,23 +212,38 @@ class ResultScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              RawMaterialButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainMenu(),
-                      ));
-                },
-                fillColor: Colors.white,
-                elevation: 10,
-                shape: StadiumBorder(),
-                padding: EdgeInsets.all(18.0),
-                child: Text(
-                  "Пройти тест заново",
-                  style: TextStyle(color: mainColor),
-                ),
-              ),
+              Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MainMenu(),
+                          ));
+                    },
+                    style: Constants.customElevatedButtonStyle,
+                    child: Text(
+                      'Пройти тест заново',
+                      style: TextStyle(color: mainColor),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GreetingScreen(),
+                          ));
+                    },
+                    style: Constants.customElevatedButtonStyle,
+                    child: Text(
+                      'Вернуться на главную',
+                      style: TextStyle(color: mainColor),
+                    ),
+                  )
+                ],
+              )
             ],
           ),
         ),
