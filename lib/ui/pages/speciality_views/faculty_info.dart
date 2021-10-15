@@ -55,37 +55,30 @@ class FacultyPage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                (faculty.imagePath == '')
-                    ? Text('Нет фото')
-                    : Container(
+                if (faculty.imagePath == '')
+                  Text('Нет фото')
+                else
+                  Stack(
+                    children: [
+                      Container(
+                        height: 180,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                      Container(
                         height: 180,
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: Image.network(
                               '${faculty.imagePath}',
-                              loadingBuilder: (BuildContext context,
-                                  Widget child,
-                                  ImageChunkEvent? loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                }
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: mainColor,
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
-                                  ),
-                                );
-                              },
                             ).image,
                           ),
                         ),
                       ),
+                    ],
+                  ),
                 Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text(
