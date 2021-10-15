@@ -33,6 +33,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner:
+  pedantic:
 
   get: ^4.1.4
 

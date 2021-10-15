@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
+import 'package:bntu_app/ui/widgets/user_exit_dialog.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,20 +16,18 @@ class GreetingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    var height = MediaQuery.of(context).size.height;
     var themeProvider = Provider.of<ThemeProvider>(context);
-    const Color mainColor = Constants.mainColor;
+    const mainColor = Constants.mainColor;
     const _url = Constants.url;
 
+    final _formKey = GlobalKey<FormState>();
+    final _errorFormKey = GlobalKey<FormState>();
+    var _loginController = TextEditingController();
+    var _passwordController = TextEditingController();
+    var _errorDescriptionController = TextEditingController();
 
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-    final GlobalKey<FormState> _errorFormKey = GlobalKey<FormState>();
-    TextEditingController _loginController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
-    TextEditingController _errorDescriptionController =
-    TextEditingController();
-
-    List<Map<String, dynamic>> _buttons = [
+    var _buttons = <Map<String, dynamic>>[
       {
         'text': 'Выбери факультет',
         'link': '/main_page',
@@ -96,10 +95,10 @@ class GreetingScreen extends StatelessWidget {
 
     DateTime? backButtonPressedTime;
     Future<bool> onWillPop() async {
-      DateTime currentTime = DateTime.now();
-      bool backButton = backButtonPressedTime == null ||
+      var currentTime = DateTime.now();
+      var backButton = backButtonPressedTime == null ||
           currentTime.difference(backButtonPressedTime!) > Duration(seconds: 2);
-      Fluttertoast.showToast(
+      await Fluttertoast.showToast(
         msg: 'Нажмите ещё раз для выхода',
       );
 
@@ -112,8 +111,7 @@ class GreetingScreen extends StatelessWidget {
 
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-
-        customElevatedButtonStyle() {
+        ButtonStyle customElevatedButtonStyle() {
           return ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
@@ -241,15 +239,15 @@ class GreetingScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Отмена'),
                     style: customElevatedButtonStyle(),
+                    child: Text('Отмена'),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       _signIn();
                     },
-                    child: Text('Войти'),
                     style: customElevatedButtonStyle(),
+                    child: Text('Войти'),
                   ),
                 ],
               );
@@ -343,15 +341,15 @@ class GreetingScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Отмена'),
                     style: customElevatedButtonStyle(),
+                    child: Text('Отмена'),
                   ),
                   ElevatedButton(
                     onPressed: () {
                       _handleErrorMessageByUser();
                     },
-                    child: Text('Отправить'),
                     style: customElevatedButtonStyle(),
+                    child: Text('Отправить'),
                   ),
                 ],
               );
@@ -365,7 +363,7 @@ class GreetingScreen extends StatelessWidget {
 
         void _signOut() async {
           state.signOut();
-          Fluttertoast.showToast(msg: 'Вы вышли из режима редактора');
+          await Fluttertoast.showToast(msg: 'Вы вышли из режима редактора');
         }
 
         return Scaffold(
@@ -384,7 +382,13 @@ class GreetingScreen extends StatelessWidget {
                       ),
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          _signOut();
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return ExitDialog(onConfirmPressed: () {
+                                  _signOut();
+                                });
+                              });
                         },
                         icon: const Icon(
                           Icons.exit_to_app,
@@ -497,7 +501,7 @@ class GreetingScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
                   child: Text(
-                    "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
+                    'БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ),
