@@ -8,88 +8,85 @@ import 'package:provider/provider.dart';
 
 import 'main_menu.dart';
 
-class ResultScreen extends StatefulWidget {
+class ResultScreen extends StatelessWidget {
   const ResultScreen({Key? key, required this.tagsList}) : super(key: key);
 
   final tagsList;
 
-  @override
-  _ResultScreenState createState() => _ResultScreenState();
-}
-
-class _ResultScreenState extends State<ResultScreen> {
-  String _fit = '...';
-  String _mayFit = '...';
-  List list = [];
-  List<MapEntry<String, int>> _sortedList = [];
-  Map<String, int> _tagsFrequency = {};
-  int maxFrequency = 0;
-  bool _mayFitVisibility = true;
-
-  void _getTagsFrequencyList() {
-    list = [];
-    for (var item in widget.tagsList) {
-      if (list.contains(item)) {
-        int? count = _tagsFrequency[item];
-        _tagsFrequency[item] = count! + 1;
-      } else {
-        _tagsFrequency[item] = 1;
-        list.add(item);
-      }
-    }
-
-    print(_tagsFrequency);
-  }
-
-  void _sortTagsFrequencyList() {
-    _sortedList = [];
-    _tagsFrequency.entries.forEach((element) {
-      _sortedList.add(element);
-    });
-    print('unsorted: $_sortedList');
-    _sortedList.sort((a, b) => b.value.compareTo(a.value));
-    print('sorted: $_sortedList');
-  }
-
-  void _getMaxFrequency() {
-    maxFrequency = 0;
-    _tagsFrequency.forEach((key, value) {
-      if (value > maxFrequency) maxFrequency = value;
-    });
-    print('maxFrequency: $maxFrequency');
-  }
-
-  void _setTitles() {
-    int maxFrequencyCount = 0;
-    _tagsFrequency.forEach((key, value) {
-      if (value == maxFrequency) ++maxFrequencyCount;
-    });
-    print('maxFrequencyCount: $maxFrequencyCount');
-
-    if (maxFrequencyCount == 1) {
-      _fit = 'Тебе больше всего подходит:';
-    } else {
-      _fit = 'Тебе больше всего подходят:';
-    }
-
-    print('_tagsFrequency.length: ${_tagsFrequency.length}');
-    if (_tagsFrequency.length - maxFrequencyCount == 1) {
-      _mayFit = 'Также тебе может подойти:';
-    } else {
-      _mayFit = 'Также тебе могут подойти:';
-    }
-    if (_tagsFrequency.length - maxFrequencyCount == 0) {
-      _mayFitVisibility = false;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
+//   @override
+//   _ResultScreenState createState() => _ResultScreenState();
+// }
+//
+// class _ResultScreenState extends State<ResultScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    String _fit = '...';
+    String _mayFit = '...';
+    List list = [];
+    List<MapEntry<String, int>> _sortedList = [];
+    Map<String, int> _tagsFrequency = {};
+    int maxFrequency = 0;
+    bool _mayFitVisibility = true;
+
+    void _getTagsFrequencyList() {
+      list = [];
+      for (var item in tagsList) {
+        if (list.contains(item)) {
+          int? count = _tagsFrequency[item];
+          _tagsFrequency[item] = count! + 1;
+        } else {
+          _tagsFrequency[item] = 1;
+          list.add(item);
+        }
+      }
+
+      print(_tagsFrequency);
+    }
+
+    void _sortTagsFrequencyList() {
+      _sortedList = [];
+      _tagsFrequency.entries.forEach((element) {
+        _sortedList.add(element);
+      });
+      print('unsorted: $_sortedList');
+      _sortedList.sort((a, b) => b.value.compareTo(a.value));
+      print('sorted: $_sortedList');
+    }
+
+    void _getMaxFrequency() {
+      maxFrequency = 0;
+      _tagsFrequency.forEach((key, value) {
+        if (value > maxFrequency) maxFrequency = value;
+      });
+      print('maxFrequency: $maxFrequency');
+    }
+
+    void _setTitles() {
+      int maxFrequencyCount = 0;
+      _tagsFrequency.forEach((key, value) {
+        if (value == maxFrequency) ++maxFrequencyCount;
+      });
+      print('maxFrequencyCount: $maxFrequencyCount');
+
+      if (maxFrequencyCount == 1) {
+        _fit = 'Тебе больше всего подходит:';
+      } else {
+        _fit = 'Тебе больше всего подходят:';
+      }
+
+      print('_tagsFrequency.length: ${_tagsFrequency.length}');
+      if (_tagsFrequency.length - maxFrequencyCount == 1) {
+        _mayFit = 'Также тебе может подойти:';
+      } else {
+        _mayFit = 'Также тебе могут подойти:';
+      }
+      if (_tagsFrequency.length - maxFrequencyCount == 0) {
+        _mayFitVisibility = false;
+      }
+    }
+
     _getTagsFrequencyList();
     _sortTagsFrequencyList();
     _getMaxFrequency();
