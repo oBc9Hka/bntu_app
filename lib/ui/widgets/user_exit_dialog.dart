@@ -8,7 +8,7 @@ class ExitDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
-        height: 40,
+        height: 45,
         child: Center(
             child: Text(
               'Хотите выйти из режима редактора?',

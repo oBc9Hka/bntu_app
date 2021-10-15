@@ -363,6 +363,7 @@ class GreetingScreen extends StatelessWidget {
 
         void _signOut() async {
           state.signOut();
+          Navigator.of(context).pop();
           await Fluttertoast.showToast(msg: 'Вы вышли из режима редактора');
         }
 
