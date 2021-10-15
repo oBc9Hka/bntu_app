@@ -61,22 +61,27 @@ class _QuizzScreenState extends State<QuizzScreen> {
   String errorMsg = '';
 
   void initQuiz() async {
-    answers = _questions[0].answers!;
-    setState(() {});
-    checkedAnswers = {};
-    answers.keys.forEach((e) {
-      checkedAnswers[e] = false;
-    });
-
-    setState(() {});
+    try{
+      answers = _questions[0].answers!;
+      print(answers);
+      // setState(() {});
+      checkedAnswers = {};
+      answers.keys.forEach((e) {
+        checkedAnswers[e] = false;
+      });
+      print(checkedAnswers);
+      isLoading = false;
+    }catch(e){ print('catch');}
+    // setState(() {});
   }
 
   @override
   void initState() {
     _controller = PageController(initialPage: 0);
-    initQuiz();
     super.initState();
   }
+
+  bool isInited = false;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +89,18 @@ class _QuizzScreenState extends State<QuizzScreen> {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
         _questions = state.questions;
+        if(!isInited) {
+          initQuiz();
+          isInited = true;
+        }
+        // answers = _questions[0].answers!;
+        // print(answers);
+        // // setState(() {});
+        // checkedAnswers = {};
+        // answers.keys.forEach((e) {
+        //   checkedAnswers[e] = false;
+        // });
+        // print(checkedAnswers);
         return Scaffold(
           appBar: AppBar(
             // centerTitle: true,
