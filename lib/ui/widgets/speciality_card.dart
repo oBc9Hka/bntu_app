@@ -422,7 +422,7 @@ class SpecialityCard extends StatelessWidget {
                     children: [
                       ...list.map(
                         (spec) {
-                          if (spec['num'].toString() != '')
+                          if (spec['num'].toString() != '') {
                             return Container(
                               // color: Colors.green,
                               width: 76,
@@ -461,6 +461,7 @@ class SpecialityCard extends StatelessWidget {
                                 ],
                               ),
                             );
+                          }
                           return SizedBox(
                             height: 1,
                             width: 1,
