@@ -114,116 +114,124 @@ class _QuizzScreenState extends State<QuizzScreen> {
                     color: mainColor,
                   ),
                 )
-              : PageView.builder(
-                  controller: _controller!,
-                  onPageChanged: (page) {
-                    initAnswers();
-                    if (_questions.isNotEmpty) {
-                      if (page == _questions.length - 1) {
+              : Center(
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 600,
+                    ),
+                    child: PageView.builder(
+                      controller: _controller!,
+                      onPageChanged: (page) {
+                        initAnswers();
+                        if (_questions.isNotEmpty) {
+                          if (page == _questions.length - 1) {
+                            setState(() {
+                              btnText = 'Увидеть результат';
+                            });
+                          }
+                        }
                         setState(() {
-                          btnText = 'Увидеть результат';
+                          answered = false;
                         });
-                      }
-                    }
-                    setState(() {
-                      answered = false;
-                    });
-                  },
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: _questions.length,
-                  itemBuilder: (context, index) {
-                    answers = _questions[index].answers!;
-                    return Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
+                      },
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _questions.length,
+                      itemBuilder: (context, index) {
+                        answers = _questions[index].answers!;
+                        return Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  'Вопрос ${index + 1}',
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize: 28.0,
+                              Column(
+                                children: [
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Вопрос ${index + 1}',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 28.0,
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: mainColor,
+                                  ),
+                                  Visibility(
+                                    visible: showMsg,
+                                    child: Text(
+                                      'Необходимо выбрать минимум один вариант ответа',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    _questions[index].question!,
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                  ...checkedAnswers.keys.map((key) {
+                                    return CheckboxListTile(
+                                      title: Text(key),
+                                      value: checkedAnswers[key],
+                                      activeColor: mainColor,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          checkedAnswers[key] = value!;
+                                        });
+                                      },
+                                    );
+                                  }),
+                                ],
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  getCheckboxItems(_controller!.page!.toInt());
+                                  if (!checkedAnswers.values.contains(true)) {
+                                    setState(() {
+                                      showMsg = true;
+                                    });
+                                  } else {
+                                    showMsg = false;
+                                    if (_controller!.page?.toInt() ==
+                                        _questions.length - 1) {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ResultScreen(
+                                                    tagsList: tagsArray,
+                                                  )));
+                                    } else {
+                                      _controller!.nextPage(
+                                          duration: Duration(milliseconds: 250),
+                                          curve: Curves.easeInExpo);
+                                      setState(() {
+                                        btnPressed = false;
+                                      });
+                                    }
+                                  }
+                                },
+                                style: Constants.customElevatedButtonStyle,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 12.0, horizontal: 24.0),
+                                  child: Text(
+                                    btnText,
+                                    style: TextStyle(color: mainColor),
                                   ),
                                 ),
                               ),
-                              Divider(
-                                color: mainColor,
-                              ),
-                              Visibility(
-                                visible: showMsg,
-                                child: Text(
-                                  'Необходимо выбрать минимум один вариант ответа',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              )
                             ],
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                _questions[index].question!,
-                                style: TextStyle(fontSize: 24),
-                              ),
-                              ...checkedAnswers.keys.map((key) {
-                                return CheckboxListTile(
-                                  title: Text(key),
-                                  value: checkedAnswers[key],
-                                  activeColor: mainColor,
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      checkedAnswers[key] = value!;
-                                    });
-                                  },
-                                );
-                              }),
-                            ],
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              getCheckboxItems(_controller!.page!.toInt());
-                              if (!checkedAnswers.values.contains(true)) {
-                                setState(() {
-                                  showMsg = true;
-                                });
-                              } else {
-                                showMsg = false;
-                                if (_controller!.page?.toInt() ==
-                                    _questions.length - 1) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ResultScreen(
-                                                tagsList: tagsArray,
-                                              )));
-                                } else {
-                                  _controller!.nextPage(
-                                      duration: Duration(milliseconds: 250),
-                                      curve: Curves.easeInExpo);
-                                  setState(() {
-                                    btnPressed = false;
-                                  });
-                                }
-                              }
-                            },
-                            style: Constants.customElevatedButtonStyle,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 12.0, horizontal: 24.0),
-                              child: Text(
-                                btnText,
-                                style: TextStyle(color: mainColor),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                        );
+                      },
+                    ),
+                  ),
                 ),
         );
       },

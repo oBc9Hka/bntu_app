@@ -45,39 +45,47 @@ class MainPage extends StatelessWidget {
           ),
           body: (!state.isFacultiesLoaded)
               ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: state.faculties.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
-                      child: FacultyItem(
-                        shortName: state.faculties[index].shortName.toString(),
-                        name: state.faculties[index].name.toString(),
-                        user: state.user,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FacultyPage(
-                                faculty: state.faculties[index],
-                              ),
-                            ),
-                          );
-                        },
-                        onEditPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FacultyEdit(
-                                faculty: state.faculties[index],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
+              : Center(
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 600,
+                    ),
+                    child: ListView.builder(
+                      itemCount: state.faculties.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          child: FacultyItem(
+                            shortName:
+                                state.faculties[index].shortName.toString(),
+                            name: state.faculties[index].name.toString(),
+                            user: state.user,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FacultyPage(
+                                    faculty: state.faculties[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            onEditPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FacultyEdit(
+                                    faculty: state.faculties[index],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
         );
       },

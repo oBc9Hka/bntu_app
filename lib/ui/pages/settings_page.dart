@@ -82,207 +82,214 @@ class _SettingsPageState extends State<SettingsPage> {
           appBar: AppBar(
             title: Text('Настройки'),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          onTap: () {
-                            Navigator.of(context).pushNamed('/messages');
-                          },
-                          title: Text('Сообщения об ошибках'),
-                          trailing: Container(
-                            decoration: BoxDecoration(
-                                color: (_unseenCount == '0')
-                                    ? Colors.grey
-                                    : mainColor,
-                                border: Border.all(
+          body: Center(
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: 600,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushNamed('/messages');
+                              },
+                              title: Text('Сообщения об ошибках'),
+                              trailing: Container(
+                                decoration: BoxDecoration(
                                     color: (_unseenCount == '0')
                                         ? Colors.grey
-                                        : mainColor),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text(
-                                'новых: $_unseenCount',
-                                style: TextStyle(
-                                    color: (_themeProvider.brightness ==
-                                            CustomBrightness.dark)
-                                        ? Colors.black
-                                        : Colors.white),
+                                        : mainColor,
+                                    border: Border.all(
+                                        color: (_unseenCount == '0')
+                                            ? Colors.grey
+                                            : mainColor),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(
+                                    'новых: $_unseenCount',
+                                    style: TextStyle(
+                                        color: (_themeProvider.brightness ==
+                                                CustomBrightness.dark)
+                                            ? Colors.black
+                                            : Colors.white),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Divider(),
-                        ListTile(
-                          title: Text('Текущий год приёма'),
-                          subtitle: Text(
-                              'Отображается в плане набора, проходных баллах'),
-                          trailing: Container(
-                            width: 50,
-                            child: TextFormField(
-                              textAlign: TextAlign.center,
-                              controller: _yearController,
-                              onChanged: (value) {
-                                if (value != oldYearState) {
-                                  setState(() {
-                                    isYearChanged = true;
-                                  });
-                                } else {
-                                  setState(() {
-                                    isYearChanged = false;
-                                  });
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                        Divider(),
-                        ListTile(
-                          title: Text('Ключ входа в режим администратора'),
-                          subtitle: Row(
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  var _chars =
-                                      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-                                  var _rnd = Random();
-                                  _keyController.text = String.fromCharCodes(
-                                      Iterable.generate(
-                                          10,
-                                          (_) => _chars.codeUnitAt(
-                                              _rnd.nextInt(_chars.length))));
-                                  setState(() {});
-                                },
-                                style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(
-                                        EdgeInsets.all(0))),
-                                child: Text('Сгенерировать'),
-                              ),
-                            ],
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 100,
+                            Divider(),
+                            ListTile(
+                              title: Text('Текущий год приёма'),
+                              subtitle: Text(
+                                  'Отображается в плане набора, проходных баллах'),
+                              trailing: Container(
+                                width: 50,
                                 child: TextFormField(
                                   textAlign: TextAlign.center,
-                                  controller: _keyController,
+                                  controller: _yearController,
                                   onChanged: (value) {
-                                    if (value != oldKeyState) {
+                                    if (value != oldYearState) {
                                       setState(() {
-                                        isKeyChanged = true;
+                                        isYearChanged = true;
                                       });
                                     } else {
                                       setState(() {
-                                        isKeyChanged = false;
+                                        isYearChanged = false;
                                       });
                                     }
                                   },
                                 ),
                               ),
-                              IconButton(
-                                  onPressed: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text: _keyController.text));
-                                    Fluttertoast.showToast(
-                                        msg: 'Скопировано в буфер обмена');
-                                  },
-                                  icon: Icon(Icons.copy))
-                            ],
-                          ),
+                            ),
+                            Divider(),
+                            ListTile(
+                              title: Text('Ключ входа в режим администратора'),
+                              subtitle: Row(
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      var _chars =
+                                          'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+                                      var _rnd = Random();
+                                      _keyController.text = String.fromCharCodes(
+                                          Iterable.generate(
+                                              10,
+                                              (_) => _chars.codeUnitAt(
+                                                  _rnd.nextInt(_chars.length))));
+                                      setState(() {});
+                                    },
+                                    style: ButtonStyle(
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.all(0))),
+                                    child: Text('Сгенерировать'),
+                                  ),
+                                ],
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    child: TextFormField(
+                                      textAlign: TextAlign.center,
+                                      controller: _keyController,
+                                      onChanged: (value) {
+                                        if (value != oldKeyState) {
+                                          setState(() {
+                                            isKeyChanged = true;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isKeyChanged = false;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        Clipboard.setData(ClipboardData(
+                                            text: _keyController.text));
+                                        Fluttertoast.showToast(
+                                            msg: 'Скопировано в буфер обмена');
+                                      },
+                                      icon: Icon(Icons.copy))
+                                ],
+                              ),
+                            ),
+                            Divider(),
+                            ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushNamed('/testList');
+                              },
+                              title: Text('Список вопросов'),
+                              trailing: Icon(Icons.question_answer_outlined),
+                            ),
+                            Divider(),
+                          ],
                         ),
-                        Divider(),
-                        ListTile(
-                          onTap: () {
-                            Navigator.of(context).pushNamed('/testList');
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        (isYearChanged || isKeyChanged)
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  _showAlertDialog(
+                                    () {
+                                      _saveSettings(state);
+                                    },
+                                  );
+                                },
+                                style: ButtonStyle(
+                                  minimumSize:
+                                      MaterialStateProperty.all(Size(150, 50)),
+                                  elevation: MaterialStateProperty.all(10),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: mainColor),
+                                    ),
+                                  ),
+                                ),
+                                child: Text('Сохранить измененения'),
+                              )
+                            : ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                  minimumSize:
+                                      MaterialStateProperty.all(Size(150, 50)),
+                                  elevation: MaterialStateProperty.all(10),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: BorderSide(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  'Сохранить измененения',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
-                          title: Text('Список вопросов'),
-                          trailing: Icon(Icons.question_answer_outlined),
+                          style: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all(mainColor),
+                            minimumSize: MaterialStateProperty.all(Size(130, 50)),
+                            elevation: MaterialStateProperty.all(10),
+                            shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: mainColor),
+                              ),
+                            ),
+                          ),
+                          child: Text('Назад'),
                         ),
-                        Divider(),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    (isYearChanged || isKeyChanged)
-                        ? ElevatedButton(
-                            onPressed: () {
-                              _showAlertDialog(
-                                () {
-                                  _saveSettings(state);
-                                },
-                              );
-                            },
-                            style: ButtonStyle(
-                              minimumSize:
-                                  MaterialStateProperty.all(Size(150, 50)),
-                              elevation: MaterialStateProperty.all(10),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  side: BorderSide(color: mainColor),
-                                ),
-                              ),
-                            ),
-                            child: Text('Сохранить измененения'),
-                          )
-                        : ElevatedButton(
-                            onPressed: () {},
-                            style: ButtonStyle(
-                              minimumSize:
-                                  MaterialStateProperty.all(Size(150, 50)),
-                              elevation: MaterialStateProperty.all(10),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                  side: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              'Сохранить измененения',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(mainColor),
-                        minimumSize: MaterialStateProperty.all(Size(130, 50)),
-                        elevation: MaterialStateProperty.all(10),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: mainColor),
-                          ),
-                        ),
-                      ),
-                      child: Text('Назад'),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

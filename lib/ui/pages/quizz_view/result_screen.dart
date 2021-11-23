@@ -96,6 +96,13 @@ class ResultScreen extends StatelessWidget {
           }
         }
       }
+      var mayFitFacultyList = [];
+      var mayFitFacultyIndex = 0;
+      for (var item in sortedQueryList) {
+        if (item.value < maxFrequency) {
+          mayFitFacultyList.add(item);
+        }
+      }
       return Scaffold(
         appBar: AppBar(
           title: Text('Результаты'),
@@ -168,22 +175,37 @@ class ResultScreen extends StatelessWidget {
                       constraints: BoxConstraints(
                           minWidth: 50,
                           maxWidth: MediaQuery.of(context).size.width * 0.7,
-                      maxHeight: MediaQuery.of(context).size.height*0.3),
-                      child: ListWheelScrollView(
-                        controller: fixedExtentScrollController,
-                        physics: FixedExtentScrollPhysics(),
-                        itemExtent: 60.0,
-                        diameterRatio: 1,
-                        squeeze: 1.5,
-                        children: [
-                          for (var item in sortedQueryList)
-                            if (item.value < maxFrequency)
+                          maxHeight: MediaQuery.of(context).size.height * 0.3),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FacultyPage(
+                                faculty:
+                                    mayFitFacultyList[mayFitFacultyIndex].key,
+                              ),
+                            ),
+                          );
+                        },
+                        child: ListWheelScrollView(
+                          controller: fixedExtentScrollController,
+                          physics: FixedExtentScrollPhysics(),
+                          itemExtent: 60.0,
+                          diameterRatio: 2,
+                          squeeze: 1,
+                          perspective: 0.01,
+                          onSelectedItemChanged: (index) {
+                            mayFitFacultyIndex = index;
+                          },
+                          children: [
+                            for (var item in mayFitFacultyList)
                               Container(
                                 constraints: BoxConstraints(
-                                    minWidth: 50,
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width *
-                                            0.8),
+                                  minWidth: 100,
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.grey),
@@ -205,48 +227,9 @@ class ResultScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                        ],
+                          ],
+                        ),
                       ),
-                      // CarouselSlider(
-                      //   items: [
-                      //     for (var item in sortedQueryList)
-                      //       if (item.value < maxFrequency)
-                      //         Container(
-                      //           constraints: BoxConstraints(
-                      //               minWidth: 50,
-                      //               maxWidth:
-                      //                   MediaQuery.of(context).size.width *
-                      //                       0.8),
-                      //           decoration: BoxDecoration(
-                      //             borderRadius: BorderRadius.circular(10),
-                      //             border: Border.all(color: Colors.grey),
-                      //           ),
-                      //           child: TextButton(
-                      //             onPressed: () {
-                      //               Navigator.push(
-                      //                 context,
-                      //                 MaterialPageRoute(
-                      //                   builder: (context) => FacultyPage(
-                      //                     faculty: item.key,
-                      //                   ),
-                      //                 ),
-                      //               );
-                      //             },
-                      //             child: Text(
-                      //               item.key.shortName,
-                      //               style: TextStyle(color: Colors.grey),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //   ],
-                      //   options: CarouselOptions(
-                      //       height: MediaQuery.of(context).size.height * 0.2,
-                      //       scrollDirection: Axis.vertical,
-                      //       enableInfiniteScroll: false,
-                      //       viewportFraction: 0.35,
-                      //       enlargeCenterPage: true,
-                      //       scrollPhysics: PageScrollPhysics()),
-                      // ),
                     ),
                   ],
                 ),
@@ -267,6 +250,7 @@ class ResultScreen extends StatelessWidget {
                       style: TextStyle(color: mainColor),
                     ),
                   ),
+                  Padding(padding: EdgeInsets.only(top: 10)),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(

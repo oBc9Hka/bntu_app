@@ -12,82 +12,130 @@ class Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants.mainColor;
-    double height = MediaQuery.of(context).size.height;
+    var mainColor = Constants.mainColor;
+    var height = MediaQuery.of(context).size.height;
 
     return Consumer<AppProvider>(builder: (context, state, child) {
       return Scaffold(
-        appBar: AppBar(
-          // centerTitle: true,
-          title: Text('Как поступить?'),
+          appBar: AppBar(
+            // centerTitle: true,
+            title: Text('Как поступить?'),
 
-          actions: [
-            state.user != null
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AdmissionInfoAdd(),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.add)),
-                      IconButton(
-                          onPressed: () {
-                            state.initInfoCards();
-                          },
-                          icon: Icon(Icons.refresh)),
-                    ],
-                  )
-                : Container()
-          ],
-        ),
-        body: ListView(
-          // scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                "БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+            actions: [
+              state.user != null
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AdmissionInfoAdd(),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.add)),
+                        IconButton(
+                            onPressed: () {
+                              state.initInfoCards();
+                            },
+                            icon: Icon(Icons.refresh)),
+                      ],
+                    )
+                  : Container()
+            ],
+          ),
+          body: Center(
+            child: SingleChildScrollView(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: 650,
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        'БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: height / 3,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: Image.asset('assets/bntu_logo.png').image,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        'СТАНЬ СТУДЕНТОМ БНТУ!',
+                        style: TextStyle(
+                            color: mainColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    InfoCardWidget(
+                      list: state.infoCards,
+                      user: state.user,
+                    ),
+                  ],
                 ),
               ),
             ),
-            Container(
-              width: double.infinity,
-              height: height / 3,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: Image.asset('assets/bntu_logo.png').image,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                'СТАНЬ СТУДЕНТОМ БНТУ!',
-                style: TextStyle(
-                    color: mainColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            InfoCardWidget(
-                list: state.infoCards,
-                user: state.user,
-              ),
-          ],
-        ),
-      );
+          )
+          // ListView(
+          //   // scrollDirection: Axis.vertical,
+          //   shrinkWrap: true,
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.only(left: 10),
+          //       child: Text(
+          //         'БЕЛОРУССКИЙ НАЦИОНАЛЬНЫЙ ТЕХНИЧЕСКИЙ УНИВЕРСИТЕТ',
+          //         style: TextStyle(
+          //           fontSize: 20,
+          //           fontWeight: FontWeight.w700,
+          //         ),
+          //       ),
+          //     ),
+          //     Container(
+          //       width: double.infinity,
+          //       height: height / 3,
+          //       alignment: Alignment.center,
+          //       decoration: BoxDecoration(
+          //         image: DecorationImage(
+          //           image: Image.asset('assets/bntu_logo.png').image,
+          //           fit: BoxFit.contain,
+          //         ),
+          //       ),
+          //     ),
+          //     Padding(
+          //       padding: const EdgeInsets.only(left: 10),
+          //       child: Text(
+          //         'СТАНЬ СТУДЕНТОМ БНТУ!',
+          //         style: TextStyle(
+          //             color: mainColor,
+          //             fontSize: 20,
+          //             fontWeight: FontWeight.w700),
+          //       ),
+          //     ),
+          //     InfoCardWidget(
+          //         list: state.infoCards,
+          //         user: state.user,
+          //       ),
+          //   ],
+          // ),
+          );
     });
   }
 }

@@ -55,66 +55,75 @@ class FacultyPage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (faculty.imagePath == '')
-                  Text('Нет фото')
-                else
-                  Stack(
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 600,
+                  ),
+                  child: Column(
                     children: [
-                      Container(
-                        height: 180,
-                        child: Center(
-                          child: CircularProgressIndicator(),
+                      if (faculty.imagePath == '')
+                        Text('Нет фото')
+                      else
+                        Stack(
+                          children: [
+                            Container(
+                              height: 180,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
+                            Container(
+                              height: 180,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: Image.network(
+                                    '${faculty.imagePath}',
+                                  ).image,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        height: 180,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.network(
-                              '${faculty.imagePath}',
-                            ).image,
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          faculty.about.toString(),
+                          style: TextStyle(
+                            fontSize: 16,
                           ),
                         ),
                       ),
+                      if (faculty.shortName != 'ВТФ')
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Text(
+                            'Наши специальности',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: state.specialties.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (state.specialties[index].facultyBased ==
+                                faculty.shortName) {
+                              return SpecialityCard(
+                                currentYear: int.parse(state.currentAdmissionYear),
+                                item: state.specialties[index],
+                                user: state.user,
+                              );
+                            }
+                            return Container();
+                          }),
+                      Padding(padding: EdgeInsets.only(top: 10)),
                     ],
                   ),
-                Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    faculty.about.toString(),
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
                 ),
-                if (faculty.shortName != 'ВТФ')
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                    child: Text(
-                      'Наши специальности',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.specialties.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (state.specialties[index].facultyBased ==
-                          faculty.shortName) {
-                        return SpecialityCard(
-                          currentYear: int.parse(state.currentAdmissionYear),
-                          item: state.specialties[index],
-                          user: state.user,
-                        );
-                      }
-                      return Container();
-                    }),
-                Padding(padding: EdgeInsets.only(top: 10)),
                 Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
