@@ -18,37 +18,45 @@ class MessagesPage extends StatelessWidget {
             title: Text('Сообщения об ошибках'),
           ),
           body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: state.errorMessages.length,
-                itemBuilder: (BuildContext context, index) {
-                  ErrorMessage item = state.errorMessages[index];
-                  return ErrorMessageCard(
-                    item: item,
-                    onTap: () {
-                      state.changeViewedState(item.id!);
-                      Fluttertoast.showToast(msg: 'Прочитано');
-                    },
-                    onRemovePressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return RemoveItem(
-                            itemName: 'сообщение',
-                            onRemovePressed: () {
-                              state.removeErrorMessage(item.id!);
-                              Navigator.of(context).pop();
-                              Fluttertoast.showToast(msg: 'Сообщение удалено');
+            child: Center(
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: 600,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: state.errorMessages.length,
+                    itemBuilder: (BuildContext context, index) {
+                      ErrorMessage item = state.errorMessages[index];
+                      return ErrorMessageCard(
+                        item: item,
+                        onTap: () {
+                          state.changeViewedState(item.id!);
+                          Fluttertoast.showToast(msg: 'Прочитано');
+                        },
+                        onRemovePressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return RemoveItem(
+                                itemName: 'сообщение',
+                                onRemovePressed: () {
+                                  state.removeErrorMessage(item.id!);
+                                  Navigator.of(context).pop();
+                                  Fluttertoast.showToast(
+                                      msg: 'Сообщение удалено');
+                                },
+                              );
                             },
                           );
                         },
                       );
                     },
-                  );
-                },
+                  ),
+                ),
               ),
             ),
           ),

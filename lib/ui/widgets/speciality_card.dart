@@ -24,7 +24,7 @@ class SpecialityCard extends StatelessWidget {
   showAlertDialog(BuildContext context, Speciality item) {
     Widget okButton = TextButton(
       child: Text(
-        "Закрыть",
+        'Закрыть',
         style: TextStyle(
           color: mainColor,
         ),
@@ -34,7 +34,7 @@ class SpecialityCard extends StatelessWidget {
       },
     );
 
-    AlertDialog alert = AlertDialog(
+    var alert = AlertDialog(
       title: Text(item.name.toString()),
       content: SingleChildScrollView(
         child: Text(item.about.toString()),
@@ -233,12 +233,12 @@ class SpecialityCard extends StatelessWidget {
   }
 
   String getStringFromList(List<dynamic>? temp) {
-    String tempString = '';
-    for (int i = 0; i < temp!.length; i++) {
+    var tempString = '';
+    for (var i = 0; i < temp!.length; i++) {
       tempString += '_${temp[i]}';
     }
 
-    String newTempString = tempString.replaceFirst('_', ' ');
+    var newTempString = tempString.replaceFirst('_', ' ');
     newTempString = newTempString.trim();
     return newTempString.replaceAll('_', ' • ');
   }
@@ -422,7 +422,7 @@ class SpecialityCard extends StatelessWidget {
                     children: [
                       ...list.map(
                         (spec) {
-                          if (spec['num'].toString() != '')
+                          if (spec['num'].toString() != '') {
                             return Container(
                               // color: Colors.green,
                               width: 76,
@@ -461,6 +461,7 @@ class SpecialityCard extends StatelessWidget {
                                 ],
                               ),
                             );
+                          }
                           return SizedBox(
                             height: 1,
                             width: 1,

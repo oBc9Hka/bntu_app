@@ -2,7 +2,6 @@ import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/greeting_screen.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -85,6 +84,7 @@ class ResultScreen extends StatelessWidget {
     _getMaxFrequency();
     _setTitles();
 
+    var fixedExtentScrollController = FixedExtentScrollController();
     const mainColor = Constants.mainColor;
     return Consumer<AppProvider>(builder: (context, state, child) {
       var sortedQueryList = <MapEntry<dynamic, int>>[];
@@ -94,6 +94,13 @@ class ResultScreen extends StatelessWidget {
             sortedQueryList
                 .add(MapEntry(facultiesListItem, sortedListItem.value));
           }
+        }
+      }
+      var mayFitFacultyList = [];
+      var mayFitFacultyIndex = 0;
+      for (var item in sortedQueryList) {
+        if (item.value < maxFrequency) {
+          mayFitFacultyList.add(item);
         }
       }
       return Scaffold(
@@ -167,17 +174,38 @@ class ResultScreen extends StatelessWidget {
                     Container(
                       constraints: BoxConstraints(
                           minWidth: 50,
-                          maxWidth: MediaQuery.of(context).size.width * 0.7),
-                      child: CarouselSlider(
-                        items: [
-                          for (var item in sortedQueryList)
-                            if (item.value < maxFrequency)
+                          maxWidth: MediaQuery.of(context).size.width * 0.7,
+                          maxHeight: MediaQuery.of(context).size.height * 0.3),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FacultyPage(
+                                faculty:
+                                    mayFitFacultyList[mayFitFacultyIndex].key,
+                              ),
+                            ),
+                          );
+                        },
+                        child: ListWheelScrollView(
+                          controller: fixedExtentScrollController,
+                          physics: FixedExtentScrollPhysics(),
+                          itemExtent: 60.0,
+                          diameterRatio: 2,
+                          squeeze: 1,
+                          perspective: 0.01,
+                          onSelectedItemChanged: (index) {
+                            mayFitFacultyIndex = index;
+                          },
+                          children: [
+                            for (var item in mayFitFacultyList)
                               Container(
                                 constraints: BoxConstraints(
-                                    minWidth: 50,
-                                    maxWidth:
-                                        MediaQuery.of(context).size.width *
-                                            0.8),
+                                  minWidth: 100,
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.grey),
@@ -199,14 +227,8 @@ class ResultScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                        ],
-                        options: CarouselOptions(
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            scrollDirection: Axis.vertical,
-                            enableInfiniteScroll: false,
-                            viewportFraction: 0.35,
-                            enlargeCenterPage: true,
-                            scrollPhysics: PageScrollPhysics()),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -228,6 +250,7 @@ class ResultScreen extends StatelessWidget {
                       style: TextStyle(color: mainColor),
                     ),
                   ),
+                  Padding(padding: EdgeInsets.only(top: 10)),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(

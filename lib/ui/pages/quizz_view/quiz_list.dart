@@ -18,7 +18,7 @@ class _QuizListState extends State<QuizList> {
 
   @override
   Widget build(BuildContext context) {
-    const Color mainColor = Constants.mainColor;
+    const mainColor = Constants.mainColor;
     return Consumer<AppProvider>(builder: (context, state, child) {
       _questions = state.questions;
       return Scaffold(
@@ -39,72 +39,79 @@ class _QuizListState extends State<QuizList> {
                 icon: Icon(Icons.refresh))
           ],
         ),
-        body: ListView.builder(
-          itemCount: _questions.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              leading: Text('${index + 1}'),
-              title: Text(_questions[index].question.toString()),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return QuizEdit(
-                          question: _questions[index],
-                        );
-                      }));
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: mainColor,
-                    ),
+        body: Center(
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: 600,
+            ),
+            child: ListView.builder(
+              itemCount: _questions.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading: Text('${index + 1}'),
+                  title: Text(_questions[index].question.toString()),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return QuizEdit(
+                              question: _questions[index],
+                            );
+                          }));
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          color: mainColor,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          try {
+                            state.moveUpQuestion(
+                              _questions[index].id!,
+                              _questions[index - 1].id!,
+                            );
+                          } catch (e) {}
+                        },
+                        tooltip: 'Поднять в списке',
+                        icon: Icon(
+                          Icons.arrow_upward,
+                          color: mainColor,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          try {
+                            state.moveDownQuestion(
+                              _questions[index].id!,
+                              _questions[index + 1].id!,
+                            );
+                          } catch (e) {}
+                        },
+                        tooltip: 'Опустить в списке',
+                        icon: Icon(
+                          Icons.arrow_downward,
+                          color: mainColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    onPressed: () {
-                      try {
-                        state.moveUpQuestion(
-                          _questions[index].id!,
-                          _questions[index - 1].id!,
-                        );
-                      } catch (e) {}
-                    },
-                    tooltip: 'Поднять в списке',
-                    icon: Icon(
-                      Icons.arrow_upward,
-                      color: mainColor,
-                    ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ..._questions[index]
+                          .answers!
+                          .entries
+                          .map((e) => Text('${e.key}: "${e.value}"')),
+                    ],
                   ),
-                  IconButton(
-                    onPressed: () {
-                      try {
-                        state.moveDownQuestion(
-                          _questions[index].id!,
-                          _questions[index + 1].id!,
-                        );
-                      } catch (e) {}
-                    },
-                    tooltip: 'Опустить в списке',
-                    icon: Icon(
-                      Icons.arrow_downward,
-                      color: mainColor,
-                    ),
-                  ),
-                ],
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ..._questions[index]
-                      .answers!
-                      .entries
-                      .map((e) => Text('${e.key}: "${e.value}"')),
-                ],
-              ),
-            );
-          },
+                );
+              },
+            ),
+          ),
         ),
       );
     });

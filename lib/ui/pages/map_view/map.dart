@@ -3,6 +3,7 @@ import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/buildings_modal.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -126,179 +127,190 @@ class _BuildingsMapState extends State<BuildingsMap> {
                     icon: Icon(Icons.refresh)),
             ],
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Stack(
+          body: kIsWeb
+              ? Center(
+                  child: Text(
+                      'Работа с картами пока не поддерживается в браузере'),
+                )
+              : Column(
                   children: [
-                    YandexMap(
-                      onMapCreated:
-                          (YandexMapController yandexMapController) async {
-                        controller = yandexMapController;
-                      },
-                      onMapRendered: () async {
-                        print('Map rendered');
-                        setInitialPos();
-                        var tiltGesturesEnabled =
-                            await controller!.isTiltGesturesEnabled();
-                        var zoomGesturesEnabled =
-                            await controller!.isZoomGesturesEnabled();
-
-                        var zoom = await controller!.getZoom();
-                        var minZoom = await controller!.getMinZoom();
-                        var maxZoom = await controller!.getMaxZoom();
-
-                        print(
-                            'Current zoom: $zoom, minZoom: $minZoom, maxZoom: $maxZoom');
-
-                        setState(() {
-                          isTiltGesturesEnabled = tiltGesturesEnabled;
-                          isZoomGesturesEnabled = zoomGesturesEnabled;
-                        });
-                      },
-                      onMapSizeChanged: (MapSize size) => print(
-                          'Map size changed to ${size.width}x${size.height}'),
-                      onMapTap: (Point point) => print(
-                          'Tapped map at ${point.latitude},${point.longitude}'),
-                      onMapLongTap: (Point point) => print(
-                          'Long tapped map at ${point.latitude},${point.longitude}'),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        width: 60,
-                        height: 160,
-                        child: Card(
-                          child: Column(
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    controller!.zoomIn();
-                                  },
-                                  tooltip: 'Приблизить',
-                                  icon: Icon(Icons.add)),
-                              IconButton(
-                                  onPressed: () {
-                                    controller!.zoomOut();
-                                  },
-                                  tooltip: 'Отдалить',
-                                  icon: Icon(Icons.remove)),
-                              IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _selectedIndex = -1;
-                                    });
-                                    setInitialPos();
-                                  },
-                                  tooltip: 'Показать студгородок',
-                                  icon: Icon(Icons.zoom_out_map)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: !state.isBuildingsLoaded
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : ListView.builder(
-                        itemCount: state.buildings.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Building item = state.buildings[index];
-                          String subtitle = _showOptional
-                              ? item.optional != ''
-                                  ? ' (${item.optional})'
-                                  : ''
-                              : '';
-                          String title = item.name! + subtitle;
-                          return ListTile(
-                            onTap: () {
-                              setState(() {
-                                _selectedIndex = index;
-                              });
-                              setPos(item.point!);
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          YandexMap(
+                            onMapCreated: (YandexMapController
+                                yandexMapController) async {
+                              controller = yandexMapController;
                             },
-                            title: Text(title),
-                            selected: index == _selectedIndex,
-                            trailing: Column(
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                            onMapRendered: () async {
+                              print('Map rendered');
+                              setInitialPos();
+                              var tiltGesturesEnabled =
+                                  await controller!.isTiltGesturesEnabled();
+                              var zoomGesturesEnabled =
+                                  await controller!.isZoomGesturesEnabled();
+
+                              var zoom = await controller!.getZoom();
+                              var minZoom = await controller!.getMinZoom();
+                              var maxZoom = await controller!.getMaxZoom();
+
+                              print(
+                                  'Current zoom: $zoom, minZoom: $minZoom, maxZoom: $maxZoom');
+
+                              setState(() {
+                                isTiltGesturesEnabled = tiltGesturesEnabled;
+                                isZoomGesturesEnabled = zoomGesturesEnabled;
+                              });
+                            },
+                            onMapSizeChanged: (MapSize size) => print(
+                                'Map size changed to ${size.width}x${size.height}'),
+                            onMapTap: (Point point) => print(
+                                'Tapped map at ${point.latitude},${point.longitude}'),
+                            onMapLongTap: (Point point) => print(
+                                'Long tapped map at ${point.latitude},${point.longitude}'),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: SizedBox(
+                              width: 60,
+                              height: 160,
+                              child: Card(
+                                child: Column(
                                   children: [
                                     IconButton(
-                                      onPressed: () {
-                                        _selectedIndex = index;
-                                        setPos(item.point!);
-                                        _showBottomSheet(item.name!,
-                                            item.optional!, item.imagePath!);
-                                      },
-                                      tooltip: 'Показать фото',
-                                      padding: EdgeInsets.all(0),
-                                      icon: const Icon(Icons.info),
-                                    ),
-                                    if (state.user != null)
-                                      IconButton(
                                         onPressed: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BuildingEdit(building: item),
-                                            ),
-                                          );
+                                          controller!.zoomIn();
                                         },
-                                        tooltip: 'Редактировать',
-                                        padding: EdgeInsets.all(0),
-                                        icon: const Icon(Icons.edit),
-                                      ),
-                                    if (state.user != null)
-                                      IconButton(
+                                        tooltip: 'Приблизить',
+                                        icon: Icon(Icons.add)),
+                                    IconButton(
                                         onPressed: () {
-                                          try {
-                                            state.moveUpBuilding(
-                                              state.buildings[index].docId
-                                                  .toString(),
-                                              state.buildings[index - 1].docId
-                                                  .toString(),
-                                            );
-                                          } catch (e) {}
+                                          controller!.zoomOut();
                                         },
-                                        tooltip: 'Поднять в списке',
-                                        icon: Icon(
-                                          Icons.arrow_upward,
-                                        ),
-                                      ),
-                                    if (state.user != null)
-                                      IconButton(
+                                        tooltip: 'Отдалить',
+                                        icon: Icon(Icons.remove)),
+                                    IconButton(
                                         onPressed: () {
-                                          try {
-                                            state.moveDownBuilding(
-                                              state.buildings[index].docId
-                                                  .toString(),
-                                              state.buildings[index + 1].docId
-                                                  .toString(),
-                                            );
-                                          } catch (e) {}
+                                          setState(() {
+                                            _selectedIndex = -1;
+                                          });
+                                          setInitialPos();
                                         },
-                                        tooltip: 'Опустить в списке',
-                                        icon: Icon(
-                                          Icons.arrow_downward,
-                                        ),
-                                      ),
+                                        tooltip: 'Показать студгородок',
+                                        icon: Icon(Icons.zoom_out_map)),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
-              )
-            ],
-          ),
+                    ),
+                    Expanded(
+                      child: !state.isBuildingsLoaded
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.builder(
+                              itemCount: state.buildings.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Building item = state.buildings[index];
+                                String subtitle = _showOptional
+                                    ? item.optional != ''
+                                        ? ' (${item.optional})'
+                                        : ''
+                                    : '';
+                                String title = item.name! + subtitle;
+                                return ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedIndex = index;
+                                    });
+                                    setPos(item.point!);
+                                  },
+                                  title: Text(title),
+                                  selected: index == _selectedIndex,
+                                  trailing: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {
+                                              _selectedIndex = index;
+                                              setPos(item.point!);
+                                              _showBottomSheet(
+                                                  item.name!,
+                                                  item.optional!,
+                                                  item.imagePath!);
+                                            },
+                                            tooltip: 'Показать фото',
+                                            padding: EdgeInsets.all(0),
+                                            icon: const Icon(Icons.info),
+                                          ),
+                                          if (state.user != null)
+                                            IconButton(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        BuildingEdit(
+                                                            building: item),
+                                                  ),
+                                                );
+                                              },
+                                              tooltip: 'Редактировать',
+                                              padding: EdgeInsets.all(0),
+                                              icon: const Icon(Icons.edit),
+                                            ),
+                                          if (state.user != null)
+                                            IconButton(
+                                              onPressed: () {
+                                                try {
+                                                  state.moveUpBuilding(
+                                                    state.buildings[index].docId
+                                                        .toString(),
+                                                    state.buildings[index - 1]
+                                                        .docId
+                                                        .toString(),
+                                                  );
+                                                } catch (e) {}
+                                              },
+                                              tooltip: 'Поднять в списке',
+                                              icon: Icon(
+                                                Icons.arrow_upward,
+                                              ),
+                                            ),
+                                          if (state.user != null)
+                                            IconButton(
+                                              onPressed: () {
+                                                try {
+                                                  state.moveDownBuilding(
+                                                    state.buildings[index].docId
+                                                        .toString(),
+                                                    state.buildings[index + 1]
+                                                        .docId
+                                                        .toString(),
+                                                  );
+                                                } catch (e) {}
+                                              },
+                                              tooltip: 'Опустить в списке',
+                                              icon: Icon(
+                                                Icons.arrow_downward,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                    )
+                  ],
+                ),
         );
       },
     );

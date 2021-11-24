@@ -60,7 +60,7 @@ class _FacultyEditState extends State<FacultyEdit> {
 
     task = uploadFile(data!);
     setState(() {});
-    await showDialog(
+    showDialog(
         context: context,
         builder: (BuildContext context) {
           var themeProvider = Provider.of<ThemeProvider>(context);
@@ -87,7 +87,6 @@ class _FacultyEditState extends State<FacultyEdit> {
       task = null;
     });
     final path = await storageTaskSnapshot.ref.getDownloadURL();
-
     _imagePath = path;
     setState(() {});
   }

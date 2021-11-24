@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
-        android:label="bntu_app"
+        android:label="Абитуриент БНТУ"
         android:icon="@mipmap/launcher_icon">
         <activity
 

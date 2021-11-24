@@ -23,48 +23,6 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _subtitleController = TextEditingController();
 
-  // void showAlertDialog(
-  //     BuildContext context, QueryDocumentSnapshot<Object?> item) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         content: Container(
-  //           height: 22,
-  //           child: const Center(
-  //               child: Text(
-  //                 'Хотите удалить карточку?',
-  //                 style: TextStyle(fontSize: 18),
-  //               )),
-  //         ),
-  //         actions: [
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               _info.removeCard(item.id);
-  //               Navigator.pop(context);
-  //               Navigator.pop(context);
-  //             },
-  //             style: ButtonStyle(
-  //               backgroundColor: MaterialStateProperty.all(Colors.red),
-  //             ),
-  //             child: const Text('Удалить', style: TextStyle(color: Colors.white),),
-  //           ),
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //               setState(() {});
-  //             },
-  //             style: ButtonStyle(
-  //               backgroundColor: MaterialStateProperty.all(Colors.black38),
-  //             ),
-  //             child: const Text('Отмена', style: TextStyle(color: Colors.white),),
-  //           )
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
   void _onSubmit(String id, AppProvider state) {
     if (_formKey.currentState!.validate()) {
       state.editInfoCard(
@@ -85,43 +43,50 @@ class _AdmissionInfoEditState extends State<AdmissionInfoEdit> {
       appBar: AppBar(
         title: Text('Редактировать карточку'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            InfoForm(
-              formKey: _formKey,
-              titleController: _titleController,
-              subtitleController: _subtitleController,
-            ),
-            Consumer<AppProvider>(
-              builder: (context, state, child) {
-                return EditButtonsSection(
-                  onEditPressed: () {
-                    _onSubmit(widget.infoCard.docId.toString(), state);
-                  },
-                  onRemovePressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return RemoveItem(
-                          itemName: 'карточку',
-                          onRemovePressed: () {
-                            state.removeInfoCard(
-                                widget.infoCard.docId.toString());
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                            Fluttertoast.showToast(msg: 'Карточка успешно удалена');
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: 600,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InfoForm(
+                  formKey: _formKey,
+                  titleController: _titleController,
+                  subtitleController: _subtitleController,
+                ),
+                Consumer<AppProvider>(
+                  builder: (context, state, child) {
+                    return EditButtonsSection(
+                      onEditPressed: () {
+                        _onSubmit(widget.infoCard.docId.toString(), state);
+                      },
+                      onRemovePressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return RemoveItem(
+                              itemName: 'карточку',
+                              onRemovePressed: () {
+                                state.removeInfoCard(
+                                    widget.infoCard.docId.toString());
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                Fluttertoast.showToast(msg: 'Карточка успешно удалена');
+                              },
+                            );
                           },
                         );
                       },
                     );
                   },
-                );
-              },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
