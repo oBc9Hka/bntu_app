@@ -17,7 +17,7 @@ class GreetingScreen extends StatelessWidget {
 
     var _buttons = <Map<String, dynamic>>[
       {
-        'text': 'Выбери факультет',
+        'text': 'Выбери специальность',
         'link': '/main_page',
         'icon': Icon(Icons.account_balance_outlined),
       },
