@@ -20,7 +20,7 @@ class FacultyItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants.mainColor;
+    var mainColor = Constants.mainColor;
 
     return ListTile(
       onTap: onTap,
