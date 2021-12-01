@@ -1,4 +1,5 @@
 import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/info_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,6 +15,7 @@ class Info extends StatelessWidget {
   Widget build(BuildContext context) {
     var mainColor = Constants.mainColor;
     var height = MediaQuery.of(context).size.height;
+    var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Consumer<AppProvider>(builder: (context, state, child) {
       return Scaffold(
@@ -70,7 +72,7 @@ class Info extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: Image.asset('assets/bntu_logo.png').image,
+                          image: Image.asset((themeProvider.brightness == CustomBrightness.light) ? 'assets/bntu_logo.png' : 'assets/bntu_logo_dark.png').image,
                           fit: BoxFit.contain,
                         ),
                       ),

@@ -1,6 +1,8 @@
+import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FacultyItem extends StatelessWidget {
   final String name;
@@ -22,7 +24,12 @@ class FacultyItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var mainColor = Constants.mainColor;
 
+    var themeProvider = Provider.of<ThemeProvider>(context);
+
     return ListTile(
+      tileColor: themeProvider.brightness == CustomBrightness.light
+          ? Colors.white
+          : Colors.grey[900],
       onTap: onTap,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),

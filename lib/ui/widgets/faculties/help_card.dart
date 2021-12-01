@@ -7,7 +7,9 @@ class HelpCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: Constants.mainColor),
+          borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -32,7 +34,10 @@ class HelpCard extends StatelessWidget {
                 Navigator.pushNamed(context, '/test');
               },
               style: Constants.customElevatedButtonStyle,
-              child: Text('Пройти тест', style: TextStyle(fontSize: 18),),
+              child: Text(
+                'Пройти тест',
+                style: TextStyle(fontSize: 18),
+              ),
             ),
           ],
         ),

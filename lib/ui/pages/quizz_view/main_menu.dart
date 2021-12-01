@@ -1,6 +1,8 @@
+import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'quizz_screen.dart';
 
 class MainMenu extends StatelessWidget {
@@ -10,6 +12,7 @@ class MainMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var mainColor = Constants.mainColor;
+    var themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +33,7 @@ class MainMenu extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: Image.asset('assets/bntu_logo.png').image,
+                  image: Image.asset((themeProvider.brightness == CustomBrightness.light) ? 'assets/bntu_logo.png' : 'assets/bntu_logo_dark.png').image,
                   fit: BoxFit.contain,
                 ),
               ),
