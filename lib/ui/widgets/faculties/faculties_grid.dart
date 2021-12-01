@@ -2,6 +2,7 @@ import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/pages/faculties_views/faculty_edit.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/src/provider.dart';
 
 import 'faculty_short_item.dart';
@@ -21,7 +22,8 @@ class FacultiesGridView extends StatelessWidget {
         ),
       );
     }
-    void _onEditPressed(var faculty){
+
+    void _onEditPressed(var faculty) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -31,33 +33,37 @@ class FacultiesGridView extends StatelessWidget {
         ),
       );
     }
+
     var state = context.watch<AppProvider>();
 
-    return GridView.count(
-      shrinkWrap: true,
+    return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      childAspectRatio: 3,
-      children: [
-        ...state.faculties.map(
-              (faculty) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 5, horizontal: 10),
+      shrinkWrap: true,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, childAspectRatio: 3),
+      itemCount: state.faculties.length,
+      itemBuilder: (context, int index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: AnimationConfiguration.staggeredGrid(
+            position: index,
+            duration: const Duration(milliseconds: 200),
+            columnCount: 2,
+            child: FadeInAnimation(
               child: FacultyShortItem(
-                shortName: faculty.shortName.toString(),
+                shortName: state.faculties[index].shortName.toString(),
                 user: state.user,
                 onTap: () {
-                  _onTap(faculty);
+                  _onTap(state.faculties[index]);
                 },
                 onEditPressed: () {
-                  _onEditPressed(faculty);
+                  _onEditPressed(state.faculties[index]);
                 },
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:bntu_app/ui/pages/faculties_views/faculty_edit.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import 'faculty_item.dart';
 
@@ -21,7 +22,8 @@ class FacultiesListView extends StatelessWidget {
         ),
       );
     }
-    void _onEditPressed(var faculty){
+
+    void _onEditPressed(var faculty) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -31,32 +33,35 @@ class FacultiesListView extends StatelessWidget {
         ),
       );
     }
+
     var state = context.watch<AppProvider>();
 
-    return ListView(
+    return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      children: [
-        ...state.faculties.map(
-              (faculty) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 5, horizontal: 10),
+      itemCount: state.faculties.length,
+      itemBuilder: (context, int index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 200),
+            child: FadeInAnimation(
               child: FacultyItem(
-                shortName: faculty.shortName.toString(),
-                name: faculty.name.toString(),
+                shortName: state.faculties[index].shortName.toString(),
+                name: state.faculties[index].name.toString(),
                 user: state.user,
                 onTap: () {
-                  _onTap(faculty);
+                  _onTap(state.faculties[index]);
                 },
                 onEditPressed: () {
-                  _onEditPressed(faculty);
+                  _onEditPressed(state.faculties[index]);
                 },
               ),
-            );
-          },
-        ),
-      ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

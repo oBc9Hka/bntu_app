@@ -35,7 +35,6 @@ class _MainPageState extends State<MainPage>
             title: Text('Список факультетов'),
             elevation: 3,
             actions: [
-
               IconButton(
                 onPressed: () {
                   setState(() {
