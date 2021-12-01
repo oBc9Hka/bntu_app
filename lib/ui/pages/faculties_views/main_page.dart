@@ -16,14 +16,15 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage>
     with SingleTickerProviderStateMixin {
-  var isList = true;
   late AnimationController _animationController;
 
   @override
-  void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 350));
-    super.initState();
+  void didChangeDependencies() {
+    _animationController = AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 350),
+        value: context.watch<AppProvider>().isList ? 0 : 1);
+    super.didChangeDependencies();
   }
 
   @override
@@ -38,8 +39,8 @@ class _MainPageState extends State<MainPage>
               IconButton(
                 onPressed: () {
                   setState(() {
-                    isList = !isList;
-                    !isList
+                    state.isList = !state.isList;
+                    !state.isList
                         ? _animationController.forward()
                         : _animationController.reverse();
                   });
@@ -79,8 +80,9 @@ class _MainPageState extends State<MainPage>
                   child: Column(
                     children: [
                       Container(
-                        child:
-                            isList ? FacultiesListView() : FacultiesGridView(),
+                        child: state.isList
+                            ? FacultiesListView()
+                            : FacultiesGridView(),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
