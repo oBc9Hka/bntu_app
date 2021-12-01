@@ -24,19 +24,23 @@ class FacultyShortItem extends StatelessWidget {
     var themeProvider = Provider.of<ThemeProvider>(context);
     return ListTile(
       tileColor: themeProvider.brightness == CustomBrightness.light
-        ? Colors.white
-        : Colors.grey[900],
+          ? Colors.white
+          : Colors.grey[900],
       onTap: onTap,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
         side: BorderSide(color: mainColor),
       ),
       trailing: user != null
-          ? IconButton(
-              onPressed: onEditPressed,
-              icon: Icon(
-                Icons.edit,
-                color: mainColor,
+          ? Container(
+              width: 24,
+              child: IconButton(
+                padding: EdgeInsets.all(0),
+                onPressed: onEditPressed,
+                icon: Icon(
+                  Icons.edit,
+                  color: mainColor,
+                ),
               ),
             )
           : Container(
