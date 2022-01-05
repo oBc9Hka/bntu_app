@@ -6,19 +6,21 @@ import 'package:provider/provider.dart';
 
 import 'result_screen.dart';
 
-class QuizzScreen extends StatefulWidget {
-  const QuizzScreen({Key? key}) : super(key: key);
+class QuizScreen extends StatefulWidget {
+  const QuizScreen({Key? key}) : super(key: key);
 
   @override
-  _QuizzScreenState createState() => _QuizzScreenState();
+  _QuizScreenState createState() => _QuizScreenState();
 }
 
-class _QuizzScreenState extends State<QuizzScreen> {
+class _QuizScreenState extends State<QuizScreen> {
   bool btnPressed = false;
   PageController? _controller;
-  String btnText = "Следующий вопрос";
+  String btnText = 'Следующий вопрос';
   bool answered = false;
   bool showMsg = false;
+  int groupValue = 0;
+  String checkedLetter = '';
 
   List<QuestionModel> _questions = [];
 
@@ -29,6 +31,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
   getCheckboxItems(int index) {
     tmpArray = [];
     checkedAnswers.forEach((key, value) {
+      print('key: $key');
       if (value == true) {
         tmpArray.add(key);
       }
@@ -90,7 +93,8 @@ class _QuizzScreenState extends State<QuizzScreen> {
     const mainColor = Constants.mainColor;
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        _questions = state.questions;
+        // _questions = state.questions;
+        _questions = Constants.quizQuestionsList;
         if (!isInited) {
           initQuiz();
           isInited = true;
@@ -106,7 +110,7 @@ class _QuizzScreenState extends State<QuizzScreen> {
         return Scaffold(
           appBar: AppBar(
             // centerTitle: true,
-            title: Text('Тест'),
+            title: Text('Тест на специальность'),
           ),
           body: isLoading
               ? Center(
@@ -146,57 +150,102 @@ class _QuizzScreenState extends State<QuizzScreen> {
                             children: [
                               Column(
                                 children: [
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Text(
-                                      'Вопрос ${index + 1}',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 28.0,
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: Text(
+                                          'Вопрос ${index + 1}',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontSize: 28.0,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      Divider(
+                                        color: mainColor,
+                                      ),
+                                      Visibility(
+                                        visible: showMsg,
+                                        child: Text(
+                                          'Необходимо выбрать один вариант ответа',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Divider(
-                                    color: mainColor,
+                                  Column(
+                                    children: [
+                                      Text(
+                                        _questions[index].question!,
+                                        style: TextStyle(fontSize: 24),
+                                      ),
+                                      Container(
+                                        constraints: BoxConstraints(
+                                          maxHeight: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.4,
+                                        ),
+                                        child: ListView(
+                                          children: [
+                                            for (int i = 1;
+                                                i <= checkedAnswers.keys.length;
+                                                i++)
+                                              RadioListTile(
+                                                title: Text(checkedAnswers.keys
+                                                    .elementAt(i - 1)),
+                                                value: i,
+                                                groupValue: groupValue,
+                                                onChanged: (T) {
+                                                  print(T);
+                                                  setState(() {
+                                                    groupValue = T as int;
+                                                    checkedAnswers.values
+                                                        .map((e) => e = false);
+                                                    checkedAnswers[
+                                                        checkedAnswers.keys
+                                                            .elementAt(
+                                                                i - 1)] = true;
+                                                    // checkedLetter = checkedAnswers.values.elementAt(i - 1);
+                                                  });
+                                                },
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      // ...checkedAnswers.keys.map((key) {
+                                      //   return CheckboxListTile(
+                                      //     title: Text(key),
+                                      //     value: checkedAnswers[key],
+                                      //     activeColor: mainColor,
+                                      //     onChanged: (bool? value) {
+                                      //       setState(() {
+                                      //         checkedAnswers[key] = value!;
+                                      //       });
+                                      //     },
+                                      //   );
+                                      // }),
+                                    ],
                                   ),
-                                  Visibility(
-                                    visible: showMsg,
-                                    child: Text(
-                                      'Необходимо выбрать минимум один вариант ответа',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  )
                                 ],
                               ),
-                              Column(
-                                children: [
-                                  Text(
-                                    _questions[index].question!,
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                  ...checkedAnswers.keys.map((key) {
-                                    return CheckboxListTile(
-                                      title: Text(key),
-                                      value: checkedAnswers[key],
-                                      activeColor: mainColor,
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          checkedAnswers[key] = value!;
-                                        });
-                                      },
-                                    );
-                                  }),
-                                ],
+                              Divider(
+                                color: mainColor,
                               ),
                               ElevatedButton(
                                 onPressed: () {
                                   getCheckboxItems(_controller!.page!.toInt());
-                                  if (!checkedAnswers.values.contains(true)) {
+                                  // if (!checkedAnswers.values.contains(true)) {
+                                  if (groupValue == 0) {
                                     setState(() {
                                       showMsg = true;
                                     });
                                   } else {
+                                    groupValue = 0;
                                     showMsg = false;
+                                    // tagsArray.add(value);
                                     if (_controller!.page?.toInt() ==
                                         _questions.length - 1) {
                                       Navigator.pushReplacement(

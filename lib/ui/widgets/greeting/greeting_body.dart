@@ -30,7 +30,7 @@ class GreetingBody extends StatelessWidget {
             children: [
               Container(
                 width: double.infinity,
-                height: height / 2.5,
+                height: height / 2.6,
                 alignment: Alignment.center,
                 child: Image.asset('assets/man.png'),
               ),

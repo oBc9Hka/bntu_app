@@ -313,8 +313,8 @@ class GreetingDrawer extends StatelessWidget {
                   }
                 },
                 title: Text(
-                  'Dark Mode',
-                  style: TextStyle(fontStyle: FontStyle.italic),
+                  'Тёмная тема',
+                  // style: TextStyle(fontStyle: FontStyle.italic),
                 ),
                 trailing: themeProvider.currentIcon,
               ),
@@ -322,7 +322,7 @@ class GreetingDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, '/test');
                 },
-                title: Text('Помощь с выбором факультета'),
+                title: Text('Помощь с выбором специальности (демо)'),
                 trailing: Icon(Icons.speaker_notes_rounded),
               ),
               ListTile(

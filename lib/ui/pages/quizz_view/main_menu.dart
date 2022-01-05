@@ -3,7 +3,7 @@ import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'quizz_screen.dart';
+import 'quiz_screen.dart';
 
 class MainMenu extends StatelessWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -43,7 +43,7 @@ class MainMenu extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
-                  'Пройди тест и узнай, какие факультеты тебе подходят',
+                  'Пройди тест и узнай, какие специальности тебе подходят',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -60,7 +60,7 @@ class MainMenu extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => QuizzScreen(),
+                        builder: (context) => QuizScreen(),
                       ),
                     );
                   },
