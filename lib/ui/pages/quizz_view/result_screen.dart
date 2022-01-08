@@ -10,8 +10,13 @@ import '../../../models/faculty_model.dart';
 import 'main_menu.dart';
 
 class ResultScreen extends StatelessWidget {
-  const ResultScreen({Key? key, required this.tagsList}) : super(key: key);
+  const ResultScreen({
+    Key? key,
+    required this.tagsList,
+    required this.isFacultiesQuiz,
+  }) : super(key: key);
   final tagsList;
+  final bool isFacultiesQuiz;
 
   @override
   Widget build(BuildContext context) {
@@ -91,9 +96,11 @@ class ResultScreen extends StatelessWidget {
 
     _getTagsFrequencyList();
     _sortTagsFrequencyList();
-    // _getMaxFrequency();
-    // _setTitles();
     _fit = 'Тебе больше всего подходят:';
+    if (isFacultiesQuiz) {
+      _getMaxFrequency();
+      _setTitles();
+    }
 
     var fixedExtentScrollController = FixedExtentScrollController();
     const mainColor = Constants.mainColor;
@@ -114,12 +121,15 @@ class ResultScreen extends StatelessWidget {
           mayFitFacultyList.add(item);
         }
       }
-      print('sortedQueryList: $sortedQueryList');
-      print('firstFromSorted: ${_sortedList.first.key}');
-      var _mockSorterList = Constants.quizResultList
-          .firstWhere((element) => element.letter == _sortedList.first.key)
-          .specialties;
-      print('itemsFromFirstFromSorted: $_mockSorterList');
+      var _mockSorterList = [];
+      if (!state.isFacultiesQuiz) {
+        print('sortedQueryList: $sortedQueryList');
+        print('firstFromSorted: ${_sortedList.first.key}');
+        _mockSorterList = Constants.quizResultList
+            .firstWhere((element) => element.letter == _sortedList.first.key)
+            .specialties;
+        print('itemsFromFirstFromSorted: $_mockSorterList');
+      }
       return Scaffold(
         appBar: AppBar(
           title: Text('Результаты'),
@@ -156,34 +166,147 @@ class ResultScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Container(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height*0.5,
-                    ),
-                    child: ListView(
-                      children: [
-                        for (var item in _mockSorterList)
-                          ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => FacultyPage(
-                                    faculty: _getFacultyByShortName(
-                                      item.values.first,
-                                      state.faculties,
+                  isFacultiesQuiz
+                      ? Column(
+                          children: [
+                            Column(
+                              children: [
+                                for (var item in sortedQueryList)
+                                  if (item.value == maxFrequency)
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => FacultyPage(
+                                              faculty: item.key,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        item.key.shortName,
+                                        style: TextStyle(
+                                            fontSize: 26, color: mainColor),
+                                      ),
+                                    ),
+                              ],
+                            ),
+                            Visibility(
+                              visible: _mayFitVisibility,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    _mayFit,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                            title: Text(item.keys.first),
-                            trailing: Text(item.values.first),
-                          )
-                      ],
-                    ),
-                  ),
-
+                                  Container(
+                                    constraints: BoxConstraints(
+                                        minWidth: 50,
+                                        maxWidth:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                        maxHeight:
+                                            MediaQuery.of(context).size.height *
+                                                0.3),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => FacultyPage(
+                                              faculty: mayFitFacultyList[
+                                                      mayFitFacultyIndex]
+                                                  .key,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: ListWheelScrollView(
+                                        controller: fixedExtentScrollController,
+                                        physics: FixedExtentScrollPhysics(),
+                                        itemExtent: 60.0,
+                                        diameterRatio: 2,
+                                        squeeze: 1,
+                                        perspective: 0.01,
+                                        onSelectedItemChanged: (index) {
+                                          mayFitFacultyIndex = index;
+                                        },
+                                        children: [
+                                          for (var item in mayFitFacultyList)
+                                            Container(
+                                              constraints: BoxConstraints(
+                                                minWidth: 100,
+                                                maxWidth: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.8,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                border: Border.all(
+                                                    color: Colors.grey),
+                                              ),
+                                              child: TextButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          FacultyPage(
+                                                        faculty: item.key,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Text(
+                                                  item.key.shortName,
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 0.5,
+                          ),
+                          child: ListView(
+                            children: [
+                              for (var item in _mockSorterList)
+                                ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => FacultyPage(
+                                          faculty: _getFacultyByShortName(
+                                            item.values.first,
+                                            state.faculties,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  title: Text(item.keys.first),
+                                  trailing: Text(item.values.first),
+                                )
+                            ],
+                          ),
+                        ),
                 ],
               ),
               Column(
@@ -191,10 +314,13 @@ class ResultScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MainMenu(),
-                          ));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainMenu(
+                            isFacultiesQuiz: isFacultiesQuiz,
+                          ),
+                        ),
+                      );
                     },
                     style: Constants.customElevatedButtonStyle,
                     child: Text(
@@ -380,81 +506,81 @@ class ResultScreen extends StatelessWidget {
 //                       ),
 //                 ],
 //               ),
-//               // Visibility(
-//               //   visible: _mayFitVisibility,
-//               //   child: Column(
-//               //     children: [
-//               //       Text(
-//               //         _mayFit,
-//               //         style: TextStyle(
-//               //           color: Colors.grey,
-//               //           fontSize: 18.0,
-//               //           fontWeight: FontWeight.bold,
-//               //         ),
-//               //       ),
-//               //       Container(
-//               //         constraints: BoxConstraints(
-//               //             minWidth: 50,
-//               //             maxWidth: MediaQuery.of(context).size.width * 0.7,
-//               //             maxHeight: MediaQuery.of(context).size.height * 0.3),
-//               //         child: GestureDetector(
-//               //           onTap: () {
-//               //             Navigator.push(
-//               //               context,
-//               //               MaterialPageRoute(
-//               //                 builder: (context) => FacultyPage(
-//               //                   faculty:
-//               //                       mayFitFacultyList[mayFitFacultyIndex].key,
-//               //                 ),
-//               //               ),
-//               //             );
-//               //           },
-//               //           child: ListWheelScrollView(
-//               //             controller: fixedExtentScrollController,
-//               //             physics: FixedExtentScrollPhysics(),
-//               //             itemExtent: 60.0,
-//               //             diameterRatio: 2,
-//               //             squeeze: 1,
-//               //             perspective: 0.01,
-//               //             onSelectedItemChanged: (index) {
-//               //               mayFitFacultyIndex = index;
-//               //             },
-//               //             children: [
-//               //               for (var item in mayFitFacultyList)
-//               //                 Container(
-//               //                   constraints: BoxConstraints(
-//               //                     minWidth: 100,
-//               //                     maxWidth:
-//               //                         MediaQuery.of(context).size.width * 0.8,
-//               //                   ),
-//               //                   decoration: BoxDecoration(
-//               //                     borderRadius: BorderRadius.circular(10),
-//               //                     border: Border.all(color: Colors.grey),
-//               //                   ),
-//               //                   child: TextButton(
-//               //                     onPressed: () {
-//               //                       Navigator.push(
-//               //                         context,
-//               //                         MaterialPageRoute(
-//               //                           builder: (context) => FacultyPage(
-//               //                             faculty: item.key,
-//               //                           ),
-//               //                         ),
-//               //                       );
-//               //                     },
-//               //                     child: Text(
-//               //                       item.key.shortName,
-//               //                       style: TextStyle(color: Colors.grey),
-//               //                     ),
-//               //                   ),
-//               //                 ),
-//               //             ],
-//               //           ),
-//               //         ),
-//               //       ),
-//               //     ],
-//               //   ),
-//               // ),
+//               Visibility(
+//                 visible: _mayFitVisibility,
+//                 child: Column(
+//                   children: [
+//                     Text(
+//                       _mayFit,
+//                       style: TextStyle(
+//                         color: Colors.grey,
+//                         fontSize: 18.0,
+//                         fontWeight: FontWeight.bold,
+//                       ),
+//                     ),
+//                     Container(
+//                       constraints: BoxConstraints(
+//                           minWidth: 50,
+//                           maxWidth: MediaQuery.of(context).size.width * 0.7,
+//                           maxHeight: MediaQuery.of(context).size.height * 0.3),
+//                       child: GestureDetector(
+//                         onTap: () {
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (context) => FacultyPage(
+//                                 faculty:
+//                                     mayFitFacultyList[mayFitFacultyIndex].key,
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                         child: ListWheelScrollView(
+//                           controller: fixedExtentScrollController,
+//                           physics: FixedExtentScrollPhysics(),
+//                           itemExtent: 60.0,
+//                           diameterRatio: 2,
+//                           squeeze: 1,
+//                           perspective: 0.01,
+//                           onSelectedItemChanged: (index) {
+//                             mayFitFacultyIndex = index;
+//                           },
+//                           children: [
+//                             for (var item in mayFitFacultyList)
+//                               Container(
+//                                 constraints: BoxConstraints(
+//                                   minWidth: 100,
+//                                   maxWidth:
+//                                       MediaQuery.of(context).size.width * 0.8,
+//                                 ),
+//                                 decoration: BoxDecoration(
+//                                   borderRadius: BorderRadius.circular(10),
+//                                   border: Border.all(color: Colors.grey),
+//                                 ),
+//                                 child: TextButton(
+//                                   onPressed: () {
+//                                     Navigator.push(
+//                                       context,
+//                                       MaterialPageRoute(
+//                                         builder: (context) => FacultyPage(
+//                                           faculty: item.key,
+//                                         ),
+//                                       ),
+//                                     );
+//                                   },
+//                                   child: Text(
+//                                     item.key.shortName,
+//                                     style: TextStyle(color: Colors.grey),
+//                                   ),
+//                                 ),
+//                               ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
 //               Column(
 //                 children: [
 //                   ElevatedButton(

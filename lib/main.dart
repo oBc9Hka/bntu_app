@@ -16,6 +16,7 @@ import 'package:bntu_app/ui/pages/greeting_screen.dart';
 import 'package:bntu_app/ui/pages/map_view/map.dart';
 import 'package:bntu_app/ui/pages/messages_page.dart';
 import 'package:bntu_app/ui/pages/quizz_view/main_menu.dart';
+import 'package:bntu_app/ui/pages/quizz_view/quiz_choose.dart';
 import 'package:bntu_app/ui/pages/quizz_view/quiz_list.dart';
 import 'package:bntu_app/ui/pages/settings_page.dart';
 import 'package:custom_splash/custom_splash.dart';
@@ -34,16 +35,15 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider(theme)),
         ChangeNotifierProvider(
-            create: (context) =>
-                AppProvider(
-                    FacultiesFirestoreRepository(),
-                    SpecialtiesFirestoreRepository(),
-                    SettingsFirestoreRepository(),
-                    InfoCardsFirestoreRepository(),
-                    ErrorMessagesFirestoreRepository(),
-                    BuildingsFirestoreRepository(),
-                    QuestionsFirestoreRepository(),
-                    UserFirestoreRepository(),
+            create: (context) => AppProvider(
+                  FacultiesFirestoreRepository(),
+                  SpecialtiesFirestoreRepository(),
+                  SettingsFirestoreRepository(),
+                  InfoCardsFirestoreRepository(),
+                  ErrorMessagesFirestoreRepository(),
+                  BuildingsFirestoreRepository(),
+                  QuestionsFirestoreRepository(),
+                  UserFirestoreRepository(),
                 )),
       ],
       child: App(),
@@ -78,8 +78,13 @@ class App extends StatelessWidget {
         '/messages': (context) => MessagesPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
-        '/test': (context) => MainMenu(),
-        '/testList': (context) => QuizList(),
+        '/test': (context) => MainMenu(
+            isFacultiesQuiz: context.watch<AppProvider>().isFacultiesQuiz),
+        '/test-faculties': (context) => MainMenu(isFacultiesQuiz: true),
+        '/test-specialties': (context) => MainMenu(isFacultiesQuiz: false),
+        '/test-faculties-edit': (context) => QuizList(),
+        '/test-specialties-edit': (context) => QuizList(),
+        '/test-edit': (context) => QuizChoose(),
       },
     );
   }

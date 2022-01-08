@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({Key? key}) : super(key: key);
+  const QuizScreen({Key? key, required this.isFacultiesQuiz}) : super(key: key);
+  final bool isFacultiesQuiz;
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -93,8 +94,12 @@ class _QuizScreenState extends State<QuizScreen> {
     const mainColor = Constants.mainColor;
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        // _questions = state.questions;
-        _questions = Constants.quizQuestionsList;
+        if (widget.isFacultiesQuiz) {
+          _questions = state.questions;
+        } else {
+          _questions = Constants.quizQuestionsList;
+        }
+
         if (!isInited) {
           initQuiz();
           isInited = true;
@@ -110,7 +115,7 @@ class _QuizScreenState extends State<QuizScreen> {
         return Scaffold(
           appBar: AppBar(
             // centerTitle: true,
-            title: Text('Тест на специальность'),
+            title: Text('Тест на ${widget.isFacultiesQuiz ? 'факультет' : 'специальность'}'),
           ),
           body: isLoading
               ? Center(
@@ -249,12 +254,15 @@ class _QuizScreenState extends State<QuizScreen> {
                                     if (_controller!.page?.toInt() ==
                                         _questions.length - 1) {
                                       Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ResultScreen(
-                                                    tagsList: tagsArray,
-                                                  )));
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ResultScreen(
+                                            tagsList: tagsArray,
+                                            isFacultiesQuiz:
+                                                widget.isFacultiesQuiz,
+                                          ),
+                                        ),
+                                      );
                                     } else {
                                       _controller!.nextPage(
                                           duration: Duration(milliseconds: 250),

@@ -59,6 +59,7 @@ class AppProvider with ChangeNotifier {
   String dropdown5Value = '...';
 
   bool isList = true; // ListView or GridView at faculties page
+  bool isFacultiesQuiz = true; // Quiz for faculties or specialties
 
   AppProvider(
     this._facultiesRepository,

@@ -1,18 +1,24 @@
 import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'quiz_screen.dart';
 
 class MainMenu extends StatelessWidget {
-  const MainMenu({Key? key}) : super(key: key);
+  const MainMenu({Key? key, required this.isFacultiesQuiz}) : super(key: key);
+  final bool isFacultiesQuiz;
+
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var text = 'специальности';
+    if(isFacultiesQuiz){
+      text = 'факультеты';
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +39,11 @@ class MainMenu extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: Image.asset((themeProvider.brightness == CustomBrightness.light) ? 'assets/bntu_logo.png' : 'assets/bntu_logo_dark.png').image,
+                  image: Image.asset(
+                          (themeProvider.brightness == CustomBrightness.light)
+                              ? 'assets/bntu_logo.png'
+                              : 'assets/bntu_logo_dark.png')
+                      .image,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -43,7 +53,7 @@ class MainMenu extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
-                  'Пройди тест и узнай, какие специальности тебе подходят',
+                  'Пройди тест и узнай, какие $text тебе подходят',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -60,14 +70,14 @@ class MainMenu extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => QuizScreen(),
+                        builder: (context) => QuizScreen(isFacultiesQuiz: isFacultiesQuiz,),
                       ),
                     );
                   },
                   style: Constants.customElevatedButtonStyle,
                   child: const Padding(
                     padding:
-                    EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                        EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
                     child: Text(
                       'Начать тест',
                       style: TextStyle(
@@ -77,7 +87,7 @@ class MainMenu extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
               ),
             ),
           ],

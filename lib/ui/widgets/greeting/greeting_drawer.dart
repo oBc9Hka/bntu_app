@@ -10,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 class GreetingDrawer extends StatelessWidget {
   const GreetingDrawer({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     var state = context.watch<AppProvider>();
@@ -24,7 +23,6 @@ class GreetingDrawer extends StatelessWidget {
     var _loginController = TextEditingController();
     var _passwordController = TextEditingController();
     var _errorDescriptionController = TextEditingController();
-
 
     ButtonStyle customElevatedButtonStyle() {
       return ButtonStyle(
@@ -57,8 +55,8 @@ class GreetingDrawer extends StatelessWidget {
         print('hasError? ${state.errorsMap['hasError']}');
         _showLoadingDialog();
         await state
-            .signIn(_loginController.text.trim(),
-            _passwordController.text.trim())
+            .signIn(
+                _loginController.text.trim(), _passwordController.text.trim())
             .whenComplete(() {
           print('still hasError? ${state.errorsMap['hasError']}');
           if (state.errorsMap['hasError']) {
@@ -76,8 +74,8 @@ class GreetingDrawer extends StatelessWidget {
         print('VALIDATE BLOCK');
         _showLoadingDialog();
         await state
-            .signIn(_loginController.text.trim(),
-            _passwordController.text.trim())
+            .signIn(
+                _loginController.text.trim(), _passwordController.text.trim())
             .whenComplete(() {
           print(state.errorsMap['hasError']);
           if (state.errorsMap['hasError']) {
@@ -142,8 +140,7 @@ class GreetingDrawer extends StatelessWidget {
                         }
                         return null;
                       },
-                      decoration:
-                      const InputDecoration(labelText: 'Пароль'),
+                      decoration: const InputDecoration(labelText: 'Пароль'),
                     ),
                   ],
                 ),
@@ -169,7 +166,6 @@ class GreetingDrawer extends StatelessWidget {
         },
       );
     }
-
 
     void _handleErrorMessageByUser() {
       if (_errorFormKey.currentState!.validate()) {
@@ -222,26 +218,20 @@ class GreetingDrawer extends StatelessWidget {
                           labelText: 'Текст ошибки',
                           enabledBorder: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(5)),
+                                  BorderRadius.all(Radius.circular(5)),
                               borderSide:
-                              BorderSide(color: Colors.grey, width: 1)),
+                                  BorderSide(color: Colors.grey, width: 1)),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                            BorderSide(color: mainColor, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(color: mainColor, width: 1),
                           ),
                           errorBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                            BorderSide(color: Colors.red, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(color: Colors.red, width: 1),
                           ),
                           focusedErrorBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(5)),
-                            borderSide:
-                            BorderSide(color: Colors.red, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(color: Colors.red, width: 1),
                           ),
                         ),
                         minLines: 1,
@@ -278,8 +268,9 @@ class GreetingDrawer extends StatelessWidget {
         : throw 'Could not launch $_url';
 
     return Container(
-      color: themeProvider.brightness ==
-          CustomBrightness.dark ? Colors.black54 : Colors.white,
+      color: themeProvider.brightness == CustomBrightness.dark
+          ? Colors.black54
+          : Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -287,12 +278,10 @@ class GreetingDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding:
-                const EdgeInsets.only(left: 20, top: 20, bottom: 5),
+                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 5),
                 child: Text(
                   'Меню абитуриента',
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               Divider(),
@@ -305,8 +294,7 @@ class GreetingDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  if (themeProvider.brightness ==
-                      CustomBrightness.dark) {
+                  if (themeProvider.brightness == CustomBrightness.dark) {
                     themeProvider.toggle(CustomBrightness.light);
                   } else {
                     themeProvider.toggle(CustomBrightness.dark);
@@ -318,11 +306,22 @@ class GreetingDrawer extends StatelessWidget {
                 ),
                 trailing: themeProvider.currentIcon,
               ),
+              if(state.isFacultiesQuiz || state.user != null)
               ListTile(
                 onTap: () {
-                  Navigator.pushNamed(context, '/test');
+                  Navigator.pushNamed(context, '/test-faculties');
                 },
-                title: Text('Помощь с выбором специальности (демо)'),
+                title: Text('Помощь с выбором факультета (демо)'),
+                trailing: Icon(Icons.speaker_notes_rounded),
+              ),
+              if(!state.isFacultiesQuiz || state.user != null)
+              ListTile(
+                onTap: () {
+                  Navigator.pushNamed(context, '/test-specialties');
+                },
+                title: Text(
+                  'Помощь с выбором специальности (демо)',
+                ),
                 trailing: Icon(Icons.speaker_notes_rounded),
               ),
               ListTile(

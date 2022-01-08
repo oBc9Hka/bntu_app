@@ -208,9 +208,9 @@ class _SettingsPageState extends State<SettingsPage> {
                             Divider(),
                             ListTile(
                               onTap: () {
-                                Navigator.of(context).pushNamed('/testList');
+                                Navigator.of(context).pushNamed('/test-edit');
                               },
-                              title: Text('Список вопросов'),
+                              title: Text('Редактирование вопросов'),
                               trailing: Icon(Icons.question_answer_outlined),
                             ),
                             Divider(),
