@@ -1,4 +1,5 @@
 import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/src/provider.dart';
@@ -83,6 +84,7 @@ class _QuizChooseState extends State<QuizChoose> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Radio(
+                  activeColor: Constants.mainColor,
                   value: 1,
                   groupValue: groupValue,
                   onChanged: (T) {
