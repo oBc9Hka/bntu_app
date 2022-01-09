@@ -62,7 +62,6 @@ class _QuizFormState extends State<QuizForm> {
       _answer5Visible = false;
     }
     setState(() {});
-    print(_answer3Visible);
   }
 
   @override
@@ -139,6 +138,21 @@ class _QuizFormState extends State<QuizForm> {
                                 child: Text(value),
                               ),
                             ).toList(),
+                          ),
+                          Padding(padding: EdgeInsets.only(left: 10)),
+                          DropdownButton(
+                            value: state.dropdown12Value,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                state.dropdown12Value = newValue!;
+                              });
+                            },
+                            items: _dropdownList.map(
+                                  (value) => DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ),
+                            ).toList(),
                           )
                         ],
                       ),
@@ -177,6 +191,21 @@ class _QuizFormState extends State<QuizForm> {
                                   child: Text(value),
                                 ),
                               ).toList(),
+                            ),
+                            Padding(padding: EdgeInsets.only(left: 10)),
+                            DropdownButton(
+                              value: state.dropdown22Value,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  state.dropdown22Value = newValue!;
+                                });
+                              },
+                              items: _dropdownList.map(
+                                    (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
                             )
                           ],
                         ),
@@ -206,6 +235,21 @@ class _QuizFormState extends State<QuizForm> {
                               },
                               items: _dropdownList.map(
                                 (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
+                            ),
+                            Padding(padding: EdgeInsets.only(left: 10)),
+                            DropdownButton(
+                              value: state.dropdown32Value,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  state.dropdown32Value = newValue!;
+                                });
+                              },
+                              items: _dropdownList.map(
+                                    (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
                                 ),
@@ -243,6 +287,21 @@ class _QuizFormState extends State<QuizForm> {
                                   child: Text(value),
                                 ),
                               ).toList(),
+                            ),
+                            Padding(padding: EdgeInsets.only(left: 10)),
+                            DropdownButton(
+                              value: state.dropdown42Value,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  state.dropdown42Value = newValue!;
+                                });
+                              },
+                              items: _dropdownList.map(
+                                    (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
                             )
                           ],
                         ),
@@ -272,6 +331,21 @@ class _QuizFormState extends State<QuizForm> {
                               },
                               items: _dropdownList.map(
                                 (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
+                            ),
+                            Padding(padding: EdgeInsets.only(left: 10)),
+                            DropdownButton(
+                              value: state.dropdown52Value,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  state.dropdown52Value = newValue!;
+                                });
+                              },
+                              items: _dropdownList.map(
+                                    (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
                                 ),

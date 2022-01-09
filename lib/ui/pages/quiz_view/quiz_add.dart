@@ -1,6 +1,6 @@
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
-import 'package:bntu_app/ui/pages/quizz_view/quiz_form.dart';
+import 'package:bntu_app/ui/pages/quiz_view/quiz_form.dart';
 import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -25,7 +25,7 @@ class _QuizAddState extends State<QuizAdd> {
   TextEditingController _answer4Controller = TextEditingController();
   TextEditingController _answer5Controller = TextEditingController();
 
-  Map<String, dynamic> _answers = {};
+  List<Map<String, List<String>>> _answers = [];
 
   void _setAnswers(
     String v1,
@@ -33,18 +33,65 @@ class _QuizAddState extends State<QuizAdd> {
     String v3,
     String v4,
     String v5,
+    String v12,
+    String v22,
+    String v32,
+    String v42,
+    String v52,
   ) {
-    _answers = {};
-    if (_answer1Controller.text.trim() != '')
-      _answers[_answer1Controller.text.trim()] = v1;
-    if (_answer2Controller.text.trim() != '')
-      _answers[_answer2Controller.text.trim()] = v2;
-    if (_answer3Controller.text.trim() != '')
-      _answers[_answer3Controller.text.trim()] = v3;
-    if (_answer4Controller.text.trim() != '')
-      _answers[_answer4Controller.text.trim()] = v4;
-    if (_answer5Controller.text.trim() != '')
-      _answers[_answer5Controller.text.trim()] = v5;
+    _answers = [];
+    if (_answer1Controller.text.trim() != '') {
+      if (v12 != '..') {
+        _answers.add({
+          _answer1Controller.text.trim(): [v1, v12]
+        });
+      } else {
+        _answers.add({
+          _answer1Controller.text.trim(): [v1]
+        });
+      }
+    }
+    if (_answer2Controller.text.trim() != '') {
+      if (v22 != '..') {
+        _answers.add({
+          _answer2Controller.text.trim(): [v2, v22]
+        });
+      } else {
+        _answers.add({
+          _answer2Controller.text.trim(): [v2]
+        });
+      }
+    }if (_answer3Controller.text.trim() != '') {
+      if (v32 != '..') {
+        _answers.add({
+          _answer3Controller.text.trim(): [v3, v32]
+        });
+      } else {
+        _answers.add({
+          _answer3Controller.text.trim(): [v3]
+        });
+      }
+    }if (_answer4Controller.text.trim() != '') {
+      if (v42 != '..') {
+        _answers.add({
+          _answer4Controller.text.trim(): [v4, v42]
+        });
+      } else {
+        _answers.add({
+          _answer4Controller.text.trim(): [v4]
+        });
+      }
+    }if (_answer5Controller.text.trim() != '') {
+      if (v52 != '..') {
+        _answers.add({
+          _answer5Controller.text.trim(): [v5, v52]
+        });
+      } else {
+        _answers.add({
+          _answer5Controller.text.trim(): [v5]
+        });
+      }
+    }
   }
 
   void _addQuestion(AppProvider state) {
@@ -55,6 +102,11 @@ class _QuizAddState extends State<QuizAdd> {
         state.dropdown3Value,
         state.dropdown4Value,
         state.dropdown5Value,
+        state.dropdown12Value,
+        state.dropdown22Value,
+        state.dropdown32Value,
+        state.dropdown42Value,
+        state.dropdown52Value,
       );
       if (widget.questions == 'f') {
         state.addFacultyQuestion(_questionController.text.trim(), _answers);
@@ -70,19 +122,28 @@ class _QuizAddState extends State<QuizAdd> {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-
         if (widget.questions == 'f') {
           state.dropdown1Value = state.facultiesShortNames[0];
           state.dropdown2Value = state.facultiesShortNames[0];
           state.dropdown3Value = state.facultiesShortNames[0];
           state.dropdown4Value = state.facultiesShortNames[0];
           state.dropdown5Value = state.facultiesShortNames[0];
+          state.dropdown12Value = state.facultiesShortNames[0];
+          state.dropdown22Value = state.facultiesShortNames[0];
+          state.dropdown32Value = state.facultiesShortNames[0];
+          state.dropdown42Value = state.facultiesShortNames[0];
+          state.dropdown52Value = state.facultiesShortNames[0];
         } else if (widget.questions == 's') {
-          state.dropdown1Value = Constants.quizSpecAnswersList[0];
-          state.dropdown2Value = Constants.quizSpecAnswersList[0];
-          state.dropdown3Value = Constants.quizSpecAnswersList[0];
-          state.dropdown4Value = Constants.quizSpecAnswersList[0];
-          state.dropdown5Value = Constants.quizSpecAnswersList[0];
+          state.dropdown1Value = Constants.quizSpecAnswersList[1];
+          state.dropdown2Value = Constants.quizSpecAnswersList[1];
+          state.dropdown3Value = Constants.quizSpecAnswersList[1];
+          state.dropdown4Value = Constants.quizSpecAnswersList[1];
+          state.dropdown5Value = Constants.quizSpecAnswersList[1];
+          state.dropdown12Value = Constants.quizSpecAnswersList[0];
+          state.dropdown22Value = Constants.quizSpecAnswersList[0];
+          state.dropdown32Value = Constants.quizSpecAnswersList[0];
+          state.dropdown42Value = Constants.quizSpecAnswersList[0];
+          state.dropdown52Value = Constants.quizSpecAnswersList[0];
         }
 
         return Scaffold(

@@ -9,7 +9,7 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
 
   @override
   Future<void> addQuestion(
-      String collection, String question, Map<String, dynamic> answers) async {
+      String collection, String question, List<Map<String, dynamic>> answers) async {
     int newOrderId = await _getLength(collection);
     await dbRef.collection(collection).add({
       'question': question,
@@ -20,7 +20,7 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
 
   @override
   Future<void> editQuestion(String collection, String id, String question,
-      Map<String, dynamic> answers) async {
+      List<Map<String, dynamic>> answers) async {
     await dbRef.collection(collection).doc(id).update({
       'question': question,
       'answers': answers,

@@ -65,6 +65,12 @@ class AppProvider with ChangeNotifier {
   String dropdown4Value = '...';
   String dropdown5Value = '...';
 
+  String dropdown12Value = '...';
+  String dropdown22Value = '...';
+  String dropdown32Value = '...';
+  String dropdown42Value = '...';
+  String dropdown52Value = '...';
+
   bool isList = true; // ListView or GridView at faculties page
   bool isFacultiesQuiz = true; // Quiz for faculties or specialties
 
@@ -131,7 +137,7 @@ class AppProvider with ChangeNotifier {
   }
 
   void initQuestions() async {
-    facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
+    // facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
     specialtiesQuestions =
         await _questionsRepository.getQuestionsList('quizSpecialties');
     notifyListeners();
@@ -489,7 +495,10 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addFacultyQuestion(String question, Map<String, dynamic> answers) {
+  void addFacultyQuestion(
+    String question,
+    List<Map<String, dynamic>> answers,
+  ) {
     _questionsRepository
         .addQuestion(_quizFacultiesCollection, question, answers)
         .whenComplete(() => initQuestions());
@@ -499,7 +508,7 @@ class AppProvider with ChangeNotifier {
   void editFacultyQuestion(
     String id,
     String question,
-    Map<String, dynamic> answers,
+    List<Map<String, dynamic>> answers,
   ) {
     _questionsRepository
         .editQuestion(_quizFacultiesCollection, id, question, answers)
@@ -528,7 +537,10 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addSpecialityQuestion(String question, Map<String, dynamic> answers) {
+  void addSpecialityQuestion(
+    String question,
+    List<Map<String, dynamic>> answers,
+  ) {
     _questionsRepository
         .addQuestion(_quizSpecialtiesCollection, question, answers)
         .whenComplete(() => initQuestions());
@@ -538,7 +550,7 @@ class AppProvider with ChangeNotifier {
   void editSpecialityQuestion(
     String id,
     String question,
-    Map<String, dynamic> answers,
+    List<Map<String, dynamic>> answers,
   ) {
     _questionsRepository
         .editQuestion(_quizSpecialtiesCollection, id, question, answers)

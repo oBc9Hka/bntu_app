@@ -1,8 +1,8 @@
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
-import 'package:bntu_app/ui/pages/quizz_view/quiz_add.dart';
-import 'package:bntu_app/ui/pages/quizz_view/quiz_edit.dart';
+import 'package:bntu_app/ui/pages/quiz_view/quiz_add.dart';
+import 'package:bntu_app/ui/pages/quiz_view/quiz_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -127,8 +127,12 @@ class _QuizListState extends State<QuizList> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ..._questions[index].answers!.entries.map((e) => Text(
-                          '${e.key.length <= 10 ? e.key : e.key.substring(0, 10)}: "${e.value}"')),
+                      ..._questions[index].answers!.map(
+                            (e) => Text(
+                                '${e.entries.first.key.length <= 10 ? e.entries.first.key : e.entries.first.key.substring(0, 10)}: ${e.values.first}'),
+                          ),
+                      // .entries.map((e) => Text(
+                      // '${e.key.length <= 10 ? e.key : e.key.substring(0, 10)}: "${e.value}"')),
                     ],
                   ),
                 );

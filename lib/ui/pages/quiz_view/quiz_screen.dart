@@ -44,41 +44,43 @@ class _QuizScreenState extends State<QuizScreen> {
   handleCheck(int index) {
     tmpArray.forEach((tmpKey) {
       QuestionModel temp = _questions[index];
-      String tag = '';
-      temp.answers!.entries.forEach((e) {
-        if (e.key == tmpKey) tag = e.value;
+      temp.answers!.forEach((element) {
+        if(element.keys.first == tmpKey){
+          element.values.first.forEach((element) {
+            tagsArray.add(element);
+          });
+        }
       });
-      tagsArray.add(tag);
+      print('tagsArray: $tagsArray');
     });
   }
 
-  Map<String, dynamic> answers = {};
+  // List<Map<String, List<String>>> answers = [];
+  List<dynamic> answers = [];
   bool isLoading = true;
 
   void initAnswers() {
     checkedAnswers = {};
-    answers.keys.forEach((e) {
-      checkedAnswers[e] = false;
-    });
+    for(var i = 0; i < answers.length; i++){
+      checkedAnswers[answers[i].keys.first] = false;
+    }
   }
 
   String errorMsg = '';
 
   void initQuiz() async {
     try {
-      answers = _questions[0].answers!;
+      answers = _questions.first.answers!;
       print(answers);
-      // setState(() {});
       checkedAnswers = {};
-      answers.keys.forEach((e) {
-        checkedAnswers[e] = false;
-      });
+      for(var i = 0; i < answers.length; i++){
+        checkedAnswers[answers[i].keys.first] = false;
+      }
       print(checkedAnswers);
       isLoading = false;
     } catch (e) {
       print('catch');
     }
-    // setState(() {});
   }
 
   @override
@@ -104,14 +106,7 @@ class _QuizScreenState extends State<QuizScreen> {
           initQuiz();
           isInited = true;
         }
-        // answers = _questions[0].answers!;
-        // print(answers);
-        // // setState(() {});
-        // checkedAnswers = {};
-        // answers.keys.forEach((e) {
-        //   checkedAnswers[e] = false;
-        // });
-        // print(checkedAnswers);
+
         return Scaffold(
           appBar: AppBar(
             // centerTitle: true,
@@ -195,11 +190,10 @@ class _QuizScreenState extends State<QuizScreen> {
                                         child: ListView(
                                           children: [
                                             for (int i = 1;
-                                                i <= checkedAnswers.keys.length;
+                                                i <= answers.length;
                                                 i++)
                                               RadioListTile(
-                                                title: Text(checkedAnswers.keys
-                                                    .elementAt(i - 1)),
+                                                title: Text(answers[i-1].keys.first),
                                                 value: i,
                                                 groupValue: groupValue,
                                                 onChanged: (T) {

@@ -56,8 +56,8 @@ void main() async {
       BaseMockErrorMessagesFirestoreRepository();
   BaseMockBuildingsFirestoreRepository _buildingsMockRepository =
       BaseMockBuildingsFirestoreRepository();
-  BaseMockQuestionsFirestoreRepository _questionsMockRepository =
-      BaseMockQuestionsFirestoreRepository();
+  // BaseMockQuestionsFirestoreRepository _questionsMockRepository =
+  //     BaseMockQuestionsFirestoreRepository();
   List _list;
 
   setUp(() {
@@ -236,24 +236,24 @@ void main() async {
     });
   });
 
-  group('Questions', () {
-    test('Error messages list loading', () async {
-      when(_questionsMockRepository.getQuestionsList())
-          .thenAnswer((realInvocation) => Future.value([]));
-
-      _list = await _questionsMockRepository.getQuestionsList();
-      expect(_list.length, 0);
-    });
-
-    test('Error messages list add', () async {
-      when(_questionsMockRepository.getQuestionsList())
-          .thenAnswer((realInvocation) => Future.value([testQuestion]));
-
-      await _questionsMockRepository.addQuestion(
-          testQuestion.question, testQuestion.answers);
-      _list = await _questionsMockRepository.getQuestionsList();
-      expect(_list.length, 1);
-      expect(_list, [testQuestion]);
-    });
-  });
+  // group('Questions', () {
+  //   test('Error messages list loading', () async {
+  //     when(_questionsMockRepository.getQuestionsList())
+  //         .thenAnswer((realInvocation) => Future.value([]));
+  //
+  //     _list = await _questionsMockRepository.getQuestionsList();
+  //     expect(_list.length, 0);
+  //   });
+  //
+  //   test('Error messages list add', () async {
+  //     when(_questionsMockRepository.getQuestionsList())
+  //         .thenAnswer((realInvocation) => Future.value([testQuestion]));
+  //
+  //     await _questionsMockRepository.addQuestion(
+  //         testQuestion.question, testQuestion.answers);
+  //     _list = await _questionsMockRepository.getQuestionsList();
+  //     expect(_list.length, 1);
+  //     expect(_list, [testQuestion]);
+  //   });
+  // });
 }

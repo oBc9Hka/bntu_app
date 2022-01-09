@@ -2,9 +2,15 @@ class QuestionModel {
   String? id;
   int? orderId;
   String? question;
-  Map<String, dynamic>? answers;
+  // List<Map<String,List<String>>>? answers;
+  List<dynamic>? answers;
 
-  QuestionModel({this.id, this.orderId, this.question, this.answers});
+  QuestionModel({
+    this.id,
+    this.orderId,
+    this.question,
+    this.answers,
+  });
 
   QuestionModel.fromMap(Map<String, dynamic> data, String id)
       : this(
