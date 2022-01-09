@@ -45,7 +45,7 @@ class _QuizScreenState extends State<QuizScreen> {
     tmpArray.forEach((tmpKey) {
       QuestionModel temp = _questions[index];
       temp.answers!.forEach((element) {
-        if(element.keys.first == tmpKey){
+        if (element.keys.first == tmpKey) {
           element.values.first.forEach((element) {
             tagsArray.add(element);
           });
@@ -61,7 +61,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void initAnswers() {
     checkedAnswers = {};
-    for(var i = 0; i < answers.length; i++){
+    for (var i = 0; i < answers.length; i++) {
       checkedAnswers[answers[i].keys.first] = false;
     }
   }
@@ -73,7 +73,7 @@ class _QuizScreenState extends State<QuizScreen> {
       answers = _questions.first.answers!;
       print(answers);
       checkedAnswers = {};
-      for(var i = 0; i < answers.length; i++){
+      for (var i = 0; i < answers.length; i++) {
         checkedAnswers[answers[i].keys.first] = false;
       }
       print(checkedAnswers);
@@ -110,7 +110,8 @@ class _QuizScreenState extends State<QuizScreen> {
         return Scaffold(
           appBar: AppBar(
             // centerTitle: true,
-            title: Text('Тест на ${widget.isFacultiesQuiz ? 'факультет' : 'специальность'}'),
+            title: Text(
+                'Тест на ${widget.isFacultiesQuiz ? 'факультет' : 'специальность'}'),
           ),
           body: isLoading
               ? Center(
@@ -145,55 +146,54 @@ class _QuizScreenState extends State<QuizScreen> {
                         return Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Column(
                                 children: [
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width: double.infinity,
-                                        child: Text(
-                                          'Вопрос ${index + 1}',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontSize: 28.0,
-                                          ),
-                                        ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Вопрос ${index + 1}',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 28.0,
                                       ),
-                                      Divider(
-                                        color: mainColor,
-                                      ),
-                                      Visibility(
-                                        visible: showMsg,
-                                        child: Text(
-                                          'Необходимо выбрать один вариант ответа',
-                                          style: TextStyle(color: Colors.red),
-                                        ),
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        _questions[index].question!,
-                                        style: TextStyle(fontSize: 24),
-                                      ),
-                                      Container(
-                                        constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.4,
-                                        ),
+                                  Divider(
+                                    color: mainColor,
+                                  ),
+                                  Visibility(
+                                    visible: showMsg,
+                                    child: Text(
+                                      'Необходимо выбрать один вариант ответа',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Expanded(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      _questions[index].question!,
+                                      style: TextStyle(fontSize: 24),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        // constraints: BoxConstraints(
+                                        //   maxHeight: 400,
+                                        // ),
                                         child: ListView(
                                           children: [
                                             for (int i = 1;
                                                 i <= answers.length;
                                                 i++)
                                               RadioListTile(
-                                                title: Text(answers[i-1].keys.first),
+                                                activeColor: Constants.mainColor,
+                                                title: Text(
+                                                    answers[i - 1].keys.first),
                                                 value: i,
                                                 groupValue: groupValue,
                                                 onChanged: (T) {
@@ -202,10 +202,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                                     groupValue = T as int;
                                                     checkedAnswers.values
                                                         .map((e) => e = false);
-                                                    checkedAnswers[
-                                                        checkedAnswers.keys
-                                                            .elementAt(
-                                                                i - 1)] = true;
+                                                    checkedAnswers[checkedAnswers
+                                                        .keys
+                                                        .elementAt(i - 1)] = true;
                                                     // checkedLetter = checkedAnswers.values.elementAt(i - 1);
                                                   });
                                                 },
@@ -213,69 +212,63 @@ class _QuizScreenState extends State<QuizScreen> {
                                           ],
                                         ),
                                       ),
-
-                                      // ...checkedAnswers.keys.map((key) {
-                                      //   return CheckboxListTile(
-                                      //     title: Text(key),
-                                      //     value: checkedAnswers[key],
-                                      //     activeColor: mainColor,
-                                      //     onChanged: (bool? value) {
-                                      //       setState(() {
-                                      //         checkedAnswers[key] = value!;
-                                      //       });
-                                      //     },
-                                      //   );
-                                      // }),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  Divider(
+                                    color: mainColor,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      getCheckboxItems(
+                                          _controller!.page!.toInt());
+                                      // if (!checkedAnswers.values.contains(true)) {
+                                      if (groupValue == 0) {
+                                        setState(() {
+                                          showMsg = true;
+                                        });
+                                      } else {
+                                        groupValue = 0;
+                                        showMsg = false;
+                                        // tagsArray.add(value);
+                                        if (_controller!.page?.toInt() ==
+                                            _questions.length - 1) {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ResultScreen(
+                                                tagsList: tagsArray,
+                                                isFacultiesQuiz:
+                                                    widget.isFacultiesQuiz,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          _controller!.nextPage(
+                                              duration:
+                                                  Duration(milliseconds: 250),
+                                              curve: Curves.easeInExpo);
+                                          setState(() {
+                                            btnPressed = false;
+                                          });
+                                        }
+                                      }
+                                    },
+                                    style: Constants.customElevatedButtonStyle,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 12.0, horizontal: 24.0),
+                                      child: Text(
+                                        btnText,
+                                        style: TextStyle(color: mainColor),
+                                      ),
+                                    ),
                                   ),
                                 ],
-                              ),
-                              Divider(
-                                color: mainColor,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  getCheckboxItems(_controller!.page!.toInt());
-                                  // if (!checkedAnswers.values.contains(true)) {
-                                  if (groupValue == 0) {
-                                    setState(() {
-                                      showMsg = true;
-                                    });
-                                  } else {
-                                    groupValue = 0;
-                                    showMsg = false;
-                                    // tagsArray.add(value);
-                                    if (_controller!.page?.toInt() ==
-                                        _questions.length - 1) {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ResultScreen(
-                                            tagsList: tagsArray,
-                                            isFacultiesQuiz:
-                                                widget.isFacultiesQuiz,
-                                          ),
-                                        ),
-                                      );
-                                    } else {
-                                      _controller!.nextPage(
-                                          duration: Duration(milliseconds: 250),
-                                          curve: Curves.easeInExpo);
-                                      setState(() {
-                                        btnPressed = false;
-                                      });
-                                    }
-                                  }
-                                },
-                                style: Constants.customElevatedButtonStyle,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 12.0, horizontal: 24.0),
-                                  child: Text(
-                                    btnText,
-                                    style: TextStyle(color: mainColor),
-                                  ),
-                                ),
                               ),
                             ],
                           ),
