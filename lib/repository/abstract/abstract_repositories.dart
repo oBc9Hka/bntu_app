@@ -174,18 +174,18 @@ abstract class BuildingsRepository {
 }
 
 abstract class QuestionsRepository {
-  Future<List<QuestionModel>> getQuestionsList();
+  Future<List<QuestionModel>> getQuestionsList(String collection);
 
-  Future<void> addQuestion(String question, Map<String, dynamic> answers);
+  Future<void> addQuestion(String collection, String question, Map<String, dynamic> answers);
 
-  Future<void> editQuestion(
+  Future<void> editQuestion(String collection,
       String id, String question, Map<String, dynamic> answers);
 
-  Future<void> removeQuestion(String id);
+  Future<void> removeQuestion(String collection, String id);
 
-  Future<void> moveUp(String currId, String prevId);
+  Future<void> moveUp(String collection, String currId, String prevId);
 
-  Future<void> moveDown(String currId, String nextId);
+  Future<void> moveDown(String collection, String currId, String nextId);
 }
 
 abstract class ErrorMessagesRepository {
@@ -204,6 +204,10 @@ abstract class SettingsRepository {
   Future<String> getCurrentAdmissionYear();
 
   Future<String> getSecretKey();
+
+  Future<bool> getIsFacultyQuizChecked();
+
+  Future<void> editQuizChecked(bool isFacultiesQuiz);
 
   Future<void> editSettings(String currentAdmissionYear, String key);
 }

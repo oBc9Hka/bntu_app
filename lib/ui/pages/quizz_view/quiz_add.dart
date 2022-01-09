@@ -1,4 +1,5 @@
 import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/quizz_view/quiz_form.dart';
 import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class QuizAdd extends StatefulWidget {
-  const QuizAdd({Key? key}) : super(key: key);
+  const QuizAdd({Key? key, required this.questions}) : super(key: key);
+  final String questions;
 
   @override
   _QuizAddState createState() => _QuizAddState();
@@ -54,7 +56,11 @@ class _QuizAddState extends State<QuizAdd> {
         state.dropdown4Value,
         state.dropdown5Value,
       );
-      state.addQuestion(_questionController.text.trim(), _answers);
+      if (widget.questions == 'f') {
+        state.addFacultyQuestion(_questionController.text.trim(), _answers);
+      } else if (widget.questions == 's') {
+        state.addSpecialityQuestion(_questionController.text.trim(), _answers);
+      }
       Navigator.of(context).pop();
       Fluttertoast.showToast(msg: 'Вопрос успешно добавлен');
     }
@@ -64,11 +70,20 @@ class _QuizAddState extends State<QuizAdd> {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        state.dropdown1Value = state.facultiesShortNames[0];
-        state.dropdown2Value = state.facultiesShortNames[0];
-        state.dropdown3Value = state.facultiesShortNames[0];
-        state.dropdown4Value = state.facultiesShortNames[0];
-        state.dropdown5Value = state.facultiesShortNames[0];
+
+        if (widget.questions == 'f') {
+          state.dropdown1Value = state.facultiesShortNames[0];
+          state.dropdown2Value = state.facultiesShortNames[0];
+          state.dropdown3Value = state.facultiesShortNames[0];
+          state.dropdown4Value = state.facultiesShortNames[0];
+          state.dropdown5Value = state.facultiesShortNames[0];
+        } else if (widget.questions == 's') {
+          state.dropdown1Value = Constants.quizSpecAnswersList[0];
+          state.dropdown2Value = Constants.quizSpecAnswersList[0];
+          state.dropdown3Value = Constants.quizSpecAnswersList[0];
+          state.dropdown4Value = Constants.quizSpecAnswersList[0];
+          state.dropdown5Value = Constants.quizSpecAnswersList[0];
+        }
 
         return Scaffold(
           appBar: AppBar(
@@ -88,6 +103,7 @@ class _QuizAddState extends State<QuizAdd> {
                     answer4Controller: _answer4Controller,
                     answer5Controller: _answer5Controller,
                     facultiesList: state.facultiesShortNames,
+                    questions: widget.questions,
                   ),
                 ),
               ),

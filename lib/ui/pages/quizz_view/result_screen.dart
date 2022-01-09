@@ -122,7 +122,7 @@ class ResultScreen extends StatelessWidget {
         }
       }
       var _mockSorterList = [];
-      if (!state.isFacultiesQuiz) {
+      if (!isFacultiesQuiz) {
         print('sortedQueryList: $sortedQueryList');
         print('firstFromSorted: ${_sortedList.first.key}');
         _mockSorterList = Constants.quizResultList

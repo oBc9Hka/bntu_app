@@ -1,5 +1,6 @@
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class QuizForm extends StatefulWidget {
     required this.answer4Controller,
     required this.answer5Controller,
     required this.facultiesList,
+    required this.questions,
   }) : super(key: key);
 
   final QuestionModel? question;
@@ -29,6 +31,8 @@ class QuizForm extends StatefulWidget {
   final TextEditingController answer5Controller;
   final List<String> facultiesList;
 
+  final String questions;
+
   @override
   _QuizFormState createState() => _QuizFormState();
 }
@@ -38,6 +42,7 @@ class _QuizFormState extends State<QuizForm> {
   bool _answer4Visible = false;
   bool _answer5Visible = false;
 
+  final int _maxLines = 5;
   void _checkForVisibility() {
     if (widget.answer2Controller.text != '') {
       _answer3Visible = true;
@@ -61,9 +66,23 @@ class _QuizFormState extends State<QuizForm> {
   }
 
   @override
+  void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_) => _checkForVisibility());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
+        List<String> _dropdownList = [];
+
+        if (widget.questions == 'f') {
+          _dropdownList = widget.facultiesList;
+        } else if (widget.questions == 's') {
+          _dropdownList = Constants.quizSpecAnswersList;
+        }
+
         return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -84,7 +103,7 @@ class _QuizFormState extends State<QuizForm> {
                         },
                         decoration: const InputDecoration(labelText: 'Вопрос'),
                         minLines: 1,
-                        maxLines: 2,
+                        maxLines: 3,
                       ),
                       Divider(),
                       Row(
@@ -101,7 +120,7 @@ class _QuizFormState extends State<QuizForm> {
                               decoration:
                                   const InputDecoration(labelText: 'Ответ 1'),
                               minLines: 1,
-                              maxLines: 2,
+                              maxLines: _maxLines,
                               onChanged: (value) {
                                 _checkForVisibility();
                               },
@@ -114,14 +133,12 @@ class _QuizFormState extends State<QuizForm> {
                                 state.dropdown1Value = newValue!;
                               });
                             },
-                            items: widget.facultiesList
-                                .map(
-                                  (value) => DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  ),
-                                )
-                                .toList(),
+                            items: _dropdownList.map(
+                              (value) => DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ),
+                            ).toList(),
                           )
                         ],
                       ),
@@ -141,7 +158,7 @@ class _QuizFormState extends State<QuizForm> {
                                 decoration:
                                     const InputDecoration(labelText: 'Ответ 2'),
                                 minLines: 1,
-                                maxLines: 2,
+                                maxLines: _maxLines,
                                 onChanged: (value) {
                                   _checkForVisibility();
                                 },
@@ -154,14 +171,12 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown2Value = newValue!;
                                 });
                               },
-                              items: widget.facultiesList
-                                  .map(
-                                    (value) => DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ),
-                                  )
-                                  .toList(),
+                              items: _dropdownList.map(
+                                (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
                             )
                           ],
                         ),
@@ -176,7 +191,7 @@ class _QuizFormState extends State<QuizForm> {
                                 decoration:
                                     const InputDecoration(labelText: 'Ответ 3'),
                                 minLines: 1,
-                                maxLines: 2,
+                                maxLines: _maxLines,
                                 onChanged: (value) {
                                   _checkForVisibility();
                                 },
@@ -189,14 +204,12 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown3Value = newValue!;
                                 });
                               },
-                              items: widget.facultiesList
-                                  .map(
-                                    (value) => DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ),
-                                  )
-                                  .toList(),
+                              items: _dropdownList.map(
+                                (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
                             )
                           ],
                         ),
@@ -211,7 +224,7 @@ class _QuizFormState extends State<QuizForm> {
                                 decoration:
                                     const InputDecoration(labelText: 'Ответ 4'),
                                 minLines: 1,
-                                maxLines: 2,
+                                maxLines: _maxLines,
                                 onChanged: (value) {
                                   _checkForVisibility();
                                 },
@@ -224,14 +237,12 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown4Value = newValue!;
                                 });
                               },
-                              items: widget.facultiesList
-                                  .map(
-                                    (value) => DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ),
-                                  )
-                                  .toList(),
+                              items: _dropdownList.map(
+                                (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
                             )
                           ],
                         ),
@@ -246,7 +257,7 @@ class _QuizFormState extends State<QuizForm> {
                                 decoration:
                                     const InputDecoration(labelText: 'Ответ 5'),
                                 minLines: 1,
-                                maxLines: 2,
+                                maxLines: _maxLines,
                                 onChanged: (value) {
                                   _checkForVisibility();
                                 },
@@ -259,14 +270,12 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown5Value = newValue!;
                                 });
                               },
-                              items: widget.facultiesList
-                                  .map(
-                                    (value) => DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ),
-                                  )
-                                  .toList(),
+                              items: _dropdownList.map(
+                                (value) => DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ),
+                              ).toList(),
                             )
                           ],
                         ),

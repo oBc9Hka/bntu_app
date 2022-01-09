@@ -8,9 +8,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class QuizEdit extends StatefulWidget {
-  const QuizEdit({Key? key, required this.question}) : super(key: key);
+  const QuizEdit({Key? key, required this.question, required this.questions})
+      : super(key: key);
 
   final QuestionModel question;
+  final String questions;
 
   @override
   _QuizEditState createState() => _QuizEditState();
@@ -58,7 +60,14 @@ class _QuizEditState extends State<QuizEdit> {
         state.dropdown4Value,
         state.dropdown5Value,
       );
-      state.editQuestion(id, _questionController.text.trim(), _answers);
+
+      if (widget.questions == 'f') {
+        state.editFacultyQuestion(
+            id, _questionController.text.trim(), _answers);
+      } else if (widget.questions == 's') {
+        state.editSpecialityQuestion(
+            id, _questionController.text.trim(), _answers);
+      }
       Navigator.of(context).pop();
       Fluttertoast.showToast(msg: 'Вопрос успешно изменён');
     }
@@ -68,9 +77,11 @@ class _QuizEditState extends State<QuizEdit> {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        String initValue = 'ФТК';
+        String initValue = widget.questions == 'f' ? 'ФТК' : 'D';
 
-        initValue = state.facultiesShortNames[0];
+        if(initValue == 'ФТК') {
+          initValue = state.facultiesShortNames[0];
+        }
         state.dropdown1Value = initValue;
         state.dropdown2Value = initValue;
         state.dropdown3Value = initValue;
@@ -130,6 +141,7 @@ class _QuizEditState extends State<QuizEdit> {
                     answer4Controller: _answer4Controller,
                     answer5Controller: _answer5Controller,
                     facultiesList: state.facultiesShortNames,
+                    questions: widget.questions,
                   ),
                 ),
               ),
@@ -144,7 +156,11 @@ class _QuizEditState extends State<QuizEdit> {
                       return RemoveItem(
                         itemName: 'вопрос',
                         onRemovePressed: () {
-                          state.removeQuestion(widget.question.id!);
+                          if (widget.questions == 'f') {
+                            state.removeFacultyQuestion(widget.question.id!);
+                          } else if (widget.questions == 's') {
+                            state.removeSpecialityQuestion(widget.question.id!);
+                          }
                           Navigator.pop(context);
                           Navigator.pop(context);
                           Fluttertoast.showToast(msg: 'Вопрос успешно удалён');

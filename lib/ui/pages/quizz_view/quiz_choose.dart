@@ -13,14 +13,13 @@ class QuizChoose extends StatefulWidget {
 class _QuizChooseState extends State<QuizChoose> {
   var groupValue;
   bool firstInit = true;
-  var state;
+  late AppProvider state;
 
   Future<bool> _onWillPop() async {
-    print('onPop');
     if (groupValue == 0) {
-      state.isFacultiesQuiz = true;
+      state.editQuizChecked(true);
     } else if (groupValue == 1) {
-      state.isFacultiesQuiz = false;
+      state.editQuizChecked(false);
     }
     Fluttertoast.showToast(msg: 'Изменения сохранены');
     return true;

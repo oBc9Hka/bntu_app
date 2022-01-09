@@ -95,9 +95,9 @@ class _QuizScreenState extends State<QuizScreen> {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
         if (widget.isFacultiesQuiz) {
-          _questions = state.questions;
+          _questions = state.facultiesQuestions;
         } else {
-          _questions = Constants.quizQuestionsList;
+          _questions = state.specialtiesQuestions;
         }
 
         if (!isInited) {

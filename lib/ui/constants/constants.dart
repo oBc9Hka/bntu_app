@@ -23,6 +23,8 @@ class Constants {
     ),
   );
 
+  static List<String> quizSpecAnswersList = ['D', 'I', 'S', 'C'];
+
   static List<QuestionModel> quizQuestionsList = [
     QuestionModel(
         id: 'qwe',

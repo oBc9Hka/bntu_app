@@ -5,13 +5,13 @@ import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuestionsFirestoreRepository extends QuestionsRepository {
-  final dbRef = FirebaseFirestore.instance.collection('quiz');
+  final dbRef = FirebaseFirestore.instance;
 
   @override
   Future<void> addQuestion(
-      String question, Map<String, dynamic> answers) async {
-    int newOrderId = await _getLength();
-    await dbRef.add({
+      String collection, String question, Map<String, dynamic> answers) async {
+    int newOrderId = await _getLength(collection);
+    await dbRef.collection(collection).add({
       'question': question,
       'answers': answers,
       'orderId': newOrderId,
@@ -19,18 +19,19 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
   }
 
   @override
-  Future<void> editQuestion(
-      String id, String question, Map<String, dynamic> answers) async {
-    await dbRef.doc(id).update({
+  Future<void> editQuestion(String collection, String id, String question,
+      Map<String, dynamic> answers) async {
+    await dbRef.collection(collection).doc(id).update({
       'question': question,
       'answers': answers,
     });
   }
 
   @override
-  Future<List<QuestionModel>> getQuestionsList() async {
+  Future<List<QuestionModel>> getQuestionsList(String collection) async {
     List<QuestionModel> list = [];
-    QuerySnapshot<Map<String, dynamic>> temp = await dbRef.get();
+    QuerySnapshot<Map<String, dynamic>> temp =
+        await dbRef.collection(collection).get();
 
     if (temp.docs.isEmpty) {
       throw TimeoutException('Ошибка соединения');
@@ -46,8 +47,9 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
   }
 
   @override
-  Future<void> moveDown(String currId, String nextId) async {
-    int currOrderId = await dbRef.doc(currId).get().then((snapshot) {
+  Future<void> moveDown(String collection, String currId, String nextId) async {
+    int currOrderId =
+        await dbRef.collection(collection).doc(currId).get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
       var _toReturn;
       for (var item in _temp) {
@@ -57,17 +59,18 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
     });
     int nextOrderId = currOrderId + 1;
 
-    await dbRef.doc(currId).update({
+    await dbRef.collection(collection).doc(currId).update({
       'orderId': nextOrderId,
     });
-    await dbRef.doc(nextId).update({
+    await dbRef.collection(collection).doc(nextId).update({
       'orderId': currOrderId,
     });
   }
 
   @override
-  Future<void> moveUp(String currId, String prevId) async {
-    int currOrderId = await dbRef.doc(currId).get().then((snapshot) {
+  Future<void> moveUp(String collection, String currId, String prevId) async {
+    int currOrderId =
+        await dbRef.collection(collection).doc(currId).get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
       var _toReturn;
       for (var item in _temp) {
@@ -77,21 +80,21 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
     });
     int prevOrderId = currOrderId - 1;
 
-    await dbRef.doc(currId).update({
+    await dbRef.collection(collection).doc(currId).update({
       'orderId': prevOrderId,
     });
-    await dbRef.doc(prevId).update({
+    await dbRef.collection(collection).doc(prevId).update({
       'orderId': currOrderId,
     });
   }
 
   @override
-  Future<void> removeQuestion(String id) async {
-    await dbRef.doc(id).delete();
+  Future<void> removeQuestion(String collection, String id) async {
+    await dbRef.collection(collection).doc(id).delete();
   }
 
-  Future<int> _getLength() async {
-    return await dbRef.get().then((snapshot) {
+  Future<int> _getLength(String collection) async {
+    return await dbRef.collection(collection).get().then((snapshot) {
       List<int> _temp = [];
       snapshot.docs.forEach((e) {
         _temp.add(e.get('orderId'));

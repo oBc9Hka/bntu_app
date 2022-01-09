@@ -82,8 +82,10 @@ class App extends StatelessWidget {
             isFacultiesQuiz: context.watch<AppProvider>().isFacultiesQuiz),
         '/test-faculties': (context) => MainMenu(isFacultiesQuiz: true),
         '/test-specialties': (context) => MainMenu(isFacultiesQuiz: false),
-        '/test-faculties-edit': (context) => QuizList(),
-        '/test-specialties-edit': (context) => QuizList(),
+        '/test-faculties-edit': (context) => QuizList(
+            questions: 'f'),
+        '/test-specialties-edit': (context) => QuizList(
+            questions: 's'),
         '/test-edit': (context) => QuizChoose(),
       },
     );

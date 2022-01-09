@@ -10,6 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class AppProvider with ChangeNotifier {
+  final String _quizFacultiesCollection = 'quiz';
+  final String _quizSpecialtiesCollection = 'quizSpecialties';
+
   final UserRepository _userRepository;
 
   final FacultiesRepository _facultiesRepository;
@@ -44,9 +47,13 @@ class AppProvider with ChangeNotifier {
 
   bool get isBuildingsLoaded => buildings.isNotEmpty;
 
-  List<QuestionModel> questions = [];
+  List<QuestionModel> facultiesQuestions = [];
 
-  bool get isQuestionsLoaded => questions.isNotEmpty;
+  bool get isFacultiesQuestionsLoaded => facultiesQuestions.isNotEmpty;
+
+  List<QuestionModel> specialtiesQuestions = [];
+
+  bool get isSpecialtiesQuestionsLoaded => specialtiesQuestions.isNotEmpty;
 
   String currentAdmissionYear = '';
   String secretKey = '';
@@ -103,6 +110,7 @@ class AppProvider with ChangeNotifier {
   void initSettings() async {
     currentAdmissionYear = await _settingsRepository.getCurrentAdmissionYear();
     secretKey = await _settingsRepository.getSecretKey();
+    isFacultiesQuiz = await _settingsRepository.getIsFacultyQuizChecked();
     notifyListeners();
   }
 
@@ -123,7 +131,9 @@ class AppProvider with ChangeNotifier {
   }
 
   void initQuestions() async {
-    questions = await _questionsRepository.getQuestionsList();
+    facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
+    specialtiesQuestions =
+        await _questionsRepository.getQuestionsList('quizSpecialties');
     notifyListeners();
   }
 
@@ -416,6 +426,13 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void editQuizChecked(bool isFacultiesQuiz) {
+    _settingsRepository
+        .editQuizChecked(isFacultiesQuiz)
+        .whenComplete(() => initSettings());
+    notifyListeners();
+  }
+
   void submitErrorMessage(String msg) {
     _errorMessagesRepository
         .submitErrorMessage(msg)
@@ -472,39 +489,80 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addQuestion(String question, Map<String, dynamic> answers) {
+  void addFacultyQuestion(String question, Map<String, dynamic> answers) {
     _questionsRepository
-        .addQuestion(question, answers)
+        .addQuestion(_quizFacultiesCollection, question, answers)
         .whenComplete(() => initQuestions());
     notifyListeners();
   }
 
-  void editQuestion(
+  void editFacultyQuestion(
     String id,
     String question,
     Map<String, dynamic> answers,
   ) {
     _questionsRepository
-        .editQuestion(id, question, answers)
+        .editQuestion(_quizFacultiesCollection, id, question, answers)
         .whenComplete(() => initQuestions());
     notifyListeners();
   }
 
-  void removeQuestion(String id) {
-    _questionsRepository.removeQuestion(id).whenComplete(() => initQuestions());
-    notifyListeners();
-  }
-
-  void moveUpQuestion(String currId, String prevId) {
+  void removeFacultyQuestion(String id) {
     _questionsRepository
-        .moveUp(currId, prevId)
+        .removeQuestion(_quizFacultiesCollection, id)
         .whenComplete(() => initQuestions());
     notifyListeners();
   }
 
-  void moveDownQuestion(String currId, String nextId) {
+  void moveUpFacultyQuestion(String currId, String prevId) {
     _questionsRepository
-        .moveDown(currId, nextId)
+        .moveUp(_quizFacultiesCollection, currId, prevId)
+        .whenComplete(() => initQuestions());
+    notifyListeners();
+  }
+
+  void moveDownFacultyQuestion(String currId, String nextId) {
+    _questionsRepository
+        .moveDown(_quizFacultiesCollection, currId, nextId)
+        .whenComplete(() => initQuestions());
+    notifyListeners();
+  }
+
+  void addSpecialityQuestion(String question, Map<String, dynamic> answers) {
+    _questionsRepository
+        .addQuestion(_quizSpecialtiesCollection, question, answers)
+        .whenComplete(() => initQuestions());
+    notifyListeners();
+  }
+
+  void editSpecialityQuestion(
+    String id,
+    String question,
+    Map<String, dynamic> answers,
+  ) {
+    _questionsRepository
+        .editQuestion(_quizSpecialtiesCollection, id, question, answers)
+        .whenComplete(() => initQuestions());
+    notifyListeners();
+  }
+
+  void removeSpecialityQuestion(String id) {
+    _questionsRepository
+        .removeQuestion(_quizSpecialtiesCollection, id)
+        .whenComplete(() => initQuestions());
+    notifyListeners();
+  }
+
+  void moveUpSpecialityQuestion(String currId, String prevId) {
+    _questionsRepository
+        .moveUp(_quizSpecialtiesCollection, currId, prevId)
+        .whenComplete(() => initQuestions());
+    notifyListeners();
+  }
+
+  void moveDownSpecialityQuestion(String currId, String nextId) {
+    _questionsRepository
+        .moveDown(_quizSpecialtiesCollection, currId, nextId)
         .whenComplete(() => initQuestions());
     notifyListeners();
   }
@@ -514,10 +572,8 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signIn(String email, String password) async{
-    await _userRepository
-        .signIn(email, password)
-        .whenComplete(() {
+  Future<void> signIn(String email, String password) async {
+    await _userRepository.signIn(email, password).whenComplete(() {
       initUser();
       initErrorsMap();
     });

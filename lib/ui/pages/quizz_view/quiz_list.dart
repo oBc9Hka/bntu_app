@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class QuizList extends StatefulWidget {
-  const QuizList({Key? key}) : super(key: key);
+  const QuizList({Key? key, required this.questions}) : super(key: key);
+  final String questions;
 
   @override
   _QuizListState createState() => _QuizListState();
@@ -20,15 +21,24 @@ class _QuizListState extends State<QuizList> {
   Widget build(BuildContext context) {
     const mainColor = Constants.mainColor;
     return Consumer<AppProvider>(builder: (context, state, child) {
-      _questions = state.questions;
+      if (widget.questions == 'f') {
+        _questions = state.facultiesQuestions;
+      } else if (widget.questions == 's') {
+        _questions = state.specialtiesQuestions;
+      }
       return Scaffold(
         appBar: AppBar(
           title: Text('Список вопросов'),
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => QuizAdd()));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => QuizAdd(
+                      questions: widget.questions,
+                    ),
+                  ),
+                );
               },
               icon: Icon(Icons.add),
             ),
@@ -59,6 +69,7 @@ class _QuizListState extends State<QuizList> {
                               builder: (BuildContext context) {
                             return QuizEdit(
                               question: _questions[index],
+                              questions: widget.questions,
                             );
                           }));
                         },
@@ -70,10 +81,17 @@ class _QuizListState extends State<QuizList> {
                       IconButton(
                         onPressed: () {
                           try {
-                            state.moveUpQuestion(
-                              _questions[index].id!,
-                              _questions[index - 1].id!,
-                            );
+                            if (widget.questions == 'f') {
+                              state.moveUpFacultyQuestion(
+                                _questions[index].id!,
+                                _questions[index - 1].id!,
+                              );
+                            } else if (widget.questions == 's') {
+                              state.moveUpSpecialityQuestion(
+                                _questions[index].id!,
+                                _questions[index - 1].id!,
+                              );
+                            }
                           } catch (e) {}
                         },
                         tooltip: 'Поднять в списке',
@@ -85,10 +103,17 @@ class _QuizListState extends State<QuizList> {
                       IconButton(
                         onPressed: () {
                           try {
-                            state.moveDownQuestion(
-                              _questions[index].id!,
-                              _questions[index + 1].id!,
-                            );
+                            if (widget.questions == 'f') {
+                              state.moveDownFacultyQuestion(
+                                _questions[index].id!,
+                                _questions[index + 1].id!,
+                              );
+                            } else if (widget.questions == 's') {
+                              state.moveDownSpecialityQuestion(
+                                _questions[index].id!,
+                                _questions[index + 1].id!,
+                              );
+                            }
                           } catch (e) {}
                         },
                         tooltip: 'Опустить в списке',
@@ -102,10 +127,8 @@ class _QuizListState extends State<QuizList> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ..._questions[index]
-                          .answers!
-                          .entries
-                          .map((e) => Text('${e.key}: "${e.value}"')),
+                      ..._questions[index].answers!.entries.map((e) => Text(
+                          '${e.key.length <= 10 ? e.key : e.key.substring(0, 10)}: "${e.value}"')),
                     ],
                   ),
                 );
