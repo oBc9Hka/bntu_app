@@ -57,83 +57,88 @@ class _QuizListState extends State<QuizList> {
             child: ListView.builder(
               itemCount: _questions.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Text('${index + 1}'),
-                  title: Text(_questions[index].question.toString()),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) {
-                            return QuizEdit(
-                              question: _questions[index],
-                              questions: widget.questions,
-                            );
-                          }));
-                        },
-                        icon: Icon(
-                          Icons.edit,
-                          color: mainColor,
-                        ),
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Card(
+                    child: ListTile(
+                      leading: Text('${index + 1}'),
+                      title: Text(
+                        _questions[index].question.toString(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      IconButton(
-                        onPressed: () {
-                          try {
-                            if (widget.questions == 'f') {
-                              state.moveUpFacultyQuestion(
-                                _questions[index].id!,
-                                _questions[index - 1].id!,
-                              );
-                            } else if (widget.questions == 's') {
-                              state.moveUpSpecialityQuestion(
-                                _questions[index].id!,
-                                _questions[index - 1].id!,
-                              );
-                            }
-                          } catch (e) {}
-                        },
-                        tooltip: 'Поднять в списке',
-                        icon: Icon(
-                          Icons.arrow_upward,
-                          color: mainColor,
-                        ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ..._questions[index].answers!.map((e) => Text(
+                              '${e.entries.first.key.length <= 10 ? e.entries.first.key.toString().trimRight() : e.entries.first.key.substring(0, 10).toString().trimRight() + '..'}: ${e.values.first}')),
+                        ],
                       ),
-                      IconButton(
-                        onPressed: () {
-                          try {
-                            if (widget.questions == 'f') {
-                              state.moveDownFacultyQuestion(
-                                _questions[index].id!,
-                                _questions[index + 1].id!,
-                              );
-                            } else if (widget.questions == 's') {
-                              state.moveDownSpecialityQuestion(
-                                _questions[index].id!,
-                                _questions[index + 1].id!,
-                              );
-                            }
-                          } catch (e) {}
-                        },
-                        tooltip: 'Опустить в списке',
-                        icon: Icon(
-                          Icons.arrow_downward,
-                          color: mainColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ..._questions[index].answers!.map(
-                            (e) => Text(
-                                '${e.entries.first.key.length <= 10 ? e.entries.first.key : e.entries.first.key.substring(0, 10)}: ${e.values.first}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return QuizEdit(
+                                  question: _questions[index],
+                                  questions: widget.questions,
+                                );
+                              }));
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: mainColor,
+                            ),
                           ),
-                      // .entries.map((e) => Text(
-                      // '${e.key.length <= 10 ? e.key : e.key.substring(0, 10)}: "${e.value}"')),
-                    ],
+                          IconButton(
+                            onPressed: () {
+                              try {
+                                if (widget.questions == 'f') {
+                                  state.moveUpFacultyQuestion(
+                                    _questions[index].id!,
+                                    _questions[index - 1].id!,
+                                  );
+                                } else if (widget.questions == 's') {
+                                  state.moveUpSpecialityQuestion(
+                                    _questions[index].id!,
+                                    _questions[index - 1].id!,
+                                  );
+                                }
+                              } catch (e) {}
+                            },
+                            tooltip: 'Поднять в списке',
+                            icon: Icon(
+                              Icons.arrow_upward,
+                              color: mainColor,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              try {
+                                if (widget.questions == 'f') {
+                                  state.moveDownFacultyQuestion(
+                                    _questions[index].id!,
+                                    _questions[index + 1].id!,
+                                  );
+                                } else if (widget.questions == 's') {
+                                  state.moveDownSpecialityQuestion(
+                                    _questions[index].id!,
+                                    _questions[index + 1].id!,
+                                  );
+                                }
+                              } catch (e) {}
+                            },
+                            tooltip: 'Опустить в списке',
+                            icon: Icon(
+                              Icons.arrow_downward,
+                              color: mainColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
