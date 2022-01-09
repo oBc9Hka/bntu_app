@@ -32,17 +32,17 @@ class _QuizEditState extends State<QuizEdit> {
   List<Map<String, List<String>>> _answers = [];
 
   void _setAnswers(
-      String v1,
-      String v2,
-      String v3,
-      String v4,
-      String v5,
-      String v12,
-      String v22,
-      String v32,
-      String v42,
-      String v52,
-      ) {
+    String v1,
+    String v2,
+    String v3,
+    String v4,
+    String v5,
+    String v12,
+    String v22,
+    String v32,
+    String v42,
+    String v52,
+  ) {
     _answers = [];
     if (_answer1Controller.text.trim() != '') {
       if (v12 != '..') {
@@ -65,7 +65,8 @@ class _QuizEditState extends State<QuizEdit> {
           _answer2Controller.text.trim(): [v2]
         });
       }
-    }if (_answer3Controller.text.trim() != '') {
+    }
+    if (_answer3Controller.text.trim() != '') {
       if (v32 != '..') {
         _answers.add({
           _answer3Controller.text.trim(): [v3, v32]
@@ -75,7 +76,8 @@ class _QuizEditState extends State<QuizEdit> {
           _answer3Controller.text.trim(): [v3]
         });
       }
-    }if (_answer4Controller.text.trim() != '') {
+    }
+    if (_answer4Controller.text.trim() != '') {
       if (v42 != '..') {
         _answers.add({
           _answer4Controller.text.trim(): [v4, v42]
@@ -85,7 +87,8 @@ class _QuizEditState extends State<QuizEdit> {
           _answer4Controller.text.trim(): [v4]
         });
       }
-    }if (_answer5Controller.text.trim() != '') {
+    }
+    if (_answer5Controller.text.trim() != '') {
       if (v52 != '..') {
         _answers.add({
           _answer5Controller.text.trim(): [v5, v52]
@@ -131,7 +134,7 @@ class _QuizEditState extends State<QuizEdit> {
       builder: (context, state, child) {
         String initValue = widget.questions == 'f' ? 'ФТК' : '..';
 
-        if(initValue == 'ФТК') {
+        if (initValue == 'ФТК') {
           initValue = state.facultiesShortNames[0];
         }
         state.dropdown1Value = initValue;
@@ -158,11 +161,10 @@ class _QuizEditState extends State<QuizEdit> {
           initValue,
         ];
 
-
-        for(var i =0; i < widget.question.answers!.length; i++){
+        for (var i = 0; i < widget.question.answers!.length; i++) {
           values[i] = widget.question.answers![i].values.first.first;
-          if(widget.question.answers![i].values.first.length > 1) {
-            values[i+5] = widget.question.answers![i].values.first.last;
+          if (widget.question.answers![i].values.first.length > 1) {
+            values[i + 5] = widget.question.answers![i].values.first.last;
           }
         }
 
@@ -186,13 +188,65 @@ class _QuizEditState extends State<QuizEdit> {
         ];
 
         _questionController.text = widget.question.question!;
-        for(var i = 0; i < widget.question.answers!.length; i++){
-          _answerControllersList[i].text = widget.question.answers![i].keys.first;
+        for (var i = 0; i < widget.question.answers!.length; i++) {
+          _answerControllersList[i].text =
+              widget.question.answers![i].keys.first;
         }
+
+        final helpSheet = <Map<String, String>>[
+          {
+            'Доминирование (D)':
+                'Представитель этого типа стремится победить даже через конфликт. Он его не боится и даже зачастую сам становится инициатором «разборок». Если «Д» вдруг окажется побежденным, то потребует реванша, из которого теперь точно выйдет победителем. Эти качества делают людей «Д» лучшими партнерами в кризисных ситуациях. «Д» - энергичные и волевые, адаптируются в разных условиях, потому им просто на должностях, требующих быстрой реакции и смекалки.'
+          },
+          {'Убеждение (I)': 'Представители этого типа всегда собирают вокруг себя одноклассников, ненавязчиво внедряют свою точку зрения, и те не замечают, как идут на поводу. «У» - душа компании, а главный «мотиватор» для них – признание. Все, что пришло «У» в голову, он тут же хочет воплотить в жизнь. Это качество дает «У» преимущества в должностях, предполагающих раскрутку проектов, особенно, когда дело нужно сдвинуть с мертвой точки. Их конек также креативность, изобретательность и любовь ко всему новому и оригинальному.'},
+          {'Постоянство (S)': 'Представители данного типа стараются сплотить команду и уже общими усилиями добиваться цели. «П» считает, что мир доброжелателен, и поэтому все за него сами сделают или проблема решиться сама собой. Такой человек стремиться к стабильности и постоянству, главный «мотиватор» для него – предсказуемость. Потому «П» аккуратный и даже педантичный исполнитель рутины. Также «П» - психолог: чутко относится к людям, поможет, посочувствует, даст совет (он будет не радикальным).'},
+          {'Следование правилам (C)': 'Представители данного типа замкнуты, не любят показывать эмоции, часто проводят время в одиночестве, ни за что не откроют свою душу, считают, что мир враждебен. Но именно недоверие к миру делает из них отличных «ревизоров». Наиболее хорошие результаты «C» показывает, работая индивидуально, - посторонние их сбивают с мысли и раздражают. «C» способны к анализу и логическому просчету возможных ходов, поэтому у них всегда есть план действий «на про запас». скрупулезность также их конек.'},
+        ];
 
         return Scaffold(
           appBar: AppBar(
             title: Text('Редактирование вопроса'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ...helpSheet
+                                      .map(
+                                        (item) => Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.keys.first,
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(bottom: 5.0),
+                                              child: Text(item.values.first),
+                                            ),
+
+                                          ],
+                                        ),
+                                      )
+                                      .toList(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                },
+                icon: Icon(Icons.help_outline),
+              )
+            ],
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
