@@ -1,5 +1,6 @@
 import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/providers/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/buildings_modal.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,6 @@ class BuildingsMap extends StatefulWidget {
 class _BuildingsMapState extends State<BuildingsMap> {
   static YandexMapController? controller;
   bool _showOptional = true;
-  final Color mainColor = Color.fromARGB(255, 0, 138, 94);
 
   int _selectedIndex = -1;
 
@@ -82,6 +82,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Consumer<AppProvider>(
       builder: (context, state, child) {
         return Scaffold(
@@ -100,7 +101,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                       },
                       value: _showOptional,
                       title: Text('Отображение доп.информации'),
-                      activeColor: mainColor,
+                      activeColor: Constants.mainColor,
                       activeTrackColor: Color.fromARGB(120, 0, 138, 94),
                     ),
                   ),
@@ -222,6 +223,9 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                     : '';
                                 String title = item.name! + subtitle;
                                 return ListTile(
+                                  tileColor: themeProvider.brightness == CustomBrightness.light
+                                    ? Colors.white
+                                    : null,
                                   onTap: () {
                                     setState(() {
                                       _selectedIndex = index;

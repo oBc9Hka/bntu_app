@@ -29,6 +29,10 @@ class BuildingEdit extends StatefulWidget {
 
 class _BuildingEditState extends State<BuildingEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _nameController =
+  TextEditingController();
+  TextEditingController _optionalController =
+  TextEditingController();
 
   XFile? _image;
   String _imagePath = '';
@@ -198,15 +202,18 @@ class _BuildingEditState extends State<BuildingEdit> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    TextEditingController _nameController =
-        TextEditingController(text: widget.building.name);
-    TextEditingController _optionalController =
+  void initState() {
+    _nameController = TextEditingController(text: widget.building.name);
+    _optionalController =
         TextEditingController(text: widget.building.optional);
     _point = GeoPoint(
         widget.building.point!.latitude, widget.building.point!.longitude);
     _imagePath = widget.building.imagePath!;
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Добавление точки'),

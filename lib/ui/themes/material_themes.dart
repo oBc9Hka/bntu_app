@@ -5,6 +5,7 @@ ThemeData _themeDark = ThemeData.dark();
 
 ThemeData themeLight = _themeLight.copyWith(
   primaryColor: Color.fromARGB(255, 0, 138, 94),
+  scaffoldBackgroundColor: Colors.grey[100],
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.white,
     iconTheme: IconThemeData(color: Colors.black),
@@ -51,14 +52,15 @@ ThemeData themeDark = _themeDark.copyWith(
     titleTextStyle: TextStyle(
         color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
   ),
-  backgroundColor: Color.fromARGB(255, 17, 17, 17),
+  scaffoldBackgroundColor: Color.fromARGB(255, 17, 17, 17),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all<Color>(
-        Color.fromARGB(255, 42, 42, 42),
+        Color.fromARGB(255, 17, 17, 17),
       ),
     ),
   ),
+  cardColor: Colors.grey[900],
   colorScheme: ColorScheme(
     primary: Color.fromARGB(255, 0, 138, 94),
     primaryVariant: Colors.black,

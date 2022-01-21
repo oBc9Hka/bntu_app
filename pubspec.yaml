@@ -17,7 +17,6 @@ dependencies:
   firebase_storage:
   custom_splash: ^0.0.2
   yandex_mapkit: ^1.1.1
-  permission_handler: ^6.1.1 # в будущем будет удалён, возможно
   provider: ^6.0.0
   fluttertoast: ^8.0.8
   image_picker:
@@ -25,6 +24,7 @@ dependencies:
   shared_preferences: ^2.0.8
   carousel_slider: ^4.0.0
   mockito: ^5.0.16 # testing
+  flutter_staggered_animations: "^1.0.0"
 
   cupertino_icons: ^1.0.2
 
