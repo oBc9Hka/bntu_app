@@ -1,5 +1,6 @@
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/quiz_view/quiz_form.dart';
 import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
 import 'package:bntu_app/ui/widgets/remove_item.dart';
@@ -133,6 +134,7 @@ class _QuizEditState extends State<QuizEdit> {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
         String initValue = widget.questions == 'f' ? 'ФТК' : '..';
+        String facSecondInitValue = Constants.quizFacAnswersList[0].toString();
 
         if (initValue == 'ФТК') {
           initValue = state.facultiesShortNames[0];
@@ -142,25 +144,50 @@ class _QuizEditState extends State<QuizEdit> {
         state.dropdown3Value = initValue;
         state.dropdown4Value = initValue;
         state.dropdown5Value = initValue;
-        state.dropdown12Value = initValue;
-        state.dropdown22Value = initValue;
-        state.dropdown32Value = initValue;
-        state.dropdown42Value = initValue;
-        state.dropdown52Value = initValue;
+        if(widget.questions == 'f'){
+          state.dropdown12Value = facSecondInitValue;
+          state.dropdown22Value = facSecondInitValue;
+          state.dropdown32Value = facSecondInitValue;
+          state.dropdown42Value = facSecondInitValue;
+          state.dropdown52Value = facSecondInitValue;
+        }
+        else{
+          state.dropdown12Value = initValue;
+          state.dropdown22Value = initValue;
+          state.dropdown32Value = initValue;
+          state.dropdown42Value = initValue;
+          state.dropdown52Value = initValue;
+        }
 
-        List<String> values = [
-          initValue,
-          initValue,
-          initValue,
-          initValue,
-          initValue,
-          initValue,
-          initValue,
-          initValue,
-          initValue,
-          initValue,
-        ];
+        List<String> values;
 
+        if(widget.questions == 'f'){
+          values = [
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            facSecondInitValue,
+            facSecondInitValue,
+            facSecondInitValue,
+            facSecondInitValue,
+            facSecondInitValue,
+          ];
+        } else {
+          values = [
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+            initValue,
+          ];
+        }
         for (var i = 0; i < widget.question.answers!.length; i++) {
           values[i] = widget.question.answers![i].values.first.first;
           if (widget.question.answers![i].values.first.length > 1) {

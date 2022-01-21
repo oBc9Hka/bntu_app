@@ -26,6 +26,7 @@ class _QuizListState extends State<QuizList> {
       } else if (widget.questions == 's') {
         _questions = state.specialtiesQuestions;
       }
+      print(_questions);
       return Scaffold(
         appBar: AppBar(
           title: Text('Список вопросов'),

@@ -24,6 +24,7 @@ class Constants {
   );
 
   static List<String> quizSpecAnswersList = ['..','D', 'I', 'S', 'C'];
+  static List<int> quizFacAnswersList = [1, 2, 3, 4, 5, 6, 7, 8];
 
   static List<QuestionModel> quizQuestionsList = [
     QuestionModel(

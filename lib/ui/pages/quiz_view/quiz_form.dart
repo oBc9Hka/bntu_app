@@ -74,12 +74,15 @@ class _QuizFormState extends State<QuizForm> {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        List<String> _dropdownList = [];
+        List<String> _dropdownList1 = [];
+        List<String> _dropdownList2 = [];
 
         if (widget.questions == 'f') {
-          _dropdownList = widget.facultiesList;
+          _dropdownList1 = widget.facultiesList;
+          _dropdownList2 = Constants.quizFacAnswersList.map((e) => e.toString()).toList();
         } else if (widget.questions == 's') {
-          _dropdownList = Constants.quizSpecAnswersList;
+          _dropdownList1 = Constants.quizSpecAnswersList;
+          _dropdownList2 = Constants.quizSpecAnswersList;
         }
 
         return SingleChildScrollView(
@@ -132,7 +135,7 @@ class _QuizFormState extends State<QuizForm> {
                                 state.dropdown1Value = newValue!;
                               });
                             },
-                            items: _dropdownList.map(
+                            items: _dropdownList1.map(
                               (value) => DropdownMenuItem(
                                 value: value,
                                 child: Text(value),
@@ -147,7 +150,7 @@ class _QuizFormState extends State<QuizForm> {
                                 state.dropdown12Value = newValue!;
                               });
                             },
-                            items: _dropdownList.map(
+                            items: _dropdownList2.map(
                                   (value) => DropdownMenuItem(
                                 value: value,
                                 child: Text(value),
@@ -185,7 +188,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown2Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList1.map(
                                 (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -200,7 +203,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown22Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList2.map(
                                     (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -233,7 +236,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown3Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList1.map(
                                 (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -248,7 +251,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown32Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList2.map(
                                     (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -281,7 +284,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown4Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList1.map(
                                 (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -296,7 +299,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown42Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList2.map(
                                     (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -329,7 +332,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown5Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList1.map(
                                 (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
@@ -344,7 +347,7 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown52Value = newValue!;
                                 });
                               },
-                              items: _dropdownList.map(
+                              items: _dropdownList2.map(
                                     (value) => DropdownMenuItem(
                                   value: value,
                                   child: Text(value),

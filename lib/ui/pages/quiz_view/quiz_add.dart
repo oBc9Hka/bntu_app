@@ -128,11 +128,11 @@ class _QuizAddState extends State<QuizAdd> {
           state.dropdown3Value = state.facultiesShortNames[0];
           state.dropdown4Value = state.facultiesShortNames[0];
           state.dropdown5Value = state.facultiesShortNames[0];
-          state.dropdown12Value = state.facultiesShortNames[0];
-          state.dropdown22Value = state.facultiesShortNames[0];
-          state.dropdown32Value = state.facultiesShortNames[0];
-          state.dropdown42Value = state.facultiesShortNames[0];
-          state.dropdown52Value = state.facultiesShortNames[0];
+          state.dropdown12Value = Constants.quizFacAnswersList[0].toString();
+          state.dropdown22Value = Constants.quizFacAnswersList[0].toString();
+          state.dropdown32Value = Constants.quizFacAnswersList[0].toString();
+          state.dropdown42Value = Constants.quizFacAnswersList[0].toString();
+          state.dropdown52Value = Constants.quizFacAnswersList[0].toString();
         } else if (widget.questions == 's') {
           state.dropdown1Value = Constants.quizSpecAnswersList[1];
           state.dropdown2Value = Constants.quizSpecAnswersList[1];

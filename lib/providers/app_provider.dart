@@ -137,7 +137,7 @@ class AppProvider with ChangeNotifier {
   }
 
   void initQuestions() async {
-    // facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
+    facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
     specialtiesQuestions =
         await _questionsRepository.getQuestionsList('quizSpecialties');
     notifyListeners();

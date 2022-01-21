@@ -59,6 +59,7 @@ class _QuizChooseState extends State<QuizChoose> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Radio(
+                  activeColor: Constants.mainColor,
                   value: 0,
                   groupValue: groupValue,
                   onChanged: (T) {

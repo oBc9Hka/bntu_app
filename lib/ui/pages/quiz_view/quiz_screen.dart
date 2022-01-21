@@ -46,9 +46,19 @@ class _QuizScreenState extends State<QuizScreen> {
       QuestionModel temp = _questions[index];
       temp.answers!.forEach((element) {
         if (element.keys.first == tmpKey) {
-          element.values.first.forEach((element) {
-            tagsArray.add(element);
-          });
+          print('tmpKey = $tmpKey');
+          print('element = $element');
+          if(widget.isFacultiesQuiz){
+           for (var i = 0; i < int.parse(element.values.first[1]); i++){
+             tagsArray.add(element.values.first[0]);
+           }
+          }
+          else{
+            element.values.first.forEach((element) {
+              print('secElType = ${element.runtimeType}');
+              tagsArray.add(element);
+            });
+          }
         }
       });
       print('tagsArray: $tagsArray');
