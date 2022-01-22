@@ -151,6 +151,10 @@ class _BuildingsMapState extends State<BuildingsMap> {
                               var zoomGesturesEnabled =
                                   await controller!.isZoomGesturesEnabled();
 
+                              if(themeProvider.brightness == CustomBrightness.dark) {
+                                controller?.toggleNightMode(enabled: true);
+                              }
+
                               var zoom = await controller!.getZoom();
                               var minZoom = await controller!.getMinZoom();
                               var maxZoom = await controller!.getMaxZoom();

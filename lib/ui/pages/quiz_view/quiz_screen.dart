@@ -1,6 +1,7 @@
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,12 +49,11 @@ class _QuizScreenState extends State<QuizScreen> {
         if (element.keys.first == tmpKey) {
           print('tmpKey = $tmpKey');
           print('element = $element');
-          if(widget.isFacultiesQuiz){
-           for (var i = 0; i < int.parse(element.values.first[1]); i++){
-             tagsArray.add(element.values.first[0]);
-           }
-          }
-          else{
+          if (widget.isFacultiesQuiz) {
+            for (var i = 0; i < int.parse(element.values.first[1]); i++) {
+              tagsArray.add(element.values.first[0]);
+            }
+          } else {
             element.values.first.forEach((element) {
               print('secElType = ${element.runtimeType}');
               tagsArray.add(element);
@@ -186,41 +186,43 @@ class _QuizScreenState extends State<QuizScreen> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    Text(
-                                      _questions[index].question!,
-                                      style: TextStyle(fontSize: 24),
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxHeight:MediaQuery.of(context).size.height*0.25,
+                                      ),
+                                      child: AutoSizeText(
+                                        _questions[index].question!,
+                                        style: TextStyle(fontSize: 24),
+                                      ),
                                     ),
                                     Expanded(
-                                      child: Container(
-                                        // constraints: BoxConstraints(
-                                        //   maxHeight: 400,
-                                        // ),
-                                        child: ListView(
-                                          children: [
-                                            for (int i = 1;
-                                                i <= answers.length;
-                                                i++)
-                                              RadioListTile(
-                                                activeColor: Constants.mainColor,
-                                                title: Text(
-                                                    answers[i - 1].keys.first),
-                                                value: i,
-                                                groupValue: groupValue,
-                                                onChanged: (T) {
-                                                  print(T);
-                                                  setState(() {
-                                                    groupValue = T as int;
-                                                    checkedAnswers.values
-                                                        .map((e) => e = false);
-                                                    checkedAnswers[checkedAnswers
-                                                        .keys
-                                                        .elementAt(i - 1)] = true;
-                                                    // checkedLetter = checkedAnswers.values.elementAt(i - 1);
-                                                  });
-                                                },
-                                              ),
-                                          ],
-                                        ),
+                                      child: ListView(
+                                        children: [
+                                          for (int i = 1;
+                                              i <= answers.length;
+                                              i++)
+                                            RadioListTile(
+                                              activeColor:
+                                                  Constants.mainColor,
+                                              title: Text(
+                                                  answers[i - 1].keys.first),
+                                              value: i,
+                                              groupValue: groupValue,
+                                              onChanged: (T) {
+                                                print(T);
+                                                setState(() {
+                                                  groupValue = T as int;
+                                                  checkedAnswers.values
+                                                      .map((e) => e = false);
+                                                  checkedAnswers[
+                                                      checkedAnswers.keys
+                                                          .elementAt(
+                                                              i - 1)] = true;
+                                                  // checkedLetter = checkedAnswers.values.elementAt(i - 1);
+                                                });
+                                              },
+                                            ),
+                                        ],
                                       ),
                                     ),
                                   ],
