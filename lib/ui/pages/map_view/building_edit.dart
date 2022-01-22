@@ -214,6 +214,8 @@ class _BuildingEditState extends State<BuildingEdit> {
 
   @override
   Widget build(BuildContext context) {
+
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Добавление точки'),
@@ -248,6 +250,9 @@ class _BuildingEditState extends State<BuildingEdit> {
                           var zoomGesturesEnabled =
                               await controller!.isZoomGesturesEnabled();
 
+                          if(themeProvider.brightness == CustomBrightness.dark) {
+                            controller?.toggleNightMode(enabled: true);
+                          }
                           var zoom = await controller!.getZoom();
                           var minZoom = await controller!.getMinZoom();
                           var maxZoom = await controller!.getMaxZoom();

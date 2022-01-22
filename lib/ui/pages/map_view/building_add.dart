@@ -202,6 +202,7 @@ class _BuildingAddState extends State<BuildingAdd> {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Добавление точки'),
@@ -232,6 +233,9 @@ class _BuildingAddState extends State<BuildingAdd> {
                           //   ));
                           // }
                           enableCameraTracking();
+                          if(themeProvider.brightness == CustomBrightness.dark) {
+                            controller?.toggleNightMode(enabled: true);
+                          }
                           var tiltGesturesEnabled =
                               await controller!.isTiltGesturesEnabled();
                           var zoomGesturesEnabled =
