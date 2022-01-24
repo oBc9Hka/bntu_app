@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/greeting_screen.dart';
@@ -148,7 +149,7 @@ class ResultScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: Text(
-                  'Результат теста:',
+                  'Результат теста',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 40.0,
@@ -158,8 +159,9 @@ class ResultScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Text(
+                  AutoSizeText(
                     _fit,
+                    maxLines: 1,
                     style: TextStyle(
                       color: mainColor,
                       fontSize: 24.0,
@@ -196,8 +198,9 @@ class ResultScreen extends StatelessWidget {
                               visible: _mayFitVisibility,
                               child: Column(
                                 children: [
-                                  Text(
+                                  AutoSizeText(
                                     _mayFit,
+                                    maxLines: 1,
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 18.0,
@@ -328,7 +331,7 @@ class ResultScreen extends StatelessWidget {
                       style: TextStyle(color: mainColor),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: 10)),
+                  // Padding(padding: EdgeInsets.only(top: 10)),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.pushReplacement(

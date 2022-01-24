@@ -41,7 +41,7 @@ class MainMenu extends StatelessWidget {
                 image: DecorationImage(
                   image: Image.asset(
                           (themeProvider.brightness == CustomBrightness.light)
-                              ? 'assets/bntu_logo.png'
+                              ? 'assets/BNTU_Logo.png'
                               : 'assets/bntu_logo_dark.png')
                       .image,
                   fit: BoxFit.contain,

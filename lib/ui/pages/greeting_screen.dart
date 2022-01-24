@@ -1,4 +1,5 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/greeting/narrow_layout.dart';
@@ -75,8 +76,8 @@ class GreetingScreen extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: const ListTile(
-        title: Text('АБИТУРИЕНТ?',
-            style: TextStyle(fontSize: 35, fontWeight: FontWeight.w700)),
+        title: AutoSizeText('АБИТУРИЕНТ?',
+            style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700)),
         subtitle: Text(
           'Приходи, ждём!',
           style: TextStyle(
