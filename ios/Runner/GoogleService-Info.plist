@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>7735442397-4jsm7lvbqp65fa6nrud5gap6h82llbdp.apps.googleusercontent.com</string>
+	<string>7735442397-78tha0smrq00t2nv9tcj2e0asgpii4r0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.7735442397-4jsm7lvbqp65fa6nrud5gap6h82llbdp</string>
+	<string>com.googleusercontent.apps.7735442397-78tha0smrq00t2nv9tcj2e0asgpii4r0</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCnP6bOgsqfISNmWa2nbtPUOVLl6AXJ8Bw</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.bntu.bntuapp</string>
+	<string>com.bntu.bntu-app</string>
 	<key>PROJECT_ID</key>
 	<string>bntu-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:7735442397:ios:79bcf3fc741db436b49434</string>
+	<string>1:7735442397:ios:a8430fc1c468e226b49434</string>
+	<key>DATABASE_URL</key>
+	<string>https://bntu-app-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>
