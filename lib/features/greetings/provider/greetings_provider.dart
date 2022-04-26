@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 import '../domain/repository/error_messages_repository.dart';
 import '../domain/repository/user_repository.dart';
