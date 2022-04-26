@@ -2,14 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
-import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
+import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:bntu_app/ui/widgets/image_loading.dart';
-import 'package:bntu_app/ui/widgets/remove_item.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,20 +13,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
-import 'building_form.dart';
+import '../provider/map_provider.dart';
+import 'widgets/building_form.dart';
 
-class BuildingEdit extends StatefulWidget {
-  const BuildingEdit({Key? key, required this.building}) : super(key: key);
-  final Building building;
+class BuildingAdd extends StatefulWidget {
+  const BuildingAdd({Key? key}) : super(key: key);
 
   @override
-  _BuildingEditState createState() => _BuildingEditState();
+  _BuildingAddState createState() => _BuildingAddState();
 }
 
-class _BuildingEditState extends State<BuildingEdit> {
+class _BuildingAddState extends State<BuildingAdd> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _optionalController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _optionalController = TextEditingController();
 
   XFile? _image;
   String _imagePath = '';
@@ -41,25 +37,24 @@ class _BuildingEditState extends State<BuildingEdit> {
   bool isNightModeEnabled = false;
   bool isZoomGesturesEnabled = false;
   bool isTiltGesturesEnabled = false;
-  GeoPoint? _point;
   late Point _newPoint;
 
   void getPhoto() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image!;
     });
   }
 
-  Future<void> saveImage(String folderName) async {
+  Future<void> saveImage() async {
     Uint8List? data;
     await File(_image!.path)
         .readAsBytes()
         .then((value) => {data = Uint8List.fromList(value)});
 
-    task = uploadFile(data!, folderName);
+    task = uploadFile(data!);
     setState(() {});
-    showDialog(
+    await showDialog(
         context: context,
         builder: (BuildContext context) {
           var themeProvider = Provider.of<ThemeProvider>(context);
@@ -82,22 +77,22 @@ class _BuildingEditState extends State<BuildingEdit> {
 
     if (task == null) return;
 
-    final TaskSnapshot storageTaskSnapshot = await task!.whenComplete(() {
+    final storageTaskSnapshot = await task!.whenComplete(() {
       task = null;
     });
-    final String path = await storageTaskSnapshot.ref.getDownloadURL();
+    final path = await storageTaskSnapshot.ref.getDownloadURL();
 
     _imagePath = path;
   }
 
-  UploadTask? uploadFile(Uint8List data, folder) {
+  UploadTask? uploadFile(Uint8List data) {
     try {
-      final Reference storageReference =
-          FirebaseStorage.instance.ref('buildings/$folder/photo.jpg');
+      final storageReference = FirebaseStorage.instance
+          .ref('buildings/${_nameController.text}/photo.jpg');
       // return storageReference.putFile(File(_image.path));
 
       return storageReference.putData(data);
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       return null;
     }
   }
@@ -121,30 +116,35 @@ class _BuildingEditState extends State<BuildingEdit> {
         },
       );
 
-  void _editBuilding(AppProvider state, String name, String optional) async {
+  // Future<void> _getUser() async {
+  //   final user = await _authService.getCurrentUser();
+  //   setState(() {
+  //     _user = user as User;
+  //   });
+  // }
+
+  void _addBuilding(MapProvider state) async {
     if (_formKey.currentState!.validate()) {
       if (_image != null) {
-        await saveImage(name).whenComplete(() {
-          state.editBuilding(
-            name,
-            optional,
+        await saveImage().whenComplete(() {
+          state.addBuilding(
+            _nameController.text.trim(),
+            _optionalController.text.trim(),
             _newPoint,
             _imagePath,
-            widget.building.docId!,
           );
           Navigator.of(context).pop();
         });
       } else {
-        state.editBuilding(
-          name,
-          optional,
+        state.addBuilding(
+          _nameController.text.trim(),
+          _optionalController.text.trim(),
           _newPoint,
           '',
-          widget.building.docId!,
         );
       }
       Navigator.of(context).pop();
-      Fluttertoast.showToast(msg: 'Точка успешно изменена');
+      await Fluttertoast.showToast(msg: 'Точка успешно добавлена');
     }
   }
 
@@ -161,7 +161,7 @@ class _BuildingEditState extends State<BuildingEdit> {
         animation: const MapAnimation(smooth: true, duration: 1.0));
 
     removePlacemark();
-    if (point != Constants.initialPoint) addPlacemark(point);
+    if (point != Constants.initialPoint) await addPlacemark(point);
   }
 
   Future<void> addPlacemark(Point point) async {
@@ -175,8 +175,9 @@ class _BuildingEditState extends State<BuildingEdit> {
   }
 
   void removePlacemark() {
-    if (controller!.placemarks.isNotEmpty)
+    if (controller!.placemarks.isNotEmpty) {
       controller!.removePlacemark(controller!.placemarks.first);
+    }
   }
 
   Future<void> cameraPositionChanged(dynamic arguments) async {
@@ -192,21 +193,11 @@ class _BuildingEditState extends State<BuildingEdit> {
   }
 
   Future<void> enableCameraTracking() async {
-    final currentCameraTracking = await controller!.enableCameraTracking(
+    await controller!.enableCameraTracking(
       onCameraPositionChange: cameraPositionChanged,
       style: const PlacemarkStyle(
           iconName: 'assets/yandex_images/place.png', opacity: 0.5),
     );
-  }
-
-  @override
-  void initState() {
-    _nameController = TextEditingController(text: widget.building.name);
-    _optionalController = TextEditingController(text: widget.building.optional);
-    _point = GeoPoint(
-        widget.building.point!.latitude, widget.building.point!.longitude);
-    _imagePath = widget.building.imagePath!;
-    super.initState();
   }
 
   @override
@@ -234,22 +225,21 @@ class _BuildingEditState extends State<BuildingEdit> {
                         },
                         onMapRendered: () async {
                           print('Map rendered');
-
-                          setPos(Point(
-                            longitude: _point!.longitude,
-                            latitude: _point!.latitude,
-                          ));
-
-                          enableCameraTracking();
-                          var tiltGesturesEnabled =
-                              await controller!.isTiltGesturesEnabled();
+                          setInitialPos();
+                          // if (widget.isEdit) {
+                          //   setPos(Point(
+                          //     longitude: _point!.longitude,
+                          //     latitude: _point!.latitude,
+                          //   ));
+                          // }
+                          await enableCameraTracking();
+                          if (themeProvider.brightness ==
+                              CustomBrightness.dark) {
+                            await controller?.toggleNightMode(enabled: true);
+                          }
                           var zoomGesturesEnabled =
                               await controller!.isZoomGesturesEnabled();
 
-                          if (themeProvider.brightness ==
-                              CustomBrightness.dark) {
-                            controller?.toggleNightMode(enabled: true);
-                          }
                           var zoom = await controller!.getZoom();
                           var minZoom = await controller!.getMinZoom();
                           var maxZoom = await controller!.getMaxZoom();
@@ -290,6 +280,9 @@ class _BuildingEditState extends State<BuildingEdit> {
                                         Icon(Icons.do_not_disturb_on_outlined)),
                                 IconButton(
                                     onPressed: () {
+                                      setState(() {
+                                        // _prevSelectedItem.isActive = false;
+                                      });
                                       setInitialPos();
                                     },
                                     icon: Icon(Icons.zoom_out_map)),
@@ -311,38 +304,15 @@ class _BuildingEditState extends State<BuildingEdit> {
                     getPhoto();
                   },
                   image: _image,
-                  item: widget.building,
                 ),
               ],
             ),
           ),
-          Consumer<AppProvider>(
+          Consumer<MapProvider>(
             builder: (context, state, child) {
-              return EditButtonsSection(
-                onEditPressed: () {
-                  _editBuilding(
-                    state,
-                    _nameController.text.trim(),
-                    _optionalController.text.trim(),
-                  );
-                },
-                onRemovePressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return RemoveItem(
-                        itemName: 'точку',
-                        onRemovePressed: () {
-                          state.removeBuilding(widget.building.docId!);
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                          Fluttertoast.showToast(msg: 'Точка успешно удалена');
-                        },
-                      );
-                    },
-                  );
-                },
-              );
+              return AddButtonsSection(onAddPressed: () {
+                _addBuilding(state);
+              });
             },
           ),
         ],

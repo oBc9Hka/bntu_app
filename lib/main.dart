@@ -5,7 +5,6 @@ import 'package:bntu_app/core/repository/error_messages_repository.dart';
 import 'package:bntu_app/features/faculties/ui/faculties_screen.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
 import 'package:bntu_app/features/settings/repository/settings_repository.dart';
-import 'package:bntu_app/ui/pages/map_view/map.dart';
 import 'package:bntu_app/features/settings/ui/messages_page.dart';
 import 'package:bntu_app/ui/pages/quiz_view/main_menu.dart';
 import 'package:bntu_app/ui/pages/quiz_view/quiz_choose.dart';
@@ -25,6 +24,9 @@ import 'features/admission_info/ui/info.dart';
 import 'features/faculties/provider/faculties_provider.dart';
 import 'features/faculties/repository/faculties_repository.dart';
 import 'features/greetings/provider/greetings_provider.dart';
+import 'features/map/provider/map_provider.dart';
+import 'features/map/repository/buildings_repository.dart';
+import 'features/map/ui/map.dart';
 import 'features/settings/provider/settings_provider.dart';
 import 'features/specialties/provider/specialties_provider.dart';
 import 'features/specialties/repository/specialties_repository.dart';
@@ -67,6 +69,11 @@ void main() async {
           create: (context) => SettingsProvider(
             settingsRepository: SettingsFirestoreRepository(),
             errorMessagesRepository: ErrorMessagesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MapProvider(
+            buildingsRepository: BuildingsFirestoreRepository(),
           ),
         ),
       ],

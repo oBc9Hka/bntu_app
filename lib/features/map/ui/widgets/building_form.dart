@@ -1,4 +1,4 @@
-import 'package:bntu_app/models/buildings_model.dart';
+import 'package:bntu_app/features/map/domain/models/buildings_model.dart';
 import 'package:flutter/material.dart';
 
 class BuildingForm extends StatelessWidget {

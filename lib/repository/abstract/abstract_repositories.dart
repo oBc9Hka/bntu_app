@@ -1,22 +1,4 @@
-import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/models/question_model.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
-
-abstract class BuildingsRepository {
-  Future<List<Building>> getBuildingsList();
-
-  Future<void> addBuilding(
-      String name, String optional, Point point, String imagePath);
-
-  Future<void> editBuilding(
-      String name, String optional, Point point, String imagePath, String id);
-
-  Future<void> removeBuilding(String id);
-
-  Future<void> moveUp(String currId, String prevId);
-
-  Future<void> moveDown(String currId, String nextId);
-}
 
 abstract class QuestionsRepository {
   Future<List<QuestionModel>> getQuestionsList(String collection);

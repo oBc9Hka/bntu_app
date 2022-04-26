@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
+import 'package:bntu_app/features/map/domain/models/buildings_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+
+import '../domain/repository/buildings_repository.dart';
 
 class BuildingsFirestoreRepository extends BuildingsRepository {
   final dbRef = FirebaseFirestore.instance.collection('buildings');
@@ -11,8 +12,8 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
   @override
   Future<void> addBuilding(
       String name, String optional, Point point, String imagePath) async {
-    int newOrderId = 0;
-    QuerySnapshot<Map<String, dynamic>> item = await dbRef.get();
+    var newOrderId = 0;
+    var item = await dbRef.get();
     newOrderId = item.docs.length + 1;
 
     await dbRef.add({
@@ -20,7 +21,7 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
       'optional': optional,
       'point': GeoPoint(point.latitude, point.longitude),
       'imagePath': imagePath,
-      'orderId' : newOrderId,
+      'orderId': newOrderId,
     });
   }
 
@@ -37,14 +38,14 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
 
   @override
   Future<List<Building>> getBuildingsList() async {
-    List<Building> list = [];
-    QuerySnapshot<Map<String, dynamic>> temp = await dbRef.get();
+    var list = <Building>[];
+    var temp = await dbRef.get();
 
-    if(temp.docs.isEmpty){
+    if (temp.docs.isEmpty) {
       throw TimeoutException('Ошибка соединения');
     }
 
-    for (var faculty in temp.docs){
+    for (var faculty in temp.docs) {
       list.add(Building.fromMap(faculty.data(), faculty.id));
     }
 
@@ -55,7 +56,7 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
 
   @override
   Future<void> moveDown(String currId, String nextId) async {
-    int currOrderId = await dbRef.doc(currId).get().then((snapshot) {
+    var currOrderId = await dbRef.doc(currId).get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
       var _toReturn;
       for (var item in _temp) {
@@ -63,7 +64,7 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
       }
       return _toReturn;
     });
-    int nextOrderId = currOrderId + 1;
+    var nextOrderId = currOrderId + 1;
 
     await dbRef.doc(currId).update({
       'orderId': nextOrderId,
@@ -75,7 +76,7 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
 
   @override
   Future<void> moveUp(String currId, String prevId) async {
-    int currOrderId = await dbRef.doc(currId).get().then((snapshot) {
+    var currOrderId = await dbRef.doc(currId).get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
       var _toReturn;
       for (var item in _temp) {
@@ -83,7 +84,7 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
       }
       return _toReturn;
     });
-    int prevOrderId = currOrderId - 1;
+    var prevOrderId = currOrderId - 1;
 
     await dbRef.doc(currId).update({
       'orderId': prevOrderId,

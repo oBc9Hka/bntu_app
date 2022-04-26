@@ -1,4 +1,4 @@
-import 'package:bntu_app/models/buildings_model.dart';
+import 'package:bntu_app/features/map/domain/models/buildings_model.dart';
 import 'package:bntu_app/core/domain/models/error_message_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
@@ -17,7 +17,7 @@ class AppProvider with ChangeNotifier {
 
   // final ErrorMessagesRepository _errorMessagesRepository;
 
-  final BuildingsRepository _buildingsRepository;
+  // final BuildingsRepository _buildingsRepository;
   final QuestionsRepository _questionsRepository;
 
   User? user;
@@ -26,10 +26,6 @@ class AppProvider with ChangeNotifier {
   List<ErrorMessage> errorMessages = [];
 
   bool get isErrorMessagesLoaded => errorMessages.isNotEmpty;
-
-  List<Building> buildings = [];
-
-  bool get isBuildingsLoaded => buildings.isNotEmpty;
 
   List<QuestionModel> facultiesQuestions = [];
 
@@ -57,7 +53,7 @@ class AppProvider with ChangeNotifier {
     // this._settingsRepository,
     // this._infoCardsRepository,
     // this._errorMessagesRepository,
-    this._buildingsRepository,
+    // this._buildingsRepository,
     this._questionsRepository,
     // this._userRepository,
   ) {
@@ -67,54 +63,14 @@ class AppProvider with ChangeNotifier {
     // initSettings();
     // initInfoCards();
     // initErrorMessages();
-    initBuildings();
+    // initBuildings();
     initQuestions();
-  }
-
-  void initBuildings() async {
-    buildings = await _buildingsRepository.getBuildingsList();
-    notifyListeners();
   }
 
   void initQuestions() async {
     facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
     specialtiesQuestions =
         await _questionsRepository.getQuestionsList('quizSpecialties');
-    notifyListeners();
-  }
-
-  void addBuilding(
-      String name, String optional, Point point, String imagePath) {
-    _buildingsRepository
-        .addBuilding(name, optional, point, imagePath)
-        .whenComplete(() => initBuildings());
-    notifyListeners();
-  }
-
-  void editBuilding(
-      String name, String optional, Point point, String imagePath, String id) {
-    _buildingsRepository
-        .editBuilding(name, optional, point, imagePath, id)
-        .whenComplete(() => initBuildings());
-    notifyListeners();
-  }
-
-  void removeBuilding(String id) {
-    _buildingsRepository.removeBuilding(id).whenComplete(() => initBuildings());
-    notifyListeners();
-  }
-
-  void moveUpBuilding(String currId, String prevId) {
-    _buildingsRepository
-        .moveUp(currId, prevId)
-        .whenComplete(() => initBuildings());
-    notifyListeners();
-  }
-
-  void moveDownBuilding(String currId, String nextId) {
-    _buildingsRepository
-        .moveDown(currId, nextId)
-        .whenComplete(() => initBuildings());
     notifyListeners();
   }
 

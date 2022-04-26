@@ -1,14 +1,13 @@
-import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/buildings_modal.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
+import '../../../core/provider/app_provider.dart';
+import '../provider/map_provider.dart';
 import 'building_add.dart';
 import 'building_edit.dart';
 
@@ -36,7 +35,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
         animation: const MapAnimation(smooth: true, duration: 1.0));
 
     removePlacemark();
-    if (point != Constants.initialPoint) addPlacemark(point);
+    if (point != Constants.initialPoint) await addPlacemark(point);
   }
 
   void _showBottomSheet(String title, String subtitle, String imagePath) {
@@ -76,14 +75,16 @@ class _BuildingsMapState extends State<BuildingsMap> {
   }
 
   void removePlacemark() {
-    if (controller!.placemarks.isNotEmpty)
+    if (controller!.placemarks.isNotEmpty) {
       controller!.removePlacemark(controller!.placemarks.first);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
-    return Consumer<AppProvider>(
+    final appState = context.watch<AppProvider>();
+    return Consumer<MapProvider>(
       builder: (context, state, child) {
         return Scaffold(
           appBar: AppBar(
@@ -105,7 +106,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                       activeTrackColor: Color.fromARGB(120, 0, 138, 94),
                     ),
                   ),
-                  if (state.user != null)
+                  if (appState.user != null)
                     PopupMenuItem(
                       child: ListTile(
                         onTap: () {
@@ -119,7 +120,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                 tooltip: 'Настройки',
                 icon: Icon(Icons.settings),
               ),
-              if (state.user != null)
+              if (appState.user != null)
                 IconButton(
                     onPressed: () {
                       state.initBuildings();
@@ -153,7 +154,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
 
                               if (themeProvider.brightness ==
                                   CustomBrightness.dark) {
-                                controller?.toggleNightMode(enabled: true);
+                                await controller?.toggleNightMode(
+                                    enabled: true);
                               }
 
                               var zoom = await controller!.getZoom();
@@ -220,13 +222,13 @@ class _BuildingsMapState extends State<BuildingsMap> {
                           : ListView.builder(
                               itemCount: state.buildings.length,
                               itemBuilder: (BuildContext context, int index) {
-                                Building item = state.buildings[index];
-                                String subtitle = _showOptional
+                                var item = state.buildings[index];
+                                var subtitle = _showOptional
                                     ? item.optional != ''
                                         ? ' (${item.optional})'
                                         : ''
                                     : '';
-                                String title = item.name! + subtitle;
+                                var title = item.name! + subtitle;
                                 return ListTile(
                                   tileColor: themeProvider.brightness ==
                                           CustomBrightness.light
@@ -260,7 +262,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                             padding: EdgeInsets.all(0),
                                             icon: const Icon(Icons.info),
                                           ),
-                                          if (state.user != null)
+                                          if (appState.user != null)
                                             IconButton(
                                               onPressed: () {
                                                 Navigator.of(context).push(
@@ -275,7 +277,7 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                               padding: EdgeInsets.all(0),
                                               icon: const Icon(Icons.edit),
                                             ),
-                                          if (state.user != null)
+                                          if (appState.user != null)
                                             IconButton(
                                               onPressed: () {
                                                 try {
@@ -286,14 +288,16 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                                         .docId
                                                         .toString(),
                                                   );
-                                                } catch (e) {}
+                                                } catch (e) {
+                                                  print('catch');
+                                                }
                                               },
                                               tooltip: 'Поднять в списке',
                                               icon: Icon(
                                                 Icons.arrow_upward,
                                               ),
                                             ),
-                                          if (state.user != null)
+                                          if (appState.user != null)
                                             IconButton(
                                               onPressed: () {
                                                 try {
@@ -304,7 +308,9 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                                         .docId
                                                         .toString(),
                                                   );
-                                                } catch (e) {}
+                                                } catch (e) {
+                                                  print('catch');
+                                                }
                                               },
                                               tooltip: 'Опустить в списке',
                                               icon: Icon(
