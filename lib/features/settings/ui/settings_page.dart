@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/settings_provider.dart';
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -50,7 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
         });
   }
 
-  void _saveSettings(AppProvider state) {
+  void _saveSettings(SettingsProvider state) {
     if (_formKey.currentState!.validate()) {
       state.editSettings(
         _yearController.text.trim(),
@@ -65,7 +67,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     var _themeProvider = Provider.of<ThemeProvider>(context);
-    return Consumer<AppProvider>(
+    return Consumer<SettingsProvider>(
       builder: (context, state, child) {
         if (!isInited) {
           _yearController =
@@ -74,9 +76,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
           oldYearState = state.currentAdmissionYear;
           oldKeyState = state.secretKey;
-          _unseenCount = state.unseenCount;
           isInited = true;
         }
+        _unseenCount = state.unseenCount;
 
         return Scaffold(
           appBar: AppBar(
@@ -98,6 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           children: [
                             ListTile(
                               onTap: () {
+                                state.initErrorMessages();
                                 Navigator.of(context).pushNamed('/messages');
                               },
                               title: Text('Сообщения об ошибках'),
@@ -166,7 +169,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                                   (_) => _chars.codeUnitAt(
                                                       _rnd.nextInt(
                                                           _chars.length))));
-                                      setState(() {});
+                                      setState(() {
+                                        isKeyChanged = true;
+                                      });
                                     },
                                     style: ButtonStyle(
                                         padding: MaterialStateProperty.all(
@@ -210,7 +215,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             Divider(),
                             ListTile(
                               onTap: () {
-                                Navigator.of(context).pushNamed('/test-edit');
+                                // Navigator.of(context).pushNamed('/test-edit');
                               },
                               title: Text('Редактирование вопросов'),
                               trailing: Icon(Icons.question_answer_outlined),

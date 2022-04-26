@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 
-import '../domain/repository/error_messages_repository.dart';
+import '../../../core/domain/repository/error_messages_repository.dart';
 
 class GreetingsProvider with ChangeNotifier {
   final ErrorMessagesRepository errorMessagesRepository;
-
-  String secretKey = 'Admin'; // TODO: implement loading from firestore
 
   GreetingsProvider({
     required this.errorMessagesRepository,
@@ -15,10 +13,4 @@ class GreetingsProvider with ChangeNotifier {
     errorMessagesRepository.submitErrorMessage(msg);
     notifyListeners();
   }
-
-  // void initErrorMessages() async {
-  //   errorMessages = await errorMessagesRepository.getErrorMessagesList();
-  //   unseenCount = await errorMessagesRepository.getUnseenMessages();
-  //   notifyListeners();
-  // }
 }

@@ -1,15 +1,16 @@
 // @dart=2.9
 
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/features/greetings/repository/error_messages_repository.dart';
+import 'package:bntu_app/core/repository/error_messages_repository.dart';
 import 'package:bntu_app/features/faculties/ui/faculties_screen.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
+import 'package:bntu_app/features/settings/repository/settings_repository.dart';
 import 'package:bntu_app/ui/pages/map_view/map.dart';
-import 'package:bntu_app/ui/pages/messages_page.dart';
+import 'package:bntu_app/features/settings/ui/messages_page.dart';
 import 'package:bntu_app/ui/pages/quiz_view/main_menu.dart';
 import 'package:bntu_app/ui/pages/quiz_view/quiz_choose.dart';
 import 'package:bntu_app/ui/pages/quiz_view/quiz_list.dart';
-import 'package:bntu_app/ui/pages/settings_page.dart';
+import 'package:bntu_app/features/settings/ui/settings_page.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ import 'features/admission_info/ui/info.dart';
 import 'features/faculties/provider/faculties_provider.dart';
 import 'features/faculties/repository/faculties_repository.dart';
 import 'features/greetings/provider/greetings_provider.dart';
+import 'features/settings/provider/settings_provider.dart';
 import 'features/specialties/provider/specialties_provider.dart';
 import 'features/specialties/repository/specialties_repository.dart';
 
@@ -61,18 +63,12 @@ void main() async {
             infoCardsRepository: InfoCardsFirestoreRepository(),
           ),
         ),
-
-        // ChangeNotifierProvider(
-        //     create: (context) => AppProvider(
-        //           FacultiesFirestoreRepository(),
-        //           SpecialtiesFirestoreRepository(),
-        //           SettingsFirestoreRepository(),
-        //           InfoCardsFirestoreRepository(),
-        //           // ErrorMessagesFirestoreRepository(),
-        //           // BuildingsFirestoreRepository(),
-        //           // QuestionsFirestoreRepository(),
-        //           UserFirestoreRepository(),
-        //         )),
+        ChangeNotifierProvider(
+          create: (context) => SettingsProvider(
+            settingsRepository: SettingsFirestoreRepository(),
+            errorMessagesRepository: ErrorMessagesFirestoreRepository(),
+          ),
+        ),
       ],
       child: BntuApp(),
     ),

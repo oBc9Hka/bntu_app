@@ -1,8 +1,9 @@
-import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/src/provider.dart';
+
+import '../../../features/settings/provider/settings_provider.dart';
 
 class QuizChoose extends StatefulWidget {
   const QuizChoose({Key? key}) : super(key: key);
@@ -14,15 +15,15 @@ class QuizChoose extends StatefulWidget {
 class _QuizChooseState extends State<QuizChoose> {
   var groupValue;
   bool firstInit = true;
-  late AppProvider state;
+  late SettingsProvider settingsState;
 
   Future<bool> _onWillPop() async {
     if (groupValue == 0) {
-      state.editQuizChecked(true);
+      settingsState.editQuizChecked(true);
     } else if (groupValue == 1) {
-      state.editQuizChecked(false);
+      settingsState.editQuizChecked(false);
     }
-    Fluttertoast.showToast(msg: 'Изменения сохранены');
+    await Fluttertoast.showToast(msg: 'Изменения сохранены');
     return true;
   }
 
@@ -30,8 +31,9 @@ class _QuizChooseState extends State<QuizChoose> {
   Widget build(BuildContext context) {
     if (firstInit) {
       setState(() {
-        state = context.watch<AppProvider>();
-        groupValue = state.isFacultiesQuiz ? 0 : 1;
+        settingsState = context.watch<SettingsProvider>();
+
+        groupValue = settingsState.isFacultiesQuiz ? 0 : 1;
         firstInit = false;
       });
     }

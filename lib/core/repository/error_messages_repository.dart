@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
+import 'package:bntu_app/core/domain/models/error_message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../domain/repository/error_messages_repository.dart';

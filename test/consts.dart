@@ -1,5 +1,5 @@
 import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
+import 'package:bntu_app/core/domain/models/error_message_model.dart';
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
 import 'package:bntu_app/features/admission_info/domain/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';

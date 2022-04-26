@@ -1,5 +1,5 @@
 import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
+import 'package:bntu_app/core/domain/models/error_message_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +12,7 @@ class AppProvider with ChangeNotifier {
 
   // final FacultiesRepository _facultiesRepository;
   // final SpecialtiesRepository _specialtiesRepository;
-  final SettingsRepository _settingsRepository;
+  // final SettingsRepository _settingsRepository;
   // final InfoCardsRepository _infoCardsRepository;
 
   // final ErrorMessagesRepository _errorMessagesRepository;
@@ -39,10 +39,6 @@ class AppProvider with ChangeNotifier {
 
   bool get isSpecialtiesQuestionsLoaded => specialtiesQuestions.isNotEmpty;
 
-  String currentAdmissionYear = '';
-  String secretKey = '';
-  String unseenCount = '';
-
   String dropdown1Value = '...';
   String dropdown2Value = '...';
   String dropdown3Value = '...';
@@ -55,12 +51,10 @@ class AppProvider with ChangeNotifier {
   String dropdown42Value = '...';
   String dropdown52Value = '...';
 
-  bool isFacultiesQuiz = true; // Quiz for faculties or specialties
-
   AppProvider(
     // this._facultiesRepository,
     // this._specialtiesRepository,
-    this._settingsRepository,
+    // this._settingsRepository,
     // this._infoCardsRepository,
     // this._errorMessagesRepository,
     this._buildingsRepository,
@@ -70,24 +64,11 @@ class AppProvider with ChangeNotifier {
     // initUser();
     // initFaculties();
     // initSpecialties();
-    initSettings();
+    // initSettings();
     // initInfoCards();
     // initErrorMessages();
     initBuildings();
     initQuestions();
-  }
-
-  // void initFaculties() async {
-  //   faculties = await _facultiesRepository.getFacultiesList();
-  //   facultiesShortNames = await _facultiesRepository.getFacultiesShortNames();
-  //   notifyListeners();
-  // }
-
-  void initSettings() async {
-    currentAdmissionYear = await _settingsRepository.getCurrentAdmissionYear();
-    secretKey = await _settingsRepository.getSecretKey();
-    isFacultiesQuiz = await _settingsRepository.getIsFacultyQuizChecked();
-    notifyListeners();
   }
 
   void initBuildings() async {
@@ -101,34 +82,6 @@ class AppProvider with ChangeNotifier {
         await _questionsRepository.getQuestionsList('quizSpecialties');
     notifyListeners();
   }
-
-  void editSettings(String currentAdmissionYear, String key) {
-    _settingsRepository
-        .editSettings(currentAdmissionYear, key)
-        .whenComplete(() => initSettings());
-    notifyListeners();
-  }
-
-  void editQuizChecked(bool isFacultiesQuiz) {
-    _settingsRepository
-        .editQuizChecked(isFacultiesQuiz)
-        .whenComplete(() => initSettings());
-    notifyListeners();
-  }
-
-  // void changeViewedState(String id) {
-  //   errorMessagesRepository
-  //       .changeViewedState(id)
-  //       .whenComplete(() => initErrorMessages());
-  //   notifyListeners();
-  // }
-
-  // void removeErrorMessage(String id) {
-  //   errorMessagesRepository
-  //       .removeErrorMessage(id)
-  //       .whenComplete(() => initErrorMessages());
-  //   notifyListeners();
-  // }
 
   void addBuilding(
       String name, String optional, Point point, String imagePath) {

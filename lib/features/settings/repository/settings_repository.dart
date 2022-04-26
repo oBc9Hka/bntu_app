@@ -1,5 +1,6 @@
-import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../domain/repository/settings_repository.dart';
 
 class SettingsFirestoreRepository extends SettingsRepository {
   final dbRef = FirebaseFirestore.instance.collection('settings');
@@ -28,7 +29,7 @@ class SettingsFirestoreRepository extends SettingsRepository {
   }
 
   Future<String> _getFieldData(String fieldName) async {
-    String value = await dbRef.doc('commonSettings').get().then((snapshot) {
+    var value = await dbRef.doc('commonSettings').get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
       var _toReturn;
       for (var item in _temp) {
@@ -40,7 +41,7 @@ class SettingsFirestoreRepository extends SettingsRepository {
   }
 
   @override
-  Future<void> editSettings(String currentAdmissionYear, String key) async{
+  Future<void> editSettings(String currentAdmissionYear, String key) async {
     await dbRef.doc('commonSettings').update({
       'currentAdmissionYear': currentAdmissionYear,
       'secretKey': key,
@@ -48,11 +49,9 @@ class SettingsFirestoreRepository extends SettingsRepository {
   }
 
   @override
-  Future<void> editQuizChecked(bool isFacultiesQuiz) async{
-    await dbRef.doc('commonSettings').update({
-      'isFacultiesQuizChecked': isFacultiesQuiz
-    });
+  Future<void> editQuizChecked(bool isFacultiesQuiz) async {
+    await dbRef
+        .doc('commonSettings')
+        .update({'isFacultiesQuizChecked': isFacultiesQuiz});
   }
-
-
 }

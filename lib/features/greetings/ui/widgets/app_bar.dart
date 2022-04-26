@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 
 import '../../../../core/provider/app_provider.dart';
-import '../../../../ui/widgets/user_exit_dialog.dart';
+import 'user_exit_dialog.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar({Key? key, required this.signOut}) : super(key: key);

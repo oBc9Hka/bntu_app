@@ -20,16 +20,6 @@ class RemoveItem extends StatelessWidget {
       ),
       actions: [
         ElevatedButton(
-          onPressed: onRemovePressed,
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.red),
-          ),
-          child: const Text(
-            'Удалить',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -40,7 +30,17 @@ class RemoveItem extends StatelessWidget {
             'Отмена',
             style: TextStyle(color: Colors.white),
           ),
-        )
+        ),
+        ElevatedButton(
+          onPressed: onRemovePressed,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.red),
+          ),
+          child: const Text(
+            'Удалить',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ],
     );
   }

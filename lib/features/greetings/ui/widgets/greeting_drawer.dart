@@ -1,4 +1,5 @@
 import 'package:bntu_app/core/provider/theme_provider.dart';
+import 'package:bntu_app/features/settings/provider/settings_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +15,9 @@ class GreetingDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var state = context.watch<AppProvider>();
-    var greetingState = context.watch<GreetingsProvider>();
+    final appState = context.watch<AppProvider>();
+    final greetingState = context.watch<GreetingsProvider>();
+    final settingsState = context.watch<SettingsProvider>();
 
     var themeProvider = Provider.of<ThemeProvider>(context);
     const mainColor = Constants.mainColor;
@@ -53,16 +55,16 @@ class GreetingDrawer extends StatelessWidget {
 
     Future<void> _signIn() async {
       _formKey.currentState!.save();
-      if (state.errorsMap['hasError']) {
+      if (appState.errorsMap['hasError']) {
         print('HAS ERROR BLOCK');
-        print('hasError? ${state.errorsMap['hasError']}');
+        print('hasError? ${appState.errorsMap['hasError']}');
         _showLoadingDialog();
-        await state
+        await appState
             .signIn(
                 _loginController.text.trim(), _passwordController.text.trim())
             .whenComplete(() {
-          print('still hasError? ${state.errorsMap['hasError']}');
-          if (state.errorsMap['hasError']) {
+          print('still hasError? ${appState.errorsMap['hasError']}');
+          if (appState.errorsMap['hasError']) {
             _formKey.currentState!.validate();
             Navigator.of(context).pop();
           } else {
@@ -72,17 +74,17 @@ class GreetingDrawer extends StatelessWidget {
             Fluttertoast.showToast(msg: 'Вы в режиме редактора');
           }
         });
-      } else if (!state.errorsMap['hasError'] &&
+      } else if (!appState.errorsMap['hasError'] &&
           _formKey.currentState!.validate()) {
         print('VALIDATE BLOCK');
         _showLoadingDialog();
-        await state
+        await appState
             .signIn(
                 _loginController.text.trim(), _passwordController.text.trim())
             .whenComplete(() {
-          print(state.errorsMap['hasError']);
-          if (state.errorsMap['hasError']) {
-            print(state.errorsMap['hasError']);
+          print(appState.errorsMap['hasError']);
+          if (appState.errorsMap['hasError']) {
+            print(appState.errorsMap['hasError']);
             _formKey.currentState!.validate();
             Navigator.of(context).pop();
           } else {
@@ -118,11 +120,11 @@ class GreetingDrawer extends StatelessWidget {
                         if (!validateEmail(value!.trim())) {
                           return 'Почта заполнена некорректно';
                         }
-                        state.initErrorsMap();
+                        appState.initErrorsMap();
                         print(
-                            'hasEmailError ${state.errorsMap['hasEmailError']}');
-                        if (state.errorsMap['hasEmailError']) {
-                          return state.errorsMap['errorEmailMessage'];
+                            'hasEmailError ${appState.errorsMap['hasEmailError']}');
+                        if (appState.errorsMap['hasEmailError']) {
+                          return appState.errorsMap['errorEmailMessage'];
                         }
                         return null;
                       },
@@ -135,11 +137,11 @@ class GreetingDrawer extends StatelessWidget {
                         if (value == '') {
                           return 'Введите пароль';
                         }
-                        state.initErrorsMap();
+                        appState.initErrorsMap();
                         print(
-                            'hasPasswordError ${state.errorsMap['hasPasswordError']}');
-                        if (state.errorsMap['hasPasswordError']) {
-                          return state.errorsMap['errorPasswordMessage'];
+                            'hasPasswordError ${appState.errorsMap['hasPasswordError']}');
+                        if (appState.errorsMap['hasPasswordError']) {
+                          return appState.errorsMap['errorPasswordMessage'];
                         }
                         return null;
                       },
@@ -172,9 +174,9 @@ class GreetingDrawer extends StatelessWidget {
 
     void _handleErrorMessageByUser() {
       if (_errorFormKey.currentState!.validate()) {
-        if (_errorDescriptionController.text == greetingState.secretKey) {
+        if (_errorDescriptionController.text == settingsState.secretKey) {
           Navigator.of(context).pop();
-          if (state.user == null) {
+          if (appState.user == null) {
             _showAlertDialog();
           } else {
             Fluttertoast.showToast(msg: 'Вы уже в режиме редактора');
@@ -269,7 +271,6 @@ class GreetingDrawer extends StatelessWidget {
     void _launchURL() async => await canLaunch(_url)
         ? await launch(_url)
         : throw 'Could not launch $_url';
-
     return Container(
       color: themeProvider.brightness == CustomBrightness.dark
           ? Colors.black54
@@ -342,9 +343,10 @@ class GreetingDrawer extends StatelessWidget {
                 title: Text('Сообщить об ошибке'),
                 trailing: Icon(Icons.mail),
               ),
-              if (state.user != null)
+              if (appState.user != null)
                 ListTile(
                   onTap: () {
+                    settingsState.initSettings();
                     Navigator.of(context).pushNamed('/settings');
                   },
                   title: Text('Общие настройки'),
