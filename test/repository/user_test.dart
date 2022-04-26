@@ -1,4 +1,4 @@
-import 'package:bntu_app/features/greetings/repository/user_repository.dart';
+import 'package:bntu_app/core/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

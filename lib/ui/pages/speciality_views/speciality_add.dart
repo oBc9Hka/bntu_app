@@ -1,4 +1,4 @@
-import 'package:bntu_app/models/faculty_model.dart';
+import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/pages/speciality_views/speciality_form.dart';
 import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
@@ -328,7 +328,9 @@ class _SpecialityAddState extends State<SpecialityAdd> {
                   ],
                 ),
               ),
-              AddButtonsSection(onAddPressed: () {_addSpeciality(state);}),
+              AddButtonsSection(onAddPressed: () {
+                _addSpeciality(state);
+              }),
             ],
           );
         },

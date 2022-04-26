@@ -1,4 +1,4 @@
-import 'package:bntu_app/models/faculty_model.dart';
+import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';

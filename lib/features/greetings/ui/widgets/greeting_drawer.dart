@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/provider/app_provider.dart';
 import '../../provider/greetings_provider.dart';
 
 class GreetingDrawer extends StatelessWidget {
@@ -13,7 +14,8 @@ class GreetingDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var state = context.watch<GreetingsProvider>();
+    var state = context.watch<AppProvider>();
+    var greetingState = context.watch<GreetingsProvider>();
 
     var themeProvider = Provider.of<ThemeProvider>(context);
     const mainColor = Constants.mainColor;
@@ -170,7 +172,7 @@ class GreetingDrawer extends StatelessWidget {
 
     void _handleErrorMessageByUser() {
       if (_errorFormKey.currentState!.validate()) {
-        if (_errorDescriptionController.text == state.secretKey) {
+        if (_errorDescriptionController.text == greetingState.secretKey) {
           Navigator.of(context).pop();
           if (state.user == null) {
             _showAlertDialog();
@@ -178,7 +180,7 @@ class GreetingDrawer extends StatelessWidget {
             Fluttertoast.showToast(msg: 'Вы уже в режиме редактора');
           }
         } else {
-          state.submitErrorMessage(_errorDescriptionController.text);
+          greetingState.submitErrorMessage(_errorDescriptionController.text);
           Navigator.of(context).pop();
           Fluttertoast.showToast(
             msg: 'Сообщение отправлено в поддержку',

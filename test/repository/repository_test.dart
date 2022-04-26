@@ -1,6 +1,6 @@
 import 'package:bntu_app/repository/buildings_repository.dart';
 import 'package:bntu_app/features/greetings/repository/error_messages_repository.dart';
-import 'package:bntu_app/repository/faculties_repository.dart';
+import 'package:bntu_app/features/faculties/repository/faculties_repository.dart';
 import 'package:bntu_app/repository/info_cards_repository.dart';
 import 'package:bntu_app/repository/questions_repository.dart';
 import 'package:bntu_app/repository/settings_repository.dart';

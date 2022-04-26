@@ -2,8 +2,8 @@ import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 
+import '../../../../core/provider/app_provider.dart';
 import '../../../../ui/widgets/user_exit_dialog.dart';
-import '../../provider/greetings_provider.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar({Key? key, required this.signOut}) : super(key: key);
@@ -20,7 +20,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         backgroundImage: Image.asset('assets/bntu.png').image,
       ),
       actions: [
-        context.watch<GreetingsProvider>().user != null
+        context.watch<AppProvider>().user != null
             ? Container(
                 constraints: BoxConstraints(
                   minWidth: 100,

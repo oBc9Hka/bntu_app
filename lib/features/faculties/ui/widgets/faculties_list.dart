@@ -1,10 +1,11 @@
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/pages/faculties_views/faculty_edit.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+import '../../../../core/provider/app_provider.dart';
+import '../../provider/faculties_provider.dart';
+import '../faculty_edit.dart';
 import 'faculty_item.dart';
 
 class FacultiesListView extends StatelessWidget {
@@ -34,7 +35,8 @@ class FacultiesListView extends StatelessWidget {
       );
     }
 
-    var state = context.watch<AppProvider>();
+    final state = context.watch<FacultiesProvider>();
+    final appState = context.watch<AppProvider>();
 
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -50,7 +52,7 @@ class FacultiesListView extends StatelessWidget {
               child: FacultyItem(
                 shortName: state.faculties[index].shortName.toString(),
                 name: state.faculties[index].name.toString(),
-                user: state.user,
+                user: appState.user,
                 onTap: () {
                   _onTap(state.faculties[index]);
                 },

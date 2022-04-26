@@ -6,7 +6,7 @@ import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/faculty_model.dart';
+import '../../../features/faculties/domain/models/faculty_model.dart';
 import 'main_menu.dart';
 
 class ResultScreen extends StatelessWidget {
@@ -107,12 +107,12 @@ class ResultScreen extends StatelessWidget {
     return Consumer<AppProvider>(builder: (context, state, child) {
       var sortedQueryList = <MapEntry<dynamic, int>>[];
       for (var sortedListItem in _sortedList) {
-        for (var facultiesListItem in state.faculties) {
-          if (facultiesListItem.shortName == sortedListItem.key) {
-            sortedQueryList
-                .add(MapEntry(facultiesListItem, sortedListItem.value));
-          }
-        }
+        // for (var facultiesListItem in state.faculties) {
+        //   if (facultiesListItem.shortName == sortedListItem.key) {
+        //     sortedQueryList
+        //         .add(MapEntry(facultiesListItem, sortedListItem.value));
+        //   }
+        // }
       }
       var mayFitFacultyList = [];
       var mayFitFacultyIndex = 0;
@@ -296,9 +296,9 @@ class ResultScreen extends StatelessWidget {
                                       MaterialPageRoute(
                                         builder: (context) => FacultyPage(
                                           faculty: _getFacultyByShortName(
-                                            item.values.first,
-                                            state.faculties,
-                                          ),
+                                              item.values.first,
+                                              // state.faculties,
+                                              []),
                                         ),
                                       ),
                                     );

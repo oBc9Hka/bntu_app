@@ -2,21 +2,20 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bntu_app/models/faculty_model.dart';
+import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
 import 'package:bntu_app/ui/widgets/image_loading.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import 'faculty_form.dart';
+import '../provider/faculties_provider.dart';
+import 'widgets/faculty_form.dart';
 
 class FacultyEdit extends StatefulWidget {
   const FacultyEdit({Key? key, required this.faculty}) : super(key: key);
@@ -60,7 +59,7 @@ class _FacultyEditState extends State<FacultyEdit> {
 
     task = uploadFile(data!);
     setState(() {});
-    showDialog(
+    await showDialog(
         context: context,
         builder: (BuildContext context) {
           var themeProvider = Provider.of<ThemeProvider>(context);
@@ -130,7 +129,7 @@ class _FacultyEditState extends State<FacultyEdit> {
     String forInquiriesNumber,
     String forHostelNumber,
     String id,
-    AppProvider state,
+    FacultiesProvider state,
   ) async {
     if (_formKey.currentState!.validate()) {
       if (_image != null) {
@@ -271,7 +270,7 @@ class _FacultyEditState extends State<FacultyEdit> {
 
     return Scaffold(
       appBar: AppBar(title: Text('Редактирование ${widget.faculty.shortName}')),
-      body: Consumer<AppProvider>(
+      body: Consumer<FacultiesProvider>(
         builder: (context, state, child) {
           return Column(
             children: [

@@ -2,18 +2,17 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:bntu_app/ui/widgets/image_loading.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import 'faculty_form.dart';
+import '../provider/faculties_provider.dart';
+import 'widgets/faculty_form.dart';
 
 class FacultyAdd extends StatefulWidget {
   const FacultyAdd({Key? key}) : super(key: key);
@@ -23,15 +22,18 @@ class FacultyAdd extends StatefulWidget {
 }
 
 class _FacultyAddState extends State<FacultyAdd> {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _shortNameController = TextEditingController();
-  TextEditingController _aboutController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _shortNameController = TextEditingController();
+  final TextEditingController _aboutController = TextEditingController();
 
-  TextEditingController _hotLineNumberController = TextEditingController();
-  TextEditingController _hotLineMailController = TextEditingController();
-  TextEditingController _forInquiriesNumberController = TextEditingController();
-  TextEditingController _forHostelNumberController = TextEditingController();
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _hotLineNumberController =
+      TextEditingController();
+  final TextEditingController _hotLineMailController = TextEditingController();
+  final TextEditingController _forInquiriesNumberController =
+      TextEditingController();
+  final TextEditingController _forHostelNumberController =
+      TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   XFile? _image;
   String _imagePath = '';
@@ -46,7 +48,7 @@ class _FacultyAddState extends State<FacultyAdd> {
     String hotLineMail,
     String forInquiriesNumber,
     String forHostelNumber,
-    AppProvider state,
+    FacultiesProvider state,
   ) async {
     if (_formKey.currentState!.validate()) {
       if (_image != null) {
@@ -61,12 +63,12 @@ class _FacultyAddState extends State<FacultyAdd> {
       }
       Navigator.of(context).pop();
       state.initFaculties();
-      Fluttertoast.showToast(msg: 'Факультет успешно добавлен');
+      await Fluttertoast.showToast(msg: 'Факультет успешно добавлен');
     }
   }
 
   void getPhoto() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final image = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _image = image!;
     });
@@ -81,7 +83,7 @@ class _FacultyAddState extends State<FacultyAdd> {
     _task = uploadFile(data!);
     setState(() {});
 
-    showDialog(
+    await showDialog(
         context: context,
         builder: (BuildContext context) {
           var themeProvider = Provider.of<ThemeProvider>(context);
@@ -104,22 +106,22 @@ class _FacultyAddState extends State<FacultyAdd> {
 
     if (_task == null) return;
 
-    final TaskSnapshot storageTaskSnapshot = await _task!.whenComplete(() {
+    final storageTaskSnapshot = await _task!.whenComplete(() {
       _task = null;
     });
-    final String path = await storageTaskSnapshot.ref.getDownloadURL();
+    final path = await storageTaskSnapshot.ref.getDownloadURL();
 
     _imagePath = path;
   }
 
   UploadTask? uploadFile(Uint8List data) {
     try {
-      final Reference storageReference = FirebaseStorage.instance
+      final storageReference = FirebaseStorage.instance
           .ref('faculties/${_shortNameController.text.trim()}/photo.jpg');
       // return storageReference.putFile(File(_image.path));
 
       return storageReference.putData(data);
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       return null;
     }
   }
@@ -149,7 +151,7 @@ class _FacultyAddState extends State<FacultyAdd> {
       appBar: AppBar(
         title: Text('Добавить факультет'),
       ),
-      body: Consumer<AppProvider>(
+      body: Consumer<FacultiesProvider>(
         builder: (context, state, child) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

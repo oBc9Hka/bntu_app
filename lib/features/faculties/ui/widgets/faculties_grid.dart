@@ -1,10 +1,11 @@
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/pages/faculties_views/faculty_edit.dart';
 import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/src/provider.dart';
 
+import '../../../../core/provider/app_provider.dart';
+import '../../provider/faculties_provider.dart';
+import '../faculty_edit.dart';
 import 'faculty_short_item.dart';
 
 class FacultiesGridView extends StatelessWidget {
@@ -34,7 +35,8 @@ class FacultiesGridView extends StatelessWidget {
       );
     }
 
-    var state = context.watch<AppProvider>();
+    final state = context.watch<FacultiesProvider>();
+    final appState = context.watch<AppProvider>();
 
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -52,7 +54,7 @@ class FacultiesGridView extends StatelessWidget {
             child: FadeInAnimation(
               child: FacultyShortItem(
                 shortName: state.faculties[index].shortName.toString(),
-                user: state.user,
+                user: appState.user,
                 onTap: () {
                   _onTap(state.faculties[index]);
                 },

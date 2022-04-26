@@ -1,6 +1,5 @@
 import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
-import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/models/speciality_model.dart';
@@ -13,7 +12,7 @@ class AppProvider with ChangeNotifier {
   final String _quizFacultiesCollection = 'quiz';
   final String _quizSpecialtiesCollection = 'quizSpecialties';
 
-  final FacultiesRepository _facultiesRepository;
+  // final FacultiesRepository _facultiesRepository;
   final SpecialtiesRepository _specialtiesRepository;
   final SettingsRepository _settingsRepository;
   final InfoCardsRepository _infoCardsRepository;
@@ -25,11 +24,6 @@ class AppProvider with ChangeNotifier {
 
   User? user;
   Map<String, dynamic> errorsMap = {};
-
-  List<Faculty> faculties = [];
-  List<String> facultiesShortNames = [];
-
-  bool get isFacultiesLoaded => faculties.isNotEmpty;
 
   List<Speciality> specialties = [];
 
@@ -71,11 +65,10 @@ class AppProvider with ChangeNotifier {
   String dropdown42Value = '...';
   String dropdown52Value = '...';
 
-  bool isList = true; // ListView or GridView at faculties page
   bool isFacultiesQuiz = true; // Quiz for faculties or specialties
 
   AppProvider(
-    this._facultiesRepository,
+    // this._facultiesRepository,
     this._specialtiesRepository,
     this._settingsRepository,
     this._infoCardsRepository,
@@ -85,7 +78,7 @@ class AppProvider with ChangeNotifier {
     // this._userRepository,
   ) {
     // initUser();
-    initFaculties();
+    // initFaculties();
     initSpecialties();
     initSettings();
     initInfoCards();
@@ -94,11 +87,11 @@ class AppProvider with ChangeNotifier {
     initQuestions();
   }
 
-  void initFaculties() async {
-    faculties = await _facultiesRepository.getFacultiesList();
-    facultiesShortNames = await _facultiesRepository.getFacultiesShortNames();
-    notifyListeners();
-  }
+  // void initFaculties() async {
+  //   faculties = await _facultiesRepository.getFacultiesList();
+  //   facultiesShortNames = await _facultiesRepository.getFacultiesShortNames();
+  //   notifyListeners();
+  // }
 
   void initSpecialties() async {
     specialties = await _specialtiesRepository.getSpecialtiesList();
@@ -126,62 +119,6 @@ class AppProvider with ChangeNotifier {
     facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
     specialtiesQuestions =
         await _questionsRepository.getQuestionsList('quizSpecialties');
-    notifyListeners();
-  }
-
-  void addFaculty(
-    String name,
-    String shortName,
-    String about,
-    String hotLineNumber,
-    String hotLineMail,
-    String forInquiriesNumber,
-    String forHostelNumber,
-    String imagePath,
-  ) {
-    try {
-      _facultiesRepository.addFaculty(
-        name,
-        shortName,
-        about,
-        hotLineNumber,
-        hotLineMail,
-        forInquiriesNumber,
-        forHostelNumber,
-        imagePath,
-      );
-    } catch (e) {
-      throw 'Непредвиденная ошибка: $e';
-    }
-    notifyListeners();
-  }
-
-  void editFaculty(
-      String name,
-      String shortName,
-      String about,
-      String hotLineNumber,
-      String hotLineMail,
-      String forInquiriesNumber,
-      String forHostelNumber,
-      String imagePath,
-      String id) {
-    _facultiesRepository.editFaculty(
-      name,
-      shortName,
-      about,
-      hotLineNumber,
-      hotLineMail,
-      forInquiriesNumber,
-      forHostelNumber,
-      imagePath,
-      id,
-    );
-    notifyListeners();
-  }
-
-  void removeFaculty(String id, String packageName) {
-    _facultiesRepository.removeFaculty(id, packageName);
     notifyListeners();
   }
 

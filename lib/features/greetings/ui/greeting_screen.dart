@@ -1,12 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/features/greetings/ui/widgets/wide_layout.dart';
-import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/features/greetings/ui/widgets/narrow_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/provider/app_provider.dart';
 import '../provider/greetings_provider.dart';
 
 class GreetingScreen extends StatelessWidget {
@@ -86,7 +86,7 @@ class GreetingScreen extends StatelessWidget {
       ),
     );
 
-    return Consumer<GreetingsProvider>(
+    return Consumer<AppProvider>(
       builder: (context, state, child) {
         void _signOut() async {
           state.signOut();

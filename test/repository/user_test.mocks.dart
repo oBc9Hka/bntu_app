@@ -4,8 +4,7 @@
 
 import 'dart:async' as _i4;
 
-import 'package:bntu_app/features/greetings/repository/user_repository.dart'
-    as _i3;
+import 'package:bntu_app/core/repository/user_repository.dart' as _i3;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_auth/firebase_auth.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;

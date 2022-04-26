@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:bntu_app/models/faculty_model.dart';
-import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
+import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class FacultiesFirestoreRepository extends FacultiesRepository {
+import '../domain/repository/faculties_repository.dart';
 
+class FacultiesFirestoreRepository extends FacultiesRepository {
   final dbRef = FirebaseFirestore.instance.collection('faculties');
 
   @override
@@ -56,14 +56,14 @@ class FacultiesFirestoreRepository extends FacultiesRepository {
 
   @override
   Future<List<Faculty>> getFacultiesList() async {
-    List<Faculty> list = [];
-    QuerySnapshot<Map<String, dynamic>> temp = await dbRef.get();
+    var list = <Faculty>[];
+    final temp = await dbRef.get();
 
-    if(temp.docs.isEmpty){
+    if (temp.docs.isEmpty) {
       throw TimeoutException('Ошибка соединения');
     }
 
-    for (var faculty in temp.docs){
+    for (var faculty in temp.docs) {
       list.add(Faculty.fromMap(faculty.data(), faculty.id));
     }
 
@@ -74,17 +74,14 @@ class FacultiesFirestoreRepository extends FacultiesRepository {
 
   @override
   Future<void> removeFaculty(String id, String name) async {
-    FirebaseStorage.instance
-        .ref('faculties/$name/photo.jpg')
-        .delete();
+    await FirebaseStorage.instance.ref('faculties/$name/photo.jpg').delete();
     await dbRef.doc(id).delete();
   }
 
   @override
   Future<List<String>> getFacultiesShortNames() async {
-    List<String> shortNames = [];
-    QuerySnapshot<Map<String, dynamic>> temp =
-    await dbRef.get();
+    var shortNames = <String>[];
+    var temp = await dbRef.get();
     for (var item in temp.docs) {
       String shortName = item['shortName'];
       shortNames.add(shortName);
@@ -94,8 +91,7 @@ class FacultiesFirestoreRepository extends FacultiesRepository {
 
   @override
   Future<Faculty> getFacultyByShortName(String name) async {
-    QuerySnapshot<Map<String, dynamic>> temp =
-    await dbRef.get();
+    var temp = await dbRef.get();
     for (var item in temp.docs) {
       if (item['shortName'] == name) {
         return Faculty.fromMap(item.data(), item.id);

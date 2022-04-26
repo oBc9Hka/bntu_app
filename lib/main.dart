@@ -1,17 +1,10 @@
 // @dart=2.9
 
-import 'package:bntu_app/providers/app_provider.dart';
+// import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/repository/buildings_repository.dart';
 import 'package:bntu_app/features/greetings/repository/error_messages_repository.dart';
-import 'package:bntu_app/repository/faculties_repository.dart';
-import 'package:bntu_app/repository/info_cards_repository.dart';
-import 'package:bntu_app/repository/questions_repository.dart';
-import 'package:bntu_app/repository/settings_repository.dart';
-import 'package:bntu_app/repository/specialties_repository.dart';
-import 'package:bntu_app/features/greetings/repository/user_repository.dart';
 import 'package:bntu_app/ui/pages/admission_info/info.dart';
-import 'package:bntu_app/ui/pages/faculties_views/main_page.dart';
+import 'package:bntu_app/features/faculties/ui/faculties_screen.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
 import 'package:bntu_app/ui/pages/map_view/map.dart';
 import 'package:bntu_app/ui/pages/messages_page.dart';
@@ -25,6 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/provider/app_provider.dart';
+import 'core/repository/user_repository.dart';
+import 'features/faculties/provider/faculties_provider.dart';
+import 'features/faculties/repository/faculties_repository.dart';
 import 'features/greetings/provider/greetings_provider.dart';
 
 void main() async {
@@ -37,9 +34,18 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider(theme)),
         ChangeNotifierProvider(
+          create: (context) => AppProvider(
+            userRepository: UserFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FacultiesProvider(
+            facultiesRepository: FacultiesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
           create: (context) => GreetingsProvider(
             errorMessagesRepository: ErrorMessagesFirestoreRepository(),
-            userRepository: UserFirestoreRepository(),
           ),
         ),
 
@@ -82,13 +88,13 @@ class BntuApp extends StatelessWidget {
       ),
       theme: themeProvider.current,
       routes: {
-        '/main_page': (context) => MainPage(),
+        '/main_page': (context) => FacultiesScreen(),
         '/settings': (context) => SettingsPage(),
         '/messages': (context) => MessagesPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
-        '/test': (context) => MainMenu(
-            isFacultiesQuiz: context.watch<AppProvider>().isFacultiesQuiz),
+        // '/test': (context) => MainMenu(
+        //     isFacultiesQuiz: context.watch<AppProvider>().isFacultiesQuiz),
         '/test-faculties': (context) => MainMenu(isFacultiesQuiz: true),
         '/test-specialties': (context) => MainMenu(isFacultiesQuiz: false),
         '/test-faculties-edit': (context) => QuizList(questions: 'f'),

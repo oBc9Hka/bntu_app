@@ -61,7 +61,8 @@ class _QuizAddState extends State<QuizAdd> {
           _answer2Controller.text.trim(): [v2]
         });
       }
-    }if (_answer3Controller.text.trim() != '') {
+    }
+    if (_answer3Controller.text.trim() != '') {
       if (v32 != '..') {
         _answers.add({
           _answer3Controller.text.trim(): [v3, v32]
@@ -71,7 +72,8 @@ class _QuizAddState extends State<QuizAdd> {
           _answer3Controller.text.trim(): [v3]
         });
       }
-    }if (_answer4Controller.text.trim() != '') {
+    }
+    if (_answer4Controller.text.trim() != '') {
       if (v42 != '..') {
         _answers.add({
           _answer4Controller.text.trim(): [v4, v42]
@@ -81,7 +83,8 @@ class _QuizAddState extends State<QuizAdd> {
           _answer4Controller.text.trim(): [v4]
         });
       }
-    }if (_answer5Controller.text.trim() != '') {
+    }
+    if (_answer5Controller.text.trim() != '') {
       if (v52 != '..') {
         _answers.add({
           _answer5Controller.text.trim(): [v5, v52]
@@ -123,11 +126,11 @@ class _QuizAddState extends State<QuizAdd> {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
         if (widget.questions == 'f') {
-          state.dropdown1Value = state.facultiesShortNames[0];
-          state.dropdown2Value = state.facultiesShortNames[0];
-          state.dropdown3Value = state.facultiesShortNames[0];
-          state.dropdown4Value = state.facultiesShortNames[0];
-          state.dropdown5Value = state.facultiesShortNames[0];
+          // state.dropdown1Value = state.facultiesShortNames[0];
+          // state.dropdown2Value = state.facultiesShortNames[0];
+          // state.dropdown3Value = state.facultiesShortNames[0];
+          // state.dropdown4Value = state.facultiesShortNames[0];
+          // state.dropdown5Value = state.facultiesShortNames[0];
           state.dropdown12Value = Constants.quizFacAnswersList[0].toString();
           state.dropdown22Value = Constants.quizFacAnswersList[0].toString();
           state.dropdown32Value = Constants.quizFacAnswersList[0].toString();
@@ -163,7 +166,7 @@ class _QuizAddState extends State<QuizAdd> {
                     answer3Controller: _answer3Controller,
                     answer4Controller: _answer4Controller,
                     answer5Controller: _answer5Controller,
-                    facultiesList: state.facultiesShortNames,
+                    facultiesList: [], //state.facultiesShortNames,
                     questions: widget.questions,
                   ),
                 ),

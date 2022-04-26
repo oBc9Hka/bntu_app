@@ -1,20 +1,21 @@
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/widgets/faculties/faculties_grid.dart';
-import 'package:bntu_app/ui/widgets/faculties/faculties_list.dart';
-import 'package:bntu_app/ui/widgets/faculties/help_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/provider/app_provider.dart';
+import '../provider/faculties_provider.dart';
 import 'faculty_add.dart';
+import 'widgets/faculties_grid.dart';
+import 'widgets/faculties_list.dart';
+import 'widgets/help_card.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class FacultiesScreen extends StatefulWidget {
+  const FacultiesScreen({Key? key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _FacultiesScreenState createState() => _FacultiesScreenState();
 }
 
-class _MainPageState extends State<MainPage>
+class _FacultiesScreenState extends State<FacultiesScreen>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
 
@@ -23,13 +24,14 @@ class _MainPageState extends State<MainPage>
     _animationController = AnimationController(
         vsync: this,
         duration: Duration(milliseconds: 350),
-        value: context.watch<AppProvider>().isList ? 0 : 1);
+        value: context.watch<FacultiesProvider>().isList ? 0 : 1);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AppProvider>(
+    final appState = context.watch<AppProvider>();
+    return Consumer<FacultiesProvider>(
       builder: (context, state, child) {
         return Scaffold(
           appBar: AppBar(
@@ -50,7 +52,7 @@ class _MainPageState extends State<MainPage>
                   progress: _animationController,
                 ),
               ),
-              state.user != null
+              appState.user != null
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
