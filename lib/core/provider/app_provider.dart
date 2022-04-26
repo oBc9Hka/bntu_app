@@ -8,7 +8,10 @@ class AppProvider with ChangeNotifier {
   User? user;
   Map<String, dynamic> errorsMap = {};
 
-  AppProvider({required this.userRepository});
+  AppProvider({required this.userRepository}) {
+    initUser();
+    initErrorsMap();
+  }
 
   void initUser() async {
     user = await userRepository

@@ -5,7 +5,7 @@ import '../domain/repository/error_messages_repository.dart';
 class GreetingsProvider with ChangeNotifier {
   final ErrorMessagesRepository errorMessagesRepository;
 
-  String secretKey = '';
+  String secretKey = 'Admin'; // TODO: implement loading from firestore
 
   GreetingsProvider({
     required this.errorMessagesRepository,
