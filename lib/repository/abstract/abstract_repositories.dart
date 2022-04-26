@@ -1,21 +1,6 @@
 import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
-
-abstract class InfoCardsRepository {
-  Future<List<InfoCard>> getCards();
-
-  Future<void> addCard(String title, String subtitle);
-
-  Future<void> editCard(String title, String subtitle, String id);
-
-  Future<void> removeCard(String id);
-
-  Future<void> moveUp(String currId, String prevId);
-
-  Future<void> moveDown(String currId, String nextId);
-}
 
 abstract class BuildingsRepository {
   Future<List<Building>> getBuildingsList();

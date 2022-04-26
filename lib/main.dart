@@ -2,7 +2,6 @@
 
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/features/greetings/repository/error_messages_repository.dart';
-import 'package:bntu_app/ui/pages/admission_info/info.dart';
 import 'package:bntu_app/features/faculties/ui/faculties_screen.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
 import 'package:bntu_app/ui/pages/map_view/map.dart';
@@ -19,6 +18,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/provider/app_provider.dart';
 import 'core/repository/user_repository.dart';
+import 'features/admission_info/provider/admission_info_provider.dart';
+import 'features/admission_info/repository/info_cards_repository.dart';
+import 'features/admission_info/ui/info.dart';
 import 'features/faculties/provider/faculties_provider.dart';
 import 'features/faculties/repository/faculties_repository.dart';
 import 'features/greetings/provider/greetings_provider.dart';
@@ -52,6 +54,11 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) => SpecialtiesProvider(
             specialtiesRepository: SpecialtiesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AdmissionInfoProvider(
+            infoCardsRepository: InfoCardsFirestoreRepository(),
           ),
         ),
 

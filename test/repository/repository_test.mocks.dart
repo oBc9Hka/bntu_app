@@ -9,7 +9,8 @@ import 'package:bntu_app/features/greetings/domain/models/error_message_model.da
     as _i12;
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart'
     as _i3;
-import 'package:bntu_app/models/info_cards_model.dart' as _i10;
+import 'package:bntu_app/features/admission_info/domain/models/info_cards_model.dart'
+    as _i10;
 import 'package:bntu_app/models/question_model.dart' as _i17;
 import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart'
     as _i7;
@@ -18,7 +19,8 @@ import 'package:bntu_app/features/greetings/repository/error_messages_repository
     as _i11;
 import 'package:bntu_app/features/faculties/repository/faculties_repository.dart'
     as _i4;
-import 'package:bntu_app/repository/info_cards_repository.dart' as _i9;
+import 'package:bntu_app/features/admission_info/repository/info_cards_repository.dart'
+    as _i9;
 import 'package:bntu_app/repository/questions_repository.dart' as _i16;
 import 'package:bntu_app/repository/settings_repository.dart' as _i8;
 import 'package:bntu_app/features/specialties/repository/specialties_repository.dart'

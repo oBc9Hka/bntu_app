@@ -1,6 +1,5 @@
 import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
-import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +13,7 @@ class AppProvider with ChangeNotifier {
   // final FacultiesRepository _facultiesRepository;
   // final SpecialtiesRepository _specialtiesRepository;
   final SettingsRepository _settingsRepository;
-  final InfoCardsRepository _infoCardsRepository;
+  // final InfoCardsRepository _infoCardsRepository;
 
   // final ErrorMessagesRepository _errorMessagesRepository;
 
@@ -23,10 +22,6 @@ class AppProvider with ChangeNotifier {
 
   User? user;
   Map<String, dynamic> errorsMap = {};
-
-  List<InfoCard> infoCards = [];
-
-  bool get isInfoCardsLoaded => infoCards.isNotEmpty;
 
   List<ErrorMessage> errorMessages = [];
 
@@ -66,7 +61,7 @@ class AppProvider with ChangeNotifier {
     // this._facultiesRepository,
     // this._specialtiesRepository,
     this._settingsRepository,
-    this._infoCardsRepository,
+    // this._infoCardsRepository,
     // this._errorMessagesRepository,
     this._buildingsRepository,
     this._questionsRepository,
@@ -76,7 +71,7 @@ class AppProvider with ChangeNotifier {
     // initFaculties();
     // initSpecialties();
     initSettings();
-    initInfoCards();
+    // initInfoCards();
     // initErrorMessages();
     initBuildings();
     initQuestions();
@@ -95,11 +90,6 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void initInfoCards() async {
-    infoCards = await _infoCardsRepository.getCards();
-    notifyListeners();
-  }
-
   void initBuildings() async {
     buildings = await _buildingsRepository.getBuildingsList();
     notifyListeners();
@@ -109,39 +99,6 @@ class AppProvider with ChangeNotifier {
     facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
     specialtiesQuestions =
         await _questionsRepository.getQuestionsList('quizSpecialties');
-    notifyListeners();
-  }
-
-  void addInfoCard(String title, String subtitle) {
-    _infoCardsRepository
-        .addCard(title, subtitle)
-        .whenComplete(() => initInfoCards());
-    notifyListeners();
-  }
-
-  void editInfoCard(String title, String subtitle, String id) {
-    _infoCardsRepository
-        .editCard(title, subtitle, id)
-        .whenComplete(() => initInfoCards());
-    notifyListeners();
-  }
-
-  void removeInfoCard(String id) {
-    _infoCardsRepository.removeCard(id).whenComplete(() => initInfoCards());
-    notifyListeners();
-  }
-
-  void moveUpInfoCard(String currId, String prevId) {
-    _infoCardsRepository
-        .moveUp(currId, prevId)
-        .whenComplete(() => initInfoCards());
-    notifyListeners();
-  }
-
-  void moveDownInfoCard(String currId, String nextId) {
-    _infoCardsRepository
-        .moveDown(currId, nextId)
-        .whenComplete(() => initInfoCards());
     notifyListeners();
   }
 

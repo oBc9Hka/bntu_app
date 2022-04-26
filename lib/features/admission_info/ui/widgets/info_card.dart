@@ -1,9 +1,11 @@
-import 'package:bntu_app/models/info_cards_model.dart';
+import 'package:bntu_app/features/admission_info/domain/models/info_cards_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
-import 'package:bntu_app/ui/pages/admission_info/info_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../provider/admission_info_provider.dart';
+import '../info_edit.dart';
 
 class InfoCardWidget extends StatelessWidget {
   const InfoCardWidget({
@@ -78,7 +80,7 @@ class InfoCardWidget extends StatelessWidget {
       );
     }
 
-    return Consumer<AppProvider>(
+    return Consumer<AdmissionInfoProvider>(
       builder: (context, state, child) {
         return ListView.builder(
           physics: NeverScrollableScrollPhysics(),

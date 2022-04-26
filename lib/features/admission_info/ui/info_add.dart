@@ -1,9 +1,9 @@
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/pages/admission_info/info_form.dart';
 import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/admission_info_provider.dart';
+import 'widgets/info_form.dart';
 
 class AdmissionInfoAdd extends StatefulWidget {
   const AdmissionInfoAdd({Key? key}) : super(key: key);
@@ -14,10 +14,10 @@ class AdmissionInfoAdd extends StatefulWidget {
 
 class _AdmissionInfoAddState extends State<AdmissionInfoAdd> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _subtitleController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _subtitleController = TextEditingController();
 
-  void _onSubmit(AppProvider state) {
+  void _onSubmit(AdmissionInfoProvider state) {
     if (_formKey.currentState!.validate()) {
       state.addInfoCard(
         _titleController.text,
@@ -33,7 +33,7 @@ class _AdmissionInfoAddState extends State<AdmissionInfoAdd> {
       appBar: AppBar(
         title: Text('Добавить карточку'),
       ),
-      body: Consumer<AppProvider>(
+      body: Consumer<AdmissionInfoProvider>(
         builder: (context, state, child) {
           return Padding(
             padding: const EdgeInsets.all(10.0),
