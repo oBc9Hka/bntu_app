@@ -1,9 +1,10 @@
-import 'package:bntu_app/models/speciality_model.dart';
+import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/ui/pages/speciality_views/speciality_edit.dart';
 import 'package:bntu_app/ui/themes/material_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../speciality_edit.dart';
 
 class SpecialityCard extends StatelessWidget {
   const SpecialityCard(
@@ -21,7 +22,7 @@ class SpecialityCard extends StatelessWidget {
   static Color _secColor = Colors.grey;
   static Color _titleBackColor = Colors.white;
 
-  showAlertDialog(BuildContext context, Speciality item) {
+  void showAlertDialog(BuildContext context, Speciality item) {
     Widget okButton = TextButton(
       child: Text(
         'Закрыть',

@@ -2,7 +2,6 @@ import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
-import 'package:bntu_app/models/speciality_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +12,7 @@ class AppProvider with ChangeNotifier {
   final String _quizSpecialtiesCollection = 'quizSpecialties';
 
   // final FacultiesRepository _facultiesRepository;
-  final SpecialtiesRepository _specialtiesRepository;
+  // final SpecialtiesRepository _specialtiesRepository;
   final SettingsRepository _settingsRepository;
   final InfoCardsRepository _infoCardsRepository;
 
@@ -24,10 +23,6 @@ class AppProvider with ChangeNotifier {
 
   User? user;
   Map<String, dynamic> errorsMap = {};
-
-  List<Speciality> specialties = [];
-
-  bool get isSpecialtiesLoaded => specialties.isNotEmpty;
 
   List<InfoCard> infoCards = [];
 
@@ -69,7 +64,7 @@ class AppProvider with ChangeNotifier {
 
   AppProvider(
     // this._facultiesRepository,
-    this._specialtiesRepository,
+    // this._specialtiesRepository,
     this._settingsRepository,
     this._infoCardsRepository,
     // this._errorMessagesRepository,
@@ -79,7 +74,7 @@ class AppProvider with ChangeNotifier {
   ) {
     // initUser();
     // initFaculties();
-    initSpecialties();
+    // initSpecialties();
     initSettings();
     initInfoCards();
     // initErrorMessages();
@@ -92,11 +87,6 @@ class AppProvider with ChangeNotifier {
   //   facultiesShortNames = await _facultiesRepository.getFacultiesShortNames();
   //   notifyListeners();
   // }
-
-  void initSpecialties() async {
-    specialties = await _specialtiesRepository.getSpecialtiesList();
-    notifyListeners();
-  }
 
   void initSettings() async {
     currentAdmissionYear = await _settingsRepository.getCurrentAdmissionYear();
@@ -119,199 +109,6 @@ class AppProvider with ChangeNotifier {
     facultiesQuestions = await _questionsRepository.getQuestionsList('quiz');
     specialtiesQuestions =
         await _questionsRepository.getQuestionsList('quizSpecialties');
-    notifyListeners();
-  }
-
-  void addSpeciality(
-    facultyBased,
-    name,
-    number,
-    about,
-    qualification,
-    trainingDurationDayFull,
-    trainingDurationDayShort,
-    trainingDurationCorrespondenceFull,
-    trainingDurationCorrespondenceShort,
-    entranceTestsFull,
-    entranceShort,
-    admissionCurrentDayFullBudget,
-    admissionCurrentDayShortBudget,
-    admissionCurrentDayFullPaid,
-    admissionCurrentDayShortPaid,
-    admissionCurrentCorrespondenceFullBudget,
-    admissionCurrentCorrespondenceShortBudget,
-    admissionCurrentCorrespondenceFullPaid,
-    admissionCurrentCorrespondenceShortPaid,
-    passScorePrevYearDayFullBudget,
-    passScorePrevYearDayShortBudget,
-    passScorePrevYearDayFullPaid,
-    passScorePrevYearDayShortPaid,
-    passScorePrevYearCorrespondenceFullBudget,
-    passScorePrevYearCorrespondenceShortBudget,
-    passScorePrevYearCorrespondenceFullPaid,
-    passScorePrevYearCorrespondenceShortPaid,
-    admissionPrevYearDayFullBudget,
-    admissionPrevYearDayShortBudget,
-    admissionPrevYearDayFullPaid,
-    admissionPrevYearDayShortPaid,
-    admissionPrevYearCorrespondenceFullBudget,
-    admissionPrevYearCorrespondenceShortBudget,
-    admissionPrevYearCorrespondenceFullPaid,
-    admissionPrevYearCorrespondenceShortPaid,
-    passScoreBeforeLastYearDayFullBudget,
-    passScoreBeforeLastYearDayShortBudget,
-    passScoreBeforeLastYearDayFullPaid,
-    passScoreBeforeLastYearDayShortPaid,
-    passScoreBeforeLastYearCorrespondenceFullBudget,
-    passScoreBeforeLastYearCorrespondenceShortBudget,
-    passScoreBeforeLastYearCorrespondenceFullPaid,
-    passScoreBeforeLastYearCorrespondenceShortPaid,
-  ) {
-    _specialtiesRepository.addSpeciality(
-      facultyBased,
-      name,
-      number,
-      about,
-      qualification,
-      trainingDurationDayFull,
-      trainingDurationDayShort,
-      trainingDurationCorrespondenceFull,
-      trainingDurationCorrespondenceShort,
-      entranceTestsFull,
-      entranceShort,
-      admissionCurrentDayFullBudget,
-      admissionCurrentDayShortBudget,
-      admissionCurrentDayFullPaid,
-      admissionCurrentDayShortPaid,
-      admissionCurrentCorrespondenceFullBudget,
-      admissionCurrentCorrespondenceShortBudget,
-      admissionCurrentCorrespondenceFullPaid,
-      admissionCurrentCorrespondenceShortPaid,
-      passScorePrevYearDayFullBudget,
-      passScorePrevYearDayShortBudget,
-      passScorePrevYearDayFullPaid,
-      passScorePrevYearDayShortPaid,
-      passScorePrevYearCorrespondenceFullBudget,
-      passScorePrevYearCorrespondenceShortBudget,
-      passScorePrevYearCorrespondenceFullPaid,
-      passScorePrevYearCorrespondenceShortPaid,
-      admissionPrevYearDayFullBudget,
-      admissionPrevYearDayShortBudget,
-      admissionPrevYearDayFullPaid,
-      admissionPrevYearDayShortPaid,
-      admissionPrevYearCorrespondenceFullBudget,
-      admissionPrevYearCorrespondenceShortBudget,
-      admissionPrevYearCorrespondenceFullPaid,
-      admissionPrevYearCorrespondenceShortPaid,
-      passScoreBeforeLastYearDayFullBudget,
-      passScoreBeforeLastYearDayShortBudget,
-      passScoreBeforeLastYearDayFullPaid,
-      passScoreBeforeLastYearDayShortPaid,
-      passScoreBeforeLastYearCorrespondenceFullBudget,
-      passScoreBeforeLastYearCorrespondenceShortBudget,
-      passScoreBeforeLastYearCorrespondenceFullPaid,
-      passScoreBeforeLastYearCorrespondenceShortPaid,
-    );
-    notifyListeners();
-  }
-
-  void editSpeciality(
-    facultyBased,
-    name,
-    number,
-    about,
-    qualification,
-    trainingDurationDayFull,
-    trainingDurationDayShort,
-    trainingDurationCorrespondenceFull,
-    trainingDurationCorrespondenceShort,
-    entranceTestsFull,
-    entranceShort,
-    admissionCurrentDayFullBudget,
-    admissionCurrentDayShortBudget,
-    admissionCurrentDayFullPaid,
-    admissionCurrentDayShortPaid,
-    admissionCurrentCorrespondenceFullBudget,
-    admissionCurrentCorrespondenceShortBudget,
-    admissionCurrentCorrespondenceFullPaid,
-    admissionCurrentCorrespondenceShortPaid,
-    passScorePrevYearDayFullBudget,
-    passScorePrevYearDayShortBudget,
-    passScorePrevYearDayFullPaid,
-    passScorePrevYearDayShortPaid,
-    passScorePrevYearCorrespondenceFullBudget,
-    passScorePrevYearCorrespondenceShortBudget,
-    passScorePrevYearCorrespondenceFullPaid,
-    passScorePrevYearCorrespondenceShortPaid,
-    admissionPrevYearDayFullBudget,
-    admissionPrevYearDayShortBudget,
-    admissionPrevYearDayFullPaid,
-    admissionPrevYearDayShortPaid,
-    admissionPrevYearCorrespondenceFullBudget,
-    admissionPrevYearCorrespondenceShortBudget,
-    admissionPrevYearCorrespondenceFullPaid,
-    admissionPrevYearCorrespondenceShortPaid,
-    passScoreBeforeLastYearDayFullBudget,
-    passScoreBeforeLastYearDayShortBudget,
-    passScoreBeforeLastYearDayFullPaid,
-    passScoreBeforeLastYearDayShortPaid,
-    passScoreBeforeLastYearCorrespondenceFullBudget,
-    passScoreBeforeLastYearCorrespondenceShortBudget,
-    passScoreBeforeLastYearCorrespondenceFullPaid,
-    passScoreBeforeLastYearCorrespondenceShortPaid,
-    id,
-  ) {
-    _specialtiesRepository.editSpeciality(
-      facultyBased,
-      name,
-      number,
-      about,
-      qualification,
-      trainingDurationDayFull,
-      trainingDurationDayShort,
-      trainingDurationCorrespondenceFull,
-      trainingDurationCorrespondenceShort,
-      entranceTestsFull,
-      entranceShort,
-      admissionCurrentDayFullBudget,
-      admissionCurrentDayShortBudget,
-      admissionCurrentDayFullPaid,
-      admissionCurrentDayShortPaid,
-      admissionCurrentCorrespondenceFullBudget,
-      admissionCurrentCorrespondenceShortBudget,
-      admissionCurrentCorrespondenceFullPaid,
-      admissionCurrentCorrespondenceShortPaid,
-      passScorePrevYearDayFullBudget,
-      passScorePrevYearDayShortBudget,
-      passScorePrevYearDayFullPaid,
-      passScorePrevYearDayShortPaid,
-      passScorePrevYearCorrespondenceFullBudget,
-      passScorePrevYearCorrespondenceShortBudget,
-      passScorePrevYearCorrespondenceFullPaid,
-      passScorePrevYearCorrespondenceShortPaid,
-      admissionPrevYearDayFullBudget,
-      admissionPrevYearDayShortBudget,
-      admissionPrevYearDayFullPaid,
-      admissionPrevYearDayShortPaid,
-      admissionPrevYearCorrespondenceFullBudget,
-      admissionPrevYearCorrespondenceShortBudget,
-      admissionPrevYearCorrespondenceFullPaid,
-      admissionPrevYearCorrespondenceShortPaid,
-      passScoreBeforeLastYearDayFullBudget,
-      passScoreBeforeLastYearDayShortBudget,
-      passScoreBeforeLastYearDayFullPaid,
-      passScoreBeforeLastYearDayShortPaid,
-      passScoreBeforeLastYearCorrespondenceFullBudget,
-      passScoreBeforeLastYearCorrespondenceShortBudget,
-      passScoreBeforeLastYearCorrespondenceFullPaid,
-      passScoreBeforeLastYearCorrespondenceShortPaid,
-      id,
-    );
-    notifyListeners();
-  }
-
-  void removeSpeciality(String id) {
-    _specialtiesRepository.removeSpeciality(id);
     notifyListeners();
   }
 

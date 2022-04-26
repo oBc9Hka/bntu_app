@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
-import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
+import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -179,7 +179,8 @@ class ResultScreen extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => FacultyPage(
+                                            builder: (context) =>
+                                                SpecialtiesScreen(
                                               faculty: item.key,
                                             ),
                                           ),
@@ -220,7 +221,8 @@ class ResultScreen extends StatelessWidget {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => FacultyPage(
+                                            builder: (context) =>
+                                                SpecialtiesScreen(
                                               faculty: mayFitFacultyList[
                                                       mayFitFacultyIndex]
                                                   .key,
@@ -260,7 +262,7 @@ class ResultScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          FacultyPage(
+                                                          SpecialtiesScreen(
                                                         faculty: item.key,
                                                       ),
                                                     ),
@@ -294,7 +296,7 @@ class ResultScreen extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => FacultyPage(
+                                        builder: (context) => SpecialtiesScreen(
                                           faculty: _getFacultyByShortName(
                                               item.values.first,
                                               // state.faculties,

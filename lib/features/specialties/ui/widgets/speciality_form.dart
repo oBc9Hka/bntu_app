@@ -1,5 +1,5 @@
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
-import 'package:bntu_app/models/speciality_model.dart';
+import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

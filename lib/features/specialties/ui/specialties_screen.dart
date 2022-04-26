@@ -1,30 +1,32 @@
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
-import 'package:bntu_app/providers/app_provider.dart';
+import 'package:bntu_app/features/specialties/ui/speciality_add.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
-import 'package:bntu_app/ui/pages/speciality_views/speciality_add.dart';
-import 'package:bntu_app/ui/widgets/speciality_card.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bntu_app/features/specialties/ui/widgets/speciality_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FacultyPage extends StatelessWidget {
+import '../../../core/provider/app_provider.dart';
+import '../provider/specialties_provider.dart';
+
+class SpecialtiesScreen extends StatelessWidget {
   final Faculty faculty;
 
-  FacultyPage({Key? key, required this.faculty}) : super(key: key);
+  SpecialtiesScreen({Key? key, required this.faculty}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
+    final appState = context.watch<AppProvider>();
 
-    return Consumer<AppProvider>(
+    return Consumer<SpecialtiesProvider>(
       builder: (context, state, child) {
         return Scaffold(
           appBar: AppBar(
             title: Text(faculty.shortName.toString()),
             actions: [
-              state.user != null
+              appState.user != null
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -116,7 +118,7 @@ class FacultyPage extends StatelessWidget {
                                 currentYear:
                                     int.parse(state.currentAdmissionYear),
                                 item: state.specialties[index],
-                                user: state.user,
+                                user: appState.user,
                               );
                             }
                             return Container();

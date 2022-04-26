@@ -1,6 +1,5 @@
 // @dart=2.9
 
-// import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/features/greetings/repository/error_messages_repository.dart';
 import 'package:bntu_app/ui/pages/admission_info/info.dart';
@@ -23,6 +22,8 @@ import 'core/repository/user_repository.dart';
 import 'features/faculties/provider/faculties_provider.dart';
 import 'features/faculties/repository/faculties_repository.dart';
 import 'features/greetings/provider/greetings_provider.dart';
+import 'features/specialties/provider/specialties_provider.dart';
+import 'features/specialties/repository/specialties_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,13 +40,18 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(
+          create: (context) => GreetingsProvider(
+            errorMessagesRepository: ErrorMessagesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
           create: (context) => FacultiesProvider(
             facultiesRepository: FacultiesFirestoreRepository(),
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) => GreetingsProvider(
-            errorMessagesRepository: ErrorMessagesFirestoreRepository(),
+          create: (context) => SpecialtiesProvider(
+            specialtiesRepository: SpecialtiesFirestoreRepository(),
           ),
         ),
 

@@ -1,21 +1,22 @@
-import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/pages/speciality_views/speciality_form.dart';
-import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
+import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
+import 'package:bntu_app/ui/widgets/remove_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class SpecialityAdd extends StatefulWidget {
-  const SpecialityAdd({Key? key, required this.faculty}) : super(key: key);
-  final Faculty faculty;
+import '../provider/specialties_provider.dart';
+import 'widgets/speciality_form.dart';
+
+class SpecialityEdit extends StatefulWidget {
+  const SpecialityEdit({Key? key, required this.speciality}) : super(key: key);
+  final Speciality speciality;
 
   @override
-  _SpecialityAddState createState() => _SpecialityAddState();
+  _SpecialityAddStEdit createState() => _SpecialityAddStEdit();
 }
 
-class _SpecialityAddState extends State<SpecialityAdd> {
+class _SpecialityAddStEdit extends State<SpecialityEdit> {
   TextEditingController _facultyBasedController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _numberController = TextEditingController();
@@ -30,8 +31,8 @@ class _SpecialityAddState extends State<SpecialityAdd> {
   TextEditingController _trainingDurationCorrespondenceShortController =
       TextEditingController();
 
-  List<String> _entranceTestsFullList = [];
-  List<String> _entranceShortList = [];
+  final List<String> _entranceTestsFullList = [];
+  final List<String> _entranceShortList = [];
   TextEditingController _entranceTestsFull1Controller = TextEditingController();
   TextEditingController _entranceTestsFull2Controller = TextEditingController();
   TextEditingController _entranceTestsFull3Controller = TextEditingController();
@@ -144,7 +145,7 @@ class _SpecialityAddState extends State<SpecialityAdd> {
     if (fifth != '') _entranceShortList.add(fifth);
   }
 
-  void _addSpeciality(AppProvider state) {
+  void _editSpeciality(String id, SpecialtiesProvider state) {
     if (_formKey.currentState!.validate()) {
       _getFullEntranceList(
           _entranceTestsFull1Controller.text,
@@ -159,9 +160,8 @@ class _SpecialityAddState extends State<SpecialityAdd> {
           _entranceShort4Controller.text,
           _entranceShort5Controller.text);
 
-      state.addSpeciality(
-        // _facultyBasedController.text,
-        widget.faculty.shortName,
+      state.editSpeciality(
+        _facultyBasedController.text,
         _nameController.text,
         _numberController.text,
         _aboutController.text,
@@ -204,22 +204,198 @@ class _SpecialityAddState extends State<SpecialityAdd> {
         _passScoreBeforeLastYearCorrespondenceShortBudgetController.text,
         _passScoreBeforeLastYearCorrespondenceFullPaidController.text,
         _passScoreBeforeLastYearCorrespondenceShortPaidController.text,
+        id,
       );
 
       _formKey.currentState!.reset();
       Navigator.of(context).pop();
       state.initSpecialties();
-      Fluttertoast.showToast(msg: 'Специальность успешно добавлена');
+      Fluttertoast.showToast(msg: 'Специальность успешно изменена');
     }
+  }
+
+  void _removeSpeciality(String id, SpecialtiesProvider state) {
+    state.removeSpeciality(id);
+    state.initSpecialties();
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Fluttertoast.showToast(msg: 'Специальность успешно удалена');
   }
 
   @override
   Widget build(BuildContext context) {
+    _facultyBasedController =
+        TextEditingController(text: widget.speciality.facultyBased);
+    _nameController = TextEditingController(text: widget.speciality.name);
+    _numberController = TextEditingController(text: widget.speciality.number);
+    _aboutController = TextEditingController(text: widget.speciality.about);
+    _qualificationController =
+        TextEditingController(text: widget.speciality.qualification);
+    _trainingDurationDayFullController =
+        TextEditingController(text: widget.speciality.trainingDurationDayFull);
+    _trainingDurationDayShortController =
+        TextEditingController(text: widget.speciality.trainingDurationDayShort);
+    _trainingDurationCorrespondenceFullController = TextEditingController(
+        text: widget.speciality.trainingDurationCorrespondenceFull);
+    _trainingDurationCorrespondenceShortController = TextEditingController(
+        text: widget.speciality.trainingDurationCorrespondenceShort);
+
+    var _entranceTestsFull = widget.speciality.entranceTestsFull;
+    var _count = 0;
+    var _entranceTestsFull1 = '';
+    var _entranceTestsFull2 = '';
+    var _entranceTestsFull3 = '';
+    var _entranceTestsFull4 = '';
+    var _entranceTestsFull5 = '';
+    for (var e in _entranceTestsFull!) {
+      ++_count;
+      if (_count > 0 && _count < 2) {
+        _entranceTestsFull1 = _entranceTestsFull[0] as String;
+      }
+      if (_count > 1 && _count < 3) {
+        _entranceTestsFull2 = _entranceTestsFull[1] as String;
+      }
+      if (_count > 2 && _count < 4) {
+        _entranceTestsFull3 = _entranceTestsFull[2] as String;
+      }
+      if (_count > 3 && _count < 5) {
+        _entranceTestsFull4 = _entranceTestsFull[3] as String;
+      }
+      if (_count > 4 && _count < 6) {
+        _entranceTestsFull5 = _entranceTestsFull[4] as String;
+      }
+    }
+
+    var _entranceTestsShort = widget.speciality.entranceShort;
+    _count = 0;
+    var _entranceTestsShort1 = '';
+    var _entranceTestsShort2 = '';
+    var _entranceTestsShort3 = '';
+    var _entranceTestsShort4 = '';
+    var _entranceTestsShort5 = '';
+    for (var e in _entranceTestsShort!) {
+      ++_count;
+      if (_count == 1) {
+        _entranceTestsShort1 = _entranceTestsShort[0] as String;
+      }
+      if (_count == 2) {
+        _entranceTestsShort2 = _entranceTestsShort[1] as String;
+      }
+      if (_count == 3) {
+        _entranceTestsShort3 = _entranceTestsShort[2] as String;
+      }
+      if (_count == 4) {
+        _entranceTestsShort4 = _entranceTestsShort[3] as String;
+      }
+      if (_count == 5) {
+        _entranceTestsShort5 = _entranceTestsShort[4] as String;
+      }
+    }
+
+    _entranceTestsFull1Controller =
+        TextEditingController(text: _entranceTestsFull1);
+    _entranceTestsFull2Controller =
+        TextEditingController(text: _entranceTestsFull2);
+    _entranceTestsFull3Controller =
+        TextEditingController(text: _entranceTestsFull3);
+    _entranceTestsFull4Controller =
+        TextEditingController(text: _entranceTestsFull4);
+    _entranceTestsFull5Controller =
+        TextEditingController(text: _entranceTestsFull5);
+    _entranceShort1Controller =
+        TextEditingController(text: _entranceTestsShort1);
+    _entranceShort2Controller =
+        TextEditingController(text: _entranceTestsShort2);
+    _entranceShort3Controller =
+        TextEditingController(text: _entranceTestsShort3);
+    _entranceShort4Controller =
+        TextEditingController(text: _entranceTestsShort4);
+    _entranceShort5Controller =
+        TextEditingController(text: _entranceTestsShort5);
+
+    _admissionCurrentDayFullBudgetController = TextEditingController(
+        text: widget.speciality.admissionCurrentDayFullBudget);
+    _admissionCurrentDayShortBudgetController = TextEditingController(
+        text: widget.speciality.admissionCurrentDayShortBudget);
+    _admissionCurrentDayFullPaidController = TextEditingController(
+        text: widget.speciality.admissionCurrentDayFullPaid);
+    _admissionCurrentDayShortPaidController = TextEditingController(
+        text: widget.speciality.admissionCurrentDayShortPaid);
+    _admissionCurrentCorrespondenceFullBudgetController = TextEditingController(
+        text: widget.speciality.admissionCurrentCorrespondenceFullBudget);
+    _admissionCurrentCorrespondenceShortBudgetController =
+        TextEditingController(
+            text: widget.speciality.admissionCurrentCorrespondenceShortBudget);
+    _admissionCurrentCorrespondenceFullPaidController = TextEditingController(
+        text: widget.speciality.admissionCurrentCorrespondenceFullPaid);
+    _admissionCurrentCorrespondenceShortPaidController = TextEditingController(
+        text: widget.speciality.admissionCurrentCorrespondenceShortPaid);
+    _passScorePrevYearDayFullBudgetController = TextEditingController(
+        text: widget.speciality.passScorePrevYearDayFullBudget);
+    _passScorePrevYearDayShortBudgetController = TextEditingController(
+        text: widget.speciality.passScorePrevYearDayShortBudget);
+    _passScorePrevYearDayFullPaidController = TextEditingController(
+        text: widget.speciality.passScorePrevYearDayFullPaid);
+    _passScorePrevYearDayShortPaidController = TextEditingController(
+        text: widget.speciality.passScorePrevYearDayShortPaid);
+    _passScorePrevYearCorrespondenceFullBudgetController =
+        TextEditingController(
+            text: widget.speciality.passScorePrevYearCorrespondenceFullBudget);
+    _passScorePrevYearCorrespondenceShortBudgetController =
+        TextEditingController(
+            text: widget.speciality.passScorePrevYearCorrespondenceShortBudget);
+    _passScorePrevYearCorrespondenceFullPaidController = TextEditingController(
+        text: widget.speciality.passScorePrevYearCorrespondenceFullPaid);
+    _passScorePrevYearCorrespondenceShortPaidController = TextEditingController(
+        text: widget.speciality.passScorePrevYearCorrespondenceShortPaid);
+    _admissionPrevYearDayFullBudgetController = TextEditingController(
+        text: widget.speciality.admissionPrevYearDayFullBudget);
+    _admissionPrevYearDayShortBudgetController = TextEditingController(
+        text: widget.speciality.admissionPrevYearDayShortBudget);
+    _admissionPrevYearDayFullPaidController = TextEditingController(
+        text: widget.speciality.admissionPrevYearDayFullPaid);
+    _admissionPrevYearDayShortPaidController = TextEditingController(
+        text: widget.speciality.admissionPrevYearDayShortPaid);
+    _admissionPrevYearCorrespondenceFullBudgetController =
+        TextEditingController(
+            text: widget.speciality.admissionPrevYearCorrespondenceFullBudget);
+    _admissionPrevYearCorrespondenceShortBudgetController =
+        TextEditingController(
+            text: widget.speciality.admissionPrevYearCorrespondenceShortBudget);
+    _admissionPrevYearCorrespondenceFullPaidController = TextEditingController(
+        text: widget.speciality.admissionPrevYearCorrespondenceFullPaid);
+    _admissionPrevYearCorrespondenceShortPaidController = TextEditingController(
+        text: widget.speciality.admissionPrevYearCorrespondenceShortPaid);
+    _passScoreBeforeLastYearDayFullBudgetController = TextEditingController(
+        text: widget.speciality.passScoreBeforeLastYearDayFullBudget);
+    _passScoreBeforeLastYearDayShortBudgetController = TextEditingController(
+        text: widget.speciality.passScoreBeforeLastYearDayShortBudget);
+    _passScoreBeforeLastYearDayFullPaidController = TextEditingController(
+        text: widget.speciality.passScoreBeforeLastYearDayFullPaid);
+    _passScoreBeforeLastYearDayShortPaidController = TextEditingController(
+        text: widget.speciality.passScoreBeforeLastYearDayShortPaid);
+    _passScoreBeforeLastYearCorrespondenceFullBudgetController =
+        TextEditingController(
+            text: widget
+                .speciality.passScoreBeforeLastYearCorrespondenceFullBudget);
+    _passScoreBeforeLastYearCorrespondenceShortBudgetController =
+        TextEditingController(
+            text: widget
+                .speciality.passScoreBeforeLastYearCorrespondenceShortBudget);
+    _passScoreBeforeLastYearCorrespondenceFullPaidController =
+        TextEditingController(
+            text: widget
+                .speciality.passScoreBeforeLastYearCorrespondenceFullPaid);
+    _passScoreBeforeLastYearCorrespondenceShortPaidController =
+        TextEditingController(
+            text: widget
+                .speciality.passScoreBeforeLastYearCorrespondenceShortPaid);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Добавление специальности'),
+        title: Text('Изменение специальности'),
       ),
-      body: Consumer<AppProvider>(
+      body: Consumer<SpecialtiesProvider>(
         builder: (context, state, child) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -229,9 +405,9 @@ class _SpecialityAddState extends State<SpecialityAdd> {
                   shrinkWrap: true,
                   children: [
                     SpecialityForm(
-                      faculty: widget.faculty,
-                      formKey: _formKey,
+                      speciality: widget.speciality,
                       currentYear: int.parse(state.currentAdmissionYear),
+                      formKey: _formKey,
                       facultyBasedController: _facultyBasedController,
                       nameController: _nameController,
                       numberController: _numberController,
@@ -328,9 +504,25 @@ class _SpecialityAddState extends State<SpecialityAdd> {
                   ],
                 ),
               ),
-              AddButtonsSection(onAddPressed: () {
-                _addSpeciality(state);
-              }),
+              EditButtonsSection(
+                onEditPressed: () {
+                  _editSpeciality(widget.speciality.id.toString(), state);
+                },
+                onRemovePressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return RemoveItem(
+                        itemName: 'специальность',
+                        onRemovePressed: () {
+                          _removeSpeciality(
+                              widget.speciality.id.toString(), state);
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           );
         },

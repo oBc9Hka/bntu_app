@@ -4,7 +4,7 @@ import 'package:bntu_app/features/faculties/repository/faculties_repository.dart
 import 'package:bntu_app/repository/info_cards_repository.dart';
 import 'package:bntu_app/repository/questions_repository.dart';
 import 'package:bntu_app/repository/settings_repository.dart';
-import 'package:bntu_app/repository/specialties_repository.dart';
+import 'package:bntu_app/features/specialties/repository/specialties_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

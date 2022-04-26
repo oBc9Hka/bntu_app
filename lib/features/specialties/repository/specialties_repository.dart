@@ -1,16 +1,17 @@
 import 'dart:async';
 
-import 'package:bntu_app/models/speciality_model.dart';
-import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
+import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../domain/repository/specialties_repository.dart';
 
 class SpecialtiesFirestoreRepository extends SpecialtiesRepository {
   final dbRef = FirebaseFirestore.instance.collection('specialties');
 
   @override
   Future<List<Speciality>> getSpecialtiesList() async {
-    List<Speciality> list = [];
-    QuerySnapshot<Map<String, dynamic>> temp = await dbRef.get();
+    final list = <Speciality>[];
+    final temp = await dbRef.get();
 
     if (temp.docs.isEmpty) {
       throw TimeoutException('Ошибка соединения');

@@ -1,4 +1,4 @@
-import 'package:bntu_app/ui/pages/speciality_views/faculty_info.dart';
+import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/src/provider.dart';
@@ -17,7 +17,7 @@ class FacultiesGridView extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => FacultyPage(
+          builder: (context) => SpecialtiesScreen(
             faculty: faculty,
           ),
         ),
