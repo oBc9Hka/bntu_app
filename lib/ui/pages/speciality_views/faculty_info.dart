@@ -1,6 +1,6 @@
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/speciality_views/speciality_add.dart';
 import 'package:bntu_app/ui/widgets/speciality_card.dart';
@@ -113,7 +113,8 @@ class FacultyPage extends StatelessWidget {
                             if (state.specialties[index].facultyBased ==
                                 faculty.shortName) {
                               return SpecialityCard(
-                                currentYear: int.parse(state.currentAdmissionYear),
+                                currentYear:
+                                    int.parse(state.currentAdmissionYear),
                                 item: state.specialties[index],
                                 user: state.user,
                               );

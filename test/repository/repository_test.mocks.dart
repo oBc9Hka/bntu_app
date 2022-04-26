@@ -5,13 +5,15 @@
 import 'dart:async' as _i5;
 
 import 'package:bntu_app/models/buildings_model.dart' as _i15;
-import 'package:bntu_app/models/error_message_model.dart' as _i12;
+import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart'
+    as _i12;
 import 'package:bntu_app/models/faculty_model.dart' as _i3;
 import 'package:bntu_app/models/info_cards_model.dart' as _i10;
 import 'package:bntu_app/models/question_model.dart' as _i17;
 import 'package:bntu_app/models/speciality_model.dart' as _i7;
 import 'package:bntu_app/repository/buildings_repository.dart' as _i13;
-import 'package:bntu_app/repository/error_messages_repository.dart' as _i11;
+import 'package:bntu_app/features/greetings/repository/error_messages_repository.dart'
+    as _i11;
 import 'package:bntu_app/repository/faculties_repository.dart' as _i4;
 import 'package:bntu_app/repository/info_cards_repository.dart' as _i9;
 import 'package:bntu_app/repository/questions_repository.dart' as _i16;
@@ -488,4 +490,3 @@ class BaseMockBuildingsFirestoreRepository extends _i1.Mock
   @override
   String toString() => super.toString();
 }
-

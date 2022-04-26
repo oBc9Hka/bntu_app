@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:bntu_app/ui/widgets/image_loading.dart';
 import 'package:firebase_storage/firebase_storage.dart';

@@ -1,5 +1,5 @@
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/info_card.dart';
 import 'package:flutter/material.dart';

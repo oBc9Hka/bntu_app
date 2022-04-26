@@ -1,4 +1,4 @@
-import 'package:bntu_app/models/error_message_model.dart';
+import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 

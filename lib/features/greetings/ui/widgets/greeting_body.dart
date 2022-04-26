@@ -1,4 +1,4 @@
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

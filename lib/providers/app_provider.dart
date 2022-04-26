@@ -1,5 +1,5 @@
 import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/models/error_message_model.dart';
+import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
@@ -13,13 +13,13 @@ class AppProvider with ChangeNotifier {
   final String _quizFacultiesCollection = 'quiz';
   final String _quizSpecialtiesCollection = 'quizSpecialties';
 
-  final UserRepository _userRepository;
-
   final FacultiesRepository _facultiesRepository;
   final SpecialtiesRepository _specialtiesRepository;
   final SettingsRepository _settingsRepository;
   final InfoCardsRepository _infoCardsRepository;
-  final ErrorMessagesRepository _errorMessagesRepository;
+
+  // final ErrorMessagesRepository _errorMessagesRepository;
+
   final BuildingsRepository _buildingsRepository;
   final QuestionsRepository _questionsRepository;
 
@@ -79,27 +79,19 @@ class AppProvider with ChangeNotifier {
     this._specialtiesRepository,
     this._settingsRepository,
     this._infoCardsRepository,
-    this._errorMessagesRepository,
+    // this._errorMessagesRepository,
     this._buildingsRepository,
     this._questionsRepository,
-    this._userRepository,
+    // this._userRepository,
   ) {
-    initUser();
+    // initUser();
     initFaculties();
     initSpecialties();
     initSettings();
     initInfoCards();
-    initErrorMessages();
+    // initErrorMessages();
     initBuildings();
     initQuestions();
-  }
-
-  void initUser() async {
-    user = await _userRepository
-        .getCurrentUser()
-        .whenComplete(() => initErrorsMap());
-
-    notifyListeners();
   }
 
   void initFaculties() async {
@@ -122,12 +114,6 @@ class AppProvider with ChangeNotifier {
 
   void initInfoCards() async {
     infoCards = await _infoCardsRepository.getCards();
-    notifyListeners();
-  }
-
-  void initErrorMessages() async {
-    errorMessages = await _errorMessagesRepository.getErrorMessagesList();
-    unseenCount = await _errorMessagesRepository.getUnseenMessages();
     notifyListeners();
   }
 
@@ -439,26 +425,19 @@ class AppProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void submitErrorMessage(String msg) {
-    _errorMessagesRepository
-        .submitErrorMessage(msg)
-        .whenComplete(() => initErrorMessages());
-    notifyListeners();
-  }
+  // void changeViewedState(String id) {
+  //   errorMessagesRepository
+  //       .changeViewedState(id)
+  //       .whenComplete(() => initErrorMessages());
+  //   notifyListeners();
+  // }
 
-  void changeViewedState(String id) {
-    _errorMessagesRepository
-        .changeViewedState(id)
-        .whenComplete(() => initErrorMessages());
-    notifyListeners();
-  }
-
-  void removeErrorMessage(String id) {
-    _errorMessagesRepository
-        .removeErrorMessage(id)
-        .whenComplete(() => initErrorMessages());
-    notifyListeners();
-  }
+  // void removeErrorMessage(String id) {
+  //   errorMessagesRepository
+  //       .removeErrorMessage(id)
+  //       .whenComplete(() => initErrorMessages());
+  //   notifyListeners();
+  // }
 
   void addBuilding(
       String name, String optional, Point point, String imagePath) {
@@ -576,29 +555,6 @@ class AppProvider with ChangeNotifier {
     _questionsRepository
         .moveDown(_quizSpecialtiesCollection, currId, nextId)
         .whenComplete(() => initQuestions());
-    notifyListeners();
-  }
-
-  void signUp(String email, String password) {
-    _userRepository.signUp(email, password).whenComplete(() => initUser());
-    notifyListeners();
-  }
-
-  Future<void> signIn(String email, String password) async {
-    await _userRepository.signIn(email, password).whenComplete(() {
-      initUser();
-      initErrorsMap();
-    });
-    notifyListeners();
-  }
-
-  void signOut() {
-    _userRepository.signOut().whenComplete(() => initUser());
-    notifyListeners();
-  }
-
-  void initErrorsMap() {
-    errorsMap = _userRepository.getErrors();
     notifyListeners();
   }
 }

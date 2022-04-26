@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:bntu_app/models/error_message_model.dart';
-import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
+import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ErrorMessagesFirestoreRepository extends ErrorMessagesRepository{
+import '../domain/repository/error_messages_repository.dart';
+
+class ErrorMessagesFirestoreRepository extends ErrorMessagesRepository {
   final dbErrorRef = FirebaseFirestore.instance.collection('errorMessages');
 
   @override
@@ -14,9 +15,8 @@ class ErrorMessagesFirestoreRepository extends ErrorMessagesRepository{
 
   @override
   Future<String> getUnseenMessages() async {
-    int _count = 0;
-    QuerySnapshot<Map<String, dynamic>> item =
-        await dbErrorRef.where('viewed', isEqualTo: false).get();
+    var _count = 0;
+    var item = await dbErrorRef.where('viewed', isEqualTo: false).get();
     _count = item.docs.length;
     return _count.toString();
   }
@@ -34,14 +34,14 @@ class ErrorMessagesFirestoreRepository extends ErrorMessagesRepository{
 
   @override
   Future<List<ErrorMessage>> getErrorMessagesList() async {
-    List<ErrorMessage> list = [];
-    QuerySnapshot<Map<String, dynamic>> temp = await dbErrorRef.get();
+    var list = <ErrorMessage>[];
+    var temp = await dbErrorRef.get();
 
-    if(temp.docs.isEmpty){
+    if (temp.docs.isEmpty) {
       throw TimeoutException('Ошибка соединения');
     }
 
-    for (var faculty in temp.docs){
+    for (var faculty in temp.docs) {
       list.add(ErrorMessage.fromMap(faculty.data(), faculty.id));
     }
 
@@ -49,5 +49,4 @@ class ErrorMessagesFirestoreRepository extends ErrorMessagesRepository{
 
     return list;
   }
-
 }

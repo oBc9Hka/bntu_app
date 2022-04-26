@@ -1,5 +1,4 @@
 import 'package:bntu_app/ui/themes/material_themes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,19 +27,19 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
-  toggle(CustomBrightness brightness) async {
+  void toggle(CustomBrightness brightness) async {
     if (brightness == CustomBrightness.dark) {
       _brightness = CustomBrightness.dark;
       _currentTheme = themeDark;
       _currentIcon = Icon(Icons.toggle_on);
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString('theme', 'dark');
+      await prefs.setString('theme', 'dark');
     } else {
       _brightness = CustomBrightness.light;
       _currentTheme = themeLight;
       _currentIcon = Icon(Icons.toggle_off_outlined);
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString('theme', 'light');
+      await prefs.setString('theme', 'light');
     }
     notifyListeners();
   }

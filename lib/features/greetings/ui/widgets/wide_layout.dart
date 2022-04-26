@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:bntu_app/ui/widgets/greeting/app_bar.dart';
-import 'package:bntu_app/ui/widgets/greeting/greeting_drawer.dart';
+import 'package:bntu_app/features/greetings/ui/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'greeting_body_wide.dart';
+import 'greeting_drawer.dart';
 
 class WideLayout extends StatelessWidget {
   const WideLayout({
@@ -20,7 +20,6 @@ class WideLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     DateTime? backButtonPressedTime;
     Future<bool> onWillPop() async {
       var currentTime = DateTime.now();
@@ -46,16 +45,17 @@ class WideLayout extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Container(decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 1,
-                    blurRadius: 1,
-                    offset: Offset(1, 0), // changes position of shadow
+              child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 1,
+                        offset: Offset(1, 0), // changes position of shadow
+                      ),
+                    ],
                   ),
-                ],
-              ),
                   child: GreetingDrawer()),
             ),
             Expanded(

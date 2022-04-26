@@ -1,21 +1,19 @@
-import 'package:bntu_app/repository/user_repository.dart';
+import 'package:bntu_app/features/greetings/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-
 import 'user_test.mocks.dart';
 
-class MockUser extends Mock implements User{}
+class MockUser extends Mock implements User {}
 
 final MockUser _mockUser = MockUser();
 
-class MockFirebaseAuth extends Mock implements FirebaseAuth{
+class MockFirebaseAuth extends Mock implements FirebaseAuth {
   @override
   User? get currentUser => _mockUser;
 }
-
 
 @GenerateMocks([], customMocks: [
   MockSpec<UserFirestoreRepository>(
@@ -26,9 +24,10 @@ class MockFirebaseAuth extends Mock implements FirebaseAuth{
 void main() {
   BaseMockUserFirestoreRepository _userRepo = BaseMockUserFirestoreRepository();
 
-  group('Authentication tests', (){
+  group('Authentication tests', () {
     test('Get current user', () {
-      expectLater(_userRepo.getCurrentUser(), _mockUser); // type 'Null' is not a subtype of type 'Future<User?>' in type cast
+      expectLater(_userRepo.getCurrentUser(),
+          _mockUser); // type 'Null' is not a subtype of type 'Future<User?>' in type cast
     });
   });
 }

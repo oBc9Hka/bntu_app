@@ -1,6 +1,6 @@
 import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/buildings_modal.dart';
 import 'package:flutter/cupertino.dart';
@@ -151,7 +151,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                               var zoomGesturesEnabled =
                                   await controller!.isZoomGesturesEnabled();
 
-                              if(themeProvider.brightness == CustomBrightness.dark) {
+                              if (themeProvider.brightness ==
+                                  CustomBrightness.dark) {
                                 controller?.toggleNightMode(enabled: true);
                               }
 
@@ -227,9 +228,10 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                     : '';
                                 String title = item.name! + subtitle;
                                 return ListTile(
-                                  tileColor: themeProvider.brightness == CustomBrightness.light
-                                    ? Colors.white
-                                    : null,
+                                  tileColor: themeProvider.brightness ==
+                                          CustomBrightness.light
+                                      ? Colors.white
+                                      : null,
                                   onTap: () {
                                     setState(() {
                                       _selectedIndex = index;

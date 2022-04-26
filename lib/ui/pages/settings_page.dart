@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -159,11 +159,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                       var _chars =
                                           'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
                                       var _rnd = Random();
-                                      _keyController.text = String.fromCharCodes(
-                                          Iterable.generate(
-                                              10,
-                                              (_) => _chars.codeUnitAt(
-                                                  _rnd.nextInt(_chars.length))));
+                                      _keyController.text =
+                                          String.fromCharCodes(
+                                              Iterable.generate(
+                                                  10,
+                                                  (_) => _chars.codeUnitAt(
+                                                      _rnd.nextInt(
+                                                          _chars.length))));
                                       setState(() {});
                                     },
                                     style: ButtonStyle(
@@ -271,11 +273,13 @@ class _SettingsPageState extends State<SettingsPage> {
                             Navigator.of(context).pop();
                           },
                           style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(mainColor),
-                            minimumSize: MaterialStateProperty.all(Size(130, 50)),
+                            foregroundColor:
+                                MaterialStateProperty.all(mainColor),
+                            minimumSize:
+                                MaterialStateProperty.all(Size(130, 50)),
                             elevation: MaterialStateProperty.all(10),
-                            shape:
-                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(18.0),
                                 side: BorderSide(color: mainColor),

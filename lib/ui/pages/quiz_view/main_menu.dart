@@ -1,4 +1,4 @@
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,14 +9,13 @@ class MainMenu extends StatelessWidget {
   const MainMenu({Key? key, required this.isFacultiesQuiz}) : super(key: key);
   final bool isFacultiesQuiz;
 
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
     var text = 'специальности';
-    if(isFacultiesQuiz){
+    if (isFacultiesQuiz) {
       text = 'факультеты';
     }
 
@@ -70,7 +69,9 @@ class MainMenu extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => QuizScreen(isFacultiesQuiz: isFacultiesQuiz,),
+                        builder: (context) => QuizScreen(
+                          isFacultiesQuiz: isFacultiesQuiz,
+                        ),
                       ),
                     );
                   },

@@ -1,5 +1,5 @@
 import 'package:bntu_app/models/speciality_model.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/pages/speciality_views/speciality_edit.dart';
 import 'package:bntu_app/ui/themes/material_themes.dart';
 import 'package:flutter/material.dart';

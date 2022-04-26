@@ -1,5 +1,5 @@
 import 'package:bntu_app/models/buildings_model.dart';
-import 'package:bntu_app/models/error_message_model.dart';
+import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
 import 'package:bntu_app/models/faculty_model.dart';
 import 'package:bntu_app/models/info_cards_model.dart';
 import 'package:bntu_app/models/question_model.dart';
@@ -176,28 +176,17 @@ abstract class BuildingsRepository {
 abstract class QuestionsRepository {
   Future<List<QuestionModel>> getQuestionsList(String collection);
 
-  Future<void> addQuestion(String collection, String question,List<Map<String, dynamic>> answers);
+  Future<void> addQuestion(
+      String collection, String question, List<Map<String, dynamic>> answers);
 
-  Future<void> editQuestion(String collection,
-      String id, String question, List<Map<String, dynamic>> answers);
+  Future<void> editQuestion(String collection, String id, String question,
+      List<Map<String, dynamic>> answers);
 
   Future<void> removeQuestion(String collection, String id);
 
   Future<void> moveUp(String collection, String currId, String prevId);
 
   Future<void> moveDown(String collection, String currId, String nextId);
-}
-
-abstract class ErrorMessagesRepository {
-  Future<List<ErrorMessage>> getErrorMessagesList();
-
-  Future<void> submitErrorMessage(String msg);
-
-  Future<void> changeViewedState(String id);
-
-  Future<void> removeErrorMessage(String id);
-
-  Future<String> getUnseenMessages();
 }
 
 abstract class SettingsRepository {
@@ -210,26 +199,4 @@ abstract class SettingsRepository {
   Future<void> editQuizChecked(bool isFacultiesQuiz);
 
   Future<void> editSettings(String currentAdmissionYear, String key);
-}
-
-abstract class UserRepository{
-  late String errorMessage;
-  late String errorEmailMessage;
-  late String errorPasswordMessage;
-  bool hasError = false;
-  bool hasEmailError = false;
-  bool hasPasswordError = false;
-  bool tooManyRequestsError = false;
-
-  Map<String, dynamic> getErrors();
-
-  Future<void> signUp(String email, String password);
-
-  Future<void> signIn(String email, String password);
-
-  Future<void> signOut();
-
-  Future<User?> getCurrentUser();
-
-  // Future<void> getUsersList();
 }

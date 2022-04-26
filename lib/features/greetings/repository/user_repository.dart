@@ -1,6 +1,7 @@
-import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../domain/repository/user_repository.dart';
 
 class UserFirestoreRepository extends UserRepository {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -13,12 +14,19 @@ class UserFirestoreRepository extends UserRepository {
   //   }
   // });
 
+  @override
   String errorMessage = '';
+  @override
   String errorEmailMessage = '';
+  @override
   String errorPasswordMessage = '';
+  @override
   bool hasError = false;
+  @override
   bool hasEmailError = false;
+  @override
   bool hasPasswordError = false;
+  @override
   bool tooManyRequestsError = false;
   CollectionReference dbRef = FirebaseFirestore.instance.collection('User');
 
@@ -29,7 +37,6 @@ class UserFirestoreRepository extends UserRepository {
 
   @override
   Future<void> signUp(String email, String password) {
-    // TODO: implement signUp
     throw UnimplementedError();
   }
 
@@ -84,7 +91,7 @@ class UserFirestoreRepository extends UserRepository {
 
   @override
   Map<String, dynamic> getErrors() {
-    Map<String, dynamic> map = {
+    final map = {
       'errorMessage': errorMessage,
       'errorEmailMessage': errorEmailMessage,
       'errorPasswordMessage': errorPasswordMessage,

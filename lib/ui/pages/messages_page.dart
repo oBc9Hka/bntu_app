@@ -1,4 +1,4 @@
-import 'package:bntu_app/models/error_message_model.dart';
+import 'package:bntu_app/features/greetings/domain/models/error_message_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/ui/widgets/error_message_card.dart';
 import 'package:bntu_app/ui/widgets/remove_item.dart';
@@ -34,7 +34,7 @@ class MessagesPage extends StatelessWidget {
                       return ErrorMessageCard(
                         item: item,
                         onTap: () {
-                          state.changeViewedState(item.id!);
+                          // state.changeViewedState(item.id!);
                           Fluttertoast.showToast(msg: 'Прочитано');
                         },
                         onRemovePressed: () {
@@ -44,7 +44,7 @@ class MessagesPage extends StatelessWidget {
                               return RemoveItem(
                                 itemName: 'сообщение',
                                 onRemovePressed: () {
-                                  state.removeErrorMessage(item.id!);
+                                  // state.removeErrorMessage(item.id!);
                                   Navigator.of(context).pop();
                                   Fluttertoast.showToast(
                                       msg: 'Сообщение удалено');

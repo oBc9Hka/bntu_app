@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:bntu_app/models/buildings_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
 import 'package:bntu_app/ui/widgets/image_loading.dart';
@@ -29,10 +29,8 @@ class BuildingEdit extends StatefulWidget {
 
 class _BuildingEditState extends State<BuildingEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController =
-  TextEditingController();
-  TextEditingController _optionalController =
-  TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _optionalController = TextEditingController();
 
   XFile? _image;
   String _imagePath = '';
@@ -204,8 +202,7 @@ class _BuildingEditState extends State<BuildingEdit> {
   @override
   void initState() {
     _nameController = TextEditingController(text: widget.building.name);
-    _optionalController =
-        TextEditingController(text: widget.building.optional);
+    _optionalController = TextEditingController(text: widget.building.optional);
     _point = GeoPoint(
         widget.building.point!.latitude, widget.building.point!.longitude);
     _imagePath = widget.building.imagePath!;
@@ -214,7 +211,6 @@ class _BuildingEditState extends State<BuildingEdit> {
 
   @override
   Widget build(BuildContext context) {
-
     var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -250,7 +246,8 @@ class _BuildingEditState extends State<BuildingEdit> {
                           var zoomGesturesEnabled =
                               await controller!.isZoomGesturesEnabled();
 
-                          if(themeProvider.brightness == CustomBrightness.dark) {
+                          if (themeProvider.brightness ==
+                              CustomBrightness.dark) {
                             controller?.toggleNightMode(enabled: true);
                           }
                           var zoom = await controller!.getZoom();

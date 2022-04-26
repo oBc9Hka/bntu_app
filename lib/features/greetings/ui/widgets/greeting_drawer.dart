@@ -1,5 +1,4 @@
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/util/validate_email.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +6,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../provider/greetings_provider.dart';
+
 class GreetingDrawer extends StatelessWidget {
   const GreetingDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var state = context.watch<AppProvider>();
+    var state = context.watch<GreetingsProvider>();
 
     var themeProvider = Provider.of<ThemeProvider>(context);
     const mainColor = Constants.mainColor;
@@ -306,24 +307,25 @@ class GreetingDrawer extends StatelessWidget {
                 ),
                 trailing: themeProvider.currentIcon,
               ),
-              if(state.isFacultiesQuiz || state.user != null)
-              ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, '/test-faculties');
-                },
-                title: Text('Помощь с выбором факультета (демо)'),
-                trailing: Icon(Icons.speaker_notes_rounded),
-              ),
-              if(!state.isFacultiesQuiz || state.user != null)
-              ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, '/test-specialties');
-                },
-                title: Text(
-                  'Помощь с выбором специальности (демо)',
-                ),
-                trailing: Icon(Icons.speaker_notes_rounded),
-              ),
+              // TODO: implement when quiz will be updated
+              // if (state.isFacultiesQuiz || state.user != null)
+              //   ListTile(
+              //     onTap: () {
+              //       Navigator.pushNamed(context, '/test-faculties');
+              //     },
+              //     title: Text('Помощь с выбором факультета (демо)'),
+              //     trailing: Icon(Icons.speaker_notes_rounded),
+              //   ),
+              // if (!state.isFacultiesQuiz || state.user != null)
+              //   ListTile(
+              //     onTap: () {
+              //       Navigator.pushNamed(context, '/test-specialties');
+              //     },
+              //     title: Text(
+              //       'Помощь с выбором специальности (демо)',
+              //     ),
+              //     trailing: Icon(Icons.speaker_notes_rounded),
+              //   ),
               ListTile(
                 onTap: () {
                   _launchURL();

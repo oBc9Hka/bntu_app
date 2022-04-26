@@ -20,8 +20,8 @@ class NarrowLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     DateTime? backButtonPressedTime;
+
     Future<bool> onWillPop() async {
       var currentTime = DateTime.now();
       var backButton = backButtonPressedTime == null ||
@@ -38,7 +38,9 @@ class NarrowLayout extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: CustomAppBar(signOut: signOut,),
+      appBar: CustomAppBar(
+        signOut: signOut,
+      ),
       drawer: Drawer(
         child: SafeArea(
           child: GreetingDrawer(),
