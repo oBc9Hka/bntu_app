@@ -1,5 +1,6 @@
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/constants/constants.dart';
 
 class HelpCard extends StatelessWidget {
   const HelpCard({Key? key}) : super(key: key);

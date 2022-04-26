@@ -1,5 +1,6 @@
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/constants/constants.dart';
 
 class AddButtonsSection extends StatelessWidget {
   const AddButtonsSection({
@@ -19,7 +20,6 @@ class AddButtonsSection extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: onAddPressed,
-            child: Text('Добавить'),
             style: ButtonStyle(
               // foregroundColor: MaterialStateProperty.all(mainColor),
               minimumSize: MaterialStateProperty.all(Size(120, 50)),
@@ -31,12 +31,12 @@ class AddButtonsSection extends StatelessWidget {
                 ),
               ),
             ),
+            child: Text('Добавить'),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Назад'),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(mainColor),
               minimumSize: MaterialStateProperty.all(Size(120, 50)),
@@ -48,6 +48,7 @@ class AddButtonsSection extends StatelessWidget {
                 ),
               ),
             ),
+            child: Text('Назад'),
           ),
         ],
       ),

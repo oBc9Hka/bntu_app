@@ -1,9 +1,9 @@
 import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/ui/themes/material_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/themes/material_themes.dart';
 import '../speciality_edit.dart';
 
 class SpecialityCard extends StatelessWidget {

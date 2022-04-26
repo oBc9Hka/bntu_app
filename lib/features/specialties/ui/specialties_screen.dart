@@ -1,11 +1,11 @@
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
 import 'package:bntu_app/features/specialties/ui/speciality_add.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/features/specialties/ui/widgets/speciality_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/constants.dart';
 import '../../../core/provider/app_provider.dart';
 import '../provider/specialties_provider.dart';
 

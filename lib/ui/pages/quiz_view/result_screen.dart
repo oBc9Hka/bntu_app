@@ -1,11 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
 import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/constants.dart';
 import '../../../features/faculties/domain/models/faculty_model.dart';
 import 'main_menu.dart';
 

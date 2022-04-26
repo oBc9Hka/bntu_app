@@ -1,10 +1,10 @@
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/constants.dart';
 import 'result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _QuizScreenState extends State<QuizScreen> {
   var tmpArray = [];
   var tagsArray = [];
 
-  getCheckboxItems(int index) {
+  void getCheckboxItems(int index) {
     tmpArray = [];
     checkedAnswers.forEach((key, value) {
       print('key: $key');
@@ -42,7 +42,7 @@ class _QuizScreenState extends State<QuizScreen> {
     handleCheck(index);
   }
 
-  handleCheck(int index) {
+  void handleCheck(int index) {
     tmpArray.forEach((tmpKey) {
       QuestionModel temp = _questions[index];
       temp.answers!.forEach((element) {
@@ -188,7 +188,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                   children: [
                                     Container(
                                       constraints: BoxConstraints(
-                                        maxHeight:MediaQuery.of(context).size.height*0.25,
+                                        maxHeight:
+                                            MediaQuery.of(context).size.height *
+                                                0.25,
                                       ),
                                       child: AutoSizeText(
                                         _questions[index].question!,
@@ -202,8 +204,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                               i <= answers.length;
                                               i++)
                                             RadioListTile(
-                                              activeColor:
-                                                  Constants.mainColor,
+                                              activeColor: Constants.mainColor,
                                               title: Text(
                                                   answers[i - 1].keys.first),
                                               value: i,
@@ -214,10 +215,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                                   groupValue = T as int;
                                                   checkedAnswers.values
                                                       .map((e) => e = false);
-                                                  checkedAnswers[
-                                                      checkedAnswers.keys
-                                                          .elementAt(
-                                                              i - 1)] = true;
+                                                  checkedAnswers[checkedAnswers
+                                                      .keys
+                                                      .elementAt(i - 1)] = true;
                                                   // checkedLetter = checkedAnswers.values.elementAt(i - 1);
                                                 });
                                               },

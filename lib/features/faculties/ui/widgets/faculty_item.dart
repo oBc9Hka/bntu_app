@@ -1,8 +1,9 @@
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/constants/constants.dart';
 
 class FacultyItem extends StatelessWidget {
   final String name;

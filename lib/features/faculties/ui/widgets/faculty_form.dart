@@ -1,6 +1,7 @@
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
-import 'package:bntu_app/util/validate_email.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/util/validate_email.dart';
 
 class FacultyForm extends StatelessWidget {
   const FacultyForm({

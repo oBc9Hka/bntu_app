@@ -3,14 +3,14 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
-import 'package:bntu_app/ui/widgets/image_loading.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/widgets/add_buttons_section.dart';
+import '../../../core/widgets/image_loading.dart';
 import '../provider/faculties_provider.dart';
 import 'widgets/faculty_form.dart';
 

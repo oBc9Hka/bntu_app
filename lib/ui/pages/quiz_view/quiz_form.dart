@@ -1,8 +1,9 @@
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../core/constants/constants.dart';
 
 class QuizForm extends StatefulWidget {
   const QuizForm({
@@ -79,7 +80,8 @@ class _QuizFormState extends State<QuizForm> {
 
         if (widget.questions == 'f') {
           _dropdownList1 = widget.facultiesList;
-          _dropdownList2 = Constants.quizFacAnswersList.map((e) => e.toString()).toList();
+          _dropdownList2 =
+              Constants.quizFacAnswersList.map((e) => e.toString()).toList();
         } else if (widget.questions == 's') {
           _dropdownList1 = Constants.quizSpecAnswersList;
           _dropdownList2 = Constants.quizSpecAnswersList;
@@ -135,12 +137,14 @@ class _QuizFormState extends State<QuizForm> {
                                 state.dropdown1Value = newValue!;
                               });
                             },
-                            items: _dropdownList1.map(
-                              (value) => DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              ),
-                            ).toList(),
+                            items: _dropdownList1
+                                .map(
+                                  (value) => DropdownMenuItem(
+                                    value: value,
+                                    child: Text(value),
+                                  ),
+                                )
+                                .toList(),
                           ),
                           Padding(padding: EdgeInsets.only(left: 10)),
                           DropdownButton(
@@ -150,12 +154,14 @@ class _QuizFormState extends State<QuizForm> {
                                 state.dropdown12Value = newValue!;
                               });
                             },
-                            items: _dropdownList2.map(
+                            items: _dropdownList2
+                                .map(
                                   (value) => DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              ),
-                            ).toList(),
+                                    value: value,
+                                    child: Text(value),
+                                  ),
+                                )
+                                .toList(),
                           )
                         ],
                       ),
@@ -188,12 +194,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown2Value = newValue!;
                                 });
                               },
-                              items: _dropdownList1.map(
-                                (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                              items: _dropdownList1
+                                  .map(
+                                    (value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                             Padding(padding: EdgeInsets.only(left: 10)),
                             DropdownButton(
@@ -203,12 +211,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown22Value = newValue!;
                                 });
                               },
-                              items: _dropdownList2.map(
+                              items: _dropdownList2
+                                  .map(
                                     (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             )
                           ],
                         ),
@@ -236,12 +246,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown3Value = newValue!;
                                 });
                               },
-                              items: _dropdownList1.map(
-                                (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                              items: _dropdownList1
+                                  .map(
+                                    (value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                             Padding(padding: EdgeInsets.only(left: 10)),
                             DropdownButton(
@@ -251,12 +263,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown32Value = newValue!;
                                 });
                               },
-                              items: _dropdownList2.map(
+                              items: _dropdownList2
+                                  .map(
                                     (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             )
                           ],
                         ),
@@ -284,12 +298,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown4Value = newValue!;
                                 });
                               },
-                              items: _dropdownList1.map(
-                                (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                              items: _dropdownList1
+                                  .map(
+                                    (value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                             Padding(padding: EdgeInsets.only(left: 10)),
                             DropdownButton(
@@ -299,12 +315,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown42Value = newValue!;
                                 });
                               },
-                              items: _dropdownList2.map(
+                              items: _dropdownList2
+                                  .map(
                                     (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             )
                           ],
                         ),
@@ -332,12 +350,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown5Value = newValue!;
                                 });
                               },
-                              items: _dropdownList1.map(
-                                (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                              items: _dropdownList1
+                                  .map(
+                                    (value) => DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                             Padding(padding: EdgeInsets.only(left: 10)),
                             DropdownButton(
@@ -347,12 +367,14 @@ class _QuizFormState extends State<QuizForm> {
                                   state.dropdown52Value = newValue!;
                                 });
                               },
-                              items: _dropdownList2.map(
+                              items: _dropdownList2
+                                  .map(
                                     (value) => DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                ),
-                              ).toList(),
+                                      value: value,
+                                      child: Text(value),
+                                    ),
+                                  )
+                                  .toList(),
                             )
                           ],
                         ),

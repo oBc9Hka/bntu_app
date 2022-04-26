@@ -14,8 +14,8 @@ class ImageLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double C_WIDTH = 200;
-    const double C_HEIGHT = 100;
+    const C_WIDTH = 200.0;
+    const C_HEIGHT = 100.0;
 
     try {
       return Column(

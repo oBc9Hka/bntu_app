@@ -1,9 +1,9 @@
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/features/admission_info/ui/widgets/info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/constants/constants.dart';
 import '../../../core/provider/app_provider.dart';
 import '../provider/admission_info_provider.dart';
 import 'info_add.dart';

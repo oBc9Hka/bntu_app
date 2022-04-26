@@ -1,9 +1,9 @@
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
-import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/widgets/add_buttons_section.dart';
 import '../provider/specialties_provider.dart';
 import 'widgets/speciality_form.dart';
 

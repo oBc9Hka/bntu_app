@@ -1,11 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/quiz_view/quiz_add.dart';
 import 'package:bntu_app/ui/pages/quiz_view/quiz_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../core/constants/constants.dart';
 
 class QuizList extends StatefulWidget {
   const QuizList({Key? key, required this.questions}) : super(key: key);
@@ -73,10 +74,10 @@ class _QuizListState extends State<QuizList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ..._questions[index].answers!.map((e) => AutoSizeText(
-                              '${e.entries.first.key.length <= 10 ? e.entries.first.key.toString().trimRight() : e.entries.first.key.substring(0, 10).toString().trimRight() + '..'}: ${e.values.first}',
-                            maxLines: 1,
-                            style: TextStyle(fontSize: 12),
-                          )),
+                                '${e.entries.first.key.length <= 10 ? e.entries.first.key.toString().trimRight() : e.entries.first.key.substring(0, 10).toString().trimRight() + '..'}: ${e.values.first}',
+                                maxLines: 1,
+                                style: TextStyle(fontSize: 12),
+                              )),
                         ],
                       ),
                       trailing: Row(

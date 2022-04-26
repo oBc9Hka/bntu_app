@@ -1,9 +1,8 @@
 import 'package:bntu_app/features/admission_info/domain/models/info_cards_model.dart';
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../provider/admission_info_provider.dart';
 import '../info_edit.dart';
 
@@ -19,7 +18,7 @@ class InfoCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants.mainColor;
+    var mainColor = Constants.mainColor;
 
     Widget customTile(
       String title,

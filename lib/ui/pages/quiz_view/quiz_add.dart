@@ -1,10 +1,11 @@
 import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:bntu_app/ui/pages/quiz_view/quiz_form.dart';
-import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+
+import '../../../core/constants/constants.dart';
+import '../../../core/widgets/add_buttons_section.dart';
 
 class QuizAdd extends StatefulWidget {
   const QuizAdd({Key? key, required this.questions}) : super(key: key);

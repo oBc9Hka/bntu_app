@@ -1,10 +1,10 @@
 import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
-import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
-import 'package:bntu_app/ui/widgets/remove_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/widgets/edit_buttons_section.dart';
+import '../../../core/widgets/remove_item.dart';
 import '../provider/specialties_provider.dart';
 import 'widgets/speciality_form.dart';
 

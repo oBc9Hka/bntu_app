@@ -1,6 +1,7 @@
 import 'package:bntu_app/core/domain/models/error_message_model.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/constants/constants.dart';
 
 class ErrorMessageCard extends StatelessWidget {
   const ErrorMessageCard(
@@ -15,7 +16,7 @@ class ErrorMessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color mainColor = Constants.mainColor;
+    var mainColor = Constants.mainColor;
 
     return Padding(
       padding: const EdgeInsets.all(5.0),

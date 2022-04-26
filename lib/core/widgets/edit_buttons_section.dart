@@ -1,5 +1,6 @@
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../core/constants/constants.dart';
 
 class EditButtonsSection extends StatelessWidget {
   const EditButtonsSection({
@@ -21,7 +22,6 @@ class EditButtonsSection extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: onEditPressed,
-            child: Text('Изменить'),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(mainColor),
               minimumSize: MaterialStateProperty.all(Size(150, 50)),
@@ -33,12 +33,12 @@ class EditButtonsSection extends StatelessWidget {
                 ),
               ),
             ),
+            child: Text('Изменить'),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Назад'),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(mainColor),
               minimumSize: MaterialStateProperty.all(Size(120, 50)),
@@ -50,10 +50,10 @@ class EditButtonsSection extends StatelessWidget {
                 ),
               ),
             ),
+            child: Text('Назад'),
           ),
           ElevatedButton(
             onPressed: onRemovePressed,
-            child: Icon(Icons.delete),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(Colors.white),
               backgroundColor: MaterialStateProperty.all(Colors.red),
@@ -66,6 +66,7 @@ class EditButtonsSection extends StatelessWidget {
                 ),
               ),
             ),
+            child: Icon(Icons.delete),
           ),
         ],
       ),

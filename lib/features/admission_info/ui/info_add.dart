@@ -1,7 +1,7 @@
-import 'package:bntu_app/ui/widgets/add_buttons_section.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/widgets/add_buttons_section.dart';
 import '../provider/admission_info_provider.dart';
 import 'widgets/info_form.dart';
 

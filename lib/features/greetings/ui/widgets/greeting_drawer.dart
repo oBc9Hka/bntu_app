@@ -1,13 +1,13 @@
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/features/settings/provider/settings_provider.dart';
-import 'package:bntu_app/ui/constants/constants.dart';
-import 'package:bntu_app/util/validate_email.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/provider/app_provider.dart';
+import '../../../../core/util/validate_email.dart';
 import '../../provider/greetings_provider.dart';
 
 class GreetingDrawer extends StatelessWidget {

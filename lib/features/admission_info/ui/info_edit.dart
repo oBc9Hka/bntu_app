@@ -1,10 +1,10 @@
 import 'package:bntu_app/features/admission_info/domain/models/info_cards_model.dart';
-import 'package:bntu_app/ui/widgets/edit_buttons_section.dart';
-import 'package:bntu_app/ui/widgets/remove_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/widgets/edit_buttons_section.dart';
+import '../../../core/widgets/remove_item.dart';
 import '../provider/admission_info_provider.dart';
 import 'widgets/info_form.dart';
 

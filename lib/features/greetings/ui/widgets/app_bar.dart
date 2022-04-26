@@ -1,7 +1,7 @@
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/provider/app_provider.dart';
 import 'user_exit_dialog.dart';
 

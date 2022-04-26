@@ -1,9 +1,9 @@
 import 'package:bntu_app/features/settings/ui/widgets/error_message_card.dart';
-import 'package:bntu_app/ui/widgets/remove_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/widgets/remove_item.dart';
 import '../provider/settings_provider.dart';
 
 class MessagesPage extends StatelessWidget {

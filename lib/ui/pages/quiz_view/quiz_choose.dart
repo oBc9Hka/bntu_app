@@ -1,8 +1,8 @@
-import 'package:bntu_app/ui/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/src/provider.dart';
 
+import '../../../core/constants/constants.dart';
 import '../../../features/settings/provider/settings_provider.dart';
 
 class QuizChoose extends StatefulWidget {
