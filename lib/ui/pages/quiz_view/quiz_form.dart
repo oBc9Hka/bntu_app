@@ -75,8 +75,8 @@ class _QuizFormState extends State<QuizForm> {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        List<String> _dropdownList1 = [];
-        List<String> _dropdownList2 = [];
+        var _dropdownList1 = <String>[];
+        var _dropdownList2 = <String>[];
 
         if (widget.questions == 'f') {
           _dropdownList1 = widget.facultiesList;

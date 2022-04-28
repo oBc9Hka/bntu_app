@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

@@ -43,19 +43,13 @@ import 'repository_test.mocks.dart';
   )
 ])
 void main() async {
-  BaseMockFacultiesFirestoreRepository _facultiesMockRepository =
-      BaseMockFacultiesFirestoreRepository();
-  BaseMockSpecialtiesFirestoreRepository _specialtiesMockRepository =
-      BaseMockSpecialtiesFirestoreRepository();
+  var _facultiesMockRepository = BaseMockFacultiesFirestoreRepository();
+  var _specialtiesMockRepository = BaseMockSpecialtiesFirestoreRepository();
 
-  BaseMockSettingsFirestoreRepository _settingsMockRepository =
-      BaseMockSettingsFirestoreRepository();
-  BaseMockInfoCardsFirestoreRepository _infoCardsMockRepository =
-      BaseMockInfoCardsFirestoreRepository();
-  BaseMockErrorMessagesFirestoreRepository _errorMessagesMockRepository =
-      BaseMockErrorMessagesFirestoreRepository();
-  BaseMockBuildingsFirestoreRepository _buildingsMockRepository =
-      BaseMockBuildingsFirestoreRepository();
+  var _settingsMockRepository = BaseMockSettingsFirestoreRepository();
+  var _infoCardsMockRepository = BaseMockInfoCardsFirestoreRepository();
+  var _errorMessagesMockRepository = BaseMockErrorMessagesFirestoreRepository();
+  var _buildingsMockRepository = BaseMockBuildingsFirestoreRepository();
   // BaseMockQuestionsFirestoreRepository _questionsMockRepository =
   //     BaseMockQuestionsFirestoreRepository();
   List _list;
@@ -202,14 +196,14 @@ void main() async {
     test('Get secret key test', () async {
       when(_settingsMockRepository.getSecretKey())
           .thenAnswer((realInvocation) => Future.value('Admin'));
-      String answer = await _settingsMockRepository.getSecretKey();
+      var answer = await _settingsMockRepository.getSecretKey();
       expect(answer, 'Admin');
     });
 
     test('Get current year test', () async {
       when(_settingsMockRepository.getCurrentAdmissionYear())
           .thenAnswer((realInvocation) => Future.value('2021'));
-      String answer = await _settingsMockRepository.getCurrentAdmissionYear();
+      var answer = await _settingsMockRepository.getCurrentAdmissionYear();
       expect(answer, '2021');
     });
   });

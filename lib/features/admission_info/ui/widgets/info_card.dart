@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'package:bntu_app/features/admission_info/domain/models/info_cards_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

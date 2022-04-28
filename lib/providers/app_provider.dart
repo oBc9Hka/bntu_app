@@ -1,10 +1,8 @@
-import 'package:bntu_app/features/map/domain/models/buildings_model.dart';
 import 'package:bntu_app/core/domain/models/error_message_model.dart';
 import 'package:bntu_app/models/question_model.dart';
 import 'package:bntu_app/repository/abstract/abstract_repositories.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class AppProvider with ChangeNotifier {
   final String _quizFacultiesCollection = 'quiz';

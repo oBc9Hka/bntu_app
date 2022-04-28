@@ -16,15 +16,15 @@ class QuizAdd extends StatefulWidget {
 }
 
 class _QuizAddState extends State<QuizAdd> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _questionController = TextEditingController();
+  final TextEditingController _questionController = TextEditingController();
 
-  TextEditingController _answer1Controller = TextEditingController();
-  TextEditingController _answer2Controller = TextEditingController();
-  TextEditingController _answer3Controller = TextEditingController();
-  TextEditingController _answer4Controller = TextEditingController();
-  TextEditingController _answer5Controller = TextEditingController();
+  final TextEditingController _answer1Controller = TextEditingController();
+  final TextEditingController _answer2Controller = TextEditingController();
+  final TextEditingController _answer3Controller = TextEditingController();
+  final TextEditingController _answer4Controller = TextEditingController();
+  final TextEditingController _answer5Controller = TextEditingController();
 
   List<Map<String, List<String>>> _answers = [];
 

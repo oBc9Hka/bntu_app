@@ -112,6 +112,7 @@ class _QuizListState extends State<QuizList> {
                                     _questions[index - 1].id!,
                                   );
                                 }
+                                // ignore: empty_catches
                               } catch (e) {}
                             },
                             tooltip: 'Поднять в списке',
@@ -134,6 +135,7 @@ class _QuizListState extends State<QuizList> {
                                     _questions[index + 1].id!,
                                   );
                                 }
+                                // ignore: empty_catches
                               } catch (e) {}
                             },
                             tooltip: 'Опустить в списке',

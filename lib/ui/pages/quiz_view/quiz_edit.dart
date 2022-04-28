@@ -21,15 +21,15 @@ class QuizEdit extends StatefulWidget {
 }
 
 class _QuizEditState extends State<QuizEdit> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _questionController = TextEditingController();
+  final TextEditingController _questionController = TextEditingController();
 
-  TextEditingController _answer1Controller = TextEditingController();
-  TextEditingController _answer2Controller = TextEditingController();
-  TextEditingController _answer3Controller = TextEditingController();
-  TextEditingController _answer4Controller = TextEditingController();
-  TextEditingController _answer5Controller = TextEditingController();
+  final TextEditingController _answer1Controller = TextEditingController();
+  final TextEditingController _answer2Controller = TextEditingController();
+  final TextEditingController _answer3Controller = TextEditingController();
+  final TextEditingController _answer4Controller = TextEditingController();
+  final TextEditingController _answer5Controller = TextEditingController();
 
   List<Map<String, List<String>>> _answers = [];
 
@@ -103,7 +103,7 @@ class _QuizEditState extends State<QuizEdit> {
     }
   }
 
-  _editQuestion(String id, AppProvider state) {
+  void _editQuestion(String id, AppProvider state) {
     if (_formKey.currentState!.validate()) {
       _setAnswers(
         state.dropdown1Value,
@@ -134,8 +134,8 @@ class _QuizEditState extends State<QuizEdit> {
   Widget build(BuildContext context) {
     return Consumer<AppProvider>(
       builder: (context, state, child) {
-        String initValue = widget.questions == 'f' ? 'ФТК' : '..';
-        String facSecondInitValue = Constants.quizFacAnswersList[0].toString();
+        var initValue = widget.questions == 'f' ? 'ФТК' : '..';
+        var facSecondInitValue = Constants.quizFacAnswersList[0].toString();
 
         if (initValue == 'ФТК') {
           // initValue = state.facultiesShortNames[0];
@@ -206,7 +206,7 @@ class _QuizEditState extends State<QuizEdit> {
         state.dropdown42Value = values[8];
         state.dropdown52Value = values[9];
 
-        List<TextEditingController> _answerControllersList = [
+        var _answerControllersList = <TextEditingController>[
           _answer1Controller,
           _answer2Controller,
           _answer3Controller,

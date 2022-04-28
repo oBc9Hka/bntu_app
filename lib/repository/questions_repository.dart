@@ -8,9 +8,9 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
   final dbRef = FirebaseFirestore.instance;
 
   @override
-  Future<void> addQuestion(
-      String collection, String question, List<Map<String, dynamic>> answers) async {
-    int newOrderId = await _getLength(collection);
+  Future<void> addQuestion(String collection, String question,
+      List<Map<String, dynamic>> answers) async {
+    var newOrderId = await _getLength(collection);
     await dbRef.collection(collection).add({
       'question': question,
       'answers': answers,
@@ -29,9 +29,8 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
 
   @override
   Future<List<QuestionModel>> getQuestionsList(String collection) async {
-    List<QuestionModel> list = [];
-    QuerySnapshot<Map<String, dynamic>> temp =
-        await dbRef.collection(collection).get();
+    var list = <QuestionModel>[];
+    var temp = await dbRef.collection(collection).get();
 
     if (temp.docs.isEmpty) {
       throw TimeoutException('Ошибка соединения');
@@ -48,7 +47,7 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
 
   @override
   Future<void> moveDown(String collection, String currId, String nextId) async {
-    int currOrderId =
+    var currOrderId =
         await dbRef.collection(collection).doc(currId).get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
       var _toReturn;
@@ -57,7 +56,7 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
       }
       return _toReturn;
     });
-    int nextOrderId = currOrderId + 1;
+    var nextOrderId = currOrderId + 1;
 
     await dbRef.collection(collection).doc(currId).update({
       'orderId': nextOrderId,
@@ -69,7 +68,7 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
 
   @override
   Future<void> moveUp(String collection, String currId, String prevId) async {
-    int currOrderId =
+    var currOrderId =
         await dbRef.collection(collection).doc(currId).get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
       var _toReturn;
@@ -78,7 +77,7 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
       }
       return _toReturn;
     });
-    int prevOrderId = currOrderId - 1;
+    var prevOrderId = currOrderId - 1;
 
     await dbRef.collection(collection).doc(currId).update({
       'orderId': prevOrderId,
@@ -95,11 +94,11 @@ class QuestionsFirestoreRepository extends QuestionsRepository {
 
   Future<int> _getLength(String collection) async {
     return await dbRef.collection(collection).get().then((snapshot) {
-      List<int> _temp = [];
+      var _temp = <int>[];
       snapshot.docs.forEach((e) {
         _temp.add(e.get('orderId'));
       });
-      int max = 0;
+      var max = 0;
       _temp.forEach((element) {
         if (element > max) {
           max = element;

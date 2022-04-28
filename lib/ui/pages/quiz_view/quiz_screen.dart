@@ -44,7 +44,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   void handleCheck(int index) {
     tmpArray.forEach((tmpKey) {
-      QuestionModel temp = _questions[index];
+      var temp = _questions[index];
       temp.answers!.forEach((element) {
         if (element.keys.first == tmpKey) {
           print('tmpKey = $tmpKey');

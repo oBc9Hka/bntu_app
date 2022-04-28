@@ -95,7 +95,7 @@ class _FacultyEditState extends State<FacultyEdit> {
           .ref('faculties/${_shortNameController.text.trim()}/photo.jpg');
 
       return storageReference.putData(data);
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       return null;
     }
   }

@@ -19,6 +19,7 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
+// ignore: subtype_of_sealed_class
 class _FakeCollectionReference_0<T extends Object?> extends _i1.Fake
     implements _i2.CollectionReference<T> {}
 

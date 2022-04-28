@@ -22,7 +22,7 @@ class MockFirebaseAuth extends Mock implements FirebaseAuth {
   ),
 ])
 void main() {
-  BaseMockUserFirestoreRepository _userRepo = BaseMockUserFirestoreRepository();
+  var _userRepo = BaseMockUserFirestoreRepository();
 
   group('Authentication tests', () {
     test('Get current user', () {
