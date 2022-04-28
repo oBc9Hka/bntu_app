@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:bntu_app/core/provider/theme_provider.dart';
+import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
+import 'package:bntu_app/features/quiz/ui/quiz/quiz_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -66,6 +68,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     var _themeProvider = Provider.of<ThemeProvider>(context);
+    final quizState = context.watch<QuizProvider>();
     return Consumer<SettingsProvider>(
       builder: (context, state, child) {
         if (!isInited) {
@@ -163,11 +166,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                       var _rnd = Random();
                                       _keyController.text =
                                           String.fromCharCodes(
-                                              Iterable.generate(
-                                                  10,
-                                                  (_) => _chars.codeUnitAt(
-                                                      _rnd.nextInt(
-                                                          _chars.length))));
+                                        Iterable.generate(
+                                          10,
+                                          (_) => _chars.codeUnitAt(
+                                            _rnd.nextInt(_chars.length),
+                                          ),
+                                        ),
+                                      );
                                       setState(() {
                                         isKeyChanged = true;
                                       });
@@ -214,7 +219,11 @@ class _SettingsPageState extends State<SettingsPage> {
                             Divider(),
                             ListTile(
                               onTap: () {
-                                // Navigator.of(context).pushNamed('/test-edit');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: ((context) => QuizList()),
+                                  ),
+                                );
                               },
                               title: Text('Редактирование вопросов'),
                               trailing: Icon(Icons.question_answer_outlined),

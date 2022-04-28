@@ -26,7 +26,8 @@ import 'package:bntu_app/features/specialties/domain/models/speciality_model.dar
 import 'package:bntu_app/features/specialties/repository/specialties_repository.dart'
     as _i6;
 import 'package:bntu_app/models/question_model.dart' as _i17;
-import 'package:bntu_app/repository/questions_repository.dart' as _i16;
+import 'package:bntu_app/features/quiz/repository/questions_repository.dart'
+    as _i16;
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:yandex_mapkit/yandex_mapkit.dart' as _i14;

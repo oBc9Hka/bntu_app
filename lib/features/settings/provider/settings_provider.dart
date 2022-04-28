@@ -20,12 +20,14 @@ class SettingsProvider with ChangeNotifier {
   String unseenCount = '0';
   bool isFacultiesQuiz = true; // Quiz for faculties or specialties
   List<ErrorMessage> errorMessages = [];
+  String nameOfCheckedTest = '';
 
   void initSettings() async {
     currentAdmissionYear = await settingsRepository.getCurrentAdmissionYear();
     secretKey = await settingsRepository.getSecretKey();
     isFacultiesQuiz = await settingsRepository.getIsFacultyQuizChecked();
     initErrorMessages();
+    getNameOfCheckedTest();
     notifyListeners();
   }
 
@@ -35,9 +37,21 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void getNameOfCheckedTest() async {
+    nameOfCheckedTest = await settingsRepository.getNameOfCheckedTest();
+    notifyListeners();
+  }
+
   void editSettings(String currentAdmissionYear, String key) {
     settingsRepository
         .editSettings(currentAdmissionYear, key)
+        .whenComplete(() => initSettings());
+    notifyListeners();
+  }
+
+  void changeCheckedTest(String testName) async {
+    await settingsRepository
+        .editCheckedQuiz(testName)
         .whenComplete(() => initSettings());
     notifyListeners();
   }

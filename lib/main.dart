@@ -4,11 +4,12 @@ import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/core/repository/error_messages_repository.dart';
 import 'package:bntu_app/features/faculties/ui/faculties_screen.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
+import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
+import 'package:bntu_app/features/quiz/repository/quiz_repository.dart';
 import 'package:bntu_app/features/settings/repository/settings_repository.dart';
 import 'package:bntu_app/features/settings/ui/messages_page.dart';
-import 'package:bntu_app/ui/pages/quiz_view/main_menu.dart';
-import 'package:bntu_app/ui/pages/quiz_view/quiz_choose.dart';
-import 'package:bntu_app/ui/pages/quiz_view/quiz_list.dart';
+import 'package:bntu_app/features/quiz/ui/main_menu.dart';
+import 'package:bntu_app/features/quiz/ui/quiz/quiz_list.dart';
 import 'package:bntu_app/features/settings/ui/settings_page.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -76,6 +77,11 @@ void main() async {
             buildingsRepository: BuildingsFirestoreRepository(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) => QuizProvider(
+            quizRepository: QuizFirestoreRepository(),
+          ),
+        ),
       ],
       child: BntuApp(),
     ),
@@ -113,9 +119,9 @@ class BntuApp extends StatelessWidget {
         //     isFacultiesQuiz: context.watch<AppProvider>().isFacultiesQuiz),
         '/test-faculties': (context) => MainMenu(isFacultiesQuiz: true),
         '/test-specialties': (context) => MainMenu(isFacultiesQuiz: false),
-        '/test-faculties-edit': (context) => QuizList(questions: 'f'),
-        '/test-specialties-edit': (context) => QuizList(questions: 's'),
-        '/test-edit': (context) => QuizChoose(),
+        // '/test-faculties-edit': (context) => QuestionsList(questions: 'f'),
+        // '/test-specialties-edit': (context) => QuestionsList(questions: 's'),
+        // '/test-edit': (context) => QuizList(),
       },
     );
   }

@@ -1,5 +1,3 @@
-import 'package:bntu_app/models/question_model.dart';
-import 'package:bntu_app/providers/app_provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +22,7 @@ class _QuizScreenState extends State<QuizScreen> {
   int groupValue = 0;
   String checkedLetter = '';
 
-  List<QuestionModel> _questions = [];
+  List _questions = [];
 
   Map<String, bool> checkedAnswers = {};
   var tmpArray = [];
@@ -104,12 +102,12 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     const mainColor = Constants.mainColor;
-    return Consumer<AppProvider>(
+    return Consumer(
       builder: (context, state, child) {
         if (widget.isFacultiesQuiz) {
-          _questions = state.facultiesQuestions;
+          // _questions = state.facultiesQuestions;
         } else {
-          _questions = state.specialtiesQuestions;
+          // _questions = state.specialtiesQuestions;
         }
 
         if (!isInited) {

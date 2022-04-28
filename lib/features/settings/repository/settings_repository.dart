@@ -16,6 +16,11 @@ class SettingsFirestoreRepository extends SettingsRepository {
   }
 
   @override
+  Future<String> getNameOfCheckedTest() {
+    return _getFieldData('nameOfCheckedTest');
+  }
+
+  @override
   Future<bool> getIsFacultyQuizChecked() async {
     var value = await dbRef.doc('commonSettings').get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();
@@ -53,5 +58,12 @@ class SettingsFirestoreRepository extends SettingsRepository {
     await dbRef
         .doc('commonSettings')
         .update({'isFacultiesQuizChecked': isFacultiesQuiz});
+  }
+
+  @override
+  Future<void> editCheckedQuiz(String nameOfQuizChecked) async {
+    await dbRef.doc('commonSettings').update({
+      'nameOfCheckedTest': nameOfQuizChecked,
+    });
   }
 }
