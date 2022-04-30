@@ -225,7 +225,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   ),
                                 );
                               },
-                              title: Text('Редактирование вопросов'),
+                              title: Text('Редактирование тестов'),
                               trailing: Icon(Icons.question_answer_outlined),
                             ),
                             Divider(),

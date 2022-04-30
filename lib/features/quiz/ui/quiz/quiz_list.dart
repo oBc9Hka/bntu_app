@@ -1,5 +1,6 @@
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz/quiz_add.dart';
+import 'package:bntu_app/features/quiz/ui/quiz/quiz_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -15,18 +16,12 @@ class QuizList extends StatefulWidget {
 }
 
 class _QuizListState extends State<QuizList> {
-  var groupValue = 0;
+  var groupValue = -1;
   bool firstInit = true;
   late SettingsProvider settingsState;
   late QuizProvider quizState;
 
   Future<bool> _onWillPop() async {
-    // if (groupValue == 0) {
-    //   settingsState.editQuizChecked(true);
-    // } else if (groupValue == 1) {
-    //   settingsState.editQuizChecked(false);
-    // }
-
     settingsState.changeCheckedTest(quizState.quizList[groupValue].quizName);
     await Fluttertoast.showToast(msg: 'Изменения сохранены');
     return true;
@@ -37,12 +32,13 @@ class _QuizListState extends State<QuizList> {
     quizState = context.watch<QuizProvider>();
 
     await quizState.getQuizList();
+    try {
+      final checkedTest = quizState.quizList.firstWhere(
+        (element) => element.quizName == settingsState.nameOfCheckedTest,
+      );
 
-    final checkedTest = quizState.quizList.firstWhere(
-      (element) => element.quizName == settingsState.nameOfCheckedTest,
-    );
-
-    groupValue = quizState.quizList.indexOf(checkedTest);
+      groupValue = quizState.quizList.indexOf(checkedTest);
+    } catch (_) {}
 
     firstInit = false;
     setState(() {});
@@ -120,7 +116,15 @@ class _QuizListState extends State<QuizList> {
                                           quizState.quizList[index].quizName),
                                       trailing: IconButton(
                                         icon: Icon(Icons.edit),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: ((context) => QuizEdit(
+                                                  quiz: quizState
+                                                      .quizList[index])),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),

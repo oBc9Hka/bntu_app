@@ -1,4 +1,6 @@
+import 'package:bntu_app/core/enums/question__types.dart';
 import 'package:bntu_app/core/enums/quiz_types.dart';
+import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
 import 'package:bntu_app/features/quiz/domain/repository/quiz_repository.dart';
@@ -26,9 +28,14 @@ class QuizFirestoreRepository extends QuizRepository {
   }
 
   @override
-  Future<bool> editQuiz({required QuizModel quiz}) {
-    // TODO: implement editQuiz
-    throw UnimplementedError();
+  Future<bool> editQuiz({required QuizModel quiz}) async {
+    await dbRef.doc(quiz.docId).update({
+      'quizName': quiz.quizName,
+      'quizType': quiz.quizType.asString,
+      'questions': [],
+    });
+
+    return true;
   }
 
   @override
@@ -47,7 +54,16 @@ class QuizFirestoreRepository extends QuizRepository {
             docId: e.id,
             quizName: e['quizName'],
             quizType: quizTypeFromString(e['quizType']),
-            questions: [],
+            questions: [
+              // QuestionModel(
+              //   question: 'Question',
+              //   quiestionType: QuiestionTypes.single_answer,
+              //   answers: [
+              //     Answer(text: 'true', coefficients: ['ФИТР', '2']),
+              //     Answer(text: 'false', coefficients: ['МТФ', '1']),
+              //   ],
+              // )
+            ],
             isVisible: e['isVisible'],
           ),
         )

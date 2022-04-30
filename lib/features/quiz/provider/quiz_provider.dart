@@ -32,4 +32,10 @@ class QuizProvider with ChangeNotifier {
     );
     notifyListeners();
   }
+
+  Future<void> editQuiz({required QuizModel quiz}) async {
+    await quizRepository.editQuiz(quiz: quiz);
+
+    notifyListeners();
+  }
 }
