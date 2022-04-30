@@ -16,8 +16,8 @@ class SettingsFirestoreRepository extends SettingsRepository {
   }
 
   @override
-  Future<String> getNameOfCheckedTest() {
-    return _getFieldData('nameOfCheckedTest');
+  Future<String> getCheckedQuizId() {
+    return _getFieldData('checkedQuizId');
   }
 
   @override
@@ -61,9 +61,9 @@ class SettingsFirestoreRepository extends SettingsRepository {
   }
 
   @override
-  Future<void> editCheckedQuiz(String nameOfQuizChecked) async {
+  Future<void> editCheckedQuiz(String checkedQuizId) async {
     await dbRef.doc('commonSettings').update({
-      'nameOfCheckedTest': nameOfQuizChecked,
+      'checkedQuizId': checkedQuizId,
     });
   }
 }

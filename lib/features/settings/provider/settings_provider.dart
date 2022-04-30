@@ -20,7 +20,7 @@ class SettingsProvider with ChangeNotifier {
   String unseenCount = '0';
   bool isFacultiesQuiz = true; // Quiz for faculties or specialties
   List<ErrorMessage> errorMessages = [];
-  String nameOfCheckedTest = '';
+  String checkedQuizId = '';
 
   void initSettings() async {
     currentAdmissionYear = await settingsRepository.getCurrentAdmissionYear();
@@ -38,7 +38,7 @@ class SettingsProvider with ChangeNotifier {
   }
 
   void getNameOfCheckedTest() async {
-    nameOfCheckedTest = await settingsRepository.getNameOfCheckedTest();
+    checkedQuizId = await settingsRepository.getCheckedQuizId();
     notifyListeners();
   }
 
@@ -49,19 +49,19 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changeCheckedTest(String testName) async {
+  void changeCheckedTest(String quizId) async {
     await settingsRepository
-        .editCheckedQuiz(testName)
+        .editCheckedQuiz(quizId)
         .whenComplete(() => initSettings());
     notifyListeners();
   }
 
-  void editQuizChecked(bool isFacultiesQuiz) {
-    settingsRepository
-        .editQuizChecked(isFacultiesQuiz)
-        .whenComplete(() => initSettings());
-    notifyListeners();
-  }
+  // void editQuizChecked(bool isFacultiesQuiz) {
+  //   settingsRepository
+  //       .editQuizChecked(isFacultiesQuiz)
+  //       .whenComplete(() => initSettings());
+  //   notifyListeners();
+  // }
 
   void changeViewedState(String id) async {
     await errorMessagesRepository.changeViewedState(id).whenComplete(() {

@@ -22,7 +22,7 @@ class _QuizListState extends State<QuizList> {
   late QuizProvider quizState;
 
   Future<bool> _onWillPop() async {
-    settingsState.changeCheckedTest(quizState.quizList[groupValue].quizName);
+    settingsState.changeCheckedTest(quizState.quizList[groupValue].docId);
     await Fluttertoast.showToast(msg: 'Изменения сохранены');
     return true;
   }
@@ -34,7 +34,7 @@ class _QuizListState extends State<QuizList> {
     await quizState.getQuizList();
     try {
       final checkedTest = quizState.quizList.firstWhere(
-        (element) => element.quizName == settingsState.nameOfCheckedTest,
+        (element) => element.docId == settingsState.checkedQuizId,
       );
 
       groupValue = quizState.quizList.indexOf(checkedTest);
