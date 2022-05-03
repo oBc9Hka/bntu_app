@@ -1,6 +1,5 @@
 import 'package:bntu_app/core/enums/question__types.dart';
 import 'package:bntu_app/core/enums/quiz_types.dart';
-import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
 import 'package:bntu_app/features/quiz/domain/repository/quiz_repository.dart';
@@ -32,7 +31,18 @@ class QuizFirestoreRepository extends QuizRepository {
     await dbRef.doc(quiz.docId).update({
       'quizName': quiz.quizName,
       'quizType': quiz.quizType.asString,
-      'questions': [],
+      'questions': quiz.questions
+          .map((e) => {
+                'question': e.question,
+                'questionType': e.questionType.asString,
+                'answers': e.answers
+                    .map((e) => {
+                          'text': e.text,
+                          'coefficients': [],
+                        })
+                    .toList(),
+              })
+          .toList(),
     });
 
     return true;
@@ -54,19 +64,16 @@ class QuizFirestoreRepository extends QuizRepository {
             docId: e.id,
             quizName: e['quizName'],
             quizType: quizTypeFromString(e['quizType']),
-            questions: [
-              // QuestionModel(
-              //   question: 'Question',
-              //   quiestionType: QuiestionTypes.single_answer,
-              //   answers: [
-              //     Answer(text: 'true', coefficients: ['ФИТР', '2']),
-              //     Answer(text: 'false', coefficients: ['МТФ', '1']),
-              //   ],
-              // )
-            ],
+            questions: qList(e['questions']),
             isVisible: e['isVisible'],
           ),
         )
         .toList();
+  }
+
+  List<QuestionModel> qList(List data) {
+    print(data);
+
+    return data.map((e) => QuestionModel.fromMap(e)).toList();
   }
 }

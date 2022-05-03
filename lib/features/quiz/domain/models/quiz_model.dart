@@ -8,7 +8,7 @@ class QuizModel extends Equatable {
   String docId;
   String quizName;
   QuizTypes quizType;
-  List<QuestionModel>? questions;
+  List<QuestionModel> questions;
   bool isVisible; // for future ability to show multiple tests
 
   QuizModel({

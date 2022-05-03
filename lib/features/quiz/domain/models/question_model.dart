@@ -4,19 +4,23 @@ import 'answer_model.dart';
 
 class QuestionModel {
   String question;
-  QuiestionTypes quiestionType;
+  QuiestionTypes questionType;
   List<Answer> answers;
 
   QuestionModel({
     required this.question,
-    required this.quiestionType,
+    required this.questionType,
     required this.answers,
   });
 
-  QuestionModel.fromMap(Map<String, dynamic> data, String id)
+  QuestionModel.fromMap(Map<String, dynamic> data)
       : this(
           question: data['question'],
-          quiestionType: questionTypeFromString(data['questionType']),
-          answers: data['answers'],
+          questionType: questionTypeFromString(data['questionType']),
+          answers: [
+            ...data['answers'].map(
+              (e) => Answer.fromMap(e),
+            ),
+          ],
         );
 }

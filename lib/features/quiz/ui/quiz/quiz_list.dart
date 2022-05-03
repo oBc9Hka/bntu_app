@@ -117,11 +117,13 @@ class _QuizListState extends State<QuizList> {
                                       trailing: IconButton(
                                         icon: Icon(Icons.edit),
                                         onPressed: () {
+                                          quizState.setQuizInEdit(
+                                            quizState.quizList[index],
+                                          );
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: ((context) => QuizEdit(
-                                                  quiz: quizState
-                                                      .quizList[index])),
+                                              builder: ((context) =>
+                                                  QuizEdit()),
                                             ),
                                           );
                                         },
