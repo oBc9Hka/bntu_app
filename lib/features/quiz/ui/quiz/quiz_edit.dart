@@ -103,7 +103,7 @@ class _QuizEditState extends State<QuizEdit> {
                                         children: [
                                           ...item.answers.map(
                                             (e) => AutoSizeText(
-                                              '${e.text.length <= 10 ? e.text.trimRight() : e.text.substring(0, 10).toString().trimRight() + '..'}: ',
+                                              '${e.text.length <= 10 ? e.text.trimRight() : e.text.substring(0, 10).toString().trimRight() + '..'}: ${e.coefficients}',
                                               maxLines: 1,
                                               style: TextStyle(fontSize: 12),
                                             ),

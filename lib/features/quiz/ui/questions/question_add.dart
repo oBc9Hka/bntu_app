@@ -10,7 +10,6 @@ import '../../provider/quiz_provider.dart';
 
 class QuestionAdd extends StatefulWidget {
   const QuestionAdd({Key? key}) : super(key: key);
-  // final QuizModel quizModel;
 
   @override
   _QuestionAddState createState() => _QuestionAddState();
