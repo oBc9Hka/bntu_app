@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:bntu_app/core/provider/theme_provider.dart';
-import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz/quiz_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -68,7 +67,6 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     var _themeProvider = Provider.of<ThemeProvider>(context);
-    final quizState = context.watch<QuizProvider>();
     return Consumer<SettingsProvider>(
       builder: (context, state, child) {
         if (!isInited) {

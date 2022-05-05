@@ -2,7 +2,6 @@ import 'package:bntu_app/core/enums/quiz_types.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
 import 'package:bntu_app/features/quiz/domain/repository/quiz_repository.dart';
-import 'package:bntu_app/features/quiz/ui/questions/question_edit.dart';
 import 'package:flutter/material.dart';
 
 class QuizProvider with ChangeNotifier {
@@ -21,21 +20,7 @@ class QuizProvider with ChangeNotifier {
 
   void setQuizInEdit(QuizModel quizModel) {
     quizInEdit = quizModel;
-    quizInEditInitState = QuizModel(
-      docId: quizModel.docId,
-      quizName: quizModel.quizName,
-      quizType: quizModel.quizType,
-      questions: quizModel.questions
-          .map(
-            (e) => QuestionModel(
-              question: e.question,
-              questionType: e.questionType,
-              answers: e.answers,
-            ),
-          )
-          .toList(),
-      isVisible: quizModel.isVisible,
-    );
+    quizInEditInitState = quizInEdit!.copyWith();
     notifyListeners();
   }
 
@@ -102,8 +87,16 @@ class QuizProvider with ChangeNotifier {
   }
 
   Future<void> reorderQuestions(int oldIndex, int newIndex) async {
-    final row = quizInEdit!.questions.removeAt(oldIndex);
-    quizInEdit!.questions.insert(newIndex, row);
+    final list = quizInEdit!.questions
+        .map((e) => QuestionModel(
+            question: e.question,
+            questionType: e.questionType,
+            answers: e.answers))
+        .toList();
+    final row = list.removeAt(oldIndex);
+    list.insert(newIndex, row);
+
+    quizInEdit = quizInEdit!.copyWith(questions: list);
 
     notifyListeners();
   }

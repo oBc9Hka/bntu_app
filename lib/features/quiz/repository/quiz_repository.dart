@@ -1,6 +1,5 @@
 import 'package:bntu_app/core/enums/question__types.dart';
 import 'package:bntu_app/core/enums/quiz_types.dart';
-import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
 import 'package:bntu_app/features/quiz/domain/repository/quiz_repository.dart';
@@ -52,12 +51,6 @@ class QuizFirestoreRepository extends QuizRepository {
     });
 
     return true;
-  }
-
-  @override
-  Future<List<QuestionModel>> getQuestionsList({required String collection}) {
-    // TODO: implement getQuestionsList
-    throw UnimplementedError();
   }
 
   @override

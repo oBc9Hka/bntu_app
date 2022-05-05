@@ -17,11 +17,15 @@ class QuizList extends StatefulWidget {
 
 class _QuizListState extends State<QuizList> {
   var groupValue = -1;
+  var oldGroupValue;
   bool firstInit = true;
   late SettingsProvider settingsState;
   late QuizProvider quizState;
 
   Future<bool> _onWillPop() async {
+    if (oldGroupValue == groupValue) {
+      return true;
+    }
     settingsState.changeCheckedTest(quizState.quizList[groupValue].docId);
     await Fluttertoast.showToast(msg: 'Изменения сохранены');
     return true;
@@ -38,11 +42,11 @@ class _QuizListState extends State<QuizList> {
       );
 
       groupValue = quizState.quizList.indexOf(checkedTest);
+      oldGroupValue = groupValue;
     } catch (_) {}
 
     firstInit = false;
     setState(() {});
-    print(groupValue);
   }
 
   @override

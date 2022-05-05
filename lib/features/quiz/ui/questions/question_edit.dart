@@ -203,10 +203,12 @@ class _QuestionEditState extends State<QuestionEdit> {
               ),
               EditButtonsSection(
                 onEditPressed: () {
-                  state.editQuestion();
+                  if (_formKey.currentState!.validate()) {
+                    state.editQuestion();
 
-                  Navigator.pop(context);
-                  Fluttertoast.showToast(msg: 'Вопрос успешно изменён');
+                    Navigator.pop(context);
+                    Fluttertoast.showToast(msg: 'Вопрос успешно изменён');
+                  }
                 },
                 onRemovePressed: () {
                   showDialog(

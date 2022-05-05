@@ -5,7 +5,6 @@ import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:reorderables/reorderables.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../questions/question_add.dart';
@@ -20,32 +19,34 @@ class QuizEdit extends StatefulWidget {
 
 class _QuizEditState extends State<QuizEdit> {
   TextEditingController quizController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<bool> _onWillPop(QuizProvider state) async {
-    if (state.quizInEditInitState == state.quizInEdit) {
-      print('oops');
-      state.clearQuizModel();
-      await state.getQuizList();
-    } else {
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SaveChanges(
-            onSavePressed: () async {
-              await state.editQuiz(quiz: state.quizInEdit!);
-              await Fluttertoast.showToast(msg: 'Изменения сохранены');
-              await state.getQuizList();
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            onNoPressed: () async {
-              await state.getQuizList();
-            },
-          );
-        },
-      );
+    if (_formKey.currentState!.validate()) {
+      if (state.quizInEditInitState == state.quizInEdit) {
+        await state.getQuizList();
+      } else {
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return SaveChanges(
+              onSavePressed: () async {
+                await state.editQuiz(quiz: state.quizInEdit!);
+                await Fluttertoast.showToast(msg: 'Изменения сохранены');
+                await state.getQuizList();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              onNoPressed: () async {
+                await state.getQuizList();
+              },
+            );
+          },
+        );
+      }
+      return true;
     }
-    return true;
+    return false;
   }
 
   @override
@@ -64,9 +65,7 @@ class _QuizEditState extends State<QuizEdit> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => QuestionAdd(
-                          // quizModel: widget.quiz,
-                          ),
+                      builder: (BuildContext context) => QuestionAdd(),
                     ),
                   );
                 },
@@ -91,11 +90,19 @@ class _QuizEditState extends State<QuizEdit> {
                   child: Column(
                     children: [
                       Form(
+                        key: _formKey,
                         child: TextFormField(
                           controller: TextEditingController(
                               text: state.quizInEdit!.quizName),
                           onChanged: (value) {
-                            state.quizInEdit!.quizName = value;
+                            state.quizInEdit =
+                                state.quizInEdit!.copyWith(quizName: value);
+                          },
+                          validator: (value) {
+                            if (value == '') {
+                              return 'Заполните поле';
+                            }
+                            return null;
                           },
                         ),
                       ),

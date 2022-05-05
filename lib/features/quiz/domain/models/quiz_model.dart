@@ -1,24 +1,23 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:bntu_app/core/enums/quiz_types.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class QuizModel extends Equatable {
-  String docId;
-  String quizName;
-  QuizTypes quizType;
-  List<QuestionModel> questions;
-  bool isVisible; // for future ability to show multiple tests
+part 'quiz_model.freezed.dart';
 
-  QuizModel({
-    required this.docId,
-    required this.quizName,
-    required this.quizType,
-    required this.questions,
-    required this.isVisible,
-  });
+@freezed
+class QuizModel with _$QuizModel {
+//  _QuizModel {
+  //  String docId;
+  //  String quizName;
+  //  QuizTypes quizType;
+  //  List<QuestionModel> questions;
+  //  bool isVisible; // for future ability to show multiple tests
 
-  @override
-  List<Object?> get props => [docId, quizName, quizType, questions, isVisible];
+  const factory QuizModel({
+    required String docId,
+    required String quizName,
+    required QuizTypes quizType,
+    required List<QuestionModel> questions,
+    required bool isVisible,
+  }) = _QuizModel;
 }

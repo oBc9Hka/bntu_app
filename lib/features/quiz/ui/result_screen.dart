@@ -105,14 +105,14 @@ class ResultScreen extends StatelessWidget {
     const mainColor = Constants.mainColor;
     return Consumer(builder: (context, state, child) {
       var sortedQueryList = <MapEntry<dynamic, int>>[];
-      for (var sortedListItem in _sortedList) {
-        // for (var facultiesListItem in state.faculties) {
-        //   if (facultiesListItem.shortName == sortedListItem.key) {
-        //     sortedQueryList
-        //         .add(MapEntry(facultiesListItem, sortedListItem.value));
-        //   }
-        // }
-      }
+      // for (var sortedListItem in _sortedList) {
+      //   // for (var facultiesListItem in state.faculties) {
+      //   //   if (facultiesListItem.shortName == sortedListItem.key) {
+      //   //     sortedQueryList
+      //   //         .add(MapEntry(facultiesListItem, sortedListItem.value));
+      //   //   }
+      //   // }
+      // }
       var mayFitFacultyList = [];
       var mayFitFacultyIndex = 0;
       for (var item in sortedQueryList) {

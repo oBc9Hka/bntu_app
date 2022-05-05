@@ -22,7 +22,7 @@ class _QuizScreenState extends State<QuizScreen> {
   int groupValue = 0;
   String checkedLetter = '';
 
-  List _questions = [];
+  final List _questions = [];
 
   Map<String, bool> checkedAnswers = {};
   var tmpArray = [];
