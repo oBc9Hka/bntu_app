@@ -21,8 +21,7 @@ class _QuestionAddState extends State<QuestionAdd> {
 
   void _addQuestion(QuizProvider state) async {
     if (_formKey.currentState!.validate()) {
-      state.quizInEdit!.questions.add(questionModel);
-      await state.editQuestions();
+      await state.addQuestion(questionModel);
       Navigator.of(context).pop();
       await Fluttertoast.showToast(msg: 'Вопрос успешно добавлен');
     }

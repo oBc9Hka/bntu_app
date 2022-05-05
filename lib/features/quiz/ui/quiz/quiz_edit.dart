@@ -1,5 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
+import 'package:bntu_app/core/widgets/save_changes.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../questions/question_add.dart';
+import '../questions/question_edit.dart';
 
 class QuizEdit extends StatefulWidget {
   const QuizEdit({Key? key}) : super(key: key);
@@ -21,10 +22,26 @@ class _QuizEditState extends State<QuizEdit> {
   Future<bool> _onWillPop(QuizProvider state) async {
     if (state.quizInEditInitState == state.quizInEdit) {
       print('oops');
-    } else {
-      await state.editQuiz(quiz: state.quizInEdit!);
-      await Fluttertoast.showToast(msg: 'Изменения сохранены');
+      state.clearQuizModel();
       await state.getQuizList();
+    } else {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SaveChanges(
+            onSavePressed: () async {
+              await state.editQuiz(quiz: state.quizInEdit!);
+              await Fluttertoast.showToast(msg: 'Изменения сохранены');
+              await state.getQuizList();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            onNoPressed: () async {
+              await state.getQuizList();
+            },
+          );
+        },
+      );
     }
     return true;
   }
@@ -115,13 +132,13 @@ class _QuizEditState extends State<QuizEdit> {
                                         children: [
                                           IconButton(
                                             onPressed: () {
-                                              // Navigator.of(context).push(MaterialPageRoute(
-                                              //     builder: (BuildContext context) {
-                                              //   return QuestionEdit(
-                                              //     question: _questions[index],
-                                              //     questions: widget.questions,
-                                              //   );
-                                              // }));
+                                              state.setQuestionInEdit(index);
+
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(builder:
+                                                      (BuildContext context) {
+                                                return QuestionEdit();
+                                              }));
                                             },
                                             icon: Icon(
                                               Icons.edit,
