@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bntu_app/providers/app_provider.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
 import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';

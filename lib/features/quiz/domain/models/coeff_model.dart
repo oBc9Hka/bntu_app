@@ -6,7 +6,7 @@ class Coeff {
 
   Coeff.fromMap(Map<String, dynamic> data)
       : this(
-          key: data['text'],
+          key: data['key'],
           weight: data['weight'],
         );
 }
