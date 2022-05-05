@@ -1,9 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:bntu_app/core/widgets/list_veiw_reordable.dart';
 import 'package:bntu_app/core/widgets/save_changes.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:reorderables/reorderables.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../questions/question_add.dart';
@@ -98,19 +100,20 @@ class _QuizEditState extends State<QuizEdit> {
                         ),
                       ),
                       state.quizInEdit!.questions.isNotEmpty
-                          ? ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: state.quizInEdit!.questions.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final item = state.quizInEdit!.questions[index];
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5.0),
-                                  child: Card(
+                          ? ListViewReordable(
+                              onReorder: (oldIndex, newIndex) {
+                                state.reorderQuestions(oldIndex, newIndex);
+                              },
+                              children: [
+                                for (var index = 0;
+                                    index < state.quizInEdit!.questions.length;
+                                    index++)
+                                  Card(
                                     child: ListTile(
                                       leading: Text('${index + 1}'),
                                       title: Text(
-                                        item.question,
+                                        state.quizInEdit!.questions[index]
+                                            .question,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -118,7 +121,9 @@ class _QuizEditState extends State<QuizEdit> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          ...item.answers.map(
+                                          ...state.quizInEdit!.questions[index]
+                                              .answers
+                                              .map(
                                             (e) => AutoSizeText(
                                               '${e.text.length <= 10 ? e.text.trimRight() : e.text.substring(0, 10).toString().trimRight() + '..'}: ${e.coefficients}',
                                               maxLines: 1,
@@ -145,58 +150,11 @@ class _QuizEditState extends State<QuizEdit> {
                                               color: mainColor,
                                             ),
                                           ),
-                                          // IconButton(
-                                          //   onPressed: () {
-                                          //     // try {
-                                          //     //   if (widget.questions == 'f') {
-                                          //     //     state.moveUpFacultyQuestion(
-                                          //     //       _questions[index].id!,
-                                          //     //       _questions[index - 1].id!,
-                                          //     //     );
-                                          //     //   } else if (widget.questions == 's') {
-                                          //     //     state.moveUpSpecialityQuestion(
-                                          //     //       _questions[index].id!,
-                                          //     //       _questions[index - 1].id!,
-                                          //     //     );
-                                          //     //   }
-                                          //     //   // ignore: empty_catches
-                                          //     // } catch (e) {}
-                                          //   },
-                                          //   tooltip: 'Поднять в списке',
-                                          //   icon: Icon(
-                                          //     Icons.arrow_upward,
-                                          //     color: mainColor,
-                                          //   ),
-                                          // ),
-                                          // IconButton(
-                                          //   onPressed: () {
-                                          //     // try {
-                                          //     //   if (widget.questions == 'f') {
-                                          //     //     state.moveDownFacultyQuestion(
-                                          //     //       _questions[index].id!,
-                                          //     //       _questions[index + 1].id!,
-                                          //     //     );
-                                          //     //   } else if (widget.questions == 's') {
-                                          //     //     state.moveDownSpecialityQuestion(
-                                          //     //       _questions[index].id!,
-                                          //     //       _questions[index + 1].id!,
-                                          //     //     );
-                                          //     //   }
-                                          //     //   // ignore: empty_catches
-                                          //     // } catch (e) {}
-                                          //   },
-                                          //   tooltip: 'Опустить в списке',
-                                          //   icon: Icon(
-                                          //     Icons.arrow_downward,
-                                          //     color: mainColor,
-                                          //   ),
-                                          // ),
                                         ],
                                       ),
                                     ),
                                   ),
-                                );
-                              },
+                              ],
                             )
                           : Expanded(
                               child: Center(

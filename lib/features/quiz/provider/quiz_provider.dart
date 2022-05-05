@@ -100,4 +100,11 @@ class QuizProvider with ChangeNotifier {
     quizInEdit!.questions.add(questionModel);
     notifyListeners();
   }
+
+  Future<void> reorderQuestions(int oldIndex, int newIndex) async {
+    final row = quizInEdit!.questions.removeAt(oldIndex);
+    quizInEdit!.questions.insert(newIndex, row);
+
+    notifyListeners();
+  }
 }
