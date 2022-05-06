@@ -8,7 +8,7 @@ import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/quiz/repository/quiz_repository.dart';
 import 'package:bntu_app/features/settings/repository/settings_repository.dart';
 import 'package:bntu_app/features/settings/ui/messages_page.dart';
-import 'package:bntu_app/features/quiz/ui/main_menu.dart';
+import 'package:bntu_app/features/quiz/ui/quiz_main_menu.dart';
 import 'package:bntu_app/features/settings/ui/settings_page.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -114,13 +114,6 @@ class BntuApp extends StatelessWidget {
         '/messages': (context) => MessagesPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
-        // '/test': (context) => MainMenu(
-        //     isFacultiesQuiz: context.watch<AppProvider>().isFacultiesQuiz),
-        '/test-faculties': (context) => MainMenu(isFacultiesQuiz: true),
-        '/test-specialties': (context) => MainMenu(isFacultiesQuiz: false),
-        // '/test-faculties-edit': (context) => QuestionsList(questions: 'f'),
-        // '/test-specialties-edit': (context) => QuestionsList(questions: 's'),
-        // '/test-edit': (context) => QuizList(),
       },
     );
   }

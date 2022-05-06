@@ -1,134 +1,80 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
+import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
+import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
 import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../features/faculties/domain/models/faculty_model.dart';
-import 'main_menu.dart';
+import '../../faculties/provider/faculties_provider.dart';
+import 'quiz_main_menu.dart';
 
 class ResultScreen extends StatelessWidget {
   const ResultScreen({
     Key? key,
-    required this.tagsList,
-    required this.isFacultiesQuiz,
+    required this.answersList,
   }) : super(key: key);
-  final tagsList;
-  final bool isFacultiesQuiz;
+  final List<Answer> answersList;
 
   @override
   Widget build(BuildContext context) {
     var _fit = '...';
     var _mayFit = '...';
-    var list = [];
-    var _sortedList = <MapEntry<String, int>>[];
-    var _tagsFrequency = <String, int>{};
-    var maxFrequency = 0;
-    var _mayFitVisibility = true;
+    var _mayFitVisibility = false;
 
-    void _getTagsFrequencyList() {
-      list = [];
-      for (var item in tagsList) {
-        if (list.contains(item)) {
-          var count = _tagsFrequency[item];
-          _tagsFrequency[item] = count! + 1;
-        } else {
-          _tagsFrequency[item] = 1;
-          list.add(item);
+    final coeffList = <Coeff>[];
+
+    for (var i = 0; i < answersList.length; i++) {
+      for (var j = 0; j < answersList[i].coefficients.length; j++) {
+        try {
+          final el = coeffList.firstWhere(
+              (element) => element.key == answersList[i].coefficients[j].key);
+          final index = coeffList.indexOf(el);
+          coeffList[index] = coeffList[index].copyWith(
+            weight:
+                answersList[i].coefficients[j].weight + coeffList[index].weight,
+          );
+        } catch (e) {
+          coeffList.add(answersList[i].coefficients[j]);
         }
       }
-
-      print(_tagsFrequency);
     }
+    print('UNSORTED: $coeffList');
 
-    void _sortTagsFrequencyList() {
-      _sortedList = [];
-      _tagsFrequency.entries.forEach((element) {
-        _sortedList.add(element);
-      });
-      print('unsorted: $_sortedList');
-      _sortedList.sort((a, b) => b.value.compareTo(a.value));
-      print('sorted: $_sortedList');
-    }
-
-    void _getMaxFrequency() {
-      maxFrequency = 0;
-      _tagsFrequency.forEach((key, value) {
-        if (value > maxFrequency) maxFrequency = value;
-      });
-      print('maxFrequency: $maxFrequency');
-    }
-
-    void _setTitles() {
-      var maxFrequencyCount = 0;
-      _tagsFrequency.forEach((key, value) {
-        if (value == maxFrequency) ++maxFrequencyCount;
-      });
-      print('maxFrequencyCount: $maxFrequencyCount');
-
-      if (maxFrequencyCount == 1) {
-        _fit = 'Тебе больше всего подходит:';
-      } else {
-        _fit = 'Тебе больше всего подходят:';
-      }
-
-      print('_tagsFrequency.length: ${_tagsFrequency.length}');
-      if (_tagsFrequency.length - maxFrequencyCount == 1) {
-        _mayFit = 'Также тебе может подойти:';
-      } else {
-        _mayFit = 'Также тебе могут подойти:';
-      }
-      if (_tagsFrequency.length - maxFrequencyCount == 0) {
-        _mayFitVisibility = false;
-      }
-    }
+    coeffList.sort(
+      (a, b) => b.weight.compareTo(a.weight),
+    );
+    print('SORTED: $coeffList');
+    final maxWeight = coeffList.first.weight;
 
     Faculty _getFacultyByShortName(String name, List<Faculty> list) {
       for (var faculty in list) {
-        if (faculty.shortName == name) {
+        if (faculty.shortName?.toLowerCase() == name.toLowerCase()) {
           return faculty;
         }
       }
       throw 'Факультет не найден';
     }
 
-    _getTagsFrequencyList();
-    _sortTagsFrequencyList();
     _fit = 'Тебе больше всего подходят:';
-    if (isFacultiesQuiz) {
-      _getMaxFrequency();
-      _setTitles();
-    }
 
     var fixedExtentScrollController = FixedExtentScrollController();
     const mainColor = Constants.mainColor;
+
+    final facultyState = context.watch<FacultiesProvider>();
     return Consumer(builder: (context, state, child) {
-      var sortedQueryList = <MapEntry<dynamic, int>>[];
-      // for (var sortedListItem in _sortedList) {
-      //   // for (var facultiesListItem in state.faculties) {
-      //   //   if (facultiesListItem.shortName == sortedListItem.key) {
-      //   //     sortedQueryList
-      //   //         .add(MapEntry(facultiesListItem, sortedListItem.value));
-      //   //   }
-      //   // }
-      // }
-      var mayFitFacultyList = [];
+      var mayFitFacultyList = <Coeff>[];
       var mayFitFacultyIndex = 0;
-      for (var item in sortedQueryList) {
-        if (item.value < maxFrequency) {
+      for (var item in coeffList) {
+        if (item.weight < maxWeight) {
           mayFitFacultyList.add(item);
+          _mayFit = 'Так же тебе могут подойти:';
+          _mayFitVisibility = true;
         }
       }
-      var _mockSorterList = [];
-      if (!isFacultiesQuiz) {
-        print('sortedQueryList: $sortedQueryList');
-        print('firstFromSorted: ${_sortedList.first.key}');
-        _mockSorterList = Constants.quizResultList
-            .firstWhere((element) => element.letter == _sortedList.first.key)
-            .specialties;
-        print('itemsFromFirstFromSorted: $_mockSorterList');
-      }
+
       return Scaffold(
         appBar: AppBar(
           title: Text('Результаты'),
@@ -166,13 +112,13 @@ class ResultScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  isFacultiesQuiz
+                  true
                       ? Column(
                           children: [
                             Column(
                               children: [
-                                for (var item in sortedQueryList)
-                                  if (item.value == maxFrequency)
+                                for (var item in coeffList)
+                                  if (item.weight == maxWeight)
                                     TextButton(
                                       onPressed: () {
                                         Navigator.push(
@@ -180,13 +126,16 @@ class ResultScreen extends StatelessWidget {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 SpecialtiesScreen(
-                                              faculty: item.key,
+                                              faculty: _getFacultyByShortName(
+                                                item.key,
+                                                facultyState.faculties,
+                                              ),
                                             ),
                                           ),
                                         );
                                       },
                                       child: Text(
-                                        item.key.shortName,
+                                        item.key.toUpperCase(),
                                         style: TextStyle(
                                             fontSize: 26, color: mainColor),
                                       ),
@@ -222,9 +171,12 @@ class ResultScreen extends StatelessWidget {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 SpecialtiesScreen(
-                                              faculty: mayFitFacultyList[
-                                                      mayFitFacultyIndex]
-                                                  .key,
+                                              faculty: _getFacultyByShortName(
+                                                mayFitFacultyList[
+                                                        mayFitFacultyIndex]
+                                                    .key,
+                                                facultyState.faculties,
+                                              ),
                                             ),
                                           ),
                                         );
@@ -262,13 +214,18 @@ class ResultScreen extends StatelessWidget {
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           SpecialtiesScreen(
-                                                        faculty: item.key,
+                                                        faculty:
+                                                            _getFacultyByShortName(
+                                                          item.key,
+                                                          facultyState
+                                                              .faculties,
+                                                        ),
                                                       ),
                                                     ),
                                                   );
                                                 },
                                                 child: Text(
-                                                  item.key.shortName,
+                                                  item.key,
                                                   style: TextStyle(
                                                       color: Colors.grey),
                                                 ),
@@ -287,28 +244,28 @@ class ResultScreen extends StatelessWidget {
                           constraints: BoxConstraints(
                             maxHeight: MediaQuery.of(context).size.height * 0.5,
                           ),
-                          child: ListView(
-                            children: [
-                              for (var item in _mockSorterList)
-                                ListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => SpecialtiesScreen(
-                                          faculty: _getFacultyByShortName(
-                                              item.values.first,
-                                              // state.faculties,
-                                              []),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  title: Text(item.keys.first),
-                                  trailing: Text(item.values.first),
-                                )
-                            ],
-                          ),
+                          // child: ListView(
+                          //   children: [
+                          //     for (var item in _mockSorterList)
+                          //       ListTile(
+                          //         onTap: () {
+                          //           Navigator.push(
+                          //             context,
+                          //             MaterialPageRoute(
+                          //               builder: (context) => SpecialtiesScreen(
+                          //                 faculty: _getFacultyByShortName(
+                          //                     item.values.first,
+                          //                     // state.faculties,
+                          //                     []),
+                          //               ),
+                          //             ),
+                          //           );
+                          //         },
+                          //         title: Text(item.keys.first),
+                          //         trailing: Text(item.values.first),
+                          //       )
+                          //   ],
+                          // ),
                         ),
                 ],
               ),
@@ -319,9 +276,7 @@ class ResultScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainMenu(
-                            isFacultiesQuiz: isFacultiesQuiz,
-                          ),
+                          builder: (context) => QuizMainMenu(),
                         ),
                       );
                     },
@@ -355,272 +310,3 @@ class ResultScreen extends StatelessWidget {
     });
   }
 }
-
-// class ResultScreen extends StatelessWidget {
-//   const ResultScreen({Key? key, required this.tagsList}) : super(key: key);
-//   final tagsList;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     var _fit = '...';
-//     var _mayFit = '...';
-//     var list = [];
-//     var _sortedList = <MapEntry<String, int>>[];
-//     var _tagsFrequency = <String, int>{};
-//     var maxFrequency = 0;
-//     var _mayFitVisibility = true;
-//
-//     void _getTagsFrequencyList() {
-//       list = [];
-//       for (var item in tagsList) {
-//         if (list.contains(item)) {
-//           var count = _tagsFrequency[item];
-//           _tagsFrequency[item] = count! + 1;
-//         } else {
-//           _tagsFrequency[item] = 1;
-//           list.add(item);
-//         }
-//       }
-//
-//       print(_tagsFrequency);
-//     }
-//
-//     void _sortTagsFrequencyList() {
-//       _sortedList = [];
-//       _tagsFrequency.entries.forEach((element) {
-//         _sortedList.add(element);
-//       });
-//       print('unsorted: $_sortedList');
-//       _sortedList.sort((a, b) => b.value.compareTo(a.value));
-//       print('sorted: $_sortedList');
-//     }
-//
-//     void _getMaxFrequency() {
-//       maxFrequency = 0;
-//       _tagsFrequency.forEach((key, value) {
-//         if (value > maxFrequency) maxFrequency = value;
-//       });
-//       print('maxFrequency: $maxFrequency');
-//     }
-//
-//     void _setTitles() {
-//       var maxFrequencyCount = 0;
-//       _tagsFrequency.forEach((key, value) {
-//         if (value == maxFrequency) ++maxFrequencyCount;
-//       });
-//       print('maxFrequencyCount: $maxFrequencyCount');
-//
-//       if (maxFrequencyCount == 1) {
-//         _fit = 'Тебе больше всего подходит:';
-//       } else {
-//         _fit = 'Тебе больше всего подходят:';
-//       }
-//
-//       print('_tagsFrequency.length: ${_tagsFrequency.length}');
-//       if (_tagsFrequency.length - maxFrequencyCount == 1) {
-//         _mayFit = 'Также тебе может подойти:';
-//       } else {
-//         _mayFit = 'Также тебе могут подойти:';
-//       }
-//       if (_tagsFrequency.length - maxFrequencyCount == 0) {
-//         _mayFitVisibility = false;
-//       }
-//     }
-//
-//     _getTagsFrequencyList();
-//     _sortTagsFrequencyList();
-//     // _getMaxFrequency();
-//     // _setTitles();
-//     _fit = 'Тебе больше всего подходят:';
-//
-//     var fixedExtentScrollController = FixedExtentScrollController();
-//     const mainColor = Constants.mainColor;
-//     return Consumer<AppProvider>(builder: (context, state, child) {
-//       var sortedQueryList = <MapEntry<dynamic, int>>[];
-//       for (var sortedListItem in _sortedList) {
-//         for (var facultiesListItem in state.faculties) {
-//           if (facultiesListItem.shortName == sortedListItem.key) {
-//             sortedQueryList
-//                 .add(MapEntry(facultiesListItem, sortedListItem.value));
-//           }
-//         }
-//       }
-//       var mayFitFacultyList = [];
-//       var mayFitFacultyIndex = 0;
-//       for (var item in sortedQueryList) {
-//         if (item.value < maxFrequency) {
-//           mayFitFacultyList.add(item);
-//         }
-//       }
-//       print('sortedQueryList: $sortedQueryList');
-//       return Scaffold(
-//         appBar: AppBar(
-//           title: Text('Результаты'),
-//         ),
-//         body: Padding(
-//           padding: const EdgeInsets.only(
-//             top: 10,
-//             left: 10,
-//             right: 10,
-//             bottom: 40,
-//           ),
-//           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               SizedBox(
-//                 width: double.infinity,
-//                 child: Text(
-//                   'Результат теста:',
-//                   textAlign: TextAlign.center,
-//                   style: TextStyle(
-//                     fontSize: 40.0,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                 ),
-//               ),
-//               Column(
-//                 children: [
-//                   Text(
-//                     _fit,
-//                     style: TextStyle(
-//                       color: mainColor,
-//                       fontSize: 24.0,
-//                       fontWeight: FontWeight.bold,
-//                     ),
-//                   ),
-//                   for (var item in sortedQueryList)
-//                     if (item.value == maxFrequency)
-//                       TextButton(
-//                         onPressed: () {
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (context) => FacultyPage(
-//                                 faculty: item.key,
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                         child: Text(
-//                           item.key.shortName,
-//                           style: TextStyle(fontSize: 26, color: mainColor),
-//                         ),
-//                       ),
-//                 ],
-//               ),
-//               Visibility(
-//                 visible: _mayFitVisibility,
-//                 child: Column(
-//                   children: [
-//                     Text(
-//                       _mayFit,
-//                       style: TextStyle(
-//                         color: Colors.grey,
-//                         fontSize: 18.0,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     Container(
-//                       constraints: BoxConstraints(
-//                           minWidth: 50,
-//                           maxWidth: MediaQuery.of(context).size.width * 0.7,
-//                           maxHeight: MediaQuery.of(context).size.height * 0.3),
-//                       child: GestureDetector(
-//                         onTap: () {
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (context) => FacultyPage(
-//                                 faculty:
-//                                     mayFitFacultyList[mayFitFacultyIndex].key,
-//                               ),
-//                             ),
-//                           );
-//                         },
-//                         child: ListWheelScrollView(
-//                           controller: fixedExtentScrollController,
-//                           physics: FixedExtentScrollPhysics(),
-//                           itemExtent: 60.0,
-//                           diameterRatio: 2,
-//                           squeeze: 1,
-//                           perspective: 0.01,
-//                           onSelectedItemChanged: (index) {
-//                             mayFitFacultyIndex = index;
-//                           },
-//                           children: [
-//                             for (var item in mayFitFacultyList)
-//                               Container(
-//                                 constraints: BoxConstraints(
-//                                   minWidth: 100,
-//                                   maxWidth:
-//                                       MediaQuery.of(context).size.width * 0.8,
-//                                 ),
-//                                 decoration: BoxDecoration(
-//                                   borderRadius: BorderRadius.circular(10),
-//                                   border: Border.all(color: Colors.grey),
-//                                 ),
-//                                 child: TextButton(
-//                                   onPressed: () {
-//                                     Navigator.push(
-//                                       context,
-//                                       MaterialPageRoute(
-//                                         builder: (context) => FacultyPage(
-//                                           faculty: item.key,
-//                                         ),
-//                                       ),
-//                                     );
-//                                   },
-//                                   child: Text(
-//                                     item.key.shortName,
-//                                     style: TextStyle(color: Colors.grey),
-//                                   ),
-//                                 ),
-//                               ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               Column(
-//                 children: [
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       Navigator.pushReplacement(
-//                           context,
-//                           MaterialPageRoute(
-//                             builder: (context) => MainMenu(),
-//                           ));
-//                     },
-//                     style: Constants.customElevatedButtonStyle,
-//                     child: Text(
-//                       'Пройти тест заново',
-//                       style: TextStyle(color: mainColor),
-//                     ),
-//                   ),
-//                   Padding(padding: EdgeInsets.only(top: 10)),
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       Navigator.pushReplacement(
-//                           context,
-//                           MaterialPageRoute(
-//                             builder: (context) => GreetingScreen(),
-//                           ));
-//                     },
-//                     style: Constants.customElevatedButtonStyle,
-//                     child: Text(
-//                       'Вернуться на главную',
-//                       style: TextStyle(color: mainColor),
-//                     ),
-//                   )
-//                 ],
-//               )
-//             ],
-//           ),
-//         ),
-//       );
-//     });
-//   }
-// }

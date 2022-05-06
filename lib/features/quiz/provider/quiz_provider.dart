@@ -14,6 +14,8 @@ class QuizProvider with ChangeNotifier {
   List<QuizModel> quizList = [];
   bool isLoading = false;
 
+  QuizModel? activeQuiz;
+
   QuizModel? quizInEdit;
   QuizModel? quizInEditInitState;
 
@@ -33,6 +35,12 @@ class QuizProvider with ChangeNotifier {
       return false;
     }
     return true;
+  }
+
+  Future<void> getActiveQuiz({required String docId}) async {
+    await getQuizList();
+    activeQuiz = quizList.firstWhere((element) => element.docId == docId);
+    notifyListeners();
   }
 
   void setNewQuizInEdit() {

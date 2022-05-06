@@ -22,7 +22,7 @@ class SettingsProvider with ChangeNotifier {
   List<ErrorMessage> errorMessages = [];
   String checkedQuizId = '';
 
-  void initSettings() async {
+  Future<void> initSettings() async {
     currentAdmissionYear = await settingsRepository.getCurrentAdmissionYear();
     secretKey = await settingsRepository.getSecretKey();
     isFacultiesQuiz = await settingsRepository.getIsFacultyQuizChecked();

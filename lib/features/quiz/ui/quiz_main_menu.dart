@@ -5,9 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/constants.dart';
 import 'quiz_screen.dart';
 
-class MainMenu extends StatelessWidget {
-  const MainMenu({Key? key, required this.isFacultiesQuiz}) : super(key: key);
-  final bool isFacultiesQuiz;
+class QuizMainMenu extends StatelessWidget {
+  const QuizMainMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +14,9 @@ class MainMenu extends StatelessWidget {
     var mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
     var text = 'специальности';
-    if (isFacultiesQuiz) {
-      text = 'факультеты';
-    }
+    // if (isFacultiesQuiz) {
+    //   text = 'факультеты';
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -69,9 +68,7 @@ class MainMenu extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => QuizScreen(
-                          isFacultiesQuiz: isFacultiesQuiz,
-                        ),
+                        builder: (context) => QuizScreen(),
                       ),
                     );
                   },

@@ -1,4 +1,5 @@
 import 'package:bntu_app/core/provider/theme_provider.dart';
+import 'package:bntu_app/features/quiz/ui/quiz_main_menu.dart';
 import 'package:bntu_app/features/settings/provider/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/provider/app_provider.dart';
 import '../../../../core/util/validate_email.dart';
+import '../../../quiz/provider/quiz_provider.dart';
 import '../../provider/greetings_provider.dart';
 
 class GreetingDrawer extends StatelessWidget {
@@ -18,6 +20,7 @@ class GreetingDrawer extends StatelessWidget {
     final appState = context.watch<AppProvider>();
     final greetingState = context.watch<GreetingsProvider>();
     final settingsState = context.watch<SettingsProvider>();
+    final quizState = context.watch<QuizProvider>();
 
     var themeProvider = Provider.of<ThemeProvider>(context);
     const mainColor = Constants.mainColor;
@@ -310,25 +313,24 @@ class GreetingDrawer extends StatelessWidget {
                 ),
                 trailing: themeProvider.currentIcon,
               ),
-              // TODO: implement when quiz will be updated
-              // if (state.isFacultiesQuiz || state.user != null)
-              //   ListTile(
-              //     onTap: () {
-              //       Navigator.pushNamed(context, '/test-faculties');
-              //     },
-              //     title: Text('Помощь с выбором факультета (демо)'),
-              //     trailing: Icon(Icons.speaker_notes_rounded),
-              //   ),
-              // if (!state.isFacultiesQuiz || state.user != null)
-              //   ListTile(
-              //     onTap: () {
-              //       Navigator.pushNamed(context, '/test-specialties');
-              //     },
-              //     title: Text(
-              //       'Помощь с выбором специальности (демо)',
-              //     ),
-              //     trailing: Icon(Icons.speaker_notes_rounded),
-              //   ),
+              // TODO: implement admin panel for all of the tests
+              ListTile(
+                onTap: () async {
+                  await settingsState.initSettings();
+                  await quizState.getActiveQuiz(
+                      docId: settingsState.checkedQuizId);
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuizMainMenu(),
+                    ),
+                  );
+                },
+                title: Text(
+                  'Помощь с выбором специальности',
+                ),
+                trailing: Icon(Icons.speaker_notes_rounded),
+              ),
               ListTile(
                 onTap: () {
                   _launchURL();
