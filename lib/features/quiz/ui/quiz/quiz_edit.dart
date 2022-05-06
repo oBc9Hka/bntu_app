@@ -22,6 +22,8 @@ class QuizEdit extends StatefulWidget {
 class _QuizEditState extends State<QuizEdit> {
   TextEditingController quizController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _coeffFormKey = GlobalKey<FormState>();
+  final coeffController = TextEditingController();
 
   Future<bool> _onWillPop(QuizProvider state) async {
     if (_formKey.currentState!.validate()) {
@@ -67,7 +69,7 @@ class _QuizEditState extends State<QuizEdit> {
                 onPressed: () {
                   state.questionInEdit = QuestionModel(
                     question: '',
-                    questionType: QuiestionTypes.single_answer,
+                    questionType: QuestionTypes.single_answer,
                     answers: [],
                   );
                   Navigator.of(context).push(
@@ -112,6 +114,54 @@ class _QuizEditState extends State<QuizEdit> {
                             return null;
                           },
                         ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: Form(
+                              key: _coeffFormKey,
+                              child: TextFormField(
+                                controller: coeffController,
+                                validator: (value) {
+                                  if (value == '') {
+                                    return 'Введите коэффициент';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {},
+                                decoration:
+                                    const InputDecoration(labelText: 'Коэфф.'),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_coeffFormKey.currentState!.validate()) {
+                                state.addCoeff(coeff: coeffController.text);
+                                coeffController.text = '';
+                              }
+                            },
+                            child: Text('Добавить'),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text('Список коэффициентов'),
+                      Wrap(
+                        children: [
+                          for (var i = 0;
+                              i < state.quizInEdit!.coefficients.length;
+                              i++)
+                            Chip(
+                              label: Text(state.quizInEdit!.coefficients[i]),
+                              onDeleted: () {
+                                state.removeCoeff(index: i);
+                              },
+                            ),
+                        ],
                       ),
                       state.quizInEdit!.questions.isNotEmpty
                           ? ListViewReordable(

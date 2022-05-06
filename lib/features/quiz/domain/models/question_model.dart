@@ -8,7 +8,7 @@ part 'question_model.freezed.dart';
 class QuestionModel with _$QuestionModel {
   const factory QuestionModel({
     required String question,
-    required QuiestionTypes questionType,
+    required QuestionTypes questionType,
     required List<Answer> answers,
   }) = _QuestionModel;
 

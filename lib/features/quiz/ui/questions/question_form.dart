@@ -1,4 +1,5 @@
 import 'package:bntu_app/core/constants/constants.dart';
+import 'package:bntu_app/core/enums/question__types.dart';
 import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
 import 'package:flutter/material.dart';
@@ -43,19 +44,31 @@ class _QuestionFormState extends State<QuestionForm> {
   Widget build(BuildContext context) {
     return Consumer<QuizProvider>(
       builder: (context, state, child) {
-        // }
         return SingleChildScrollView(
           child: Form(
             key: widget.formKey,
             child: Column(
               children: [
-                customTextField(
-                  helperText: 'Вопрос',
-                  value: state.questionInEdit!.question,
-                  onChanged: (value) {
-                    state.questionInEdit =
-                        state.questionInEdit!.copyWith(question: value);
-                  },
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: customTextField(
+                        helperText: 'Вопрос',
+                        value: state.questionInEdit!.question,
+                        onChanged: (value) {
+                          state.questionInEdit =
+                              state.questionInEdit!.copyWith(question: value);
+                        },
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        state.editAnswersCount();
+                      },
+                      child: Text(state.questionInEdit!.questionType.name),
+                    ),
+                  ],
                 ),
                 ListView.builder(
                   shrinkWrap: true,
@@ -127,8 +140,8 @@ class _QuestionFormState extends State<QuestionForm> {
     );
   }
 
-  final items = ['ФТК', 'ФИТР', 'МСФ', 'АТФ'];
   Dialog customDialog(int index, QuizProvider state) {
+    final items = state.quizInEdit!.coefficients;
     return Dialog(
       child: StatefulBuilder(builder: (context, setState) {
         return Column(
@@ -163,6 +176,7 @@ class _QuestionFormState extends State<QuestionForm> {
                   },
                   setState,
                   state,
+                  items,
                 );
               },
             ),
@@ -208,6 +222,7 @@ class _QuestionFormState extends State<QuestionForm> {
     Function() onClear,
     setState,
     QuizProvider state,
+    List<String> items,
   ) {
     return Row(
       children: [

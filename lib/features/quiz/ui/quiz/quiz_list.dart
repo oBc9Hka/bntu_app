@@ -64,6 +64,7 @@ class _QuizListState extends State<QuizList> {
               actions: [
                 IconButton(
                     onPressed: () {
+                      quizState.setNewQuizInEdit();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -4,6 +4,8 @@ import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
 import 'package:bntu_app/features/quiz/domain/repository/quiz_repository.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/enums/question__types.dart';
+
 class QuizProvider with ChangeNotifier {
   final QuizRepository quizRepository;
 
@@ -33,6 +35,21 @@ class QuizProvider with ChangeNotifier {
     return true;
   }
 
+  void setNewQuizInEdit() {
+    quizInEdit = QuizModel(
+      docId: '',
+      quizName: '',
+      quizType: QuizTypes.single_coeff,
+      questions: [],
+      coefficients: [],
+      coeffResults: [],
+      needPrintResults: false,
+      isVisible: false,
+    );
+    quizInEditInitState = quizInEdit!.copyWith();
+    notifyListeners();
+  }
+
   void setQuestionInEdit(int index) {
     questionInEditIndex = index;
     questionInEdit = quizInEdit!.questions.elementAt(index);
@@ -53,18 +70,34 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addQuiz({
-    required String quizName,
-    required QuizTypes quizType,
-  }) async {
+  Future<void> addQuiz() async {
     await quizRepository.addQuiz(
       quiz: QuizModel(
-          docId: '',
-          quizName: quizName,
-          quizType: quizType,
-          questions: [],
-          isVisible: false),
+        docId: '',
+        quizName: quizInEdit!.quizName,
+        quizType: quizInEdit!.quizType,
+        questions: [],
+        coefficients: quizInEdit!.coefficients,
+        coeffResults: [],
+        isVisible: false,
+        needPrintResults: false,
+      ),
     );
+    notifyListeners();
+    await getQuizList();
+  }
+
+  Future<void> addCoeff({required String coeff}) async {
+    var list = quizInEdit!.coefficients.map((e) => e).toList();
+    list.add(coeff);
+    quizInEdit = quizInEdit!.copyWith(coefficients: list);
+    notifyListeners();
+  }
+
+  Future<void> removeCoeff({required int index}) async {
+    var list = quizInEdit!.coefficients.map((e) => e).toList();
+    list.removeAt(index);
+    quizInEdit = quizInEdit!.copyWith(coefficients: list);
     notifyListeners();
   }
 
@@ -129,6 +162,15 @@ class QuizProvider with ChangeNotifier {
 
     quizInEdit = quizInEdit!.copyWith(questions: list);
 
+    notifyListeners();
+  }
+
+  Future<void> editAnswersCount() async {
+    questionInEdit = questionInEdit!.copyWith(
+      questionType: questionInEdit!.questionType == QuestionTypes.single_answer
+          ? QuestionTypes.multiple_answers
+          : QuestionTypes.single_answer,
+    );
     notifyListeners();
   }
 }

@@ -14,7 +14,10 @@ class QuizFirestoreRepository extends QuizRepository {
       'quizName': quiz.quizName,
       'quizType': quiz.quizType.asString,
       'questions': [],
+      'coefficients': quiz.coefficients,
+      'coeffResults': [],
       'isVisible': false,
+      'needPrintResults': quiz.needPrintResults,
     });
 
     return true;
@@ -48,6 +51,10 @@ class QuizFirestoreRepository extends QuizRepository {
                     .toList(),
               })
           .toList(),
+      'coefficients': quiz.coefficients,
+      'coeffResults': [],
+      'isVisible': false,
+      'needPrintResults': quiz.needPrintResults,
     });
 
     return true;
@@ -64,7 +71,10 @@ class QuizFirestoreRepository extends QuizRepository {
             quizName: e['quizName'],
             quizType: quizTypeFromString(e['quizType']),
             questions: qList(e['questions']),
+            coefficients: [...e['coefficients'].map((e) => e as String)],
+            coeffResults: [],
             isVisible: e['isVisible'],
+            needPrintResults: false,
           ),
         )
         .toList();

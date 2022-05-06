@@ -13,61 +13,113 @@ class QuizAdd extends StatefulWidget {
 }
 
 class _QuizAddState extends State<QuizAdd> {
-  final TextEditingController quizName = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final _coeffFormKey = GlobalKey<FormState>();
+  final coeffController = TextEditingController();
   String? quizType;
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<QuizProvider>();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Добавление теста'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    controller: quizName,
-                    validator: (value) {
-                      if (value == '') {
-                        return 'Введите название';
-                      }
-                      return null;
-                    },
-                    decoration:
-                        const InputDecoration(labelText: 'Название теста'),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Выбрать тип теста'),
-                ),
-              ],
-            ),
-            AddButtonsSection(
-              onAddPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  await state.addQuiz(
-                    quizName: quizName.text,
-                    quizType: quizType != null
-                        ? quizTypeFromString(quizType!)
-                        : QuizTypes.single_coeff,
-                  );
-                  Navigator.pop(context);
-                  await Fluttertoast.showToast(msg: 'Тест успешно создан');
-                }
-              },
-            ),
-          ],
+    return Consumer<QuizProvider>(builder: (context, state, child) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Добавление теста'),
         ),
-      ),
-    );
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          validator: (value) {
+                            if (value == '') {
+                              return 'Введите название';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            state.quizInEdit =
+                                state.quizInEdit!.copyWith(quizName: value);
+                          },
+                          decoration: const InputDecoration(
+                              labelText: 'Название теста'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: Form(
+                          key: _coeffFormKey,
+                          child: TextFormField(
+                            controller: coeffController,
+                            validator: (value) {
+                              if (value == '') {
+                                return 'Введите коэффициент';
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {},
+                            decoration:
+                                const InputDecoration(labelText: 'Коэфф.'),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_coeffFormKey.currentState!.validate()) {
+                            state.addCoeff(coeff: coeffController.text);
+                            coeffController.text = '';
+                          }
+                        },
+                        child: Text('Добавить'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text('Список коэффициентов'),
+                  Wrap(
+                    children: [
+                      for (var i = 0;
+                          i < state.quizInEdit!.coefficients.length;
+                          i++)
+                        Chip(
+                          label: Text(state.quizInEdit!.coefficients[i]),
+                          onDeleted: () {
+                            state.removeCoeff(index: i);
+                          },
+                        ),
+                    ],
+                  )
+                  // ElevatedButton(
+                  //   onPressed: () {},
+                  //   child: Text('Выбрать тип теста'),
+                  // ),
+                ],
+              ),
+              AddButtonsSection(
+                onAddPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    await state.addQuiz();
+                    Navigator.pop(context);
+                    await Fluttertoast.showToast(msg: 'Тест успешно создан');
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$QuestionModel {
   String get question => throw _privateConstructorUsedError;
-  QuiestionTypes get questionType => throw _privateConstructorUsedError;
+  QuestionTypes get questionType => throw _privateConstructorUsedError;
   List<Answer> get answers => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -31,7 +31,7 @@ abstract class $QuestionModelCopyWith<$Res> {
           QuestionModel value, $Res Function(QuestionModel) then) =
       _$QuestionModelCopyWithImpl<$Res>;
   $Res call(
-      {String question, QuiestionTypes questionType, List<Answer> answers});
+      {String question, QuestionTypes questionType, List<Answer> answers});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$QuestionModelCopyWithImpl<$Res>
       questionType: questionType == freezed
           ? _value.questionType
           : questionType // ignore: cast_nullable_to_non_nullable
-              as QuiestionTypes,
+              as QuestionTypes,
       answers: answers == freezed
           ? _value.answers
           : answers // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,7 @@ abstract class _$QuestionModelCopyWith<$Res>
       __$QuestionModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String question, QuiestionTypes questionType, List<Answer> answers});
+      {String question, QuestionTypes questionType, List<Answer> answers});
 }
 
 /// @nodoc
@@ -102,7 +102,7 @@ class __$QuestionModelCopyWithImpl<$Res>
       questionType: questionType == freezed
           ? _value.questionType
           : questionType // ignore: cast_nullable_to_non_nullable
-              as QuiestionTypes,
+              as QuestionTypes,
       answers: answers == freezed
           ? _value.answers
           : answers // ignore: cast_nullable_to_non_nullable
@@ -123,7 +123,7 @@ class _$_QuestionModel implements _QuestionModel {
   @override
   final String question;
   @override
-  final QuiestionTypes questionType;
+  final QuestionTypes questionType;
   final List<Answer> _answers;
   @override
   List<Answer> get answers {
@@ -163,13 +163,13 @@ class _$_QuestionModel implements _QuestionModel {
 abstract class _QuestionModel implements QuestionModel {
   const factory _QuestionModel(
       {required final String question,
-      required final QuiestionTypes questionType,
+      required final QuestionTypes questionType,
       required final List<Answer> answers}) = _$_QuestionModel;
 
   @override
   String get question => throw _privateConstructorUsedError;
   @override
-  QuiestionTypes get questionType => throw _privateConstructorUsedError;
+  QuestionTypes get questionType => throw _privateConstructorUsedError;
   @override
   List<Answer> get answers => throw _privateConstructorUsedError;
   @override

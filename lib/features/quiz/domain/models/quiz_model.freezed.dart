@@ -20,6 +20,9 @@ mixin _$QuizModel {
   String get quizName => throw _privateConstructorUsedError;
   QuizTypes get quizType => throw _privateConstructorUsedError;
   List<QuestionModel> get questions => throw _privateConstructorUsedError;
+  List<String> get coefficients => throw _privateConstructorUsedError;
+  List<dynamic> get coeffResults => throw _privateConstructorUsedError;
+  bool get needPrintResults => throw _privateConstructorUsedError;
   bool get isVisible => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -36,6 +39,9 @@ abstract class $QuizModelCopyWith<$Res> {
       String quizName,
       QuizTypes quizType,
       List<QuestionModel> questions,
+      List<String> coefficients,
+      List<dynamic> coeffResults,
+      bool needPrintResults,
       bool isVisible});
 }
 
@@ -53,6 +59,9 @@ class _$QuizModelCopyWithImpl<$Res> implements $QuizModelCopyWith<$Res> {
     Object? quizName = freezed,
     Object? quizType = freezed,
     Object? questions = freezed,
+    Object? coefficients = freezed,
+    Object? coeffResults = freezed,
+    Object? needPrintResults = freezed,
     Object? isVisible = freezed,
   }) {
     return _then(_value.copyWith(
@@ -72,6 +81,18 @@ class _$QuizModelCopyWithImpl<$Res> implements $QuizModelCopyWith<$Res> {
           ? _value.questions
           : questions // ignore: cast_nullable_to_non_nullable
               as List<QuestionModel>,
+      coefficients: coefficients == freezed
+          ? _value.coefficients
+          : coefficients // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      coeffResults: coeffResults == freezed
+          ? _value.coeffResults
+          : coeffResults // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      needPrintResults: needPrintResults == freezed
+          ? _value.needPrintResults
+          : needPrintResults // ignore: cast_nullable_to_non_nullable
+              as bool,
       isVisible: isVisible == freezed
           ? _value.isVisible
           : isVisible // ignore: cast_nullable_to_non_nullable
@@ -91,6 +112,9 @@ abstract class _$QuizModelCopyWith<$Res> implements $QuizModelCopyWith<$Res> {
       String quizName,
       QuizTypes quizType,
       List<QuestionModel> questions,
+      List<String> coefficients,
+      List<dynamic> coeffResults,
+      bool needPrintResults,
       bool isVisible});
 }
 
@@ -109,6 +133,9 @@ class __$QuizModelCopyWithImpl<$Res> extends _$QuizModelCopyWithImpl<$Res>
     Object? quizName = freezed,
     Object? quizType = freezed,
     Object? questions = freezed,
+    Object? coefficients = freezed,
+    Object? coeffResults = freezed,
+    Object? needPrintResults = freezed,
     Object? isVisible = freezed,
   }) {
     return _then(_QuizModel(
@@ -128,6 +155,18 @@ class __$QuizModelCopyWithImpl<$Res> extends _$QuizModelCopyWithImpl<$Res>
           ? _value.questions
           : questions // ignore: cast_nullable_to_non_nullable
               as List<QuestionModel>,
+      coefficients: coefficients == freezed
+          ? _value.coefficients
+          : coefficients // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      coeffResults: coeffResults == freezed
+          ? _value.coeffResults
+          : coeffResults // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+      needPrintResults: needPrintResults == freezed
+          ? _value.needPrintResults
+          : needPrintResults // ignore: cast_nullable_to_non_nullable
+              as bool,
       isVisible: isVisible == freezed
           ? _value.isVisible
           : isVisible // ignore: cast_nullable_to_non_nullable
@@ -144,8 +183,13 @@ class _$_QuizModel implements _QuizModel {
       required this.quizName,
       required this.quizType,
       required final List<QuestionModel> questions,
+      required final List<String> coefficients,
+      required final List<dynamic> coeffResults,
+      required this.needPrintResults,
       required this.isVisible})
-      : _questions = questions;
+      : _questions = questions,
+        _coefficients = coefficients,
+        _coeffResults = coeffResults;
 
   @override
   final String docId;
@@ -160,12 +204,28 @@ class _$_QuizModel implements _QuizModel {
     return EqualUnmodifiableListView(_questions);
   }
 
+  final List<String> _coefficients;
+  @override
+  List<String> get coefficients {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_coefficients);
+  }
+
+  final List<dynamic> _coeffResults;
+  @override
+  List<dynamic> get coeffResults {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_coeffResults);
+  }
+
+  @override
+  final bool needPrintResults;
   @override
   final bool isVisible;
 
   @override
   String toString() {
-    return 'QuizModel(docId: $docId, quizName: $quizName, quizType: $quizType, questions: $questions, isVisible: $isVisible)';
+    return 'QuizModel(docId: $docId, quizName: $quizName, quizType: $quizType, questions: $questions, coefficients: $coefficients, coeffResults: $coeffResults, needPrintResults: $needPrintResults, isVisible: $isVisible)';
   }
 
   @override
@@ -177,6 +237,12 @@ class _$_QuizModel implements _QuizModel {
             const DeepCollectionEquality().equals(other.quizName, quizName) &&
             const DeepCollectionEquality().equals(other.quizType, quizType) &&
             const DeepCollectionEquality().equals(other.questions, questions) &&
+            const DeepCollectionEquality()
+                .equals(other.coefficients, coefficients) &&
+            const DeepCollectionEquality()
+                .equals(other.coeffResults, coeffResults) &&
+            const DeepCollectionEquality()
+                .equals(other.needPrintResults, needPrintResults) &&
             const DeepCollectionEquality().equals(other.isVisible, isVisible));
   }
 
@@ -187,6 +253,9 @@ class _$_QuizModel implements _QuizModel {
       const DeepCollectionEquality().hash(quizName),
       const DeepCollectionEquality().hash(quizType),
       const DeepCollectionEquality().hash(questions),
+      const DeepCollectionEquality().hash(coefficients),
+      const DeepCollectionEquality().hash(coeffResults),
+      const DeepCollectionEquality().hash(needPrintResults),
       const DeepCollectionEquality().hash(isVisible));
 
   @JsonKey(ignore: true)
@@ -201,6 +270,9 @@ abstract class _QuizModel implements QuizModel {
       required final String quizName,
       required final QuizTypes quizType,
       required final List<QuestionModel> questions,
+      required final List<String> coefficients,
+      required final List<dynamic> coeffResults,
+      required final bool needPrintResults,
       required final bool isVisible}) = _$_QuizModel;
 
   @override
@@ -211,6 +283,12 @@ abstract class _QuizModel implements QuizModel {
   QuizTypes get quizType => throw _privateConstructorUsedError;
   @override
   List<QuestionModel> get questions => throw _privateConstructorUsedError;
+  @override
+  List<String> get coefficients => throw _privateConstructorUsedError;
+  @override
+  List<dynamic> get coeffResults => throw _privateConstructorUsedError;
+  @override
+  bool get needPrintResults => throw _privateConstructorUsedError;
   @override
   bool get isVisible => throw _privateConstructorUsedError;
   @override
