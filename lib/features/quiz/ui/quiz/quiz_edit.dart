@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/constants.dart';
+import '../../../../core/enums/question__types.dart';
+import '../../domain/models/question_model.dart';
 import '../questions/question_add.dart';
 import '../questions/question_edit.dart';
 
@@ -23,7 +25,7 @@ class _QuizEditState extends State<QuizEdit> {
 
   Future<bool> _onWillPop(QuizProvider state) async {
     if (_formKey.currentState!.validate()) {
-      if (state.quizInEditInitState == state.quizInEdit) {
+      if (!state.haveChanges()) {
         await state.getQuizList();
       } else {
         await showDialog(
@@ -63,6 +65,11 @@ class _QuizEditState extends State<QuizEdit> {
             actions: [
               IconButton(
                 onPressed: () {
+                  state.questionInEdit = QuestionModel(
+                    question: '',
+                    questionType: QuiestionTypes.single_answer,
+                    answers: [],
+                  );
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) => QuestionAdd(),

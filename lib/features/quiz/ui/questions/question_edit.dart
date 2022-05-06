@@ -7,113 +7,14 @@ import '../../../../core/widgets/edit_buttons_section.dart';
 import '../../../../core/widgets/remove_item.dart';
 import '../../provider/quiz_provider.dart';
 
-class QuestionEdit extends StatefulWidget {
+class QuestionEdit extends StatelessWidget {
   const QuestionEdit({Key? key}) : super(key: key);
 
   @override
-  _QuestionEditState createState() => _QuestionEditState();
-}
-
-class _QuestionEditState extends State<QuestionEdit> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  void _editQuestion(String id, QuizProvider state) {
-    if (_formKey.currentState!.validate()) {
-      Navigator.of(context).pop();
-      Fluttertoast.showToast(msg: 'Вопрос успешно изменён');
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
     return Consumer<QuizProvider>(
       builder: (context, state, child) {
-        // var initValue = widget.questions == 'f' ? 'ФТК' : '..';
-        // var facSecondInitValue = Constants.quizFacAnswersList[0].toString();
-
-        // if (initValue == 'ФТК') {
-        //   // initValue = state.facultiesShortNames[0];
-        // }
-        // state.dropdown1Value = initValue;
-        // state.dropdown2Value = initValue;
-        // state.dropdown3Value = initValue;
-        // state.dropdown4Value = initValue;
-        // state.dropdown5Value = initValue;
-        // if (widget.questions == 'f') {
-        //   state.dropdown12Value = facSecondInitValue;
-        //   state.dropdown22Value = facSecondInitValue;
-        //   state.dropdown32Value = facSecondInitValue;
-        //   state.dropdown42Value = facSecondInitValue;
-        //   state.dropdown52Value = facSecondInitValue;
-        // } else {
-        //   state.dropdown12Value = initValue;
-        //   state.dropdown22Value = initValue;
-        //   state.dropdown32Value = initValue;
-        //   state.dropdown42Value = initValue;
-        //   state.dropdown52Value = initValue;
-        // }
-
-        // List<String> values;
-
-        // if (widget.questions == 'f') {
-        //   values = [
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     facSecondInitValue,
-        //     facSecondInitValue,
-        //     facSecondInitValue,
-        //     facSecondInitValue,
-        //     facSecondInitValue,
-        //   ];
-        // } else {
-        //   values = [
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //     initValue,
-        //   ];
-        // }
-        // for (var i = 0; i < widget.question.answers!.length; i++) {
-        //   values[i] = widget.question.answers![i].values.first.first;
-        //   if (widget.question.answers![i].values.first.length > 1) {
-        //     values[i + 5] = widget.question.answers![i].values.first.last;
-        //   }
-        // }
-
-        // state.dropdown1Value = values[0];
-        // state.dropdown2Value = values[1];
-        // state.dropdown3Value = values[2];
-        // state.dropdown4Value = values[3];
-        // state.dropdown5Value = values[4];
-        // state.dropdown12Value = values[5];
-        // state.dropdown22Value = values[6];
-        // state.dropdown32Value = values[7];
-        // state.dropdown42Value = values[8];
-        // state.dropdown52Value = values[9];
-
-        // var _answerControllersList = <TextEditingController>[
-        //   _answer1Controller,
-        //   _answer2Controller,
-        //   _answer3Controller,
-        //   _answer4Controller,
-        //   _answer5Controller,
-        // ];
-
-        // _questionController.text = widget.question.question!;
-        // for (var i = 0; i < widget.question.answers!.length; i++) {
-        //   _answerControllersList[i].text =
-        //       widget.question.answers![i].keys.first;
-        // }
-
         // final helpSpecSheet = <Map<String, String>>[
         //   {
         //     'Доминирование (D)':
@@ -197,7 +98,6 @@ class _QuestionEditState extends State<QuestionEdit> {
                 child: SingleChildScrollView(
                   child: QuestionForm(
                     formKey: _formKey,
-                    questionModel: state.questionInEdit!,
                   ),
                 ),
               ),

@@ -20,8 +20,17 @@ class QuizProvider with ChangeNotifier {
 
   void setQuizInEdit(QuizModel quizModel) {
     quizInEdit = quizModel;
-    quizInEditInitState = quizInEdit!.copyWith();
+    quizInEditInitState = quizInEdit!.copyWith(
+      questions: quizInEdit!.questions,
+    );
     notifyListeners();
+  }
+
+  bool haveChanges() {
+    if (quizInEdit == quizInEditInitState) {
+      return false;
+    }
+    return true;
   }
 
   void setQuestionInEdit(int index) {
@@ -62,17 +71,25 @@ class QuizProvider with ChangeNotifier {
   Future<void> editQuiz({required QuizModel quiz}) async {
     await quizRepository.editQuiz(quiz: quiz);
     await getQuizList();
-    // quizInEdit = quizList.firstWhere((element) => element.docId == quiz.docId);
     notifyListeners();
   }
 
   Future<void> editQuestion() async {
-    quizInEdit!.questions.elementAt(questionInEditIndex!).answers =
-        questionInEdit!.answers;
-    quizInEdit!.questions.elementAt(questionInEditIndex!).question =
-        questionInEdit!.question;
-    quizInEdit!.questions.elementAt(questionInEditIndex!).questionType =
-        questionInEdit!.questionType;
+    final list = quizInEdit!.questions
+        .map(
+          (e) => QuestionModel(
+            question: e.question,
+            questionType: e.questionType,
+            answers: e.answers
+                .map(
+                  (e) => e.copyWith(),
+                )
+                .toList(),
+          ),
+        )
+        .toList();
+    list[questionInEditIndex!] = questionInEdit!;
+    quizInEdit = quizInEdit!.copyWith(questions: list);
     notifyListeners();
   }
 
@@ -88,14 +105,14 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addQuestion(QuestionModel questionModel) async {
+  Future<void> addQuestion() async {
     final list = quizInEdit!.questions
         .map((e) => QuestionModel(
             question: e.question,
             questionType: e.questionType,
             answers: e.answers))
         .toList();
-    list.add(questionModel);
+    list.add(questionInEdit!);
     quizInEdit = quizInEdit!.copyWith(questions: list);
     notifyListeners();
   }

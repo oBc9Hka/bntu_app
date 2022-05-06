@@ -1,8 +1,6 @@
 import 'package:bntu_app/core/constants/constants.dart';
-import 'package:bntu_app/core/enums/quiz_types.dart';
 import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
-import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,38 +10,32 @@ class QuestionForm extends StatefulWidget {
   const QuestionForm({
     Key? key,
     required this.formKey,
-    required this.questionModel,
   }) : super(key: key);
 
   final GlobalKey<FormState> formKey;
-  final QuestionModel questionModel;
 
   @override
   _QuestionFormState createState() => _QuestionFormState();
 }
 
 class _QuestionFormState extends State<QuestionForm> {
-  @override
-  void initState() {
-    if (widget.questionModel.answers.isEmpty) {
-      addAnswer();
-    }
-    super.initState();
-  }
-
-  void addAnswer() {
-    widget.questionModel.answers.add(
+  void addAnswer(QuizProvider state) {
+    var list = state.questionInEdit!.answers.map((e) => e.copyWith()).toList();
+    list.add(
       Answer(
         text: '',
         coefficients: [],
       ),
     );
+    state.questionInEdit = state.questionInEdit!.copyWith(answers: list);
 
     setState(() {});
   }
 
-  void removeAnswer(index) {
-    widget.questionModel.answers.removeAt(index);
+  void removeAnswer(index, QuizProvider state) {
+    var list = state.questionInEdit!.answers.map((e) => e.copyWith()).toList();
+    list.removeAt(index);
+    state.questionInEdit = state.questionInEdit!.copyWith(answers: list);
     setState(() {});
   }
 
@@ -51,17 +43,7 @@ class _QuestionFormState extends State<QuestionForm> {
   Widget build(BuildContext context) {
     return Consumer<QuizProvider>(
       builder: (context, state, child) {
-        var _dropdownList1 = <String>[];
-        var _dropdownList2 = <String>[];
-
-        if (state.quizInEdit!.quizType == QuizTypes.single_coeff) {
-          _dropdownList1 = ['ФТК', 'ФИТР', 'МСФ', 'АТФ'];
-          _dropdownList2 =
-              Constants.quizFacAnswersList.map((e) => e.toString()).toList();
-        } else if (state.quizInEdit!.quizType == QuizTypes.multiple_coeff) {
-          _dropdownList1 = Constants.quizSpecAnswersList;
-          _dropdownList2 = Constants.quizSpecAnswersList;
-        }
+        // }
         return SingleChildScrollView(
           child: Form(
             key: widget.formKey,
@@ -69,22 +51,23 @@ class _QuestionFormState extends State<QuestionForm> {
               children: [
                 customTextField(
                   helperText: 'Вопрос',
-                  value: widget.questionModel.question,
+                  value: state.questionInEdit!.question,
                   onChanged: (value) {
-                    widget.questionModel.question = value;
+                    state.questionInEdit =
+                        state.questionInEdit!.copyWith(question: value);
                   },
                 ),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: widget.questionModel.answers.length,
+                  itemCount: state.questionInEdit!.answers.length,
                   itemBuilder: (context, index) {
-                    return answerTile(index);
+                    return answerTile(index, state);
                   },
                 ),
                 IconButton(
                   onPressed: () {
-                    addAnswer();
+                    addAnswer(state);
                   },
                   icon: Icon(
                     Icons.add,
@@ -99,16 +82,22 @@ class _QuestionFormState extends State<QuestionForm> {
     );
   }
 
-  Widget answerTile(int index) {
+  Widget answerTile(int index, QuizProvider state) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
           child: customTextField(
             helperText: 'Ответ ${index + 1}',
-            value: widget.questionModel.answers[index].text,
+            value: state.questionInEdit!.answers[index].text,
             onChanged: (value) {
-              widget.questionModel.answers[index].text = value;
+              var list = state.questionInEdit!.answers
+                  .map((e) => e.copyWith())
+                  .toList();
+              list[index] =
+                  state.questionInEdit!.answers[index].copyWith(text: value);
+              state.questionInEdit =
+                  state.questionInEdit!.copyWith(answers: list);
             },
           ),
         ),
@@ -120,14 +109,14 @@ class _QuestionFormState extends State<QuestionForm> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  return customDialog(index);
+                  return customDialog(index, state);
                 });
           },
           child: Text('Коэфф.'),
         ),
         IconButton(
           onPressed: () {
-            removeAnswer(index);
+            removeAnswer(index, state);
           },
           icon: Icon(
             Icons.clear,
@@ -139,7 +128,7 @@ class _QuestionFormState extends State<QuestionForm> {
   }
 
   final items = ['ФТК', 'ФИТР', 'МСФ', 'АТФ'];
-  Dialog customDialog(int index) {
+  Dialog customDialog(int index, QuizProvider state) {
     return Dialog(
       child: StatefulBuilder(builder: (context, setState) {
         return Column(
@@ -148,29 +137,58 @@ class _QuestionFormState extends State<QuestionForm> {
             Divider(),
             ListView.builder(
               itemCount:
-                  widget.questionModel.answers[index].coefficients.length,
+                  state.questionInEdit!.answers[index].coefficients.length,
               shrinkWrap: true,
               itemBuilder: (context, coeffIndex) {
                 return coeffTile(
                   index,
                   coeffIndex,
                   () {
-                    widget.questionModel.answers[index].coefficients
-                        .removeAt(coeffIndex);
+                    var list = state.questionInEdit!.answers
+                        .map((e) => e.copyWith())
+                        .toList();
+                    var cList = list[index]
+                        .coefficients
+                        .map(
+                          (e) => e.copyWith(),
+                        )
+                        .toList();
+                    cList.removeAt(coeffIndex);
+                    list[index] = list[index].copyWith(coefficients: cList);
+
+                    state.questionInEdit =
+                        state.questionInEdit!.copyWith(answers: list);
+
                     setState(() {});
                   },
                   setState,
+                  state,
                 );
               },
             ),
             IconButton(
               onPressed: () {
-                widget.questionModel.answers[index].coefficients.add(
+                var list = state.questionInEdit!.answers
+                    .map(
+                      (e) => e.copyWith(),
+                    )
+                    .toList();
+                var cList = list[index]
+                    .coefficients
+                    .map(
+                      (e) => e.copyWith(),
+                    )
+                    .toList();
+
+                cList.add(
                   Coeff(
                     key: items.first,
                     weight: 1,
                   ),
                 );
+                list[index] = list[index].copyWith(coefficients: cList);
+                state.questionInEdit =
+                    state.questionInEdit!.copyWith(answers: list);
                 setState(() {});
               },
               icon: Icon(
@@ -184,7 +202,13 @@ class _QuestionFormState extends State<QuestionForm> {
     );
   }
 
-  Widget coeffTile(int index, int coeffIndex, Function() onClear, setState) {
+  Widget coeffTile(
+    int index,
+    int coeffIndex,
+    Function() onClear,
+    setState,
+    QuizProvider state,
+  ) {
     return Row(
       children: [
         IconButton(
@@ -196,8 +220,8 @@ class _QuestionFormState extends State<QuestionForm> {
         ),
         Expanded(
           child: DropdownButton<String>(
-            value: widget
-                .questionModel.answers[index].coefficients[coeffIndex].key,
+            value: state
+                .questionInEdit!.answers[index].coefficients[coeffIndex].key,
             items: [
               ...items.map(
                 (e) => DropdownMenuItem(
@@ -208,8 +232,21 @@ class _QuestionFormState extends State<QuestionForm> {
             ],
             onChanged: (value) {
               if (value != null) {
-                widget.questionModel.answers[index].coefficients[coeffIndex]
-                    .key = value;
+                var list = state.questionInEdit!.answers
+                    .map(
+                      (e) => e.copyWith(),
+                    )
+                    .toList();
+                var cList = list[index]
+                    .coefficients
+                    .map(
+                      (e) => e.copyWith(),
+                    )
+                    .toList();
+                cList[coeffIndex] = cList[coeffIndex].copyWith(key: value);
+                list[index] = list[index].copyWith(coefficients: cList);
+                state.questionInEdit =
+                    state.questionInEdit!.copyWith(answers: list);
 
                 setState(() {});
               }
@@ -221,11 +258,26 @@ class _QuestionFormState extends State<QuestionForm> {
           children: [
             IconButton(
               onPressed: () {
-                if (widget.questionModel.answers[index].coefficients[coeffIndex]
-                        .weight >
+                if (state.questionInEdit!.answers[index]
+                        .coefficients[coeffIndex].weight >
                     1) {
-                  widget.questionModel.answers[index].coefficients[coeffIndex]
-                      .weight--;
+                  var list = state.questionInEdit!.answers
+                      .map(
+                        (e) => e.copyWith(),
+                      )
+                      .toList();
+                  var cList = list[index]
+                      .coefficients
+                      .map(
+                        (e) => e.copyWith(),
+                      )
+                      .toList();
+                  cList[coeffIndex] = cList[coeffIndex]
+                      .copyWith(weight: cList[coeffIndex].weight - 1);
+                  list[index] = list[index].copyWith(coefficients: cList);
+                  state.questionInEdit =
+                      state.questionInEdit!.copyWith(answers: list);
+
                   setState(() {});
                 }
               },
@@ -234,13 +286,28 @@ class _QuestionFormState extends State<QuestionForm> {
                 color: Constants.mainColor,
               ),
             ),
-            Text(widget
-                .questionModel.answers[index].coefficients[coeffIndex].weight
+            Text(state
+                .questionInEdit!.answers[index].coefficients[coeffIndex].weight
                 .toString()),
             IconButton(
               onPressed: () {
-                widget.questionModel.answers[index].coefficients[coeffIndex]
-                    .weight++;
+                var list = state.questionInEdit!.answers
+                    .map(
+                      (e) => e.copyWith(),
+                    )
+                    .toList();
+                var cList = list[index]
+                    .coefficients
+                    .map(
+                      (e) => e.copyWith(),
+                    )
+                    .toList();
+                cList[coeffIndex] = cList[coeffIndex]
+                    .copyWith(weight: cList[coeffIndex].weight + 1);
+                list[index] = list[index].copyWith(coefficients: cList);
+                state.questionInEdit =
+                    state.questionInEdit!.copyWith(answers: list);
+
                 setState(() {});
               },
               icon: Icon(

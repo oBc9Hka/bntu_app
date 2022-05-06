@@ -6,13 +6,6 @@ part 'quiz_model.freezed.dart';
 
 @freezed
 class QuizModel with _$QuizModel {
-//  _QuizModel {
-  //  String docId;
-  //  String quizName;
-  //  QuizTypes quizType;
-  //  List<QuestionModel> questions;
-  //  bool isVisible; // for future ability to show multiple tests
-
   const factory QuizModel({
     required String docId,
     required String quizName,

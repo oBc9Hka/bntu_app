@@ -1,12 +1,14 @@
-class Coeff {
-  String key;
-  int weight;
+import 'package:freezed_annotation/freezed_annotation.dart';
+part 'coeff_model.freezed.dart';
 
-  Coeff({required this.key, required this.weight});
-
-  Coeff.fromMap(Map<String, dynamic> data)
-      : this(
-          key: data['key'],
-          weight: data['weight'],
-        );
+@freezed
+class Coeff with _$Coeff {
+  const factory Coeff({
+    required String key,
+    required int weight,
+  }) = _Coeff;
+  factory Coeff.fromMap(Map<String, dynamic> data) => Coeff(
+        key: data['key'],
+        weight: data['weight'],
+      );
 }

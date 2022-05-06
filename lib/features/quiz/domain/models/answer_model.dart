@@ -1,21 +1,21 @@
 import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Answer {
-  String text;
-  List<Coeff> coefficients;
+part 'answer_model.freezed.dart';
 
-  Answer({
-    required this.text,
-    required this.coefficients,
-  });
+@freezed
+class Answer with _$Answer {
+  const factory Answer({
+    required String text,
+    required List<Coeff> coefficients,
+  }) = _Answer;
 
-  Answer.fromMap(Map<String, dynamic> data)
-      : this(
-          text: data['text'],
-          coefficients: [
-            ...data['coefficients'].map(
-              (e) => Coeff.fromMap(e),
-            ),
-          ],
-        );
+  factory Answer.fromMap(Map<String, dynamic> data) => Answer(
+        text: data['text'],
+        coefficients: [
+          ...data['coefficients'].map(
+            (e) => Coeff.fromMap(e),
+          ),
+        ],
+      );
 }

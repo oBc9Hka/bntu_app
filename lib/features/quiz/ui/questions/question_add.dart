@@ -5,40 +5,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/widgets/add_buttons_section.dart';
-import '../../domain/models/question_model.dart';
 import '../../provider/quiz_provider.dart';
 
-class QuestionAdd extends StatefulWidget {
+class QuestionAdd extends StatelessWidget {
   const QuestionAdd({Key? key}) : super(key: key);
 
   @override
-  _QuestionAddState createState() => _QuestionAddState();
-}
-
-class _QuestionAddState extends State<QuestionAdd> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late QuestionModel questionModel;
-
-  void _addQuestion(QuizProvider state) async {
-    if (_formKey.currentState!.validate()) {
-      await state.addQuestion(questionModel);
-      Navigator.of(context).pop();
-      await Fluttertoast.showToast(msg: 'Вопрос успешно добавлен');
-    }
-  }
-
-  @override
-  void initState() {
-    questionModel = QuestionModel(
-      question: '',
-      questionType: QuiestionTypes.single_answer,
-      answers: [],
-    );
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+
+    void _addQuestion(QuizProvider state) async {
+      if (_formKey.currentState!.validate()) {
+        await state.addQuestion();
+        Navigator.of(context).pop();
+        await Fluttertoast.showToast(msg: 'Вопрос успешно добавлен');
+      }
+    }
+
     return Consumer<QuizProvider>(
       builder: (context, state, child) {
         return Scaffold(
@@ -52,7 +35,6 @@ class _QuestionAddState extends State<QuestionAdd> {
                 child: SingleChildScrollView(
                   child: QuestionForm(
                     formKey: _formKey,
-                    questionModel: questionModel,
                   ),
                 ),
               ),

@@ -1,26 +1,24 @@
 import 'package:bntu_app/core/enums/question__types.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'answer_model.dart';
+part 'question_model.freezed.dart';
 
-class QuestionModel {
-  String question;
-  QuiestionTypes questionType;
-  List<Answer> answers;
+@freezed
+class QuestionModel with _$QuestionModel {
+  const factory QuestionModel({
+    required String question,
+    required QuiestionTypes questionType,
+    required List<Answer> answers,
+  }) = _QuestionModel;
 
-  QuestionModel({
-    required this.question,
-    required this.questionType,
-    required this.answers,
-  });
-
-  QuestionModel.fromMap(Map<String, dynamic> data)
-      : this(
-          question: data['question'],
-          questionType: questionTypeFromString(data['questionType']),
-          answers: [
-            ...data['answers'].map(
-              (e) => Answer.fromMap(e),
-            ),
-          ],
-        );
+  factory QuestionModel.fromMap(Map<String, dynamic> data) => QuestionModel(
+        question: data['question'],
+        questionType: questionTypeFromString(data['questionType']),
+        answers: [
+          ...data['answers'].map(
+            (e) => Answer.fromMap(e),
+          ),
+        ],
+      );
 }
