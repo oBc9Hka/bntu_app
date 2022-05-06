@@ -77,12 +77,26 @@ class QuizProvider with ChangeNotifier {
   }
 
   Future<void> removeQuestion() async {
-    quizInEdit!.questions.removeAt(questionInEditIndex!);
+    final list = quizInEdit!.questions
+        .map((e) => QuestionModel(
+            question: e.question,
+            questionType: e.questionType,
+            answers: e.answers))
+        .toList();
+    list.removeAt(questionInEditIndex!);
+    quizInEdit = quizInEdit!.copyWith(questions: list);
     notifyListeners();
   }
 
   Future<void> addQuestion(QuestionModel questionModel) async {
-    quizInEdit!.questions.add(questionModel);
+    final list = quizInEdit!.questions
+        .map((e) => QuestionModel(
+            question: e.question,
+            questionType: e.questionType,
+            answers: e.answers))
+        .toList();
+    list.add(questionModel);
+    quizInEdit = quizInEdit!.copyWith(questions: list);
     notifyListeners();
   }
 
