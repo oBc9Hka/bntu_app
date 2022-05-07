@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/core/widgets/list_veiw_reordable.dart';
 import 'package:bntu_app/core/widgets/save_changes.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
+import 'package:bntu_app/features/quiz/ui/quiz/coefficients_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +23,6 @@ class QuizEdit extends StatefulWidget {
 class _QuizEditState extends State<QuizEdit> {
   TextEditingController quizController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _coeffFormKey = GlobalKey<FormState>();
-  final coeffController = TextEditingController();
 
   Future<bool> _onWillPop(QuizProvider state) async {
     if (_formKey.currentState!.validate()) {
@@ -115,53 +114,18 @@ class _QuizEditState extends State<QuizEdit> {
                           },
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: Form(
-                              key: _coeffFormKey,
-                              child: TextFormField(
-                                controller: coeffController,
-                                validator: (value) {
-                                  if (value == '') {
-                                    return 'Введите коэффициент';
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value) {},
-                                decoration:
-                                    const InputDecoration(labelText: 'Коэфф.'),
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_coeffFormKey.currentState!.validate()) {
-                                state.addCoeff(coeff: coeffController.text);
-                                coeffController.text = '';
-                              }
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return CoefficientsScreen();
                             },
-                            child: Text('Добавить'),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text('Список коэффициентов'),
-                      Wrap(
-                        children: [
-                          for (var i = 0;
-                              i < state.quizInEdit!.coefficients.length;
-                              i++)
-                            Chip(
-                              label: Text(state.quizInEdit!.coefficients[i]),
-                              onDeleted: () {
-                                state.removeCoeff(index: i);
-                              },
-                            ),
-                        ],
+                          );
+                        },
+                        child: Text(
+                          'Редактирование коэффициентов',
+                        ),
                       ),
                       state.quizInEdit!.questions.isNotEmpty
                           ? ListViewReordable(

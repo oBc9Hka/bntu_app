@@ -17,7 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CoeffResult {
   String get name => throw _privateConstructorUsedError;
-  List<String> get results => throw _privateConstructorUsedError;
+  List<Result> get results => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $CoeffResultCopyWith<CoeffResult> get copyWith =>
@@ -29,7 +29,7 @@ abstract class $CoeffResultCopyWith<$Res> {
   factory $CoeffResultCopyWith(
           CoeffResult value, $Res Function(CoeffResult) then) =
       _$CoeffResultCopyWithImpl<$Res>;
-  $Res call({String name, List<String> results});
+  $Res call({String name, List<Result> results});
 }
 
 /// @nodoc
@@ -53,7 +53,7 @@ class _$CoeffResultCopyWithImpl<$Res> implements $CoeffResultCopyWith<$Res> {
       results: results == freezed
           ? _value.results
           : results // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Result>,
     ));
   }
 }
@@ -65,7 +65,7 @@ abstract class _$CoeffResultCopyWith<$Res>
           _CoeffResult value, $Res Function(_CoeffResult) then) =
       __$CoeffResultCopyWithImpl<$Res>;
   @override
-  $Res call({String name, List<String> results});
+  $Res call({String name, List<Result> results});
 }
 
 /// @nodoc
@@ -91,7 +91,7 @@ class __$CoeffResultCopyWithImpl<$Res> extends _$CoeffResultCopyWithImpl<$Res>
       results: results == freezed
           ? _value.results
           : results // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<Result>,
     ));
   }
 }
@@ -100,14 +100,14 @@ class __$CoeffResultCopyWithImpl<$Res> extends _$CoeffResultCopyWithImpl<$Res>
 
 class _$_CoeffResult implements _CoeffResult {
   const _$_CoeffResult(
-      {required this.name, required final List<String> results})
+      {required this.name, required final List<Result> results})
       : _results = results;
 
   @override
   final String name;
-  final List<String> _results;
+  final List<Result> _results;
   @override
-  List<String> get results {
+  List<Result> get results {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_results);
   }
@@ -141,12 +141,12 @@ class _$_CoeffResult implements _CoeffResult {
 abstract class _CoeffResult implements CoeffResult {
   const factory _CoeffResult(
       {required final String name,
-      required final List<String> results}) = _$_CoeffResult;
+      required final List<Result> results}) = _$_CoeffResult;
 
   @override
   String get name => throw _privateConstructorUsedError;
   @override
-  List<String> get results => throw _privateConstructorUsedError;
+  List<Result> get results => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$CoeffResultCopyWith<_CoeffResult> get copyWith =>

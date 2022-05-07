@@ -1,6 +1,8 @@
 import 'package:bntu_app/core/enums/quiz_types.dart';
+import 'package:bntu_app/features/quiz/domain/models/coeff_result_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
+import 'package:bntu_app/features/quiz/domain/models/result_model.dart';
 import 'package:bntu_app/features/quiz/domain/repository/quiz_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -86,7 +88,7 @@ class QuizProvider with ChangeNotifier {
         quizType: quizInEdit!.quizType,
         questions: [],
         coefficients: quizInEdit!.coefficients,
-        coeffResults: [],
+        coeffResults: quizInEdit!.coeffResults,
         isVisible: false,
         needPrintResults: false,
       ),
@@ -106,6 +108,114 @@ class QuizProvider with ChangeNotifier {
     var list = quizInEdit!.coefficients.map((e) => e).toList();
     list.removeAt(index);
     quizInEdit = quizInEdit!.copyWith(coefficients: list);
+    notifyListeners();
+  }
+
+  Future<void> changeNeedPrintResults({required bool value}) async {
+    quizInEdit = quizInEdit!.copyWith(
+      needPrintResults: value,
+      coeffResults: quizInEdit!.coefficients
+          .map((e) => CoeffResult(name: e, results: []))
+          .toList(),
+    );
+    notifyListeners();
+  }
+
+  Future<void> coeffResultAddNew({required int coeffIndex}) async {
+    final cList = quizInEdit!.coeffResults
+        .map(
+          (e) => CoeffResult(name: e.name, results: e.results),
+        )
+        .toList();
+    final list = quizInEdit!.coeffResults[coeffIndex].results
+        .map(
+          (e) => Result(
+            speciality: e.speciality,
+            faculty: e.faculty,
+          ),
+        )
+        .toList();
+
+    list.add(
+      Result(speciality: '', faculty: ''),
+    );
+
+    cList[coeffIndex] = cList[coeffIndex].copyWith(results: list);
+
+    quizInEdit = quizInEdit!.copyWith(coeffResults: cList);
+    notifyListeners();
+  }
+
+  Future<void> coeffResultRemove({
+    required int coeffIndex,
+    required int resultIndex,
+  }) async {
+    final cList = quizInEdit!.coeffResults
+        .map(
+          (e) => CoeffResult(name: e.name, results: e.results),
+        )
+        .toList();
+    final list = quizInEdit!.coeffResults[coeffIndex].results
+        .map(
+          (e) => Result(
+            speciality: e.speciality,
+            faculty: e.faculty,
+          ),
+        )
+        .toList();
+    list.removeAt(resultIndex);
+
+    cList[coeffIndex] = cList[coeffIndex].copyWith(results: list);
+
+    quizInEdit = quizInEdit!.copyWith(coeffResults: cList);
+    notifyListeners();
+  }
+
+  Future<void> coeffResultChangeSpeciality({
+    required int coeffIndex,
+    required int resultIndex,
+    required String value,
+  }) async {
+    final cList = quizInEdit!.coeffResults
+        .map(
+          (e) => CoeffResult(name: e.name, results: e.results),
+        )
+        .toList();
+    final list = quizInEdit!.coeffResults[coeffIndex].results
+        .map(
+          (e) => Result(
+            speciality: e.speciality,
+            faculty: e.faculty,
+          ),
+        )
+        .toList();
+    list[resultIndex] = list[resultIndex].copyWith(speciality: value);
+    cList[coeffIndex] = cList[coeffIndex].copyWith(results: list);
+    quizInEdit = quizInEdit!.copyWith(coeffResults: cList);
+    notifyListeners();
+  }
+
+  Future<void> coeffResultChangeFaculty({
+    required int coeffIndex,
+    required int resultIndex,
+    required String value,
+  }) async {
+    final cList = quizInEdit!.coeffResults
+        .map(
+          (e) => CoeffResult(name: e.name, results: e.results),
+        )
+        .toList();
+    final list = quizInEdit!.coeffResults[coeffIndex].results
+        .map(
+          (e) => Result(
+            speciality: e.speciality,
+            faculty: e.faculty,
+          ),
+        )
+        .toList();
+    list[resultIndex] = list[resultIndex].copyWith(faculty: value);
+    cList[coeffIndex] = cList[coeffIndex].copyWith(results: list);
+    quizInEdit = quizInEdit!.copyWith(coeffResults: cList);
     notifyListeners();
   }
 

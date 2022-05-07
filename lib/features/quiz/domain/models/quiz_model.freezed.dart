@@ -21,7 +21,7 @@ mixin _$QuizModel {
   QuizTypes get quizType => throw _privateConstructorUsedError;
   List<QuestionModel> get questions => throw _privateConstructorUsedError;
   List<String> get coefficients => throw _privateConstructorUsedError;
-  List<dynamic> get coeffResults => throw _privateConstructorUsedError;
+  List<CoeffResult> get coeffResults => throw _privateConstructorUsedError;
   bool get needPrintResults => throw _privateConstructorUsedError;
   bool get isVisible => throw _privateConstructorUsedError;
 
@@ -40,7 +40,7 @@ abstract class $QuizModelCopyWith<$Res> {
       QuizTypes quizType,
       List<QuestionModel> questions,
       List<String> coefficients,
-      List<dynamic> coeffResults,
+      List<CoeffResult> coeffResults,
       bool needPrintResults,
       bool isVisible});
 }
@@ -88,7 +88,7 @@ class _$QuizModelCopyWithImpl<$Res> implements $QuizModelCopyWith<$Res> {
       coeffResults: coeffResults == freezed
           ? _value.coeffResults
           : coeffResults // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List<CoeffResult>,
       needPrintResults: needPrintResults == freezed
           ? _value.needPrintResults
           : needPrintResults // ignore: cast_nullable_to_non_nullable
@@ -113,7 +113,7 @@ abstract class _$QuizModelCopyWith<$Res> implements $QuizModelCopyWith<$Res> {
       QuizTypes quizType,
       List<QuestionModel> questions,
       List<String> coefficients,
-      List<dynamic> coeffResults,
+      List<CoeffResult> coeffResults,
       bool needPrintResults,
       bool isVisible});
 }
@@ -162,7 +162,7 @@ class __$QuizModelCopyWithImpl<$Res> extends _$QuizModelCopyWithImpl<$Res>
       coeffResults: coeffResults == freezed
           ? _value.coeffResults
           : coeffResults // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>,
+              as List<CoeffResult>,
       needPrintResults: needPrintResults == freezed
           ? _value.needPrintResults
           : needPrintResults // ignore: cast_nullable_to_non_nullable
@@ -184,7 +184,7 @@ class _$_QuizModel implements _QuizModel {
       required this.quizType,
       required final List<QuestionModel> questions,
       required final List<String> coefficients,
-      required final List<dynamic> coeffResults,
+      required final List<CoeffResult> coeffResults,
       required this.needPrintResults,
       required this.isVisible})
       : _questions = questions,
@@ -211,9 +211,9 @@ class _$_QuizModel implements _QuizModel {
     return EqualUnmodifiableListView(_coefficients);
   }
 
-  final List<dynamic> _coeffResults;
+  final List<CoeffResult> _coeffResults;
   @override
-  List<dynamic> get coeffResults {
+  List<CoeffResult> get coeffResults {
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_coeffResults);
   }
@@ -271,7 +271,7 @@ abstract class _QuizModel implements QuizModel {
       required final QuizTypes quizType,
       required final List<QuestionModel> questions,
       required final List<String> coefficients,
-      required final List<dynamic> coeffResults,
+      required final List<CoeffResult> coeffResults,
       required final bool needPrintResults,
       required final bool isVisible}) = _$_QuizModel;
 
@@ -286,7 +286,7 @@ abstract class _QuizModel implements QuizModel {
   @override
   List<String> get coefficients => throw _privateConstructorUsedError;
   @override
-  List<dynamic> get coeffResults => throw _privateConstructorUsedError;
+  List<CoeffResult> get coeffResults => throw _privateConstructorUsedError;
   @override
   bool get needPrintResults => throw _privateConstructorUsedError;
   @override

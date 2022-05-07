@@ -1,4 +1,5 @@
 import 'package:bntu_app/core/enums/quiz_types.dart';
+import 'package:bntu_app/features/quiz/domain/models/coeff_result_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -12,7 +13,7 @@ class QuizModel with _$QuizModel {
     required QuizTypes quizType,
     required List<QuestionModel> questions,
     required List<String> coefficients,
-    required List coeffResults,
+    required List<CoeffResult> coeffResults,
     required bool needPrintResults,
     required bool isVisible,
   }) = _QuizModel;

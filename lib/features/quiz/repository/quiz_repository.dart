@@ -1,7 +1,9 @@
 import 'package:bntu_app/core/enums/question__types.dart';
 import 'package:bntu_app/core/enums/quiz_types.dart';
+import 'package:bntu_app/features/quiz/domain/models/coeff_result_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/quiz_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/question_model.dart';
+import 'package:bntu_app/features/quiz/domain/models/result_model.dart';
 import 'package:bntu_app/features/quiz/domain/repository/quiz_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,7 +17,21 @@ class QuizFirestoreRepository extends QuizRepository {
       'quizType': quiz.quizType.asString,
       'questions': [],
       'coefficients': quiz.coefficients,
-      'coeffResults': [],
+      'coeffResults': quiz.coeffResults
+          .map(
+            (e) => CoeffResult(
+              name: e.name,
+              results: e.results
+                  .map(
+                    (e) => Result(
+                      speciality: e.speciality,
+                      faculty: e.faculty,
+                    ),
+                  )
+                  .toList(),
+            ),
+          )
+          .toList(),
       'isVisible': false,
       'needPrintResults': quiz.needPrintResults,
     });
@@ -52,7 +68,17 @@ class QuizFirestoreRepository extends QuizRepository {
               })
           .toList(),
       'coefficients': quiz.coefficients,
-      'coeffResults': [],
+      'coeffResults': quiz.coeffResults
+          .map((e) => {
+                'name': e.name,
+                'results': e.results
+                    .map((e) => {
+                          'speciality': e.speciality,
+                          'faculty': e.faculty,
+                        })
+                    .toList(),
+              })
+          .toList(),
       'isVisible': false,
       'needPrintResults': quiz.needPrintResults,
     });
@@ -72,9 +98,23 @@ class QuizFirestoreRepository extends QuizRepository {
             quizType: quizTypeFromString(e['quizType']),
             questions: qList(e['questions']),
             coefficients: [...e['coefficients'].map((e) => e as String)],
-            coeffResults: [],
+            coeffResults: [
+              ...e['coeffResults'].map(
+                (e) => CoeffResult(
+                  name: e['name'],
+                  results: [
+                    ...e['results'].map(
+                      (e) => Result(
+                        speciality: e['speciality'],
+                        faculty: e['faculty'],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             isVisible: e['isVisible'],
-            needPrintResults: false,
+            needPrintResults: e['needPrintResults'],
           ),
         )
         .toList();
