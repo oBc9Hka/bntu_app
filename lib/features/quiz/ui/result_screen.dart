@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
 import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
+import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ class ResultScreen extends StatelessWidget {
     var _fit = '...';
     var _mayFit = '...';
     var _mayFitVisibility = false;
+    var maxWeightCoeffName = '';
 
     final coeffList = <Coeff>[];
 
@@ -64,7 +66,7 @@ class ResultScreen extends StatelessWidget {
     const mainColor = Constants.mainColor;
 
     final facultyState = context.watch<FacultiesProvider>();
-    return Consumer(builder: (context, state, child) {
+    return Consumer<QuizProvider>(builder: (context, state, child) {
       var mayFitFacultyList = <Coeff>[];
       var mayFitFacultyIndex = 0;
       for (var item in coeffList) {
@@ -73,6 +75,11 @@ class ResultScreen extends StatelessWidget {
           _mayFit = 'Так же тебе могут подойти:';
           _mayFitVisibility = true;
         }
+      }
+
+      if (state.activeQuiz!.needPrintResults) {
+        maxWeightCoeffName =
+            coeffList.firstWhere((element) => element.weight == maxWeight).key;
       }
 
       return Scaffold(
@@ -112,7 +119,7 @@ class ResultScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  true
+                  !state.activeQuiz!.needPrintResults
                       ? Column(
                           children: [
                             Column(
@@ -244,28 +251,31 @@ class ResultScreen extends StatelessWidget {
                           constraints: BoxConstraints(
                             maxHeight: MediaQuery.of(context).size.height * 0.5,
                           ),
-                          // child: ListView(
-                          //   children: [
-                          //     for (var item in _mockSorterList)
-                          //       ListTile(
-                          //         onTap: () {
-                          //           Navigator.push(
-                          //             context,
-                          //             MaterialPageRoute(
-                          //               builder: (context) => SpecialtiesScreen(
-                          //                 faculty: _getFacultyByShortName(
-                          //                     item.values.first,
-                          //                     // state.faculties,
-                          //                     []),
-                          //               ),
-                          //             ),
-                          //           );
-                          //         },
-                          //         title: Text(item.keys.first),
-                          //         trailing: Text(item.values.first),
-                          //       )
-                          //   ],
-                          // ),
+                          child: ListView(
+                            children: [
+                              for (var item in state.activeQuiz!.coeffResults
+                                  .firstWhere((element) =>
+                                      element.name == maxWeightCoeffName)
+                                  .results)
+                                ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SpecialtiesScreen(
+                                          faculty: _getFacultyByShortName(
+                                            item.faculty,
+                                            facultyState.faculties,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  title: Text(item.speciality),
+                                  trailing: Text(item.faculty),
+                                )
+                            ],
+                          ),
                         ),
                 ],
               ),

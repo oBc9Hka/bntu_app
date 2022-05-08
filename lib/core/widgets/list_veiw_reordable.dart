@@ -27,24 +27,16 @@ class _ListViewReordableState extends State<ListViewReordable> {
       });
     }
 
-    // Make sure there is a scroll controller attached to the scroll view that contains ReorderableSliverList.
-    // Otherwise an error will be thrown.
     final _scrollController =
         PrimaryScrollController.of(context) ?? ScrollController();
 
     return CustomScrollView(
-      // A ScrollController must be included in CustomScrollView, otherwise
-      // ReorderableSliverList wouldn't work
-      controller: _scrollController,
+      // controller: _scrollController,
       shrinkWrap: true,
       slivers: <Widget>[
         ReorderableSliverList(
+          controller: _scrollController,
           delegate: ReorderableSliverChildListDelegate(widget.children),
-          // or use ReorderableSliverChildBuilderDelegate if needed
-//          delegate: ReorderableSliverChildBuilderDelegate(
-//            (BuildContext context, int index) => _rows[index],
-//            childCount: _rows.length
-//          ),
           onReorder: _onReorder,
         )
       ],

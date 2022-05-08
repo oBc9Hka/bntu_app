@@ -128,61 +128,69 @@ class _QuizEditState extends State<QuizEdit> {
                         ),
                       ),
                       state.quizInEdit!.questions.isNotEmpty
-                          ? ListViewReordable(
-                              onReorder: (oldIndex, newIndex) {
-                                state.reorderQuestions(oldIndex, newIndex);
-                              },
-                              children: [
-                                for (var index = 0;
-                                    index < state.quizInEdit!.questions.length;
-                                    index++)
-                                  Card(
-                                    child: ListTile(
-                                      leading: Text('${index + 1}'),
-                                      title: Text(
-                                        state.quizInEdit!.questions[index]
-                                            .question,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      subtitle: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ...state.quizInEdit!.questions[index]
-                                              .answers
-                                              .map(
-                                            (e) => AutoSizeText(
-                                              '${e.text.length <= 10 ? e.text.trimRight() : e.text.substring(0, 10).toString().trimRight() + '..'}: ${e.coefficients}',
-                                              maxLines: 1,
-                                              style: TextStyle(fontSize: 12),
-                                            ),
+                          ? Flexible(
+                              child: Scaffold(
+                                body: ListViewReordable(
+                                  onReorder: (oldIndex, newIndex) {
+                                    state.reorderQuestions(oldIndex, newIndex);
+                                  },
+                                  children: [
+                                    for (var index = 0;
+                                        index <
+                                            state.quizInEdit!.questions.length;
+                                        index++)
+                                      Card(
+                                        child: ListTile(
+                                          leading: Text('${index + 1}'),
+                                          title: Text(
+                                            state.quizInEdit!.questions[index]
+                                                .question,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                        ],
-                                      ),
-                                      trailing: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {
-                                              state.setQuestionInEdit(index);
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ...state.quizInEdit!
+                                                  .questions[index].answers
+                                                  .map(
+                                                (e) => AutoSizeText(
+                                                  '${e.text.length <= 10 ? e.text.trimRight() : e.text.substring(0, 10).toString().trimRight() + '..'}: ${e.coefficients}',
+                                                  maxLines: 1,
+                                                  style:
+                                                      TextStyle(fontSize: 12),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  state
+                                                      .setQuestionInEdit(index);
 
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(builder:
-                                                      (BuildContext context) {
-                                                return QuestionEdit();
-                                              }));
-                                            },
-                                            icon: Icon(
-                                              Icons.edit,
-                                              color: mainColor,
-                                            ),
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(builder:
+                                                          (BuildContext
+                                                              context) {
+                                                    return QuestionEdit();
+                                                  }));
+                                                },
+                                                icon: Icon(
+                                                  Icons.edit,
+                                                  color: mainColor,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                              ],
+                                  ],
+                                ),
+                              ),
                             )
                           : Expanded(
                               child: Center(
