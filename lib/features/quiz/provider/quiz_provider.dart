@@ -64,6 +64,7 @@ class QuizProvider with ChangeNotifier {
     quizInEdit = QuizModel(
       docId: '',
       quizName: '',
+      quizDescription: '',
       quizType: QuizTypes.single_coeff,
       questions: [],
       coefficients: [],
@@ -107,6 +108,7 @@ class QuizProvider with ChangeNotifier {
       quiz: QuizModel(
         docId: '',
         quizName: quizInEdit!.quizName,
+        quizDescription: quizInEdit!.quizDescription,
         quizType: quizInEdit!.quizType,
         questions: [],
         coefficients: quizInEdit!.coefficients,

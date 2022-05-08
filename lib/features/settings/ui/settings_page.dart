@@ -229,6 +229,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   },
                                 );
                                 await state.getCheckedTestsIds();
+                                Navigator.of(context).pop();
                                 await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: ((context) => QuizList()),

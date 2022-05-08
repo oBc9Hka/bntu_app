@@ -15,6 +15,7 @@ class QuizFirestoreRepository extends QuizRepository {
   Future<bool> addQuiz({required QuizModel quiz}) async {
     await dbRef.add({
       'quizName': quiz.quizName,
+      'quizDescription': quiz.quizDescription,
       'quizType': quiz.quizType.asString,
       'questions': [],
       'coefficients': quiz.coefficients,
@@ -66,6 +67,7 @@ class QuizFirestoreRepository extends QuizRepository {
   }) async {
     await targetLocation.add({
       'quizName': quiz.quizName,
+      'quizDescription': quiz.quizDescription,
       'quizType': quiz.quizType.asString,
       'questions': [],
       'coefficients': quiz.coefficients,
@@ -94,6 +96,7 @@ class QuizFirestoreRepository extends QuizRepository {
   Future<bool> editQuiz({required QuizModel quiz}) async {
     await dbRef.doc(quiz.docId).update({
       'quizName': quiz.quizName,
+      'quizDescription': quiz.quizDescription,
       'quizType': quiz.quizType.asString,
       'questions': quiz.questions
           .map((e) => {
@@ -141,6 +144,7 @@ class QuizFirestoreRepository extends QuizRepository {
           list.add(QuizModel(
             docId: e.id,
             quizName: e['quizName'],
+            quizDescription: e['quizDescription'],
             quizType: quizTypeFromString(e['quizType']),
             questions: qList(e['questions']),
             coefficients: [...e['coefficients'].map((e) => e as String)],
@@ -184,6 +188,7 @@ class QuizFirestoreRepository extends QuizRepository {
           (e) => QuizModel(
             docId: e.id,
             quizName: e['quizName'],
+            quizDescription: e['quizDescription'],
             quizType: quizTypeFromString(e['quizType']),
             questions: qList(e['questions']),
             coefficients: [...e['coefficients'].map((e) => e as String)],
@@ -218,6 +223,7 @@ class QuizFirestoreRepository extends QuizRepository {
           (e) => QuizModel(
             docId: e.id,
             quizName: e['quizName'],
+            quizDescription: e['quizDescription'],
             quizType: quizTypeFromString(e['quizType']),
             questions: qList(e['questions']),
             coefficients: [...e['coefficients'].map((e) => e as String)],

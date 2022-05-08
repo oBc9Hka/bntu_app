@@ -10,6 +10,7 @@ class QuizModel with _$QuizModel {
   const factory QuizModel({
     required String docId,
     required String quizName,
+    required String quizDescription,
     required QuizTypes quizType,
     required List<QuestionModel> questions,
     required List<String> coefficients,

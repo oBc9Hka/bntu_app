@@ -118,19 +118,43 @@ class _QuizEditState extends State<QuizEdit> {
                     children: [
                       Form(
                         key: _formKey,
-                        child: TextFormField(
-                          controller: TextEditingController(
-                              text: state.quizInEdit!.quizName),
-                          onChanged: (value) {
-                            state.quizInEdit =
-                                state.quizInEdit!.copyWith(quizName: value);
-                          },
-                          validator: (value) {
-                            if (value == '') {
-                              return 'Заполните поле';
-                            }
-                            return null;
-                          },
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: TextEditingController(
+                                text: state.quizInEdit!.quizName,
+                              ),
+                              onChanged: (value) {
+                                state.quizInEdit =
+                                    state.quizInEdit!.copyWith(quizName: value);
+                              },
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'Заполните поле';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                  labelText: 'Название теста'),
+                            ),
+                            TextFormField(
+                              controller: TextEditingController(
+                                text: state.quizInEdit!.quizDescription,
+                              ),
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'Введите описание';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                state.quizInEdit = state.quizInEdit!
+                                    .copyWith(quizDescription: value);
+                              },
+                              decoration: const InputDecoration(
+                                  labelText: 'Описание теста'),
+                            ),
+                          ],
                         ),
                       ),
                       ElevatedButton(

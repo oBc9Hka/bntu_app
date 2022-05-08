@@ -52,61 +52,23 @@ class _QuizAddState extends State<QuizAdd> {
                           decoration: const InputDecoration(
                               labelText: 'Название теста'),
                         ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value == '') {
+                              return 'Введите описание';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            state.quizInEdit = state.quizInEdit!
+                                .copyWith(quizDescription: value);
+                          },
+                          decoration: const InputDecoration(
+                              labelText: 'Описание теста'),
+                        ),
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Form(
-                          key: _coeffFormKey,
-                          child: TextFormField(
-                            controller: coeffController,
-                            validator: (value) {
-                              if (value == '') {
-                                return 'Введите коэффициент';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {},
-                            decoration:
-                                const InputDecoration(labelText: 'Коэфф.'),
-                          ),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_coeffFormKey.currentState!.validate()) {
-                            state.addCoeff(coeff: coeffController.text);
-                            coeffController.text = '';
-                          }
-                        },
-                        child: Text('Добавить'),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text('Список коэффициентов'),
-                  Wrap(
-                    children: [
-                      for (var i = 0;
-                          i < state.quizInEdit!.coefficients.length;
-                          i++)
-                        Chip(
-                          label: Text(state.quizInEdit!.coefficients[i]),
-                          onDeleted: () {
-                            state.removeCoeff(index: i);
-                          },
-                        ),
-                    ],
-                  )
-                  // ElevatedButton(
-                  //   onPressed: () {},
-                  //   child: Text('Выбрать тип теста'),
-                  // ),
                 ],
               ),
               AddButtonsSection(

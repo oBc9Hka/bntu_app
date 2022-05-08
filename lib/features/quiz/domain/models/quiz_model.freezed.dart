@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$QuizModel {
   String get docId => throw _privateConstructorUsedError;
   String get quizName => throw _privateConstructorUsedError;
+  String get quizDescription => throw _privateConstructorUsedError;
   QuizTypes get quizType => throw _privateConstructorUsedError;
   List<QuestionModel> get questions => throw _privateConstructorUsedError;
   List<String> get coefficients => throw _privateConstructorUsedError;
@@ -37,6 +38,7 @@ abstract class $QuizModelCopyWith<$Res> {
   $Res call(
       {String docId,
       String quizName,
+      String quizDescription,
       QuizTypes quizType,
       List<QuestionModel> questions,
       List<String> coefficients,
@@ -57,6 +59,7 @@ class _$QuizModelCopyWithImpl<$Res> implements $QuizModelCopyWith<$Res> {
   $Res call({
     Object? docId = freezed,
     Object? quizName = freezed,
+    Object? quizDescription = freezed,
     Object? quizType = freezed,
     Object? questions = freezed,
     Object? coefficients = freezed,
@@ -72,6 +75,10 @@ class _$QuizModelCopyWithImpl<$Res> implements $QuizModelCopyWith<$Res> {
       quizName: quizName == freezed
           ? _value.quizName
           : quizName // ignore: cast_nullable_to_non_nullable
+              as String,
+      quizDescription: quizDescription == freezed
+          ? _value.quizDescription
+          : quizDescription // ignore: cast_nullable_to_non_nullable
               as String,
       quizType: quizType == freezed
           ? _value.quizType
@@ -110,6 +117,7 @@ abstract class _$QuizModelCopyWith<$Res> implements $QuizModelCopyWith<$Res> {
   $Res call(
       {String docId,
       String quizName,
+      String quizDescription,
       QuizTypes quizType,
       List<QuestionModel> questions,
       List<String> coefficients,
@@ -131,6 +139,7 @@ class __$QuizModelCopyWithImpl<$Res> extends _$QuizModelCopyWithImpl<$Res>
   $Res call({
     Object? docId = freezed,
     Object? quizName = freezed,
+    Object? quizDescription = freezed,
     Object? quizType = freezed,
     Object? questions = freezed,
     Object? coefficients = freezed,
@@ -146,6 +155,10 @@ class __$QuizModelCopyWithImpl<$Res> extends _$QuizModelCopyWithImpl<$Res>
       quizName: quizName == freezed
           ? _value.quizName
           : quizName // ignore: cast_nullable_to_non_nullable
+              as String,
+      quizDescription: quizDescription == freezed
+          ? _value.quizDescription
+          : quizDescription // ignore: cast_nullable_to_non_nullable
               as String,
       quizType: quizType == freezed
           ? _value.quizType
@@ -181,6 +194,7 @@ class _$_QuizModel implements _QuizModel {
   const _$_QuizModel(
       {required this.docId,
       required this.quizName,
+      required this.quizDescription,
       required this.quizType,
       required final List<QuestionModel> questions,
       required final List<String> coefficients,
@@ -195,6 +209,8 @@ class _$_QuizModel implements _QuizModel {
   final String docId;
   @override
   final String quizName;
+  @override
+  final String quizDescription;
   @override
   final QuizTypes quizType;
   final List<QuestionModel> _questions;
@@ -225,7 +241,7 @@ class _$_QuizModel implements _QuizModel {
 
   @override
   String toString() {
-    return 'QuizModel(docId: $docId, quizName: $quizName, quizType: $quizType, questions: $questions, coefficients: $coefficients, coeffResults: $coeffResults, needPrintResults: $needPrintResults, isChecked: $isChecked)';
+    return 'QuizModel(docId: $docId, quizName: $quizName, quizDescription: $quizDescription, quizType: $quizType, questions: $questions, coefficients: $coefficients, coeffResults: $coeffResults, needPrintResults: $needPrintResults, isChecked: $isChecked)';
   }
 
   @override
@@ -235,6 +251,8 @@ class _$_QuizModel implements _QuizModel {
             other is _QuizModel &&
             const DeepCollectionEquality().equals(other.docId, docId) &&
             const DeepCollectionEquality().equals(other.quizName, quizName) &&
+            const DeepCollectionEquality()
+                .equals(other.quizDescription, quizDescription) &&
             const DeepCollectionEquality().equals(other.quizType, quizType) &&
             const DeepCollectionEquality().equals(other.questions, questions) &&
             const DeepCollectionEquality()
@@ -251,6 +269,7 @@ class _$_QuizModel implements _QuizModel {
       runtimeType,
       const DeepCollectionEquality().hash(docId),
       const DeepCollectionEquality().hash(quizName),
+      const DeepCollectionEquality().hash(quizDescription),
       const DeepCollectionEquality().hash(quizType),
       const DeepCollectionEquality().hash(questions),
       const DeepCollectionEquality().hash(coefficients),
@@ -268,6 +287,7 @@ abstract class _QuizModel implements QuizModel {
   const factory _QuizModel(
       {required final String docId,
       required final String quizName,
+      required final String quizDescription,
       required final QuizTypes quizType,
       required final List<QuestionModel> questions,
       required final List<String> coefficients,
@@ -279,6 +299,8 @@ abstract class _QuizModel implements QuizModel {
   String get docId => throw _privateConstructorUsedError;
   @override
   String get quizName => throw _privateConstructorUsedError;
+  @override
+  String get quizDescription => throw _privateConstructorUsedError;
   @override
   QuizTypes get quizType => throw _privateConstructorUsedError;
   @override

@@ -1,4 +1,5 @@
 import 'package:bntu_app/core/provider/theme_provider.dart';
+import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,9 +15,8 @@ class QuizMainMenu extends StatelessWidget {
     var mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
     var text = 'специальности';
-    // if (isFacultiesQuiz) {
-    //   text = 'факультеты';
-    // }
+
+    final quizState = context.watch<QuizProvider>();
 
     return Scaffold(
       appBar: AppBar(
@@ -51,7 +51,7 @@ class QuizMainMenu extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
-                  'Пройди тест и узнай, какие $text тебе подходят',
+                  quizState.activeQuiz!.quizDescription,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
