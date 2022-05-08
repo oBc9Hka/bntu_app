@@ -16,12 +16,10 @@ class SettingsProvider with ChangeNotifier {
   }
 
   List<String> quizIds = [];
-  List<String> allQuizIds = [];
   String currentAdmissionYear = '';
   String secretKey = '';
   String unseenCount = '0';
   List<ErrorMessage> errorMessages = [];
-  String checkedQuizId = '';
 
   Future<void> initSettings() async {
     currentAdmissionYear = await settingsRepository.getCurrentAdmissionYear();
@@ -49,11 +47,6 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> saveCheckedQuizIds() async {
     await settingsRepository.editCheckedQuizIds(checkedQuizIds: quizIds);
-    notifyListeners();
-  }
-
-  Future<void> getAllTestsIds() async {
-    allQuizIds = await settingsRepository.getAllQuizIds();
     notifyListeners();
   }
 

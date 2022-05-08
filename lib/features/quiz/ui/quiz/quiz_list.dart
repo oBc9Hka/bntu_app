@@ -46,7 +46,7 @@ class _QuizListState extends State<QuizList> {
     settingsState = context.watch<SettingsProvider>();
     quizState = context.watch<QuizProvider>();
     initCheckedIds = settingsState.quizIds.map((e) => e).toList();
-    await quizState.getQuizList(quizIds: settingsState.allQuizIds);
+    await quizState.getAllQuizList();
     try {
       quizState.quizList.map((e) {
         if (settingsState.quizIds.contains(e!.docId)) {
@@ -70,6 +70,79 @@ class _QuizListState extends State<QuizList> {
         return WillPopScope(
           onWillPop: _onWillPop,
           child: Scaffold(
+            floatingActionButton: IconButton(
+              tooltip: 'Удалёные тесты',
+              iconSize: 40,
+              icon: CircleAvatar(
+                radius: 50,
+                backgroundColor: Constants.mainColor,
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () async {
+                // ignore: unawaited_futures
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      child: LinearProgressIndicator(
+                        color: Constants.mainColor,
+                      ),
+                    );
+                  },
+                );
+                await quizState.getDeletedQuizList();
+                Navigator.of(context).pop();
+                await showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Список удалённых тестов'),
+                          Divider(),
+                          ListView(
+                            shrinkWrap: true,
+                            children: [
+                              if (quizState.deletedQuizList.isEmpty)
+                                Center(
+                                  child: Text('Нет удалённых тестов'),
+                                ),
+                              for (var quiz in quizState.deletedQuizList)
+                                ListTile(
+                                  title: Text(quiz!.quizName),
+                                  trailing: ElevatedButton(
+                                    child: Text('Восстановить'),
+                                    onPressed: () async {
+                                      // ignore: unawaited_futures
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Dialog(
+                                            child: LinearProgressIndicator(
+                                              color: Constants.mainColor,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                      await quizState.recoverQuiz(quiz: quiz);
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
             appBar: AppBar(
               title: Text('Редактирование тестов'),
               actions: [

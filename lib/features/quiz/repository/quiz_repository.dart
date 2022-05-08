@@ -33,7 +33,6 @@ class QuizFirestoreRepository extends QuizRepository {
             ),
           )
           .toList(),
-      'isVisible': false,
       'needPrintResults': quiz.needPrintResults,
     });
 
@@ -42,7 +41,30 @@ class QuizFirestoreRepository extends QuizRepository {
 
   @override
   Future<bool> deleteQuiz({required QuizModel quiz}) async {
-    await trashDbRef.add({
+    await changeQuizLocation(
+      initialLocation: dbRef,
+      targetLocation: trashDbRef,
+      quiz: quiz,
+    );
+    return true;
+  }
+
+  @override
+  Future<bool> recoverQuiz({required QuizModel quiz}) async {
+    await changeQuizLocation(
+      initialLocation: trashDbRef,
+      targetLocation: dbRef,
+      quiz: quiz,
+    );
+    return true;
+  }
+
+  Future<void> changeQuizLocation({
+    required CollectionReference<Map<String, dynamic>> initialLocation,
+    required CollectionReference<Map<String, dynamic>> targetLocation,
+    required QuizModel quiz,
+  }) async {
+    await targetLocation.add({
       'quizName': quiz.quizName,
       'quizType': quiz.quizType.asString,
       'questions': [],
@@ -62,13 +84,10 @@ class QuizFirestoreRepository extends QuizRepository {
             ),
           )
           .toList(),
-      'isVisible': false,
       'needPrintResults': quiz.needPrintResults,
     });
 
-    await dbRef.doc(quiz.docId).delete();
-
-    return true;
+    await initialLocation.doc(quiz.docId).delete();
   }
 
   @override
@@ -105,7 +124,6 @@ class QuizFirestoreRepository extends QuizRepository {
                     .toList(),
               })
           .toList(),
-      'isVisible': false,
       'needPrintResults': quiz.needPrintResults,
     });
 
@@ -155,5 +173,73 @@ class QuizFirestoreRepository extends QuizRepository {
     print(data);
 
     return data.map((e) => QuestionModel.fromMap(e)).toList();
+  }
+
+  @override
+  Future<List<QuizModel?>> getAllQuizList() async {
+    final response = await dbRef.get();
+
+    return response.docs
+        .map(
+          (e) => QuizModel(
+            docId: e.id,
+            quizName: e['quizName'],
+            quizType: quizTypeFromString(e['quizType']),
+            questions: qList(e['questions']),
+            coefficients: [...e['coefficients'].map((e) => e as String)],
+            coeffResults: [
+              ...e['coeffResults'].map(
+                (e) => CoeffResult(
+                  name: e['name'],
+                  results: [
+                    ...e['results'].map(
+                      (e) => Result(
+                        speciality: e['speciality'],
+                        faculty: e['faculty'],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            needPrintResults: e['needPrintResults'],
+            isChecked: false,
+          ),
+        )
+        .toList();
+  }
+
+  @override
+  Future<List<QuizModel?>> getDeletedQuizList() async {
+    final response = await trashDbRef.get();
+
+    return response.docs
+        .map(
+          (e) => QuizModel(
+            docId: e.id,
+            quizName: e['quizName'],
+            quizType: quizTypeFromString(e['quizType']),
+            questions: qList(e['questions']),
+            coefficients: [...e['coefficients'].map((e) => e as String)],
+            coeffResults: [
+              ...e['coeffResults'].map(
+                (e) => CoeffResult(
+                  name: e['name'],
+                  results: [
+                    ...e['results'].map(
+                      (e) => Result(
+                        speciality: e['speciality'],
+                        faculty: e['faculty'],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            needPrintResults: e['needPrintResults'],
+            isChecked: false,
+          ),
+        )
+        .toList();
   }
 }

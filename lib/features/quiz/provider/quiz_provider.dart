@@ -14,6 +14,7 @@ class QuizProvider with ChangeNotifier {
   QuizProvider({required this.quizRepository});
 
   List<QuizModel?> quizList = [];
+  List<QuizModel?> deletedQuizList = [];
   bool isLoading = false;
 
   QuizModel? activeQuiz;
@@ -29,6 +30,17 @@ class QuizProvider with ChangeNotifier {
     quizInEditInitState = quizInEdit!.copyWith(
       questions: quizInEdit!.questions,
     );
+    notifyListeners();
+  }
+
+  Future<void> getDeletedQuizList() async {
+    deletedQuizList = await quizRepository.getDeletedQuizList();
+    notifyListeners();
+  }
+
+  Future<void> recoverQuiz({required QuizModel quiz}) async {
+    await quizRepository.recoverQuiz(quiz: quiz);
+    await getAllQuizList();
     notifyListeners();
   }
 
@@ -78,12 +90,19 @@ class QuizProvider with ChangeNotifier {
 
   Future<void> getQuizList({required List<String> quizIds}) async {
     isLoading = true;
+    notifyListeners();
     quizList = await quizRepository.getQuizList(quizIds: quizIds);
     isLoading = false;
     notifyListeners();
   }
 
-  Future<void> addQuiz({required List<String> allQuizIds}) async {
+  Future<void> deleteQuiz() async {
+    await quizRepository.deleteQuiz(quiz: quizInEdit!);
+    notifyListeners();
+    await getAllQuizList();
+  }
+
+  Future<void> addQuiz() async {
     await quizRepository.addQuiz(
       quiz: QuizModel(
         docId: '',
@@ -97,7 +116,12 @@ class QuizProvider with ChangeNotifier {
       ),
     );
     notifyListeners();
-    await getQuizList(quizIds: allQuizIds);
+    await getAllQuizList();
+  }
+
+  Future<void> getAllQuizList() async {
+    quizList = await quizRepository.getAllQuizList();
+    notifyListeners();
   }
 
   Future<void> addCoeff({required String coeff}) async {
@@ -222,10 +246,9 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> editQuiz(
-      {required QuizModel quiz, required List<String> allQuizIds}) async {
+  Future<void> editQuiz({required QuizModel quiz}) async {
     await quizRepository.editQuiz(quiz: quiz);
-    await getQuizList(quizIds: allQuizIds);
+    await getAllQuizList();
     notifyListeners();
   }
 

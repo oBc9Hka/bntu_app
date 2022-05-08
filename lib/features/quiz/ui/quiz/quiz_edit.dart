@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:bntu_app/core/widgets/list_veiw_reordable.dart';
+import 'package:bntu_app/core/widgets/remove_item.dart';
 import 'package:bntu_app/core/widgets/save_changes.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz/coefficients_screen.dart';
@@ -29,7 +30,7 @@ class _QuizEditState extends State<QuizEdit> {
       QuizProvider state, SettingsProvider settingsProvider) async {
     if (_formKey.currentState!.validate()) {
       if (!state.haveChanges()) {
-        await state.getQuizList(quizIds: settingsProvider.allQuizIds);
+        await state.getAllQuizList();
       } else {
         await showDialog(
           context: context,
@@ -38,15 +39,14 @@ class _QuizEditState extends State<QuizEdit> {
               onSavePressed: () async {
                 await state.editQuiz(
                   quiz: state.quizInEdit!,
-                  allQuizIds: settingsProvider.allQuizIds,
                 );
                 await Fluttertoast.showToast(msg: 'Изменения сохранены');
-                await state.getQuizList(quizIds: settingsProvider.allQuizIds);
+                await state.getAllQuizList();
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               onNoPressed: () async {
-                await state.getQuizList(quizIds: settingsProvider.allQuizIds);
+                await state.getAllQuizList();
               },
             );
           },
@@ -85,12 +85,25 @@ class _QuizEditState extends State<QuizEdit> {
                 },
                 icon: Icon(Icons.add),
               ),
-              // IconButton(
-              //   onPressed: () {
-              //     state.getQuizList();
-              //   },
-              //   icon: Icon(Icons.refresh),
-              // )
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return RemoveItem(
+                        itemName: 'тест',
+                        onRemovePressed: () {
+                          settingsState.quizIds.remove(state.quizInEdit!.docId);
+                          state.deleteQuiz();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                  );
+                },
+                icon: Icon(Icons.delete),
+              )
             ],
           ),
           body: state.isLoading

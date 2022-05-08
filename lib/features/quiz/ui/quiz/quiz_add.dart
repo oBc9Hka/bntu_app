@@ -22,7 +22,6 @@ class _QuizAddState extends State<QuizAdd> {
 
   @override
   Widget build(BuildContext context) {
-    final settingsState = context.watch<SettingsProvider>();
     return Consumer<QuizProvider>(builder: (context, state, child) {
       return Scaffold(
         appBar: AppBar(
@@ -113,7 +112,7 @@ class _QuizAddState extends State<QuizAdd> {
               AddButtonsSection(
                 onAddPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await state.addQuiz(allQuizIds: settingsState.allQuizIds);
+                    await state.addQuiz();
                     Navigator.pop(context);
                     await Fluttertoast.showToast(msg: 'Тест успешно создан');
                   }

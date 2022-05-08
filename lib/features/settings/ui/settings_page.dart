@@ -217,7 +217,17 @@ class _SettingsPageState extends State<SettingsPage> {
                             Divider(),
                             ListTile(
                               onTap: () async {
-                                await state.getAllTestsIds();
+                                // ignore: unawaited_futures
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      child: LinearProgressIndicator(
+                                        color: mainColor,
+                                      ),
+                                    );
+                                  },
+                                );
                                 await state.getCheckedTestsIds();
                                 await Navigator.of(context).push(
                                   MaterialPageRoute(

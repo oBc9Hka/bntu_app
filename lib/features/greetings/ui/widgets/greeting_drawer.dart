@@ -313,11 +313,11 @@ class GreetingDrawer extends StatelessWidget {
                 ),
                 trailing: themeProvider.currentIcon,
               ),
-              // TODO: implement admin panel for all of the tests
               ListTile(
                 onTap: () async {
                   _showLoadingDialog();
                   await settingsState.initSettings();
+                  await quizState.getQuizList(quizIds: settingsState.quizIds);
                   Navigator.of(context).pop();
                   if (settingsState.quizIds.length == 1) {
                     await quizState.getActiveQuiz(
@@ -375,18 +375,6 @@ class GreetingDrawer extends StatelessWidget {
                           );
                         });
                   }
-
-                  // await quizState.getActiveQuiz(
-                  //   docId: settingsState.checkedQuizId,
-                  //   quizIds: settingsState.quizIds,
-                  // );
-
-                  // await Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => QuizMainMenu(),
-                  //   ),
-                  // );
                 },
                 title: Text(
                   'Помощь с выбором специальности',

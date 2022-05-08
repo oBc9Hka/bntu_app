@@ -69,11 +69,6 @@ class SettingsFirestoreRepository extends SettingsRepository {
   }
 
   @override
-  Future<List<String>> getAllQuizIds() async {
-    return _getListFieldData('allQuizIds');
-  }
-
-  @override
   Future<List<String>> getCheckedQuizIds() {
     return _getListFieldData('checkedQuizIds');
   }
