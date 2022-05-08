@@ -5,7 +5,7 @@ abstract class QuizRepository {
 
   Future<bool> editQuiz({required QuizModel quiz});
 
-  Future<bool> deleteQuiz({required String quizName});
+  Future<bool> deleteQuiz({required QuizModel quiz});
 
-  Future<List<QuizModel>> getQuizList();
+  Future<List<QuizModel?>> getQuizList({required List<String> quizIds});
 }

@@ -216,8 +216,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                             Divider(),
                             ListTile(
-                              onTap: () {
-                                Navigator.of(context).push(
+                              onTap: () async {
+                                await state.getAllTestsIds();
+                                await state.getCheckedTestsIds();
+                                await Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: ((context) => QuizList()),
                                   ),

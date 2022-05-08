@@ -15,6 +15,6 @@ class QuizModel with _$QuizModel {
     required List<String> coefficients,
     required List<CoeffResult> coeffResults,
     required bool needPrintResults,
-    required bool isVisible,
+    required bool isChecked,
   }) = _QuizModel;
 }

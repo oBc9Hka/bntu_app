@@ -13,7 +13,7 @@ class QuizProvider with ChangeNotifier {
 
   QuizProvider({required this.quizRepository});
 
-  List<QuizModel> quizList = [];
+  List<QuizModel?> quizList = [];
   bool isLoading = false;
 
   QuizModel? activeQuiz;
@@ -39,9 +39,12 @@ class QuizProvider with ChangeNotifier {
     return true;
   }
 
-  Future<void> getActiveQuiz({required String docId}) async {
-    await getQuizList();
-    activeQuiz = quizList.firstWhere((element) => element.docId == docId);
+  Future<void> getActiveQuiz({
+    required String docId,
+    required List<String> quizIds,
+  }) async {
+    await getQuizList(quizIds: quizIds);
+    activeQuiz = quizList.firstWhere((element) => element!.docId == docId);
     notifyListeners();
   }
 
@@ -54,7 +57,7 @@ class QuizProvider with ChangeNotifier {
       coefficients: [],
       coeffResults: [],
       needPrintResults: false,
-      isVisible: false,
+      isChecked: false,
     );
     quizInEditInitState = quizInEdit!.copyWith();
     notifyListeners();
@@ -73,14 +76,14 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getQuizList() async {
+  Future<void> getQuizList({required List<String> quizIds}) async {
     isLoading = true;
-    quizList = await quizRepository.getQuizList();
+    quizList = await quizRepository.getQuizList(quizIds: quizIds);
     isLoading = false;
     notifyListeners();
   }
 
-  Future<void> addQuiz() async {
+  Future<void> addQuiz({required List<String> allQuizIds}) async {
     await quizRepository.addQuiz(
       quiz: QuizModel(
         docId: '',
@@ -89,12 +92,12 @@ class QuizProvider with ChangeNotifier {
         questions: [],
         coefficients: quizInEdit!.coefficients,
         coeffResults: quizInEdit!.coeffResults,
-        isVisible: false,
         needPrintResults: false,
+        isChecked: false,
       ),
     );
     notifyListeners();
-    await getQuizList();
+    await getQuizList(quizIds: allQuizIds);
   }
 
   Future<void> addCoeff({required String coeff}) async {
@@ -219,9 +222,10 @@ class QuizProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> editQuiz({required QuizModel quiz}) async {
+  Future<void> editQuiz(
+      {required QuizModel quiz, required List<String> allQuizIds}) async {
     await quizRepository.editQuiz(quiz: quiz);
-    await getQuizList();
+    await getQuizList(quizIds: allQuizIds);
     notifyListeners();
   }
 

@@ -3,13 +3,11 @@ abstract class SettingsRepository {
 
   Future<String> getSecretKey();
 
-  Future<String> getCheckedQuizId();
+  Future<List<String>> getCheckedQuizIds();
 
-  Future<bool> getIsFacultyQuizChecked();
+  Future<List<String>> getAllQuizIds();
 
-  Future<void> editQuizChecked(bool isFacultiesQuiz);
-
-  Future<void> editCheckedQuiz(String checkedQuizId);
+  Future<void> editCheckedQuizIds({required List<String> checkedQuizIds});
 
   Future<void> editSettings(String currentAdmissionYear, String key);
 }

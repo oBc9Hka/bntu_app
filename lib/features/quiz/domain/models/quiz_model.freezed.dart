@@ -23,7 +23,7 @@ mixin _$QuizModel {
   List<String> get coefficients => throw _privateConstructorUsedError;
   List<CoeffResult> get coeffResults => throw _privateConstructorUsedError;
   bool get needPrintResults => throw _privateConstructorUsedError;
-  bool get isVisible => throw _privateConstructorUsedError;
+  bool get isChecked => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $QuizModelCopyWith<QuizModel> get copyWith =>
@@ -42,7 +42,7 @@ abstract class $QuizModelCopyWith<$Res> {
       List<String> coefficients,
       List<CoeffResult> coeffResults,
       bool needPrintResults,
-      bool isVisible});
+      bool isChecked});
 }
 
 /// @nodoc
@@ -62,7 +62,7 @@ class _$QuizModelCopyWithImpl<$Res> implements $QuizModelCopyWith<$Res> {
     Object? coefficients = freezed,
     Object? coeffResults = freezed,
     Object? needPrintResults = freezed,
-    Object? isVisible = freezed,
+    Object? isChecked = freezed,
   }) {
     return _then(_value.copyWith(
       docId: docId == freezed
@@ -93,9 +93,9 @@ class _$QuizModelCopyWithImpl<$Res> implements $QuizModelCopyWith<$Res> {
           ? _value.needPrintResults
           : needPrintResults // ignore: cast_nullable_to_non_nullable
               as bool,
-      isVisible: isVisible == freezed
-          ? _value.isVisible
-          : isVisible // ignore: cast_nullable_to_non_nullable
+      isChecked: isChecked == freezed
+          ? _value.isChecked
+          : isChecked // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -115,7 +115,7 @@ abstract class _$QuizModelCopyWith<$Res> implements $QuizModelCopyWith<$Res> {
       List<String> coefficients,
       List<CoeffResult> coeffResults,
       bool needPrintResults,
-      bool isVisible});
+      bool isChecked});
 }
 
 /// @nodoc
@@ -136,7 +136,7 @@ class __$QuizModelCopyWithImpl<$Res> extends _$QuizModelCopyWithImpl<$Res>
     Object? coefficients = freezed,
     Object? coeffResults = freezed,
     Object? needPrintResults = freezed,
-    Object? isVisible = freezed,
+    Object? isChecked = freezed,
   }) {
     return _then(_QuizModel(
       docId: docId == freezed
@@ -167,9 +167,9 @@ class __$QuizModelCopyWithImpl<$Res> extends _$QuizModelCopyWithImpl<$Res>
           ? _value.needPrintResults
           : needPrintResults // ignore: cast_nullable_to_non_nullable
               as bool,
-      isVisible: isVisible == freezed
-          ? _value.isVisible
-          : isVisible // ignore: cast_nullable_to_non_nullable
+      isChecked: isChecked == freezed
+          ? _value.isChecked
+          : isChecked // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -186,7 +186,7 @@ class _$_QuizModel implements _QuizModel {
       required final List<String> coefficients,
       required final List<CoeffResult> coeffResults,
       required this.needPrintResults,
-      required this.isVisible})
+      required this.isChecked})
       : _questions = questions,
         _coefficients = coefficients,
         _coeffResults = coeffResults;
@@ -221,11 +221,11 @@ class _$_QuizModel implements _QuizModel {
   @override
   final bool needPrintResults;
   @override
-  final bool isVisible;
+  final bool isChecked;
 
   @override
   String toString() {
-    return 'QuizModel(docId: $docId, quizName: $quizName, quizType: $quizType, questions: $questions, coefficients: $coefficients, coeffResults: $coeffResults, needPrintResults: $needPrintResults, isVisible: $isVisible)';
+    return 'QuizModel(docId: $docId, quizName: $quizName, quizType: $quizType, questions: $questions, coefficients: $coefficients, coeffResults: $coeffResults, needPrintResults: $needPrintResults, isChecked: $isChecked)';
   }
 
   @override
@@ -243,7 +243,7 @@ class _$_QuizModel implements _QuizModel {
                 .equals(other.coeffResults, coeffResults) &&
             const DeepCollectionEquality()
                 .equals(other.needPrintResults, needPrintResults) &&
-            const DeepCollectionEquality().equals(other.isVisible, isVisible));
+            const DeepCollectionEquality().equals(other.isChecked, isChecked));
   }
 
   @override
@@ -256,7 +256,7 @@ class _$_QuizModel implements _QuizModel {
       const DeepCollectionEquality().hash(coefficients),
       const DeepCollectionEquality().hash(coeffResults),
       const DeepCollectionEquality().hash(needPrintResults),
-      const DeepCollectionEquality().hash(isVisible));
+      const DeepCollectionEquality().hash(isChecked));
 
   @JsonKey(ignore: true)
   @override
@@ -273,7 +273,7 @@ abstract class _QuizModel implements QuizModel {
       required final List<String> coefficients,
       required final List<CoeffResult> coeffResults,
       required final bool needPrintResults,
-      required final bool isVisible}) = _$_QuizModel;
+      required final bool isChecked}) = _$_QuizModel;
 
   @override
   String get docId => throw _privateConstructorUsedError;
@@ -290,7 +290,7 @@ abstract class _QuizModel implements QuizModel {
   @override
   bool get needPrintResults => throw _privateConstructorUsedError;
   @override
-  bool get isVisible => throw _privateConstructorUsedError;
+  bool get isChecked => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$QuizModelCopyWith<_QuizModel> get copyWith =>

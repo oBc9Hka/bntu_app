@@ -3,6 +3,7 @@ import 'package:bntu_app/core/widgets/list_veiw_reordable.dart';
 import 'package:bntu_app/core/widgets/save_changes.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz/coefficients_screen.dart';
+import 'package:bntu_app/features/settings/provider/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -24,24 +25,28 @@ class _QuizEditState extends State<QuizEdit> {
   TextEditingController quizController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Future<bool> _onWillPop(QuizProvider state) async {
+  Future<bool> _onWillPop(
+      QuizProvider state, SettingsProvider settingsProvider) async {
     if (_formKey.currentState!.validate()) {
       if (!state.haveChanges()) {
-        await state.getQuizList();
+        await state.getQuizList(quizIds: settingsProvider.allQuizIds);
       } else {
         await showDialog(
           context: context,
           builder: (BuildContext context) {
             return SaveChanges(
               onSavePressed: () async {
-                await state.editQuiz(quiz: state.quizInEdit!);
+                await state.editQuiz(
+                  quiz: state.quizInEdit!,
+                  allQuizIds: settingsProvider.allQuizIds,
+                );
                 await Fluttertoast.showToast(msg: 'Изменения сохранены');
-                await state.getQuizList();
+                await state.getQuizList(quizIds: settingsProvider.allQuizIds);
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
               },
               onNoPressed: () async {
-                await state.getQuizList();
+                await state.getQuizList(quizIds: settingsProvider.allQuizIds);
               },
             );
           },
@@ -54,11 +59,12 @@ class _QuizEditState extends State<QuizEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsState = context.watch<SettingsProvider>();
     const mainColor = Constants.mainColor;
     return Consumer<QuizProvider>(builder: (context, state, child) {
       return WillPopScope(
         onWillPop: () {
-          return _onWillPop(state);
+          return _onWillPop(state, settingsState);
         },
         child: Scaffold(
           appBar: AppBar(

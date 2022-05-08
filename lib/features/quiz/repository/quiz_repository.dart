@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class QuizFirestoreRepository extends QuizRepository {
   final dbRef = FirebaseFirestore.instance.collection('quizV2');
+  final trashDbRef = FirebaseFirestore.instance.collection('quizV2Trash');
 
   @override
   Future<bool> addQuiz({required QuizModel quiz}) async {
@@ -40,9 +41,34 @@ class QuizFirestoreRepository extends QuizRepository {
   }
 
   @override
-  Future<bool> deleteQuiz({required String quizName}) {
-    // TODO: implement deleteQuiz
-    throw UnimplementedError();
+  Future<bool> deleteQuiz({required QuizModel quiz}) async {
+    await trashDbRef.add({
+      'quizName': quiz.quizName,
+      'quizType': quiz.quizType.asString,
+      'questions': [],
+      'coefficients': quiz.coefficients,
+      'coeffResults': quiz.coeffResults
+          .map(
+            (e) => CoeffResult(
+              name: e.name,
+              results: e.results
+                  .map(
+                    (e) => Result(
+                      speciality: e.speciality,
+                      faculty: e.faculty,
+                    ),
+                  )
+                  .toList(),
+            ),
+          )
+          .toList(),
+      'isVisible': false,
+      'needPrintResults': quiz.needPrintResults,
+    });
+
+    await dbRef.doc(quiz.docId).delete();
+
+    return true;
   }
 
   @override
@@ -87,12 +113,14 @@ class QuizFirestoreRepository extends QuizRepository {
   }
 
   @override
-  Future<List<QuizModel>> getQuizList() async {
+  Future<List<QuizModel?>> getQuizList({required List<String> quizIds}) async {
     final response = await dbRef.get();
-
-    return response.docs
-        .map(
-          (e) => QuizModel(
+    final list = <QuizModel?>[];
+    if (quizIds.isNotEmpty) {
+      for (var i = 0; i < response.docs.length; i++) {
+        if (quizIds.contains(response.docs[i].id)) {
+          final e = response.docs[i];
+          list.add(QuizModel(
             docId: e.id,
             quizName: e['quizName'],
             quizType: quizTypeFromString(e['quizType']),
@@ -113,11 +141,14 @@ class QuizFirestoreRepository extends QuizRepository {
                 ),
               ),
             ],
-            isVisible: e['isVisible'],
             needPrintResults: e['needPrintResults'],
-          ),
-        )
-        .toList();
+            isChecked: false,
+          ));
+        }
+      }
+    }
+
+    return list;
   }
 
   List<QuestionModel> qList(List data) {

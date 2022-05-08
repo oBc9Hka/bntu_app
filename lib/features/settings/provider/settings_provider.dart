@@ -15,30 +15,45 @@ class SettingsProvider with ChangeNotifier {
     initSettings();
   }
 
+  List<String> quizIds = [];
+  List<String> allQuizIds = [];
   String currentAdmissionYear = '';
   String secretKey = '';
   String unseenCount = '0';
-  bool isFacultiesQuiz = true; // Quiz for faculties or specialties
   List<ErrorMessage> errorMessages = [];
   String checkedQuizId = '';
 
   Future<void> initSettings() async {
     currentAdmissionYear = await settingsRepository.getCurrentAdmissionYear();
     secretKey = await settingsRepository.getSecretKey();
-    isFacultiesQuiz = await settingsRepository.getIsFacultyQuizChecked();
-    initErrorMessages();
-    getNameOfCheckedTest();
+    await initErrorMessages();
+    await getCheckedTestsIds();
     notifyListeners();
   }
 
-  void initErrorMessages() async {
+  Future<void> initErrorMessages() async {
     errorMessages = await errorMessagesRepository.getErrorMessagesList();
     unseenCount = await errorMessagesRepository.getUnseenMessages();
     notifyListeners();
   }
 
-  void getNameOfCheckedTest() async {
-    checkedQuizId = await settingsRepository.getCheckedQuizId();
+  Future<void> getCheckedTestsIds() async {
+    quizIds = await settingsRepository.getCheckedQuizIds();
+    notifyListeners();
+  }
+
+  Future<void> editCheckedQuizIds({required List<String> newList}) async {
+    quizIds = newList;
+    notifyListeners();
+  }
+
+  Future<void> saveCheckedQuizIds() async {
+    await settingsRepository.editCheckedQuizIds(checkedQuizIds: quizIds);
+    notifyListeners();
+  }
+
+  Future<void> getAllTestsIds() async {
+    allQuizIds = await settingsRepository.getAllQuizIds();
     notifyListeners();
   }
 
@@ -49,19 +64,12 @@ class SettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void changeCheckedTest(String quizId) async {
+  void changeCheckedTest(List<String> quizIds) async {
     await settingsRepository
-        .editCheckedQuiz(quizId)
+        .editCheckedQuizIds(checkedQuizIds: quizIds)
         .whenComplete(() => initSettings());
     notifyListeners();
   }
-
-  // void editQuizChecked(bool isFacultiesQuiz) {
-  //   settingsRepository
-  //       .editQuizChecked(isFacultiesQuiz)
-  //       .whenComplete(() => initSettings());
-  //   notifyListeners();
-  // }
 
   void changeViewedState(String id) async {
     await errorMessagesRepository.changeViewedState(id).whenComplete(() {

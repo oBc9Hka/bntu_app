@@ -1,6 +1,8 @@
+import 'package:bntu_app/core/widgets/save_changes.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz/quiz_add.dart';
 import 'package:bntu_app/features/quiz/ui/quiz/quiz_edit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -16,33 +18,41 @@ class QuizList extends StatefulWidget {
 }
 
 class _QuizListState extends State<QuizList> {
-  var groupValue = -1;
-  var oldGroupValue;
+  List<String> initCheckedIds = [];
   bool firstInit = true;
   late SettingsProvider settingsState;
   late QuizProvider quizState;
 
   Future<bool> _onWillPop() async {
-    if (oldGroupValue == groupValue) {
-      return true;
+    var doneQuizList = settingsState.quizIds.map((e) => e).toList();
+    initCheckedIds.sort();
+    doneQuizList.sort();
+    if (!listEquals(initCheckedIds, doneQuizList)) {
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return SaveChanges(onSavePressed: () {
+              settingsState.saveCheckedQuizIds();
+              Fluttertoast.showToast(msg: 'Изменения сохранены');
+              Navigator.of(context).pop();
+            });
+          });
     }
-    settingsState.changeCheckedTest(quizState.quizList[groupValue].docId);
-    await Fluttertoast.showToast(msg: 'Изменения сохранены');
+
     return true;
   }
 
   Future<void> theFirstInit() async {
     settingsState = context.watch<SettingsProvider>();
     quizState = context.watch<QuizProvider>();
-
-    await quizState.getQuizList();
+    initCheckedIds = settingsState.quizIds.map((e) => e).toList();
+    await quizState.getQuizList(quizIds: settingsState.allQuizIds);
     try {
-      final checkedTest = quizState.quizList.firstWhere(
-        (element) => element.docId == settingsState.checkedQuizId,
-      );
-
-      groupValue = quizState.quizList.indexOf(checkedTest);
-      oldGroupValue = groupValue;
+      quizState.quizList.map((e) {
+        if (settingsState.quizIds.contains(e!.docId)) {
+          e = e.copyWith(isChecked: true);
+        }
+      });
     } catch (_) {}
 
     firstInit = false;
@@ -56,6 +66,7 @@ class _QuizListState extends State<QuizList> {
     }
     return Consumer<QuizProvider>(
       builder: (context, quizState, child) {
+        print(quizState.quizList.isEmpty);
         return WillPopScope(
           onWillPop: _onWillPop,
           child: Scaffold(
@@ -105,25 +116,40 @@ class _QuizListState extends State<QuizList> {
                               return Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Radio(
-                                    activeColor: Constants.mainColor,
-                                    value: index,
-                                    groupValue: groupValue,
-                                    onChanged: (T) {
-                                      setState(() {
-                                        groupValue = T as int;
-                                      });
+                                  Checkbox(
+                                    checkColor: Constants.mainColor,
+                                    value: settingsState.quizIds.contains(
+                                        quizState.quizList[index]!.docId),
+                                    onChanged: (value) {
+                                      final list = settingsState.quizIds;
+                                      if (!value!) {
+                                        final remove = list.firstWhere(
+                                            (element) =>
+                                                element ==
+                                                quizState
+                                                    .quizList[index]!.docId);
+                                        list.remove(remove);
+                                        settingsState.editCheckedQuizIds(
+                                          newList: list,
+                                        );
+                                      } else {
+                                        list.add(
+                                            quizState.quizList[index]!.docId);
+                                        settingsState.editCheckedQuizIds(
+                                          newList: list,
+                                        );
+                                      }
                                     },
                                   ),
                                   Expanded(
                                     child: ListTile(
                                       title: Text(
-                                          quizState.quizList[index].quizName),
+                                          quizState.quizList[index]!.quizName),
                                       trailing: IconButton(
                                         icon: Icon(Icons.edit),
                                         onPressed: () {
                                           quizState.setQuizInEdit(
-                                            quizState.quizList[index],
+                                            quizState.quizList[index]!,
                                           );
                                           Navigator.of(context).push(
                                             MaterialPageRoute(

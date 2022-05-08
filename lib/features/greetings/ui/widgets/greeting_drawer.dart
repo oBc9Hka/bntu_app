@@ -316,15 +316,77 @@ class GreetingDrawer extends StatelessWidget {
               // TODO: implement admin panel for all of the tests
               ListTile(
                 onTap: () async {
+                  _showLoadingDialog();
                   await settingsState.initSettings();
-                  await quizState.getActiveQuiz(
-                      docId: settingsState.checkedQuizId);
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => QuizMainMenu(),
-                    ),
-                  );
+                  Navigator.of(context).pop();
+                  if (settingsState.quizIds.length == 1) {
+                    await quizState.getActiveQuiz(
+                      docId: settingsState.quizIds.first,
+                      quizIds: settingsState.quizIds,
+                    );
+
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuizMainMenu(),
+                      ),
+                    );
+                  } else {
+                    await showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Выбор теста'),
+                                Divider(),
+                                ListView(
+                                  shrinkWrap: true,
+                                  children: [
+                                    for (var i = 0;
+                                        i < settingsState.quizIds.length;
+                                        i++)
+                                      ListTile(
+                                        title: Text(quizState.quizList
+                                            .firstWhere((element) =>
+                                                element!.docId ==
+                                                settingsState.quizIds[i])!
+                                            .quizName),
+                                        onTap: () {
+                                          quizState.getActiveQuiz(
+                                            docId: settingsState.quizIds[i],
+                                            quizIds: settingsState.quizIds,
+                                          );
+
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  QuizMainMenu(),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        });
+                  }
+
+                  // await quizState.getActiveQuiz(
+                  //   docId: settingsState.checkedQuizId,
+                  //   quizIds: settingsState.quizIds,
+                  // );
+
+                  // await Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => QuizMainMenu(),
+                  //   ),
+                  // );
                 },
                 title: Text(
                   'Помощь с выбором специальности',

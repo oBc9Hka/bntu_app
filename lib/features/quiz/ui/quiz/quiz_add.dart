@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+import '../../../settings/provider/settings_provider.dart';
+
 class QuizAdd extends StatefulWidget {
   const QuizAdd({Key? key}) : super(key: key);
 
@@ -20,6 +22,7 @@ class _QuizAddState extends State<QuizAdd> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsState = context.watch<SettingsProvider>();
     return Consumer<QuizProvider>(builder: (context, state, child) {
       return Scaffold(
         appBar: AppBar(
@@ -110,7 +113,7 @@ class _QuizAddState extends State<QuizAdd> {
               AddButtonsSection(
                 onAddPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    await state.addQuiz();
+                    await state.addQuiz(allQuizIds: settingsState.allQuizIds);
                     Navigator.pop(context);
                     await Fluttertoast.showToast(msg: 'Тест успешно создан');
                   }
