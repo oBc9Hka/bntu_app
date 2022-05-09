@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/src/provider.dart';
 
 import '../../../../core/provider/app_provider.dart';
+import '../../../specialties/provider/specialties_provider.dart';
 import '../../provider/faculties_provider.dart';
 import '../faculty_edit.dart';
 import 'faculty_short_item.dart';
@@ -13,7 +14,8 @@ class FacultiesGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _onTap(var faculty) {
+    void _onTap(var faculty, SpecialtiesProvider state) {
+      state.initSpecialties();
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -37,6 +39,7 @@ class FacultiesGridView extends StatelessWidget {
 
     final state = context.watch<FacultiesProvider>();
     final appState = context.watch<AppProvider>();
+    final specState = context.watch<SpecialtiesProvider>();
 
     return GridView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -56,7 +59,7 @@ class FacultiesGridView extends StatelessWidget {
                 shortName: state.faculties[index].shortName.toString(),
                 user: appState.user,
                 onTap: () {
-                  _onTap(state.faculties[index]);
+                  _onTap(state.faculties[index], specState);
                 },
                 onEditPressed: () {
                   _onEditPressed(state.faculties[index]);

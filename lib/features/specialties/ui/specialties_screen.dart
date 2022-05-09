@@ -11,8 +11,13 @@ import '../provider/specialties_provider.dart';
 
 class SpecialtiesScreen extends StatelessWidget {
   final Faculty faculty;
+  final String? qualificationNeedToShow;
 
-  SpecialtiesScreen({Key? key, required this.faculty}) : super(key: key);
+  SpecialtiesScreen({
+    Key? key,
+    required this.faculty,
+    this.qualificationNeedToShow,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,12 @@ class SpecialtiesScreen extends StatelessWidget {
                             icon: Icon(Icons.add)),
                         IconButton(
                             onPressed: () {
-                              state.initSpecialties();
+                              state.initSpecialties(
+                                qualificationNeedToShow:
+                                    qualificationNeedToShow != null
+                                        ? [qualificationNeedToShow!]
+                                        : null,
+                              );
                             },
                             icon: Icon(Icons.refresh)),
                       ],
@@ -96,34 +106,52 @@ class SpecialtiesScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (faculty.shortName != 'ВТФ')
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Text(
-                            'Наши специальности',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.specialties.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (state.specialties[index].facultyBased ==
-                                faculty.shortName) {
-                              return SpecialityCard(
-                                currentYear:
-                                    int.parse(state.currentAdmissionYear),
-                                item: state.specialties[index],
-                                user: appState.user,
-                              );
-                            }
-                            return Container();
-                          }),
-                      Padding(padding: EdgeInsets.only(top: 10)),
+                      state.isLoading
+                          ? SizedBox(
+                              height: 100,
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          : state.specialties.isEmpty
+                              ? Center(
+                                  child: Text('Список специальностей пуст'),
+                                )
+                              : Column(
+                                  children: [
+                                    if (faculty.shortName != 'ВТФ')
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        child: Text(
+                                          'Наши специальности',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: state.specialties.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          if (state.specialties[index]
+                                                  .facultyBased ==
+                                              faculty.shortName) {
+                                            return SpecialityCard(
+                                              currentYear: int.parse(
+                                                  state.currentAdmissionYear),
+                                              item: state.specialties[index],
+                                              user: appState.user,
+                                            );
+                                          }
+                                          return Container();
+                                        }),
+                                    Padding(padding: EdgeInsets.only(top: 10)),
+                                  ],
+                                )
                     ],
                   ),
                 ),

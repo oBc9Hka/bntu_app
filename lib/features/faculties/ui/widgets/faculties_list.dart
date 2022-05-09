@@ -1,3 +1,4 @@
+import 'package:bntu_app/features/specialties/provider/specialties_provider.dart';
 import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
@@ -13,7 +14,8 @@ class FacultiesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _onTap(var faculty) {
+    void _onTap(var faculty, SpecialtiesProvider state) {
+      state.initSpecialties();
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -37,6 +39,7 @@ class FacultiesListView extends StatelessWidget {
 
     final state = context.watch<FacultiesProvider>();
     final appState = context.watch<AppProvider>();
+    final specState = context.watch<SpecialtiesProvider>();
 
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -54,7 +57,7 @@ class FacultiesListView extends StatelessWidget {
                 name: state.faculties[index].name.toString(),
                 user: appState.user,
                 onTap: () {
-                  _onTap(state.faculties[index]);
+                  _onTap(state.faculties[index], specState);
                 },
                 onEditPressed: () {
                   _onEditPressed(state.faculties[index]);

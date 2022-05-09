@@ -7,15 +7,30 @@ class SpecialtiesProvider with ChangeNotifier {
   final SpecialtiesRepository specialtiesRepository;
 
   List<Speciality> specialties = [];
-  bool get isSpecialtiesLoaded => specialties.isNotEmpty;
+
   String currentAdmissionYear = '2021';
+
+  bool isLoading = false;
 
   SpecialtiesProvider({required this.specialtiesRepository}) {
     initSpecialties();
   }
 
-  void initSpecialties() async {
-    specialties = await specialtiesRepository.getSpecialtiesList();
+  void initSpecialties({List<String>? qualificationNeedToShow}) async {
+    isLoading = true;
+    notifyListeners();
+    final specialtiesResult = await specialtiesRepository.getSpecialtiesList();
+    specialties = [];
+    if (qualificationNeedToShow != null) {
+      for (var item in specialtiesResult) {
+        if (qualificationNeedToShow.contains(item.qualification)) {
+          specialties.add(item);
+        }
+      }
+    } else {
+      specialties = specialtiesResult;
+    }
+    isLoading = false;
     notifyListeners();
   }
 

@@ -3,6 +3,7 @@ import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
 import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
+import 'package:bntu_app/features/specialties/provider/specialties_provider.dart';
 import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,8 @@ class ResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final specialityState = context.watch<SpecialtiesProvider>();
+
     var _fit = '...';
     var _mayFit = '...';
     var _mayFitVisibility = false;
@@ -259,6 +262,10 @@ class ResultScreen extends StatelessWidget {
                                   .results)
                                 ListTile(
                                   onTap: () {
+                                    specialityState.initSpecialties(
+                                        qualificationNeedToShow: [
+                                          item.speciality
+                                        ]);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -267,6 +274,8 @@ class ResultScreen extends StatelessWidget {
                                             item.faculty,
                                             facultyState.faculties,
                                           ),
+                                          qualificationNeedToShow:
+                                              item.speciality,
                                         ),
                                       ),
                                     );
