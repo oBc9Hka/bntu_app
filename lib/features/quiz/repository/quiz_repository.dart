@@ -65,7 +65,23 @@ class QuizFirestoreRepository extends QuizRepository {
       'quizName': quiz.quizName,
       'quizDescription': quiz.quizDescription,
       'quizType': quiz.quizType.asString,
-      'questions': [],
+      'questions': quiz.questions
+          .map((e) => {
+                'question': e.question,
+                'questionType': e.questionType.asString,
+                'answers': e.answers
+                    .map((e) => {
+                          'text': e.text,
+                          'coefficients': e.coefficients
+                              .map((e) => {
+                                    'key': e.key,
+                                    'weight': e.weight,
+                                  })
+                              .toList()
+                        })
+                    .toList(),
+              })
+          .toList(),
       'coefficients': quiz.coefficients,
       'coeffResults': quiz.coeffResults
           .map((e) => {
