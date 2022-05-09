@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../../core/enums/question__types.dart';
+import '../../../../core/widgets/custom_text_field.dart';
 import '../../domain/models/question_model.dart';
 import '../questions/question_add.dart';
 import '../questions/question_edit.dart';
@@ -114,133 +115,140 @@ class _QuizEditState extends State<QuizEdit> {
                   constraints: BoxConstraints(
                     maxWidth: 600,
                   ),
-                  child: Column(
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: TextEditingController(
-                                text: state.quizInEdit!.quizName,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      children: [
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
                               ),
-                              onChanged: (value) {
-                                state.quizInEdit =
-                                    state.quizInEdit!.copyWith(quizName: value);
-                              },
-                              validator: (value) {
-                                if (value == '') {
-                                  return 'Заполните поле';
-                                }
-                                return null;
-                              },
-                              decoration: const InputDecoration(
-                                  labelText: 'Название теста'),
-                            ),
-                            TextFormField(
-                              controller: TextEditingController(
-                                text: state.quizInEdit!.quizDescription,
+                              CustomTextFormField(
+                                controller: TextEditingController(
+                                  text: state.quizInEdit!.quizName,
+                                ),
+                                onChanged: (value) {
+                                  state.quizInEdit = state.quizInEdit!
+                                      .copyWith(quizName: value);
+                                },
+                                validator: (value) {
+                                  if (value == '') {
+                                    return 'Заполните поле';
+                                  }
+                                  return null;
+                                },
+                                labelText: 'Название теста',
                               ),
-                              validator: (value) {
-                                if (value == '') {
-                                  return 'Введите описание';
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                state.quizInEdit = state.quizInEdit!
-                                    .copyWith(quizDescription: value);
-                              },
-                              decoration: const InputDecoration(
-                                  labelText: 'Описание теста'),
-                            ),
-                          ],
+                              CustomTextFormField(
+                                controller: TextEditingController(
+                                  text: state.quizInEdit!.quizDescription,
+                                ),
+                                validator: (value) {
+                                  if (value == '') {
+                                    return 'Введите описание';
+                                  }
+                                  return null;
+                                },
+                                onChanged: (value) {
+                                  state.quizInEdit = state.quizInEdit!
+                                      .copyWith(quizDescription: value);
+                                },
+                                labelText: 'Описание теста',
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return CoefficientsScreen();
-                            },
-                          );
-                        },
-                        child: Text(
-                          'Редактирование коэффициентов',
+                        ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return CoefficientsScreen();
+                              },
+                            );
+                          },
+                          child: Text(
+                            'Редактирование коэффициентов',
+                          ),
                         ),
-                      ),
-                      state.quizInEdit!.questions.isNotEmpty
-                          ? Flexible(
-                              child: Scaffold(
-                                body: ListViewReordable(
-                                  onReorder: (oldIndex, newIndex) {
-                                    state.reorderQuestions(oldIndex, newIndex);
-                                  },
-                                  children: [
-                                    for (var index = 0;
-                                        index <
-                                            state.quizInEdit!.questions.length;
-                                        index++)
-                                      Card(
-                                        child: ListTile(
-                                          leading: Text('${index + 1}'),
-                                          title: Text(
-                                            state.quizInEdit!.questions[index]
-                                                .question,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          subtitle: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ...state.quizInEdit!
-                                                  .questions[index].answers
-                                                  .map(
-                                                (e) => AutoSizeText(
-                                                  '${e.text.length <= 10 ? e.text.trimRight() : e.text.substring(0, 10).toString().trimRight() + '..'}: ${e.coefficients}',
-                                                  maxLines: 1,
-                                                  style:
-                                                      TextStyle(fontSize: 12),
+                        state.quizInEdit!.questions.isNotEmpty
+                            ? Flexible(
+                                child: Scaffold(
+                                  body: ListViewReordable(
+                                    onReorder: (oldIndex, newIndex) {
+                                      state.reorderQuestions(
+                                          oldIndex, newIndex);
+                                    },
+                                    children: [
+                                      for (var index = 0;
+                                          index <
+                                              state
+                                                  .quizInEdit!.questions.length;
+                                          index++)
+                                        Card(
+                                          child: ListTile(
+                                            leading: Text('${index + 1}'),
+                                            title: Text(
+                                              state.quizInEdit!.questions[index]
+                                                  .question,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            subtitle: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ...state.quizInEdit!
+                                                    .questions[index].answers
+                                                    .map(
+                                                  (e) => AutoSizeText(
+                                                    '${e.text.length <= 10 ? e.text.trimRight() : e.text.substring(0, 10).toString().trimRight() + '..'}: ${e.coefficients}',
+                                                    maxLines: 1,
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          trailing: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              IconButton(
-                                                onPressed: () {
-                                                  state
-                                                      .setQuestionInEdit(index);
+                                              ],
+                                            ),
+                                            trailing: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    state.setQuestionInEdit(
+                                                        index);
 
-                                                  Navigator.of(context).push(
-                                                      MaterialPageRoute(builder:
-                                                          (BuildContext
-                                                              context) {
-                                                    return QuestionEdit();
-                                                  }));
-                                                },
-                                                icon: Icon(
-                                                  Icons.edit,
-                                                  color: mainColor,
+                                                    Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                      return QuestionEdit();
+                                                    }));
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.edit,
+                                                    color: mainColor,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                  ],
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Expanded(
+                                child: Center(
+                                  child: Text('Список вопросов пуст'),
                                 ),
                               ),
-                            )
-                          : Expanded(
-                              child: Center(
-                                child: Text('Список вопросов пуст'),
-                              ),
-                            ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
         ),

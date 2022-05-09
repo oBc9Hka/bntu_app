@@ -66,7 +66,6 @@ class _QuizListState extends State<QuizList> {
     }
     return Consumer<QuizProvider>(
       builder: (context, quizState, child) {
-        print(quizState.quizList.isEmpty);
         return WillPopScope(
           onWillPop: _onWillPop,
           child: Scaffold(
@@ -99,45 +98,79 @@ class _QuizListState extends State<QuizList> {
                   context: context,
                   builder: (context) {
                     return Dialog(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('Список удалённых тестов'),
-                          Divider(),
-                          ListView(
-                            shrinkWrap: true,
-                            children: [
-                              if (quizState.deletedQuizList.isEmpty)
-                                Center(
-                                  child: Text('Нет удалённых тестов'),
+                      child: quizState.deletedQuizList.isEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.delete,
+                                    size: 40,
+                                    color: Constants.mainColor,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Flexible(
+                                    child: Container(
+                                      child: Text(
+                                        'Список удалённых тестов пуст',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  height: 6,
                                 ),
-                              for (var quiz in quizState.deletedQuizList)
-                                ListTile(
-                                  title: Text(quiz!.quizName),
-                                  trailing: ElevatedButton(
-                                    child: Text('Восстановить'),
-                                    onPressed: () async {
-                                      // ignore: unawaited_futures
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Dialog(
-                                            child: LinearProgressIndicator(
-                                              color: Constants.mainColor,
-                                            ),
-                                          );
-                                        },
-                                      );
-                                      await quizState.recoverQuiz(quiz: quiz);
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                    },
+                                Text(
+                                  'Список удалённых тестов',
+                                  style: TextStyle(
+                                    fontSize: 18,
                                   ),
                                 ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                Divider(
+                                  thickness: 2,
+                                ),
+                                ListView(
+                                  shrinkWrap: true,
+                                  children: [
+                                    for (var quiz in quizState.deletedQuizList)
+                                      ListTile(
+                                        title: Text(quiz!.quizName),
+                                        trailing: ElevatedButton(
+                                          child: Text('Восстановить'),
+                                          onPressed: () async {
+                                            // ignore: unawaited_futures
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                    color: Constants.mainColor,
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                            await quizState.recoverQuiz(
+                                                quiz: quiz);
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
                     );
                   },
                 );
@@ -182,61 +215,62 @@ class _QuizListState extends State<QuizList> {
                             ],
                           ),
                           Divider(),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: quizState.quizList.length,
-                            itemBuilder: ((context, index) {
-                              return Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Checkbox(
-                                    checkColor: Constants.mainColor,
-                                    value: settingsState.quizIds.contains(
-                                        quizState.quizList[index]!.docId),
-                                    onChanged: (value) {
-                                      final list = settingsState.quizIds;
-                                      if (!value!) {
-                                        final remove = list.firstWhere(
-                                            (element) =>
-                                                element ==
-                                                quizState
-                                                    .quizList[index]!.docId);
-                                        list.remove(remove);
-                                        settingsState.editCheckedQuizIds(
-                                          newList: list,
-                                        );
-                                      } else {
-                                        list.add(
-                                            quizState.quizList[index]!.docId);
-                                        settingsState.editCheckedQuizIds(
-                                          newList: list,
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  Expanded(
-                                    child: ListTile(
-                                      title: Text(
-                                          quizState.quizList[index]!.quizName),
-                                      trailing: IconButton(
-                                        icon: Icon(Icons.edit),
-                                        onPressed: () {
-                                          quizState.setQuizInEdit(
-                                            quizState.quizList[index]!,
+                          Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: quizState.quizList.length,
+                              itemBuilder: ((context, index) {
+                                return Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Checkbox(
+                                      value: settingsState.quizIds.contains(
+                                          quizState.quizList[index]!.docId),
+                                      onChanged: (value) {
+                                        final list = settingsState.quizIds;
+                                        if (!value!) {
+                                          final remove = list.firstWhere(
+                                              (element) =>
+                                                  element ==
+                                                  quizState
+                                                      .quizList[index]!.docId);
+                                          list.remove(remove);
+                                          settingsState.editCheckedQuizIds(
+                                            newList: list,
                                           );
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: ((context) =>
-                                                  QuizEdit()),
-                                            ),
+                                        } else {
+                                          list.add(
+                                              quizState.quizList[index]!.docId);
+                                          settingsState.editCheckedQuizIds(
+                                            newList: list,
                                           );
-                                        },
+                                        }
+                                      },
+                                    ),
+                                    Expanded(
+                                      child: ListTile(
+                                        title: Text(quizState
+                                            .quizList[index]!.quizName),
+                                        trailing: IconButton(
+                                          icon: Icon(Icons.edit),
+                                          onPressed: () {
+                                            quizState.setQuizInEdit(
+                                              quizState.quizList[index]!,
+                                            );
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: ((context) =>
+                                                    QuizEdit()),
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            }),
+                                  ],
+                                );
+                              }),
+                            ),
                           ),
                         ],
                       ),

@@ -14,7 +14,6 @@ class QuizMainMenu extends StatelessWidget {
     var height = MediaQuery.of(context).size.height;
     var mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
-    var text = 'специальности';
 
     final quizState = context.watch<QuizProvider>();
 
@@ -51,7 +50,7 @@ class QuizMainMenu extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
-                  quizState.activeQuiz!.quizDescription,
+                  quizState.activeQuiz?.quizDescription ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,

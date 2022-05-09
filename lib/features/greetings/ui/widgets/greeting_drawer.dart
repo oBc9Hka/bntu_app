@@ -2,6 +2,7 @@ import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz_main_menu.dart';
 import 'package:bntu_app/features/settings/provider/settings_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -336,42 +337,80 @@ class GreetingDrawer extends StatelessWidget {
                         context: context,
                         builder: (context) {
                           return Dialog(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('Выбор теста'),
-                                Divider(),
-                                ListView(
-                                  shrinkWrap: true,
-                                  children: [
-                                    for (var i = 0;
-                                        i < settingsState.quizIds.length;
-                                        i++)
-                                      ListTile(
-                                        title: Text(quizState.quizList
-                                            .firstWhere((element) =>
-                                                element!.docId ==
-                                                settingsState.quizIds[i])!
-                                            .quizName),
-                                        onTap: () {
-                                          quizState.getActiveQuiz(
-                                            docId: settingsState.quizIds[i],
-                                            quizIds: settingsState.quizIds,
-                                          );
-
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  QuizMainMenu(),
+                            child: settingsState.quizIds.isEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svg/sad_icon.svg',
+                                          color: Constants.mainColor,
+                                          height: 50,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Flexible(
+                                          child: Container(
+                                            child: Text(
+                                              'Доступных к прохождению тестов пока нет',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                              ),
                                             ),
-                                          );
-                                        },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(
+                                        height: 6,
                                       ),
-                                  ],
-                                )
-                              ],
-                            ),
+                                      Text(
+                                        'Выбор теста',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                      ),
+                                      ListView(
+                                        shrinkWrap: true,
+                                        children: [
+                                          for (var i = 0;
+                                              i < settingsState.quizIds.length;
+                                              i++)
+                                            ListTile(
+                                              title: Text(quizState.quizList
+                                                  .firstWhere((element) =>
+                                                      element!.docId ==
+                                                      settingsState.quizIds[i])!
+                                                  .quizName),
+                                              onTap: () {
+                                                quizState.getActiveQuiz(
+                                                  docId:
+                                                      settingsState.quizIds[i],
+                                                  quizIds:
+                                                      settingsState.quizIds,
+                                                );
+
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        QuizMainMenu(),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                           );
                         });
                   }

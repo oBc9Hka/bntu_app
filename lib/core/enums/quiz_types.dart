@@ -12,7 +12,6 @@ extension QuizTypesExtension on QuizTypes {
 }
 
 QuizTypes quizTypeFromString(String string) {
-  print(QuizTypes.values);
   return QuizTypes.values
       .firstWhere((i) => i.toString() == 'QuizTypes.$string');
 }

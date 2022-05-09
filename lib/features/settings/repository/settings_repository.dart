@@ -15,19 +15,6 @@ class SettingsFirestoreRepository extends SettingsRepository {
     return _getFieldData('secretKey');
   }
 
-  @override
-  Future<bool> getIsFacultyQuizChecked() async {
-    var value = await dbRef.doc('commonSettings').get().then((snapshot) {
-      var _temp = snapshot.data()!.entries.toList();
-      var _toReturn;
-      for (var item in _temp) {
-        if (item.key == 'isFacultiesQuizChecked') _toReturn = item.value;
-      }
-      return _toReturn;
-    });
-    return value;
-  }
-
   Future<String> _getFieldData(String fieldName) async {
     var value = await dbRef.doc('commonSettings').get().then((snapshot) {
       var _temp = snapshot.data()!.entries.toList();

@@ -1,3 +1,4 @@
+import 'package:bntu_app/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 ThemeData _themeLight = ThemeData.light();
@@ -9,11 +10,16 @@ ThemeData themeLight = _themeLight.copyWith(
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.white,
     iconTheme: IconThemeData(color: Colors.black),
-    titleTextStyle: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+    titleTextStyle: TextStyle(
+        color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
     // textTheme: TextTheme(
     //   headline6: TextStyle(
     //       color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
     // ),
+  ),
+  checkboxTheme: CheckboxThemeData(
+    checkColor: MaterialStateProperty.all(Colors.white),
+    fillColor: MaterialStateProperty.all(Constants.mainColor),
   ),
   colorScheme: ColorScheme(
     primary: Color.fromARGB(255, 0, 138, 94),
@@ -59,6 +65,10 @@ ThemeData themeDark = _themeDark.copyWith(
         Color.fromARGB(255, 17, 17, 17),
       ),
     ),
+  ),
+  checkboxTheme: CheckboxThemeData(
+    checkColor: MaterialStateProperty.all(Colors.white),
+    fillColor: MaterialStateProperty.all(Constants.mainColor),
   ),
   cardColor: Colors.grey[900],
   colorScheme: ColorScheme(

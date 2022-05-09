@@ -20,19 +20,15 @@ class QuizFirestoreRepository extends QuizRepository {
       'questions': [],
       'coefficients': quiz.coefficients,
       'coeffResults': quiz.coeffResults
-          .map(
-            (e) => CoeffResult(
-              name: e.name,
-              results: e.results
-                  .map(
-                    (e) => Result(
-                      speciality: e.speciality,
-                      faculty: e.faculty,
-                    ),
-                  )
-                  .toList(),
-            ),
-          )
+          .map((e) => {
+                'name': e.name,
+                'results': e.results
+                    .map((e) => {
+                          'speciality': e.speciality,
+                          'faculty': e.faculty,
+                        })
+                    .toList(),
+              })
           .toList(),
       'needPrintResults': quiz.needPrintResults,
     });
@@ -72,19 +68,15 @@ class QuizFirestoreRepository extends QuizRepository {
       'questions': [],
       'coefficients': quiz.coefficients,
       'coeffResults': quiz.coeffResults
-          .map(
-            (e) => CoeffResult(
-              name: e.name,
-              results: e.results
-                  .map(
-                    (e) => Result(
-                      speciality: e.speciality,
-                      faculty: e.faculty,
-                    ),
-                  )
-                  .toList(),
-            ),
-          )
+          .map((e) => {
+                'name': e.name,
+                'results': e.results
+                    .map((e) => {
+                          'speciality': e.speciality,
+                          'faculty': e.faculty,
+                        })
+                    .toList(),
+              })
           .toList(),
       'needPrintResults': quiz.needPrintResults,
     });
@@ -174,8 +166,6 @@ class QuizFirestoreRepository extends QuizRepository {
   }
 
   List<QuestionModel> qList(List data) {
-    print(data);
-
     return data.map((e) => QuestionModel.fromMap(e)).toList();
   }
 

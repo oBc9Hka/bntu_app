@@ -154,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             ),
                             Divider(),
                             ListTile(
-                              title: Text('Ключ входа в режим администратора'),
+                              title: Text('Ключ входа в режим редактора'),
                               subtitle: Row(
                                 children: [
                                   TextButton(
