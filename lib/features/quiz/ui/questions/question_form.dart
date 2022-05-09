@@ -159,9 +159,18 @@ class _QuestionFormState extends State<QuestionForm> {
     return Dialog(
       child: StatefulBuilder(builder: (context, setState) {
         return Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Выбор коэффициентов'),
-            Divider(),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              'Выбор коэффициентов',
+              style: TextStyle(fontSize: 18),
+            ),
+            Divider(
+              thickness: 2,
+            ),
             ListView.builder(
               itemCount:
                   state.questionInEdit!.answers[index].coefficients.length,
