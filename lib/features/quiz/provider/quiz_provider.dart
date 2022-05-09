@@ -51,7 +51,7 @@ class QuizProvider with ChangeNotifier {
     return true;
   }
 
-  Future<void> getActiveQuiz({
+  Future<void> setActiveQuiz({
     required String docId,
     required List<String> quizIds,
   }) async {

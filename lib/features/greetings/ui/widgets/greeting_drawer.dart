@@ -321,7 +321,7 @@ class GreetingDrawer extends StatelessWidget {
                   await quizState.getQuizList(quizIds: settingsState.quizIds);
                   Navigator.of(context).pop();
                   if (settingsState.quizIds.length == 1) {
-                    await quizState.getActiveQuiz(
+                    await quizState.setActiveQuiz(
                       docId: settingsState.quizIds.first,
                       quizIds: settingsState.quizIds,
                     );
@@ -391,7 +391,7 @@ class GreetingDrawer extends StatelessWidget {
                                                       settingsState.quizIds[i])!
                                                   .quizName),
                                               onTap: () {
-                                                quizState.getActiveQuiz(
+                                                quizState.setActiveQuiz(
                                                   docId:
                                                       settingsState.quizIds[i],
                                                   quizIds:

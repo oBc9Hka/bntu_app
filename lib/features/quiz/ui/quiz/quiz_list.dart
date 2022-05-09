@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../settings/provider/settings_provider.dart';
+import '../quiz_main_menu.dart';
 
 class QuizList extends StatefulWidget {
   const QuizList({Key? key}) : super(key: key);
@@ -18,6 +19,8 @@ class QuizList extends StatefulWidget {
 }
 
 class _QuizListState extends State<QuizList> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<String> initCheckedIds = [];
   bool firstInit = true;
   late SettingsProvider settingsState;
@@ -69,6 +72,7 @@ class _QuizListState extends State<QuizList> {
         return WillPopScope(
           onWillPop: _onWillPop,
           child: Scaffold(
+            key: _scaffoldKey,
             floatingActionButton: IconButton(
               tooltip: 'Удалёные тесты',
               iconSize: 40,
@@ -267,6 +271,30 @@ class _QuizListState extends State<QuizList> {
                                         ),
                                       ),
                                     ),
+                                    IconButton(
+                                      onPressed: () async {
+                                        await quizState.setActiveQuiz(
+                                          docId:
+                                              quizState.quizList[index]!.docId,
+                                          quizIds: quizState.quizList
+                                              .map((e) => e!.docId)
+                                              .toList(),
+                                        );
+                                        await Navigator.of(
+                                                _scaffoldKey.currentContext!)
+                                            .push(
+                                          MaterialPageRoute(
+                                            builder: (newContext) =>
+                                                QuizMainMenu(),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.play_arrow,
+                                        color: Constants.mainColor,
+                                        size: 36,
+                                      ),
+                                    )
                                   ],
                                 );
                               }),
