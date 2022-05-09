@@ -1,3 +1,4 @@
+import 'package:bntu_app/core/widgets/info_dialog.dart';
 import 'package:bntu_app/core/widgets/save_changes.dart';
 import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz/quiz_add.dart';
@@ -35,9 +36,34 @@ class _QuizListState extends State<QuizList> {
           context: context,
           builder: (context) {
             return SaveChanges(onSavePressed: () {
-              settingsState.saveCheckedQuizIds();
-              Fluttertoast.showToast(msg: 'Изменения сохранены');
-              Navigator.of(context).pop();
+              var canBeSaved = true;
+              for (var item in quizState.quizList) {
+                if (settingsState.quizIds.contains(item!.docId) &&
+                    item.questions.isEmpty) {
+                  canBeSaved = false;
+                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return InfoDialog(
+                        icon: Icon(
+                          Icons.info,
+                          size: 50,
+                          color: Constants.mainColor,
+                        ),
+                        message:
+                            '"${item.quizName}" не имеет вопросов, поэтому не может быть отображен для всех.',
+                      );
+                    },
+                  );
+                  break;
+                }
+              }
+              if (canBeSaved) {
+                settingsState.saveCheckedQuizIds();
+                Fluttertoast.showToast(msg: 'Изменения сохранены');
+                Navigator.of(context).pop();
+              }
             });
           });
     }
