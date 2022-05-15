@@ -106,6 +106,7 @@ class BntuApp extends StatelessWidget {
         animationEffect: 'fade-in',
         logoSize: 225,
       ),
+      debugShowCheckedModeBanner: false,
       theme: themeProvider.current,
       routes: {
         '/main_page': (context) => FacultiesScreen(),
