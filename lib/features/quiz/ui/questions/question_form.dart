@@ -1,4 +1,5 @@
 import 'package:bntu_app/core/constants/constants.dart';
+import 'package:bntu_app/core/enums/question__types.dart';
 import 'package:bntu_app/core/widgets/custom_text_field.dart';
 import 'package:bntu_app/features/quiz/domain/models/answer_model.dart';
 import 'package:bntu_app/features/quiz/domain/models/coeff_model.dart';
@@ -45,56 +46,70 @@ class _QuestionFormState extends State<QuestionForm> {
     return Consumer<QuizProvider>(
       builder: (context, state, child) {
         return SingleChildScrollView(
-          child: Form(
-            key: widget.formKey,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: CustomTextFormField(
-                        labelText: 'Вопрос',
-                        controller: TextEditingController(
-                            text: state.questionInEdit!.question),
-                        validator: (value) {
-                          if (value == '') {
-                            return 'Заполните поле';
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {
-                          state.questionInEdit =
-                              state.questionInEdit!.copyWith(question: value);
-                        },
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Form(
+              key: widget.formKey,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: CustomTextFormField(
+                          labelText: 'Вопрос',
+                          controller: TextEditingController(
+                              text: state.questionInEdit!.question),
+                          validator: (value) {
+                            if (value == '') {
+                              return 'Заполните поле';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            state.questionInEdit =
+                                state.questionInEdit!.copyWith(question: value);
+                          },
+                        ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        state.editAnswersCount();
-                      },
-                      child: Text(state.questionInEdit!.questionType.name),
-                    ),
-                  ],
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: state.questionInEdit!.answers.length,
-                  itemBuilder: (context, index) {
-                    return answerTile(index, state);
-                  },
-                ),
-                IconButton(
-                  onPressed: () {
-                    addAnswer(state);
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    color: Constants.mainColor,
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: 110,
+                        height: 56,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            state.editAnswersCount();
+                          },
+                          child: Text(
+                            state.questionInEdit!.questionType.asString,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: state.questionInEdit!.answers.length,
+                    itemBuilder: (context, index) {
+                      return answerTile(index, state);
+                    },
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      addAnswer(state);
+                    },
+                    icon: Icon(
+                      Icons.add,
+                      color: Constants.mainColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
