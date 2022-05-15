@@ -76,7 +76,7 @@ class _FacultiesScreenState extends State<FacultiesScreen>
                   : Container()
             ],
           ),
-          body: (!state.isFacultiesLoaded)
+          body: (state.isLoading)
               ? Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
                   child: Column(

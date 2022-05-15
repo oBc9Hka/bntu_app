@@ -9,6 +9,8 @@ class FacultiesProvider with ChangeNotifier {
   List<Faculty> faculties = [];
   List<String> facultiesShortNames = [];
 
+  bool isLoading = false;
+
   bool get isFacultiesLoaded => faculties.isNotEmpty;
   bool isList = true; // ListView or GridView at faculties page
 
@@ -17,8 +19,11 @@ class FacultiesProvider with ChangeNotifier {
   }
 
   void initFaculties() async {
+    isLoading = true;
+    notifyListeners();
     faculties = await facultiesRepository.getFacultiesList();
     facultiesShortNames = await facultiesRepository.getFacultiesShortNames();
+    isLoading = false;
     notifyListeners();
   }
 
@@ -73,8 +78,9 @@ class FacultiesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFaculty(String id, String packageName) {
-    facultiesRepository.removeFaculty(id, packageName);
+  Future<void> removeFaculty(String id, String packageName) async {
+    await facultiesRepository.removeFaculty(id, packageName);
     notifyListeners();
+    initFaculties();
   }
 }

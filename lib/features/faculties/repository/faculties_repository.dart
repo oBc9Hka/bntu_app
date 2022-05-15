@@ -74,7 +74,9 @@ class FacultiesFirestoreRepository extends FacultiesRepository {
 
   @override
   Future<void> removeFaculty(String id, String name) async {
-    await FirebaseStorage.instance.ref('faculties/$name/photo.jpg').delete();
+    try {
+      await FirebaseStorage.instance.ref('faculties/$name/photo.jpg').delete();
+    } catch (_) {}
     await dbRef.doc(id).delete();
   }
 
