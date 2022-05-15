@@ -11,6 +11,14 @@ class QuizMainMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String _getQuestionsWord(int length) {
+      return length == 1
+          ? 'вопрос'
+          : length < 5
+              ? 'вопроса'
+              : 'вопросов';
+    }
+
     var height = MediaQuery.of(context).size.height;
     var mainColor = Constants.mainColor;
     var themeProvider = Provider.of<ThemeProvider>(context);
@@ -51,6 +59,21 @@ class QuizMainMenu extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 30),
                 child: Text(
                   quizState.activeQuiz?.quizDescription ?? '',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: mainColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: Text(
+                  'Тест содержит ${quizState.activeQuiz!.questions.length} ${_getQuestionsWord(quizState.activeQuiz!.questions.length)}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,

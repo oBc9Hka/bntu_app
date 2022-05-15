@@ -105,7 +105,7 @@ class _QuizScreenState extends State<QuizScreen> {
               SizedBox(
                 width: double.infinity,
                 child: Text(
-                  'Вопрос ${index + 1}',
+                  'Вопрос ${index + 1}/${state.activeQuiz!.questions.length}',
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 28.0,
