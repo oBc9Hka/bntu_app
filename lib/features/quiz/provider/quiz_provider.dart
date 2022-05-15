@@ -131,6 +131,8 @@ class QuizProvider with ChangeNotifier {
     list.add(coeff);
     quizInEdit = quizInEdit!.copyWith(coefficients: list);
     notifyListeners();
+
+    await changeNeedPrintResults(value: quizInEdit!.needPrintResults);
   }
 
   Future<void> removeCoeff({required int index}) async {
@@ -138,15 +140,50 @@ class QuizProvider with ChangeNotifier {
     list.removeAt(index);
     quizInEdit = quizInEdit!.copyWith(coefficients: list);
     notifyListeners();
+
+    await changeNeedPrintResults(value: quizInEdit!.needPrintResults);
   }
 
   Future<void> changeNeedPrintResults({required bool value}) async {
+    final cResults = quizInEdit!.coeffResults.map((e) => e.copyWith()).toList();
+
     quizInEdit = quizInEdit!.copyWith(
       needPrintResults: value,
       coeffResults: quizInEdit!.coefficients
           .map((e) => CoeffResult(name: e, results: []))
           .toList(),
     );
+
+    if (cResults.isNotEmpty) {
+      // to add new coeff
+      for (var i = 0; i < quizInEdit!.coefficients.length; i++) {
+        try {
+          cResults.firstWhere(
+            (element) => element.name == quizInEdit!.coefficients[i],
+          );
+        } catch (_) {
+          cResults.add(
+            CoeffResult(
+              name: quizInEdit!.coefficients[i],
+              results: [],
+            ),
+          );
+        }
+      }
+      // to remove removed coeffs
+      for (var i = 0; i < cResults.length; i++) {
+        try {
+          quizInEdit!.coefficients.firstWhere(
+            (element) => element == cResults[i].name,
+          );
+        } catch (_) {
+          cResults.removeAt(i);
+        }
+      }
+      quizInEdit = quizInEdit!.copyWith(
+        coeffResults: cResults,
+      );
+    }
     notifyListeners();
   }
 
@@ -221,7 +258,7 @@ class QuizProvider with ChangeNotifier {
     list[resultIndex] = list[resultIndex].copyWith(speciality: value);
     cList[coeffIndex] = cList[coeffIndex].copyWith(results: list);
     quizInEdit = quizInEdit!.copyWith(coeffResults: cList);
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> coeffResultChangeFaculty({
@@ -245,7 +282,7 @@ class QuizProvider with ChangeNotifier {
     list[resultIndex] = list[resultIndex].copyWith(faculty: value);
     cList[coeffIndex] = cList[coeffIndex].copyWith(results: list);
     quizInEdit = quizInEdit!.copyWith(coeffResults: cList);
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> editQuiz({required QuizModel quiz}) async {

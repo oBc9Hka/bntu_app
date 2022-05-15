@@ -130,7 +130,7 @@ class _CoefficientsScreenState extends State<CoefficientsScreen> {
                       value: value,
                     );
                   },
-                  labelText: 'Специальность',
+                  labelText: 'Квалификация',
                 ),
               ),
               const SizedBox(
