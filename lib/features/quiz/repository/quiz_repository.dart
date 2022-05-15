@@ -68,7 +68,7 @@ class QuizFirestoreRepository extends QuizRepository {
       'questions': quiz.questions
           .map((e) => {
                 'question': e.question,
-                'questionType': e.questionType.asString,
+                'questionType': e.questionType.name,
                 'answers': e.answers
                     .map((e) => {
                           'text': e.text,
@@ -109,7 +109,7 @@ class QuizFirestoreRepository extends QuizRepository {
       'questions': quiz.questions
           .map((e) => {
                 'question': e.question,
-                'questionType': e.questionType.asString,
+                'questionType': e.questionType.name,
                 'answers': e.answers
                     .map((e) => {
                           'text': e.text,
