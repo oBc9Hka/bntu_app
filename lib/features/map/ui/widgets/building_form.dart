@@ -6,11 +6,13 @@ class BuildingForm extends StatelessWidget {
     Key? key,
     this.building,
     required this.nameController,
+    required this.descriptionController,
     required this.optionalController,
     required this.formKey,
   }) : super(key: key);
   final Building? building;
   final TextEditingController nameController;
+  final TextEditingController descriptionController;
   final TextEditingController optionalController;
   final GlobalKey<FormState> formKey;
 
@@ -36,6 +38,12 @@ class BuildingForm extends StatelessWidget {
                   controller: optionalController,
                   decoration: const InputDecoration(
                       labelText: 'Дополнительная информация'),
+                ),
+                TextFormField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: 'Описание'),
+                  minLines: 1,
+                  maxLines: 8,
                 ),
               ],
             ),

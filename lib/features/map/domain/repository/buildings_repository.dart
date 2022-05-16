@@ -6,10 +6,21 @@ abstract class BuildingsRepository {
   Future<List<Building>> getBuildingsList();
 
   Future<void> addBuilding(
-      String name, String optional, Point point, String imagePath);
+    String name,
+    String description,
+    String optional,
+    Point point,
+    String imagePath,
+  );
 
   Future<void> editBuilding(
-      String name, String optional, Point point, String imagePath, String id);
+    String name,
+    String description,
+    String optional,
+    Point point,
+    String imagePath,
+    String id,
+  );
 
   Future<void> removeBuilding(String id);
 

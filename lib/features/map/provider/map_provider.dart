@@ -19,17 +19,41 @@ class MapProvider with ChangeNotifier {
   }
 
   void addBuilding(
-      String name, String optional, Point point, String imagePath) {
+    String name,
+    String description,
+    String optional,
+    Point point,
+    String imagePath,
+  ) {
     buildingsRepository
-        .addBuilding(name, optional, point, imagePath)
+        .addBuilding(
+          name,
+          description,
+          optional,
+          point,
+          imagePath,
+        )
         .whenComplete(() => initBuildings());
     notifyListeners();
   }
 
   void editBuilding(
-      String name, String optional, Point point, String imagePath, String id) {
+    String name,
+    String description,
+    String optional,
+    Point point,
+    String imagePath,
+    String id,
+  ) {
     buildingsRepository
-        .editBuilding(name, optional, point, imagePath, id)
+        .editBuilding(
+          name,
+          description,
+          optional,
+          point,
+          imagePath,
+          id,
+        )
         .whenComplete(() => initBuildings());
     notifyListeners();
   }

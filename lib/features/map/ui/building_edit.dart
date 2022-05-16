@@ -30,6 +30,7 @@ class BuildingEdit extends StatefulWidget {
 class _BuildingEditState extends State<BuildingEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
   TextEditingController _optionalController = TextEditingController();
 
   XFile? _image;
@@ -121,12 +122,14 @@ class _BuildingEditState extends State<BuildingEdit> {
         },
       );
 
-  void _editBuilding(MapProvider state, String name, String optional) async {
+  void _editBuilding(MapProvider state, String name, String description,
+      String optional) async {
     if (_formKey.currentState!.validate()) {
       if (_image != null) {
         await saveImage(name).whenComplete(() {
           state.editBuilding(
             name,
+            description,
             optional,
             _newPoint,
             _imagePath,
@@ -137,6 +140,7 @@ class _BuildingEditState extends State<BuildingEdit> {
       } else {
         state.editBuilding(
           name,
+          description,
           optional,
           _newPoint,
           '',
@@ -203,6 +207,8 @@ class _BuildingEditState extends State<BuildingEdit> {
   @override
   void initState() {
     _nameController = TextEditingController(text: widget.building.name);
+    _descriptionController =
+        TextEditingController(text: widget.building.description);
     _optionalController = TextEditingController(text: widget.building.optional);
     _point = GeoPoint(
         widget.building.point!.latitude, widget.building.point!.longitude);
@@ -302,6 +308,7 @@ class _BuildingEditState extends State<BuildingEdit> {
                 ),
                 BuildingForm(
                   nameController: _nameController,
+                  descriptionController: _descriptionController,
                   optionalController: _optionalController,
                   formKey: _formKey,
                 ),
@@ -322,6 +329,7 @@ class _BuildingEditState extends State<BuildingEdit> {
                   _editBuilding(
                     state,
                     _nameController.text.trim(),
+                    _descriptionController.text.trim(),
                     _optionalController.text.trim(),
                   );
                 },

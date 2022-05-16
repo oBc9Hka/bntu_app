@@ -25,6 +25,7 @@ class BuildingAdd extends StatefulWidget {
 
 class _BuildingAddState extends State<BuildingAdd> {
   final TextEditingController _nameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _optionalController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -129,6 +130,7 @@ class _BuildingAddState extends State<BuildingAdd> {
         await saveImage().whenComplete(() {
           state.addBuilding(
             _nameController.text.trim(),
+            _descriptionController.text.trim(),
             _optionalController.text.trim(),
             _newPoint,
             _imagePath,
@@ -138,6 +140,7 @@ class _BuildingAddState extends State<BuildingAdd> {
       } else {
         state.addBuilding(
           _nameController.text.trim(),
+          _descriptionController.text.trim(),
           _optionalController.text.trim(),
           _newPoint,
           '',
@@ -296,6 +299,7 @@ class _BuildingAddState extends State<BuildingAdd> {
                 ),
                 BuildingForm(
                   nameController: _nameController,
+                  descriptionController: _descriptionController,
                   optionalController: _optionalController,
                   formKey: _formKey,
                 ),

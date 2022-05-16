@@ -6,7 +6,7 @@ import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/provider/app_provider.dart';
-import '../../../core/widgets/buildings_modal.dart';
+import 'widgets/buildings_modal.dart';
 import '../provider/map_provider.dart';
 import 'building_add.dart';
 import 'building_edit.dart';
@@ -38,12 +38,17 @@ class _BuildingsMapState extends State<BuildingsMap> {
     if (point != Constants.initialPoint) await addPlacemark(point);
   }
 
-  void _showBottomSheet(String title, String subtitle, String imagePath) {
+  void _showBottomSheet(
+      String title, String subtitle, String imagePath, String description) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return ModalBottomSheet(
-            title: title, subtitle: subtitle, imagePath: imagePath);
+          title: title,
+          subtitle: subtitle,
+          imagePath: imagePath,
+          description: description,
+        );
       },
     );
   }
@@ -256,7 +261,8 @@ class _BuildingsMapState extends State<BuildingsMap> {
                                               _showBottomSheet(
                                                   item.name!,
                                                   item.optional!,
-                                                  item.imagePath!);
+                                                  item.imagePath!,
+                                                  item.description ?? '');
                                             },
                                             tooltip: 'Показать фото',
                                             padding: EdgeInsets.all(0),

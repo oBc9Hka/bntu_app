@@ -11,13 +11,19 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
 
   @override
   Future<void> addBuilding(
-      String name, String optional, Point point, String imagePath) async {
+    String name,
+    String description,
+    String optional,
+    Point point,
+    String imagePath,
+  ) async {
     var newOrderId = 0;
     var item = await dbRef.get();
     newOrderId = item.docs.length + 1;
 
     await dbRef.add({
       'name': name,
+      'description': description,
       'optional': optional,
       'point': GeoPoint(point.latitude, point.longitude),
       'imagePath': imagePath,
@@ -26,10 +32,17 @@ class BuildingsFirestoreRepository extends BuildingsRepository {
   }
 
   @override
-  Future<void> editBuilding(String name, String optional, Point point,
-      String imagePath, String id) async {
+  Future<void> editBuilding(
+    String name,
+    String description,
+    String optional,
+    Point point,
+    String imagePath,
+    String id,
+  ) async {
     await dbRef.doc(id).update({
       'name': name,
+      'description': description,
       'optional': optional,
       'point': GeoPoint(point.latitude, point.longitude),
       'imagePath': imagePath,
