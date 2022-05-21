@@ -1,29 +1,34 @@
 // @dart=2.9
 
-import 'package:bntu_app/providers/app_provider.dart';
-import 'package:bntu_app/providers/theme_provider.dart';
-import 'package:bntu_app/repository/buildings_repository.dart';
-import 'package:bntu_app/repository/error_messages_repository.dart';
-import 'package:bntu_app/repository/faculties_repository.dart';
-import 'package:bntu_app/repository/info_cards_repository.dart';
-import 'package:bntu_app/repository/questions_repository.dart';
-import 'package:bntu_app/repository/settings_repository.dart';
-import 'package:bntu_app/repository/specialties_repository.dart';
-import 'package:bntu_app/repository/user_repository.dart';
-import 'package:bntu_app/ui/pages/admission_info/info.dart';
-import 'package:bntu_app/ui/pages/faculties_views/main_page.dart';
-import 'package:bntu_app/ui/pages/greeting_screen.dart';
-import 'package:bntu_app/ui/pages/map_view/map.dart';
-import 'package:bntu_app/ui/pages/messages_page.dart';
-import 'package:bntu_app/ui/pages/quiz_view/main_menu.dart';
-import 'package:bntu_app/ui/pages/quiz_view/quiz_choose.dart';
-import 'package:bntu_app/ui/pages/quiz_view/quiz_list.dart';
-import 'package:bntu_app/ui/pages/settings_page.dart';
+import 'package:bntu_app/core/provider/theme_provider.dart';
+import 'package:bntu_app/core/repository/error_messages_repository.dart';
+import 'package:bntu_app/features/faculties/ui/faculties_screen.dart';
+import 'package:bntu_app/features/greetings/ui/greeting_screen.dart';
+import 'package:bntu_app/features/quiz/provider/quiz_provider.dart';
+import 'package:bntu_app/features/quiz/repository/quiz_repository.dart';
+import 'package:bntu_app/features/settings/repository/settings_repository.dart';
+import 'package:bntu_app/features/settings/ui/messages_page.dart';
+import 'package:bntu_app/features/settings/ui/settings_page.dart';
 import 'package:custom_splash/custom_splash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'core/provider/app_provider.dart';
+import 'core/repository/user_repository.dart';
+import 'features/admission_info/provider/admission_info_provider.dart';
+import 'features/admission_info/repository/info_cards_repository.dart';
+import 'features/admission_info/ui/info.dart';
+import 'features/faculties/provider/faculties_provider.dart';
+import 'features/faculties/repository/faculties_repository.dart';
+import 'features/greetings/provider/greetings_provider.dart';
+import 'features/map/provider/map_provider.dart';
+import 'features/map/repository/buildings_repository.dart';
+import 'features/map/ui/map.dart';
+import 'features/settings/provider/settings_provider.dart';
+import 'features/specialties/provider/specialties_provider.dart';
+import 'features/specialties/repository/specialties_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,24 +40,54 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => ThemeProvider(theme)),
         ChangeNotifierProvider(
-            create: (context) => AppProvider(
-                  FacultiesFirestoreRepository(),
-                  SpecialtiesFirestoreRepository(),
-                  SettingsFirestoreRepository(),
-                  InfoCardsFirestoreRepository(),
-                  ErrorMessagesFirestoreRepository(),
-                  BuildingsFirestoreRepository(),
-                  QuestionsFirestoreRepository(),
-                  UserFirestoreRepository(),
-                )),
+          create: (context) => AppProvider(
+            userRepository: UserFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GreetingsProvider(
+            errorMessagesRepository: ErrorMessagesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FacultiesProvider(
+            facultiesRepository: FacultiesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SpecialtiesProvider(
+            specialtiesRepository: SpecialtiesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AdmissionInfoProvider(
+            infoCardsRepository: InfoCardsFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SettingsProvider(
+            settingsRepository: SettingsFirestoreRepository(),
+            errorMessagesRepository: ErrorMessagesFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => MapProvider(
+            buildingsRepository: BuildingsFirestoreRepository(),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => QuizProvider(
+            quizRepository: QuizFirestoreRepository(),
+          ),
+        ),
       ],
-      child: App(),
+      child: BntuApp(),
     ),
   );
 }
 
-class App extends StatelessWidget {
-  const App({Key key}) : super(key: key);
+class BntuApp extends StatelessWidget {
+  const BntuApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,22 +106,14 @@ class App extends StatelessWidget {
         animationEffect: 'fade-in',
         logoSize: 225,
       ),
+      debugShowCheckedModeBanner: false,
       theme: themeProvider.current,
       routes: {
-        '/main_page': (context) => MainPage(),
+        '/main_page': (context) => FacultiesScreen(),
         '/settings': (context) => SettingsPage(),
         '/messages': (context) => MessagesPage(),
         '/info': (context) => Info(),
         '/map': (context) => BuildingsMap(),
-        '/test': (context) => MainMenu(
-            isFacultiesQuiz: context.watch<AppProvider>().isFacultiesQuiz),
-        '/test-faculties': (context) => MainMenu(isFacultiesQuiz: true),
-        '/test-specialties': (context) => MainMenu(isFacultiesQuiz: false),
-        '/test-faculties-edit': (context) => QuizList(
-            questions: 'f'),
-        '/test-specialties-edit': (context) => QuizList(
-            questions: 's'),
-        '/test-edit': (context) => QuizChoose(),
       },
     );
   }
