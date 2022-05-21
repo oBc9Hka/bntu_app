@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../domain/repository/specialties_repository.dart';
 
 class SpecialtiesFirestoreRepository extends SpecialtiesRepository {
-  final dbRef = FirebaseFirestore.instance.collection('specialties');
+  final dbRef = FirebaseFirestore.instance.collection('specialtiesV2');
 
   @override
   Future<List<Speciality>> getSpecialtiesList() async {
@@ -18,7 +18,9 @@ class SpecialtiesFirestoreRepository extends SpecialtiesRepository {
     }
 
     for (var speciality in temp.docs) {
-      list.add(Speciality.fromMap(speciality.data(), speciality.id));
+      final data = speciality.data();
+      data.addAll({'id': speciality.id});
+      list.add(Speciality.fromJson(data));
     }
 
     list.sort((a, b) => a.name!.compareTo(b.name!));
@@ -28,228 +30,18 @@ class SpecialtiesFirestoreRepository extends SpecialtiesRepository {
 
   @override
   Future<void> addSpeciality(
-    String facultyBased,
-    String name,
-    String number,
-    String about,
-    String qualification,
-    String trainingDurationDayFull,
-    String trainingDurationDayShort,
-    String trainingDurationCorrespondenceFull,
-    String trainingDurationCorrespondenceShort,
-    List<String> entranceTestsFull,
-    List<String> entranceShort,
-    String admissionCurrentDayFullBudget,
-    String admissionCurrentDayShortBudget,
-    String admissionCurrentDayFullPaid,
-    String admissionCurrentDayShortPaid,
-    String admissionCurrentCorrespondenceFullBudget,
-    String admissionCurrentCorrespondenceShortBudget,
-    String admissionCurrentCorrespondenceFullPaid,
-    String admissionCurrentCorrespondenceShortPaid,
-    String passScorePrevYearDayFullBudget,
-    String passScorePrevYearDayShortBudget,
-    String passScorePrevYearDayFullPaid,
-    String passScorePrevYearDayShortPaid,
-    String passScorePrevYearCorrespondenceFullBudget,
-    String passScorePrevYearCorrespondenceShortBudget,
-    String passScorePrevYearCorrespondenceFullPaid,
-    String passScorePrevYearCorrespondenceShortPaid,
-    String admissionPrevYearDayFullBudget,
-    String admissionPrevYearDayShortBudget,
-    String admissionPrevYearDayFullPaid,
-    String admissionPrevYearDayShortPaid,
-    String admissionPrevYearCorrespondenceFullBudget,
-    String admissionPrevYearCorrespondenceShortBudget,
-    String admissionPrevYearCorrespondenceFullPaid,
-    String admissionPrevYearCorrespondenceShortPaid,
-    String passScoreBeforeLastYearDayFullBudget,
-    String passScoreBeforeLastYearDayShortBudget,
-    String passScoreBeforeLastYearDayFullPaid,
-    String passScoreBeforeLastYearDayShortPaid,
-    String passScoreBeforeLastYearCorrespondenceFullBudget,
-    String passScoreBeforeLastYearCorrespondenceShortBudget,
-    String passScoreBeforeLastYearCorrespondenceFullPaid,
-    String passScoreBeforeLastYearCorrespondenceShortPaid,
+    Speciality speciality,
   ) async {
-    await dbRef.add({
-      'facultyBased': facultyBased,
-      'name': name,
-      'number': number,
-      'about': about,
-      'qualification': qualification,
-      'trainingDurationDayFull': trainingDurationDayFull,
-      'trainingDurationDayShort': trainingDurationDayShort,
-      'trainingDurationCorrespondenceFull': trainingDurationCorrespondenceFull,
-      'trainingDurationCorrespondenceShort':
-          trainingDurationCorrespondenceShort,
-      'entranceTestsFull': entranceTestsFull,
-      'entranceShort': entranceShort,
-      'admissionCurrentDayFullBudget': admissionCurrentDayFullBudget,
-      'admissionCurrentDayShortBudget': admissionCurrentDayShortBudget,
-      'admissionCurrentDayFullPaid': admissionCurrentDayFullPaid,
-      'admissionCurrentDayShortPaid': admissionCurrentDayShortPaid,
-      'admissionCurrentCorrespondenceFullBudget':
-          admissionCurrentCorrespondenceFullBudget,
-      'admissionCurrentCorrespondenceShortBudget':
-          admissionCurrentCorrespondenceShortBudget,
-      'admissionCurrentCorrespondenceFullPaid':
-          admissionCurrentCorrespondenceFullPaid,
-      'admissionCurrentCorrespondenceShortPaid':
-          admissionCurrentCorrespondenceShortPaid,
-      'passScorePrevYearDayFullBudget': passScorePrevYearDayFullBudget,
-      'passScorePrevYearDayShortBudget': passScorePrevYearDayShortBudget,
-      'passScorePrevYearDayFullPaid': passScorePrevYearDayFullPaid,
-      'passScorePrevYearDayShortPaid': passScorePrevYearDayShortPaid,
-      'passScorePrevYearCorrespondenceFullBudget':
-          passScorePrevYearCorrespondenceFullBudget,
-      'passScorePrevYearCorrespondenceShortBudget':
-          passScorePrevYearCorrespondenceShortBudget,
-      'passScorePrevYearCorrespondenceFullPaid':
-          passScorePrevYearCorrespondenceFullPaid,
-      'passScorePrevYearCorrespondenceShortPaid':
-          passScorePrevYearCorrespondenceShortPaid,
-      'admissionPrevYearDayFullBudget': admissionPrevYearDayFullBudget,
-      'admissionPrevYearDayShortBudget': admissionPrevYearDayShortBudget,
-      'admissionPrevYearDayFullPaid': admissionPrevYearDayFullPaid,
-      'admissionPrevYearDayShortPaid': admissionPrevYearDayShortPaid,
-      'admissionPrevYearCorrespondenceFullBudget':
-          admissionPrevYearCorrespondenceFullBudget,
-      'admissionPrevYearCorrespondenceShortBudget':
-          admissionPrevYearCorrespondenceShortBudget,
-      'admissionPrevYearCorrespondenceFullPaid':
-          admissionPrevYearCorrespondenceFullPaid,
-      'admissionPrevYearCorrespondenceShortPaid':
-          admissionPrevYearCorrespondenceShortPaid,
-      'passScoreBeforeLastYearDayFullBudget':
-          passScoreBeforeLastYearDayFullBudget,
-      'passScoreBeforeLastYearDayShortBudget':
-          passScoreBeforeLastYearDayShortBudget,
-      'passScoreBeforeLastYearDayFullPaid': passScoreBeforeLastYearDayFullPaid,
-      'passScoreBeforeLastYearDayShortPaid':
-          passScoreBeforeLastYearDayShortPaid,
-      'passScoreBeforeLastYearCorrespondenceFullBudget':
-          passScoreBeforeLastYearCorrespondenceFullBudget,
-      'passScoreBeforeLastYearCorrespondenceShortBudget':
-          passScoreBeforeLastYearCorrespondenceShortBudget,
-      'passScoreBeforeLastYearCorrespondenceFullPaid':
-          passScoreBeforeLastYearCorrespondenceFullPaid,
-      'passScoreBeforeLastYearCorrespondenceShortPaid':
-          passScoreBeforeLastYearCorrespondenceShortPaid,
-    });
+    final json = speciality.toJson();
+    await dbRef.add(json);
   }
 
   @override
   Future<void> editSpeciality(
-      String facultyBased,
-      String name,
-      String number,
-      String about,
-      String qualification,
-      String trainingDurationDayFull,
-      String trainingDurationDayShort,
-      String trainingDurationCorrespondenceFull,
-      String trainingDurationCorrespondenceShort,
-      List<String> entranceTestsFull,
-      List<String> entranceShort,
-      String admissionCurrentDayFullBudget,
-      String admissionCurrentDayShortBudget,
-      String admissionCurrentDayFullPaid,
-      String admissionCurrentDayShortPaid,
-      String admissionCurrentCorrespondenceFullBudget,
-      String admissionCurrentCorrespondenceShortBudget,
-      String admissionCurrentCorrespondenceFullPaid,
-      String admissionCurrentCorrespondenceShortPaid,
-      String passScorePrevYearDayFullBudget,
-      String passScorePrevYearDayShortBudget,
-      String passScorePrevYearDayFullPaid,
-      String passScorePrevYearDayShortPaid,
-      String passScorePrevYearCorrespondenceFullBudget,
-      String passScorePrevYearCorrespondenceShortBudget,
-      String passScorePrevYearCorrespondenceFullPaid,
-      String passScorePrevYearCorrespondenceShortPaid,
-      String admissionPrevYearDayFullBudget,
-      String admissionPrevYearDayShortBudget,
-      String admissionPrevYearDayFullPaid,
-      String admissionPrevYearDayShortPaid,
-      String admissionPrevYearCorrespondenceFullBudget,
-      String admissionPrevYearCorrespondenceShortBudget,
-      String admissionPrevYearCorrespondenceFullPaid,
-      String admissionPrevYearCorrespondenceShortPaid,
-      String passScoreBeforeLastYearDayFullBudget,
-      String passScoreBeforeLastYearDayShortBudget,
-      String passScoreBeforeLastYearDayFullPaid,
-      String passScoreBeforeLastYearDayShortPaid,
-      String passScoreBeforeLastYearCorrespondenceFullBudget,
-      String passScoreBeforeLastYearCorrespondenceShortBudget,
-      String passScoreBeforeLastYearCorrespondenceFullPaid,
-      String passScoreBeforeLastYearCorrespondenceShortPaid,
-      String id) async {
-    await dbRef.doc(id).update({
-      'facultyBased': facultyBased,
-      'name': name,
-      'number': number,
-      'about': about,
-      'qualification': qualification,
-      'trainingDurationDayFull': trainingDurationDayFull,
-      'trainingDurationDayShort': trainingDurationDayShort,
-      'trainingDurationCorrespondenceFull': trainingDurationCorrespondenceFull,
-      'trainingDurationCorrespondenceShort':
-          trainingDurationCorrespondenceShort,
-      'entranceTestsFull': entranceTestsFull,
-      'entranceShort': entranceShort,
-      'admissionCurrentDayFullBudget': admissionCurrentDayFullBudget,
-      'admissionCurrentDayShortBudget': admissionCurrentDayShortBudget,
-      'admissionCurrentDayFullPaid': admissionCurrentDayFullPaid,
-      'admissionCurrentDayShortPaid': admissionCurrentDayShortPaid,
-      'admissionCurrentCorrespondenceFullBudget':
-          admissionCurrentCorrespondenceFullBudget,
-      'admissionCurrentCorrespondenceShortBudget':
-          admissionCurrentCorrespondenceShortBudget,
-      'admissionCurrentCorrespondenceFullPaid':
-          admissionCurrentCorrespondenceFullPaid,
-      'admissionCurrentCorrespondenceShortPaid':
-          admissionCurrentCorrespondenceShortPaid,
-      'passScorePrevYearDayFullBudget': passScorePrevYearDayFullBudget,
-      'passScorePrevYearDayShortBudget': passScorePrevYearDayShortBudget,
-      'passScorePrevYearDayFullPaid': passScorePrevYearDayFullPaid,
-      'passScorePrevYearDayShortPaid': passScorePrevYearDayShortPaid,
-      'passScorePrevYearCorrespondenceFullBudget':
-          passScorePrevYearCorrespondenceFullBudget,
-      'passScorePrevYearCorrespondenceShortBudget':
-          passScorePrevYearCorrespondenceShortBudget,
-      'passScorePrevYearCorrespondenceFullPaid':
-          passScorePrevYearCorrespondenceFullPaid,
-      'passScorePrevYearCorrespondenceShortPaid':
-          passScorePrevYearCorrespondenceShortPaid,
-      'admissionPrevYearDayFullBudget': admissionPrevYearDayFullBudget,
-      'admissionPrevYearDayShortBudget': admissionPrevYearDayShortBudget,
-      'admissionPrevYearDayFullPaid': admissionPrevYearDayFullPaid,
-      'admissionPrevYearDayShortPaid': admissionPrevYearDayShortPaid,
-      'admissionPrevYearCorrespondenceFullBudget':
-          admissionPrevYearCorrespondenceFullBudget,
-      'admissionPrevYearCorrespondenceShortBudget':
-          admissionPrevYearCorrespondenceShortBudget,
-      'admissionPrevYearCorrespondenceFullPaid':
-          admissionPrevYearCorrespondenceFullPaid,
-      'admissionPrevYearCorrespondenceShortPaid':
-          admissionPrevYearCorrespondenceShortPaid,
-      'passScoreBeforeLastYearDayFullBudget':
-          passScoreBeforeLastYearDayFullBudget,
-      'passScoreBeforeLastYearDayShortBudget':
-          passScoreBeforeLastYearDayShortBudget,
-      'passScoreBeforeLastYearDayFullPaid': passScoreBeforeLastYearDayFullPaid,
-      'passScoreBeforeLastYearDayShortPaid':
-          passScoreBeforeLastYearDayShortPaid,
-      'passScoreBeforeLastYearCorrespondenceFullBudget':
-          passScoreBeforeLastYearCorrespondenceFullBudget,
-      'passScoreBeforeLastYearCorrespondenceShortBudget':
-          passScoreBeforeLastYearCorrespondenceShortBudget,
-      'passScoreBeforeLastYearCorrespondenceFullPaid':
-          passScoreBeforeLastYearCorrespondenceFullPaid,
-      'passScoreBeforeLastYearCorrespondenceShortPaid':
-          passScoreBeforeLastYearCorrespondenceShortPaid,
-    });
+    Speciality speciality,
+    String id,
+  ) async {
+    await dbRef.doc(id).update(speciality.toJson());
   }
 
   @override

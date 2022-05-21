@@ -246,149 +246,149 @@ class SpecialityCard extends StatelessWidget {
 
   List<Map<String, dynamic>> _getAdmissionsCurrentYearList() {
     return [
-      {
-        'num': item.admissionCurrentDayFullBudget,
-        'description': 'Бюджет дневное'
-      },
-      {
-        'num': item.admissionCurrentDayShortBudget,
-        'description': 'Бюджет дневное (сокращенное)'
-      },
-      {
-        'num': item.admissionCurrentDayFullPaid,
-        'description': 'Платное дневное'
-      },
-      {
-        'num': item.admissionCurrentDayShortPaid,
-        'description': 'Платное дневное (сокращенное)'
-      },
-      {
-        'num': item.admissionCurrentCorrespondenceFullBudget,
-        'description': 'Бюджет заочное'
-      },
-      {
-        'num': item.admissionCurrentCorrespondenceShortBudget,
-        'description': 'Бюджет заочное (сокращенное)'
-      },
-      {
-        'num': item.admissionCurrentCorrespondenceFullPaid,
-        'description': 'Платное заочное'
-      },
-      {
-        'num': item.admissionCurrentCorrespondenceShortPaid,
-        'description': 'Платное заочное (сокращенное)'
-      },
+      // {
+      //   'num': item.admissionCurrentDayFullBudget,
+      //   'description': 'Бюджет дневное'
+      // },
+      // {
+      //   'num': item.admissionCurrentDayShortBudget,
+      //   'description': 'Бюджет дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.admissionCurrentDayFullPaid,
+      //   'description': 'Платное дневное'
+      // },
+      // {
+      //   'num': item.admissionCurrentDayShortPaid,
+      //   'description': 'Платное дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.admissionCurrentCorrespondenceFullBudget,
+      //   'description': 'Бюджет заочное'
+      // },
+      // {
+      //   'num': item.admissionCurrentCorrespondenceShortBudget,
+      //   'description': 'Бюджет заочное (сокращенное)'
+      // },
+      // {
+      //   'num': item.admissionCurrentCorrespondenceFullPaid,
+      //   'description': 'Платное заочное'
+      // },
+      // {
+      //   'num': item.admissionCurrentCorrespondenceShortPaid,
+      //   'description': 'Платное заочное (сокращенное)'
+      // },
     ];
   }
 
   List<Map<String, dynamic>> _getPassScorePrevYearList() {
     return [
-      {
-        'num': item.passScorePrevYearDayFullBudget,
-        'description': 'Бюджет дневное'
-      },
-      {
-        'num': item.passScorePrevYearDayShortBudget,
-        'description': 'Бюджет дневное (сокращенное)'
-      },
-      {
-        'num': item.passScorePrevYearDayFullPaid,
-        'description': 'Платное дневное'
-      },
-      {
-        'num': item.passScorePrevYearDayShortPaid,
-        'description': 'Платное дневное (сокращенное)'
-      },
-      {
-        'num': item.passScorePrevYearCorrespondenceFullBudget,
-        'description': 'Бюджет заочное'
-      },
-      {
-        'num': item.passScorePrevYearCorrespondenceShortBudget,
-        'description': 'Бюджет заочное (сокращенное)'
-      },
-      {
-        'num': item.passScorePrevYearCorrespondenceFullPaid,
-        'description': 'Платное заочное'
-      },
-      {
-        'num': item.passScorePrevYearCorrespondenceShortPaid,
-        'description': 'Платное заочное (сокращенное)'
-      },
+      // {
+      //   'num': item.passScorePrevYearDayFullBudget,
+      //   'description': 'Бюджет дневное'
+      // },
+      // {
+      //   'num': item.passScorePrevYearDayShortBudget,
+      //   'description': 'Бюджет дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.passScorePrevYearDayFullPaid,
+      //   'description': 'Платное дневное'
+      // },
+      // {
+      //   'num': item.passScorePrevYearDayShortPaid,
+      //   'description': 'Платное дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.passScorePrevYearCorrespondenceFullBudget,
+      //   'description': 'Бюджет заочное'
+      // },
+      // {
+      //   'num': item.passScorePrevYearCorrespondenceShortBudget,
+      //   'description': 'Бюджет заочное (сокращенное)'
+      // },
+      // {
+      //   'num': item.passScorePrevYearCorrespondenceFullPaid,
+      //   'description': 'Платное заочное'
+      // },
+      // {
+      //   'num': item.passScorePrevYearCorrespondenceShortPaid,
+      //   'description': 'Платное заочное (сокращенное)'
+      // },
     ];
   }
 
   List<Map<String, dynamic>> _getAdmissionsPrevYearList() {
     return [
-      {
-        'num': item.admissionPrevYearDayFullBudget,
-        'description': 'Бюджет дневное'
-      },
-      {
-        'num': item.admissionPrevYearDayShortBudget,
-        'description': 'Бюджет дневное (сокращенное)'
-      },
-      {
-        'num': item.admissionPrevYearDayFullPaid,
-        'description': 'Платное дневное'
-      },
-      {
-        'num': item.admissionPrevYearDayShortPaid,
-        'description': 'Платное дневное (сокращенное)'
-      },
-      {
-        'num': item.admissionPrevYearCorrespondenceFullBudget,
-        'description': 'Бюджет заочное'
-      },
-      {
-        'num': item.admissionPrevYearCorrespondenceShortBudget,
-        'description': 'Бюджет заочное (сокращенное)'
-      },
-      {
-        'num': item.admissionPrevYearCorrespondenceFullPaid,
-        'description': 'Платное заочное'
-      },
-      {
-        'num': item.admissionPrevYearCorrespondenceShortPaid,
-        'description': 'Платное заочное (сокращенное)'
-      },
+      // {
+      //   'num': item.admissionPrevYearDayFullBudget,
+      //   'description': 'Бюджет дневное'
+      // },
+      // {
+      //   'num': item.admissionPrevYearDayShortBudget,
+      //   'description': 'Бюджет дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.admissionPrevYearDayFullPaid,
+      //   'description': 'Платное дневное'
+      // },
+      // {
+      //   'num': item.admissionPrevYearDayShortPaid,
+      //   'description': 'Платное дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.admissionPrevYearCorrespondenceFullBudget,
+      //   'description': 'Бюджет заочное'
+      // },
+      // {
+      //   'num': item.admissionPrevYearCorrespondenceShortBudget,
+      //   'description': 'Бюджет заочное (сокращенное)'
+      // },
+      // {
+      //   'num': item.admissionPrevYearCorrespondenceFullPaid,
+      //   'description': 'Платное заочное'
+      // },
+      // {
+      //   'num': item.admissionPrevYearCorrespondenceShortPaid,
+      //   'description': 'Платное заочное (сокращенное)'
+      // },
     ];
   }
 
   List<Map<String, String>> _getPassScoreBeforeLastYearList() {
     return [
-      {
-        'num': item.passScoreBeforeLastYearDayFullBudget.toString(),
-        'description': 'Бюджет дневное'
-      },
-      {
-        'num': item.passScoreBeforeLastYearDayShortBudget.toString(),
-        'description': 'Бюджет дневное (сокращенное)'
-      },
-      {
-        'num': item.passScoreBeforeLastYearDayFullPaid.toString(),
-        'description': 'Платное дневное'
-      },
-      {
-        'num': item.passScoreBeforeLastYearDayShortPaid.toString(),
-        'description': 'Платное дневное (сокращенное)'
-      },
-      {
-        'num': item.passScoreBeforeLastYearCorrespondenceFullBudget.toString(),
-        'description': 'Бюджет заочное'
-      },
-      {
-        'num': item.passScoreBeforeLastYearCorrespondenceShortBudget.toString(),
-        'description': 'Бюджет заочное (сокращенное)'
-      },
-      {
-        'num': item.passScoreBeforeLastYearCorrespondenceFullPaid.toString(),
-        'description': 'Платное заочное'
-      },
-      {
-        'num': item.passScoreBeforeLastYearCorrespondenceShortPaid.toString(),
-        'description': 'Платное заочное (сокращенное)'
-      },
+      // {
+      //   'num': item.passScoreBeforeLastYearDayFullBudget.toString(),
+      //   'description': 'Бюджет дневное'
+      // },
+      // {
+      //   'num': item.passScoreBeforeLastYearDayShortBudget.toString(),
+      //   'description': 'Бюджет дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.passScoreBeforeLastYearDayFullPaid.toString(),
+      //   'description': 'Платное дневное'
+      // },
+      // {
+      //   'num': item.passScoreBeforeLastYearDayShortPaid.toString(),
+      //   'description': 'Платное дневное (сокращенное)'
+      // },
+      // {
+      //   'num': item.passScoreBeforeLastYearCorrespondenceFullBudget.toString(),
+      //   'description': 'Бюджет заочное'
+      // },
+      // {
+      //   'num': item.passScoreBeforeLastYearCorrespondenceShortBudget.toString(),
+      //   'description': 'Бюджет заочное (сокращенное)'
+      // },
+      // {
+      //   'num': item.passScoreBeforeLastYearCorrespondenceFullPaid.toString(),
+      //   'description': 'Платное заочное'
+      // },
+      // {
+      //   'num': item.passScoreBeforeLastYearCorrespondenceShortPaid.toString(),
+      //   'description': 'Платное заочное (сокращенное)'
+      // },
     ];
   }
 
