@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz_main_menu.dart';
 import 'package:bntu_app/features/settings/provider/settings_provider.dart';

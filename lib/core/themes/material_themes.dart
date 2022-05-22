@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:bntu_app/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 

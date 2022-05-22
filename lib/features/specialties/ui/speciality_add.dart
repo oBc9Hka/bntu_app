@@ -1,4 +1,3 @@
-import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
 import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';

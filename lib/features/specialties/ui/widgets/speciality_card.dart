@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/themes/material_themes.dart';
 import '../../domain/models/admission_places.dart';
-import '../speciality_edit.dart';
 
 class SpecialityCard extends StatelessWidget {
   const SpecialityCard(

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bntu_app/features/specialties/domain/models/admission_results.dart';
 
 class Speciality {

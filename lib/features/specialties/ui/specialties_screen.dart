@@ -67,7 +67,6 @@ class SpecialtiesScreen extends StatelessWidget {
                   : Container()
             ],
           ),
-          //TODO: show at map
           body: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

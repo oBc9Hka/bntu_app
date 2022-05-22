@@ -25,7 +25,7 @@ class BuildingAdd extends StatefulWidget {
 
 class _BuildingAddState extends State<BuildingAdd> {
   final TextEditingController _nameController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _optionalController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
