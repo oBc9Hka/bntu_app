@@ -8,13 +8,9 @@ part of 'admission_places.dart';
 
 AdmissionInfo _$AdmissionInfoFromJson(Map<String, dynamic> json) =>
     AdmissionInfo(
-      day: json['day'] == null
-          ? null
-          : AdmissionModel.fromJson(json['day'] as Map<String, dynamic>),
-      correspondence: json['correspondence'] == null
-          ? null
-          : AdmissionModel.fromJson(
-              json['correspondence'] as Map<String, dynamic>),
+      day: AdmissionModel.fromJson(json['day'] as Map<String, dynamic>),
+      correspondence: AdmissionModel.fromJson(
+          json['correspondence'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AdmissionInfoToJson(AdmissionInfo instance) =>

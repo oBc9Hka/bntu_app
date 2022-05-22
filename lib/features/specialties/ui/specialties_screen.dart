@@ -1,6 +1,8 @@
 import 'package:bntu_app/features/faculties/domain/models/faculty_model.dart';
+import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:bntu_app/features/specialties/ui/speciality_add.dart';
 import 'package:bntu_app/core/provider/theme_provider.dart';
+import 'package:bntu_app/features/specialties/ui/speciality_edit.dart';
 import 'package:bntu_app/features/specialties/ui/widgets/speciality_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,19 +39,22 @@ class SpecialtiesScreen extends StatelessWidget {
                       children: [
                         IconButton(
                             onPressed: () {
+                              state.setSpecialityInEdit(
+                                Speciality(
+                                  facultyBased: faculty.shortName,
+                                ),
+                              );
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SpecialityAdd(
-                                    faculty: faculty,
-                                  ),
+                                  builder: (context) => SpecialityAdd(),
                                 ),
                               );
                             },
                             icon: Icon(Icons.add)),
                         IconButton(
                             onPressed: () {
-                              state.initSpecialties(
+                              state.getSpecialties(
                                 qualificationNeedToShow:
                                     qualificationNeedToShow != null
                                         ? [qualificationNeedToShow!]
@@ -145,6 +150,18 @@ class SpecialtiesScreen extends StatelessWidget {
                                                   state.currentAdmissionYear),
                                               item: state.specialties[index],
                                               user: appState.user,
+                                              onEditPressed: () {
+                                                state.setSpecialityInEdit(
+                                                  state.specialties[index],
+                                                );
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SpecialityEdit(),
+                                                  ),
+                                                );
+                                              },
                                             );
                                           }
                                           return Container();

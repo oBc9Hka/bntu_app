@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/themes/material_themes.dart';
+import '../../domain/models/admission_places.dart';
 import '../speciality_edit.dart';
 
 class SpecialityCard extends StatelessWidget {
@@ -11,13 +12,15 @@ class SpecialityCard extends StatelessWidget {
       {Key? key,
       required this.item,
       required this.user,
-      required this.currentYear})
+      required this.currentYear,
+      this.onEditPressed})
       : super(key: key);
   final Speciality item;
   final user;
   static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
   static const Color inactiveColor = Colors.grey;
   final int currentYear;
+  final Function()? onEditPressed;
 
   static Color _secColor = Colors.grey;
   static Color _titleBackColor = Colors.white;
@@ -112,26 +115,30 @@ class SpecialityCard extends StatelessWidget {
                     ],
                   ),
                   Padding(padding: EdgeInsets.only(top: 5)),
-                  specGridCard(
-                      list: _getAdmissionsCurrentYearList(),
-                      title: 'План приёма $currentYear',
-                      icon: Icons.emoji_people,
-                      context: context),
-                  specGridCard(
-                      list: _getPassScorePrevYearList(),
-                      title: 'Проходные баллы ${currentYear - 1}',
-                      context: context),
-                  specGridCard(
-                      list: _getAdmissionsPrevYearList(),
-                      title: 'План приёма ${currentYear - 1}',
-                      icon: Icons.emoji_people,
-                      isNotActive: true,
-                      context: context),
-                  specGridCard(
-                      list: _getPassScoreBeforeLastYearList(),
-                      title: 'Проходные баллы ${currentYear - 2}',
-                      isNotActive: true,
-                      context: context),
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: item.admissions.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          if (!item.admissions[index].scores.isEmpty())
+                            specGridCard(
+                                list: _getInfo(item.admissions[index].scores),
+                                title:
+                                    'Проходные баллы ${item.admissions[index].year}',
+                                context: context),
+                          if (!item.admissions[index].places.isEmpty())
+                            specGridCard(
+                                list: _getInfo(item.admissions[index].places),
+                                title:
+                                    'План приёма ${item.admissions[index].year}',
+                                icon: Icons.emoji_people,
+                                context: context),
+                        ],
+                      );
+                    },
+                  ),
                   Row(
                     children: [
                       if (item.trainingDurationDayFull != '' ||
@@ -189,7 +196,7 @@ class SpecialityCard extends StatelessWidget {
                     ],
                   ),
                   Padding(padding: EdgeInsets.only(top: 10)),
-                  if (item.entranceTestsFull!.isNotEmpty)
+                  if (item.entranceTestsFull.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -200,7 +207,7 @@ class SpecialityCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  if (item.entranceShort!.isNotEmpty)
+                  if (item.entranceShort.isNotEmpty)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -218,15 +225,8 @@ class SpecialityCard extends StatelessWidget {
           if (user != null)
             Positioned(
               right: 5,
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => SpecialityEdit(speciality: item),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.edit)),
+              child:
+                  IconButton(onPressed: onEditPressed, icon: Icon(Icons.edit)),
             ),
         ],
       ),
@@ -244,151 +244,28 @@ class SpecialityCard extends StatelessWidget {
     return newTempString.replaceAll('_', ' • ');
   }
 
-  List<Map<String, dynamic>> _getAdmissionsCurrentYearList() {
+  List<Map<String, dynamic>> _getInfo(AdmissionInfo model) {
     return [
-      // {
-      //   'num': item.admissionCurrentDayFullBudget,
-      //   'description': 'Бюджет дневное'
-      // },
-      // {
-      //   'num': item.admissionCurrentDayShortBudget,
-      //   'description': 'Бюджет дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.admissionCurrentDayFullPaid,
-      //   'description': 'Платное дневное'
-      // },
-      // {
-      //   'num': item.admissionCurrentDayShortPaid,
-      //   'description': 'Платное дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.admissionCurrentCorrespondenceFullBudget,
-      //   'description': 'Бюджет заочное'
-      // },
-      // {
-      //   'num': item.admissionCurrentCorrespondenceShortBudget,
-      //   'description': 'Бюджет заочное (сокращенное)'
-      // },
-      // {
-      //   'num': item.admissionCurrentCorrespondenceFullPaid,
-      //   'description': 'Платное заочное'
-      // },
-      // {
-      //   'num': item.admissionCurrentCorrespondenceShortPaid,
-      //   'description': 'Платное заочное (сокращенное)'
-      // },
-    ];
-  }
-
-  List<Map<String, dynamic>> _getPassScorePrevYearList() {
-    return [
-      // {
-      //   'num': item.passScorePrevYearDayFullBudget,
-      //   'description': 'Бюджет дневное'
-      // },
-      // {
-      //   'num': item.passScorePrevYearDayShortBudget,
-      //   'description': 'Бюджет дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.passScorePrevYearDayFullPaid,
-      //   'description': 'Платное дневное'
-      // },
-      // {
-      //   'num': item.passScorePrevYearDayShortPaid,
-      //   'description': 'Платное дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.passScorePrevYearCorrespondenceFullBudget,
-      //   'description': 'Бюджет заочное'
-      // },
-      // {
-      //   'num': item.passScorePrevYearCorrespondenceShortBudget,
-      //   'description': 'Бюджет заочное (сокращенное)'
-      // },
-      // {
-      //   'num': item.passScorePrevYearCorrespondenceFullPaid,
-      //   'description': 'Платное заочное'
-      // },
-      // {
-      //   'num': item.passScorePrevYearCorrespondenceShortPaid,
-      //   'description': 'Платное заочное (сокращенное)'
-      // },
-    ];
-  }
-
-  List<Map<String, dynamic>> _getAdmissionsPrevYearList() {
-    return [
-      // {
-      //   'num': item.admissionPrevYearDayFullBudget,
-      //   'description': 'Бюджет дневное'
-      // },
-      // {
-      //   'num': item.admissionPrevYearDayShortBudget,
-      //   'description': 'Бюджет дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.admissionPrevYearDayFullPaid,
-      //   'description': 'Платное дневное'
-      // },
-      // {
-      //   'num': item.admissionPrevYearDayShortPaid,
-      //   'description': 'Платное дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.admissionPrevYearCorrespondenceFullBudget,
-      //   'description': 'Бюджет заочное'
-      // },
-      // {
-      //   'num': item.admissionPrevYearCorrespondenceShortBudget,
-      //   'description': 'Бюджет заочное (сокращенное)'
-      // },
-      // {
-      //   'num': item.admissionPrevYearCorrespondenceFullPaid,
-      //   'description': 'Платное заочное'
-      // },
-      // {
-      //   'num': item.admissionPrevYearCorrespondenceShortPaid,
-      //   'description': 'Платное заочное (сокращенное)'
-      // },
-    ];
-  }
-
-  List<Map<String, String>> _getPassScoreBeforeLastYearList() {
-    return [
-      // {
-      //   'num': item.passScoreBeforeLastYearDayFullBudget.toString(),
-      //   'description': 'Бюджет дневное'
-      // },
-      // {
-      //   'num': item.passScoreBeforeLastYearDayShortBudget.toString(),
-      //   'description': 'Бюджет дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.passScoreBeforeLastYearDayFullPaid.toString(),
-      //   'description': 'Платное дневное'
-      // },
-      // {
-      //   'num': item.passScoreBeforeLastYearDayShortPaid.toString(),
-      //   'description': 'Платное дневное (сокращенное)'
-      // },
-      // {
-      //   'num': item.passScoreBeforeLastYearCorrespondenceFullBudget.toString(),
-      //   'description': 'Бюджет заочное'
-      // },
-      // {
-      //   'num': item.passScoreBeforeLastYearCorrespondenceShortBudget.toString(),
-      //   'description': 'Бюджет заочное (сокращенное)'
-      // },
-      // {
-      //   'num': item.passScoreBeforeLastYearCorrespondenceFullPaid.toString(),
-      //   'description': 'Платное заочное'
-      // },
-      // {
-      //   'num': item.passScoreBeforeLastYearCorrespondenceShortPaid.toString(),
-      //   'description': 'Платное заочное (сокращенное)'
-      // },
+      {'num': model.day.fullBudget, 'description': 'Бюджет дневное'},
+      {
+        'num': model.day.shortBudget,
+        'description': 'Бюджет дневное (сокращенное)'
+      },
+      {'num': model.day.fullPaid, 'description': 'Платное дневное'},
+      {
+        'num': model.day.shortPaid,
+        'description': 'Платное дневное (сокращенное)'
+      },
+      {'num': model.correspondence.fullBudget, 'description': 'Бюджет заочное'},
+      {
+        'num': model.correspondence.shortBudget,
+        'description': 'Бюджет заочное (сокращенное)'
+      },
+      {'num': model.correspondence.fullPaid, 'description': 'Платное заочное'},
+      {
+        'num': model.correspondence.shortPaid,
+        'description': 'Платное заочное (сокращенное)'
+      },
     ];
   }
 

@@ -9,12 +9,8 @@ part of 'admission_results.dart';
 AdmissionResults _$AdmissionResultsFromJson(Map<String, dynamic> json) =>
     AdmissionResults(
       year: json['year'] as String,
-      places: json['places'] == null
-          ? null
-          : AdmissionInfo.fromJson(json['places'] as Map<String, dynamic>),
-      scores: json['scores'] == null
-          ? null
-          : AdmissionInfo.fromJson(json['scores'] as Map<String, dynamic>),
+      places: AdmissionInfo.fromJson(json['places'] as Map<String, dynamic>),
+      scores: AdmissionInfo.fromJson(json['scores'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$AdmissionResultsToJson(AdmissionResults instance) =>

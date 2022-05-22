@@ -15,10 +15,10 @@ class SpecialtiesProvider with ChangeNotifier {
   bool isLoading = false;
 
   SpecialtiesProvider({required this.specialtiesRepository}) {
-    initSpecialties();
+    getSpecialties();
   }
 
-  void initSpecialties({List<String>? qualificationNeedToShow}) async {
+  void getSpecialties({List<String>? qualificationNeedToShow}) async {
     isLoading = true;
     notifyListeners();
     final specialtiesResult = await specialtiesRepository.getSpecialtiesList();

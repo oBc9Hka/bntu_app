@@ -262,7 +262,7 @@ class ResultScreen extends StatelessWidget {
                                   .results)
                                 ListTile(
                                   onTap: () {
-                                    specialityState.initSpecialties(
+                                    specialityState.getSpecialties(
                                         qualificationNeedToShow: [
                                           item.speciality
                                         ]);

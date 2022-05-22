@@ -15,7 +15,7 @@ class FacultiesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _onTap(var faculty, SpecialtiesProvider state) {
-      state.initSpecialties();
+      state.getSpecialties();
       Navigator.push(
         context,
         MaterialPageRoute(

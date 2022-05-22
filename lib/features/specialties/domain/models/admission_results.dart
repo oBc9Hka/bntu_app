@@ -7,13 +7,13 @@ part 'admission_results.g.dart';
 @JsonSerializable()
 class AdmissionResults {
   String year;
-  AdmissionInfo? places;
-  AdmissionInfo? scores;
+  AdmissionInfo places;
+  AdmissionInfo scores;
 
   AdmissionResults({
     required this.year,
-    this.places,
-    this.scores,
+    required this.places,
+    required this.scores,
   });
 
   factory AdmissionResults.fromJson(Map<String, dynamic> json) =>
@@ -21,7 +21,7 @@ class AdmissionResults {
 
   Map<String, dynamic> toJson() => <String, dynamic>{
         'year': year,
-        'places': places?.toJson(),
-        'scores': scores?.toJson(),
+        'places': places.toJson(),
+        'scores': scores.toJson(),
       };
 }

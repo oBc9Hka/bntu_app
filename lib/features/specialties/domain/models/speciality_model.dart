@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bntu_app/features/specialties/domain/models/admission_results.dart';
 
 class Speciality {
@@ -7,10 +9,10 @@ class Speciality {
   String? number;
   String? about;
   String? qualification;
-  String? trainingDurationDayFull; //дневное полное
-  String? trainingDurationDayShort; //дневное сокращённое
-  String? trainingDurationCorrespondenceFull; //заочное полное
-  String? trainingDurationCorrespondenceShort; //заочное сокращённое
+  String trainingDurationDayFull; //дневное полное
+  String trainingDurationDayShort; //дневное сокращённое
+  String trainingDurationCorrespondenceFull; //заочное полное
+  String trainingDurationCorrespondenceShort; //заочное сокращённое
   List<dynamic> entranceTestsFull; //вступительные экзамены на полное
   List<dynamic> entranceShort; //вступительные экзамены на сокращённое
   List<AdmissionResults> admissions; // данные вступительных компаний
@@ -22,10 +24,10 @@ class Speciality {
     this.number,
     this.about,
     this.qualification,
-    this.trainingDurationDayFull,
-    this.trainingDurationDayShort,
-    this.trainingDurationCorrespondenceFull,
-    this.trainingDurationCorrespondenceShort,
+    this.trainingDurationDayFull = '',
+    this.trainingDurationDayShort = '',
+    this.trainingDurationCorrespondenceFull = '',
+    this.trainingDurationCorrespondenceShort = '',
     this.entranceTestsFull = const [],
     this.entranceShort = const [],
     this.admissions = const [],
@@ -39,12 +41,12 @@ class Speciality {
           number: json['number'] as String?,
           about: json['about'] as String?,
           qualification: json['qualification'] as String?,
-          trainingDurationDayFull: json['trainingDurationDayFull'] as String?,
-          trainingDurationDayShort: json['trainingDurationDayShort'] as String?,
+          trainingDurationDayFull: json['trainingDurationDayFull'] as String,
+          trainingDurationDayShort: json['trainingDurationDayShort'] as String,
           trainingDurationCorrespondenceFull:
-              json['trainingDurationCorrespondenceFull'] as String?,
+              json['trainingDurationCorrespondenceFull'] as String,
           trainingDurationCorrespondenceShort:
-              json['trainingDurationCorrespondenceShort'] as String?,
+              json['trainingDurationCorrespondenceShort'] as String,
           entranceTestsFull: json['entranceTestsFull'] as List<dynamic>,
           entranceShort: json['entranceShort'] as List<dynamic>,
           admissions: (json['admissions'] as List<dynamic>)
@@ -66,6 +68,12 @@ class Speciality {
             trainingDurationCorrespondenceShort,
         'entranceTestsFull': entranceTestsFull,
         'entranceShort': entranceShort,
-        'admissions': admissions.map((e) => e.toJson).toList(),
+        'admissions': admissions
+            .map((e) => {
+                  'year': e.year,
+                  'places': e.places.toJson(),
+                  'scores': e.scores.toJson(),
+                })
+            .toList(),
       };
 }

@@ -1,4 +1,6 @@
+import 'package:bntu_app/core/widgets/remove_item.dart';
 import 'package:bntu_app/features/specialties/domain/models/admission_model.dart';
+import 'package:bntu_app/features/specialties/domain/models/admission_places.dart';
 import 'package:bntu_app/features/specialties/domain/models/admission_results.dart';
 import 'package:bntu_app/features/specialties/domain/models/speciality_model.dart';
 import 'package:bntu_app/features/specialties/provider/specialties_provider.dart';
@@ -16,6 +18,84 @@ class SpecialityForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
   static Color mainColor = Constants.mainColor;
+
+  void addNewAdmissionYearDialog(context, SpecialtiesProvider state) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final controller = TextEditingController();
+        final formKey = GlobalKey<FormState>();
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Введите год приёма'),
+                Divider(
+                  thickness: 2,
+                ),
+                Form(
+                  key: formKey,
+                  child: TextFormField(
+                    controller: controller,
+                    keyboardType: TextInputType.number,
+                    minLines: 1,
+                    maxLines: 3,
+                    decoration: const InputDecoration(labelText: 'Год'),
+                    validator: (value) {
+                      if (value == '') return 'Введите год';
+                      return null;
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Отмена'),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          state.specialityInEdit.admissions = [
+                            AdmissionResults(
+                              year: controller.text.trim(),
+                              places: AdmissionInfo(
+                                day: AdmissionModel(),
+                                correspondence: AdmissionModel(),
+                              ),
+                              scores: AdmissionInfo(
+                                day: AdmissionModel(),
+                                correspondence: AdmissionModel(),
+                              ),
+                            ),
+                            ...state.specialityInEdit.admissions,
+                          ];
+                          state.specialityInEdit.admissions.sort(
+                            (a, b) => b.year.compareTo(a.year),
+                          );
+                          state.notif();
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: Text('Добавить'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Widget _expandedTileAdmission(
     int year,
@@ -279,7 +359,8 @@ class SpecialityForm extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: TextEditingController(
-                                      text: state.specialityInEdit.name),
+                                      text: state.specialityInEdit
+                                          .entranceTestsFull[index]),
                                   onChanged: (value) {
                                     state.specialityInEdit
                                         .entranceTestsFull[index] = value;
@@ -332,7 +413,8 @@ class SpecialityForm extends StatelessWidget {
                               Expanded(
                                 child: TextFormField(
                                   controller: TextEditingController(
-                                      text: state.specialityInEdit.name),
+                                      text: state.specialityInEdit
+                                          .entranceShort[index]),
                                   onChanged: (value) {
                                     state.specialityInEdit
                                         .entranceShort[index] = value;
@@ -372,11 +454,7 @@ class SpecialityForm extends StatelessWidget {
 
                   ElevatedButton(
                     onPressed: () {
-                      state.specialityInEdit.admissions = [
-                        ...state.specialityInEdit.admissions,
-                        AdmissionResults(year: ''),
-                      ];
-                      state.notif();
+                      addNewAdmissionYearDialog(context, state);
                     },
                     child: Text('Добавить год приема'),
                   ),
@@ -388,10 +466,340 @@ class SpecialityForm extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Row(
                         children: [
+                          Expanded(
+                            child: ExpansionTile(
+                              title: Text(
+                                state.specialityInEdit.admissions[index].year,
+                                style: TextStyle(color: mainColor),
+                              ),
+                              children: [
+                                ExpansionTile(
+                                  title: Text('План приема'),
+                                  children: [
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .day
+                                              .fullBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Бюджет дневное'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .places.day.fullBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .day
+                                              .shortBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Бюджет дневное сокращённое'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .places.day.shortBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .correspondence
+                                              .fullBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Бюджет заочное'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .places
+                                            .correspondence
+                                            .fullBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .correspondence
+                                              .shortBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Бюджет заочное сокращённое'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .places
+                                            .correspondence
+                                            .shortBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .day
+                                              .fullPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Платное дневное'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .places.day.fullPaid = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .day
+                                              .shortPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Платное дневное сокращённое'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .places.day.shortPaid = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .correspondence
+                                              .fullPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Платное заочное'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .places
+                                            .correspondence
+                                            .fullPaid = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .places
+                                              .correspondence
+                                              .shortPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Платное заочное сокращённое'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .places
+                                            .correspondence
+                                            .shortPaid = value;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                ExpansionTile(
+                                  title: Text(
+                                    'Проходные баллы',
+                                  ),
+                                  children: [
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .day
+                                              .fullBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Бюджет дневное'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .scores.day.fullBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .day
+                                              .shortBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Бюджет дневное сокращённое'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .scores.day.shortBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .correspondence
+                                              .fullBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Бюджет заочное'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .scores
+                                            .correspondence
+                                            .fullBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .correspondence
+                                              .shortBudget),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Бюджет заочное сокращённое'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .scores
+                                            .correspondence
+                                            .shortBudget = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .day
+                                              .fullPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Платное дневное'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .scores.day.fullPaid = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .day
+                                              .shortPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Платное дневное сокращённое'),
+                                      onChanged: (value) {
+                                        state.specialityInEdit.admissions[index]
+                                            .scores.day.shortPaid = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .correspondence
+                                              .fullPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Платное заочное'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .scores
+                                            .correspondence
+                                            .fullPaid = value;
+                                      },
+                                    ),
+                                    TextFormField(
+                                      controller: TextEditingController(
+                                          text: state
+                                              .specialityInEdit
+                                              .admissions[index]
+                                              .scores
+                                              .correspondence
+                                              .shortPaid),
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Платное заочное сокращённое'),
+                                      onChanged: (value) {
+                                        state
+                                            .specialityInEdit
+                                            .admissions[index]
+                                            .scores
+                                            .correspondence
+                                            .shortPaid = value;
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
                           IconButton(
                             onPressed: () {
-                              state.specialityInEdit.admissions.removeAt(index);
-                              state.notif();
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return RemoveItem(
+                                    itemName: 'год приема',
+                                    onRemovePressed: () {
+                                      state.specialityInEdit.admissions
+                                          .removeAt(index);
+                                      state.notif();
+                                      Navigator.of(context).pop();
+                                    },
+                                  );
+                                },
+                              );
                             },
                             icon: Icon(Icons.remove),
                           ),

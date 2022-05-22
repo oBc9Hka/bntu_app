@@ -4,16 +4,16 @@ part 'admission_model.g.dart';
 
 @JsonSerializable()
 class AdmissionModel {
-  String? fullBudget;
-  String? shortBudget;
-  String? fullPaid;
-  String? shortPaid;
+  String fullBudget;
+  String shortBudget;
+  String fullPaid;
+  String shortPaid;
 
   AdmissionModel({
-    this.fullBudget,
-    this.shortBudget,
-    this.fullPaid,
-    this.shortPaid,
+    this.fullBudget = '',
+    this.shortBudget = '',
+    this.fullPaid = '',
+    this.shortPaid = '',
   });
 
   factory AdmissionModel.fromJson(Map<String, dynamic> json) =>

@@ -9,8 +9,9 @@ import '../provider/specialties_provider.dart';
 import 'widgets/speciality_form.dart';
 
 class SpecialityAdd extends StatefulWidget {
-  const SpecialityAdd({Key? key, required this.faculty}) : super(key: key);
-  final Faculty faculty;
+  const SpecialityAdd({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SpecialityAddState createState() => _SpecialityAddState();
@@ -27,7 +28,7 @@ class _SpecialityAddState extends State<SpecialityAdd> {
 
       _formKey.currentState!.reset();
       Navigator.of(context).pop();
-      state.initSpecialties();
+      state.getSpecialties();
       Fluttertoast.showToast(msg: 'Специальность успешно добавлена');
     }
   }
