@@ -8,17 +8,12 @@ import '../../domain/models/admission_places.dart';
 
 class SpecialityCard extends StatelessWidget {
   const SpecialityCard(
-      {Key? key,
-      required this.item,
-      required this.user,
-      required this.currentYear,
-      this.onEditPressed})
+      {Key? key, required this.item, required this.user, this.onEditPressed})
       : super(key: key);
   final Speciality item;
   final user;
   static const Color mainColor = Color.fromARGB(255, 0, 138, 94);
   static const Color inactiveColor = Colors.grey;
-  final int currentYear;
   final Function()? onEditPressed;
 
   static Color _secColor = Colors.grey;
@@ -117,7 +112,7 @@ class SpecialityCard extends StatelessWidget {
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: item.admissions.length,
+                    itemCount: getAdmissionsCount(item),
                     itemBuilder: (context, index) {
                       return Column(
                         children: [
@@ -232,6 +227,16 @@ class SpecialityCard extends StatelessWidget {
     );
   }
 
+  int getAdmissionsCount(Speciality item) {
+    if (item.admissions.isNotEmpty && item.admissions.length > 1) {
+      if (true) {
+        return item.admissions.first.scores.isEmpty() ? 3 : 2;
+      }
+    } else {
+      return item.admissions.length;
+    }
+  }
+
   String getStringFromList(List<dynamic>? temp) {
     var tempString = '';
     for (var i = 0; i < temp!.length; i++) {
@@ -302,7 +307,7 @@ class SpecialityCard extends StatelessWidget {
                           if (spec['num'].toString() != '') {
                             return Container(
                               // color: Colors.green,
-                              width: 76,
+                              width: 70,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -331,7 +336,7 @@ class SpecialityCard extends StatelessWidget {
                                     spec['description'].toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 9,
                                       color: isNotActive ? inactiveColor : null,
                                     ),
                                   ),

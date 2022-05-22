@@ -145,8 +145,6 @@ class SpecialtiesScreen extends StatelessWidget {
                                                   .facultyBased ==
                                               faculty.shortName) {
                                             return SpecialityCard(
-                                              currentYear: int.parse(
-                                                  state.currentAdmissionYear),
                                               item: state.specialties[index],
                                               user: appState.user,
                                               onEditPressed: () {

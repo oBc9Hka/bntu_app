@@ -10,7 +10,7 @@ class SpecialtiesProvider with ChangeNotifier {
 
   Speciality specialityInEdit = Speciality();
 
-  String currentAdmissionYear = '2021';
+  String lastShowingYear = '2021';
 
   bool isLoading = false;
 
@@ -21,8 +21,25 @@ class SpecialtiesProvider with ChangeNotifier {
   void getSpecialties({List<String>? qualificationNeedToShow}) async {
     isLoading = true;
     notifyListeners();
-    final specialtiesResult = await specialtiesRepository.getSpecialtiesList();
     specialties = [];
+    final specialtiesResult = await specialtiesRepository.getSpecialtiesList();
+
+    // filter for last showing year
+    final tempList = [];
+
+    for (var i = 0; i < specialtiesResult.length; i++) {
+      tempList.clear();
+      specialtiesResult[i].admissions.forEach((element) {
+        if (int.parse(element.year) > int.parse(lastShowingYear)) {
+          tempList.add(element);
+        }
+      });
+      for (final item in tempList) {
+        specialtiesResult[i].admissions.remove(item);
+      }
+    }
+
+    // filter for showing by qualifications
     if (qualificationNeedToShow != null) {
       for (var item in specialtiesResult) {
         if (qualificationNeedToShow.contains(item.qualification)) {
