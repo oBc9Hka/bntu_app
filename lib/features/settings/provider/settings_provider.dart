@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/domain/models/error_message_model.dart';
 import '../../../core/domain/repository/error_messages_repository.dart';
@@ -23,6 +24,8 @@ class SettingsProvider with ChangeNotifier {
 
   Future<void> initSettings() async {
     currentAdmissionYear = await settingsRepository.getCurrentAdmissionYear();
+    final instance = await SharedPreferences.getInstance();
+    await instance.setString('lastShowingYear', currentAdmissionYear);
     secretKey = await settingsRepository.getSecretKey();
     await initErrorMessages();
     await getCheckedTestsIds();

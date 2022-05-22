@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/models/speciality_model.dart';
 import '../domain/repository/specialties_repository.dart';
@@ -10,17 +11,19 @@ class SpecialtiesProvider with ChangeNotifier {
 
   Speciality specialityInEdit = Speciality();
 
-  String lastShowingYear = '2021';
+  String lastShowingYear = '0';
 
   bool isLoading = false;
 
-  SpecialtiesProvider({required this.specialtiesRepository}) {
-    getSpecialties();
-  }
+  SpecialtiesProvider({
+    required this.specialtiesRepository,
+  });
 
   void getSpecialties({List<String>? qualificationNeedToShow}) async {
     isLoading = true;
     notifyListeners();
+    final instance = await SharedPreferences.getInstance();
+    lastShowingYear = instance.getString('lastShowingYear') ?? '0';
     specialties = [];
     final specialtiesResult = await specialtiesRepository.getSpecialtiesList();
 

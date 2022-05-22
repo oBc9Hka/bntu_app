@@ -1,6 +1,7 @@
 import 'package:bntu_app/features/specialties/provider/specialties_provider.dart';
 import 'package:bntu_app/features/specialties/ui/specialties_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
