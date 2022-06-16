@@ -11,7 +11,8 @@ class Constants {
     longitude: 27.593033,
   );
 
-  static const url = 'https://bntu.by';
+  static const siteUrl = 'https://bntu.by';
+  static const appUrl = 'https://disk.yandex.ru/d/7swB07vyLRJMyw';
 
   static ButtonStyle customElevatedButtonStyle = ButtonStyle(
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(

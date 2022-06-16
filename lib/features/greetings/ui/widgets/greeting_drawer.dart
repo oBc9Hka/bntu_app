@@ -3,6 +3,7 @@
 import 'package:bntu_app/core/provider/theme_provider.dart';
 import 'package:bntu_app/features/quiz/ui/quiz_main_menu.dart';
 import 'package:bntu_app/features/settings/provider/settings_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,7 +28,7 @@ class GreetingDrawer extends StatelessWidget {
 
     var themeProvider = Provider.of<ThemeProvider>(context);
     const mainColor = Constants.mainColor;
-    const _url = Constants.url;
+    const _url = Constants.siteUrl;
 
     final _formKey = GlobalKey<FormState>();
     final _errorFormKey = GlobalKey<FormState>();
@@ -274,9 +275,9 @@ class GreetingDrawer extends StatelessWidget {
       );
     }
 
-    void _launchURL() async => await canLaunch(_url)
-        ? await launch(_url)
-        : throw 'Could not launch $_url';
+    void _launchURL(String url) async => await canLaunch(url)
+        ? await launch(url)
+        : throw 'Could not launch $url';
     return Container(
       color: themeProvider.brightness == CustomBrightness.dark
           ? Colors.black54
@@ -424,7 +425,7 @@ class GreetingDrawer extends StatelessWidget {
               ),
               ListTile(
                 onTap: () {
-                  _launchURL();
+                  _launchURL(_url);
                 },
                 title: Text('На сайт БНТУ'),
                 trailing: Icon(Icons.open_in_browser),
@@ -444,6 +445,14 @@ class GreetingDrawer extends StatelessWidget {
                   },
                   title: Text('Общие настройки'),
                   trailing: Icon(Icons.settings),
+                ),
+              if (kIsWeb)
+                ListTile(
+                  onTap: () {
+                    _launchURL(Constants.appUrl);
+                  },
+                  title: Text('Скачать на Android'),
+                  trailing: Icon(Icons.android),
                 ),
             ],
           ),
